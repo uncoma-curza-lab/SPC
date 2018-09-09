@@ -16,9 +16,9 @@ use froala\froalaeditor\FroalaEditorWidget;
         <div class="form-group">
             <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
         </div>
-    <h3>Portada</h3>
+    <h3>Programa</h3>
     <?= $this->renderAjax('_portada',['model'=>$model]); ?>
-    <!--
+    
      <?=
       TabsX::widget([
       'position' => TabsX::POS_ABOVE,
@@ -135,7 +135,7 @@ use froala\froalaeditor\FroalaEditorWidget;
   ]);?>
 
 
--->
+
 
     <?php ActiveForm::end(); ?>
 
