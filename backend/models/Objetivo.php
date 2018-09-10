@@ -47,7 +47,9 @@ class Objetivo extends \yii\db\ActiveRecord
             'programa_id' => 'Programa ID',
         ];
     }
-
+    public function getDescripcion(){
+      return $this->descripcion;
+    }
     /**
      * @return \yii\db\ActiveQuery
      */

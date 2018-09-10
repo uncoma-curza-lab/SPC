@@ -10,7 +10,7 @@ use froala\froalaeditor\FroalaEditorWidget;
   'items' => [
     [
       'label' => 'Descripcion',
-      'content' =>  $this->render('_objetivos',['model' => $model])
+      'content' =>  $this->render('_objetivos',['model' => $model, 'form' => $form])
     ],
     [
       'label' => 'Unidades',

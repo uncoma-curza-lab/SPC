@@ -33,6 +33,8 @@ use Yii;
  */
 class Programa extends \yii\db\ActiveRecord
 {
+    public $objetivos;
+
     /**
      * {@inheritdoc}
      */
@@ -48,7 +50,7 @@ class Programa extends \yii\db\ActiveRecord
     {
         return [
             [['departamento_id', 'cuatrimestre', 'created_by', 'updated_by'], 'integer'],
-            [['curso', 'profadj_regular', 'asist_regular', 'ayudante_p', 'ayudante_s', 'fundament', 'objetivo_plan', 'contenido_plan', 'propuesta_met', 'evycond_acreditacion', 'parcial_rec_promo', 'distr_horaria', 'actv_extracur'], 'required'],
+          //  [['curso', 'profadj_regular', 'asist_regular', 'ayudante_p', 'ayudante_s', 'fundament', 'objetivo_plan', 'contenido_plan', 'propuesta_met', 'evycond_acreditacion', 'parcial_rec_promo', 'distr_horaria', 'actv_extracur'], 'required'],
             [['created_at', 'updated_at'], 'safe'],
             [['curso', 'profadj_regular', 'asist_regular', 'ayudante_p', 'ayudante_s'], 'string', 'max' => 60],
             [['year'], 'string', 'max' => 4],
@@ -93,5 +95,10 @@ class Programa extends \yii\db\ActiveRecord
     public function getDepartamento()
     {
         return $this->hasOne(Departamento::className(), ['id' => 'departamento_id']);
+    }
+
+    public function getObjetivos()
+    {
+        return $this->hasMany(Objetivo::className(), ['programa_id' => 'id']);
     }
 }

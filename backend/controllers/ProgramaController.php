@@ -10,6 +10,7 @@ use backend\models\DepartamentoSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use backend\models\Objetivo;
 
 /**
  * ProgramaController implements the CRUD actions for Programa model.
@@ -68,13 +69,44 @@ class ProgramaController extends Controller
     {
         $model = new Programa();
 
+        $array = [0 => 'val1' , 1 => 'val2' , 3 =>  'val3'];
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['pagina', 'id' => $model->id]);
         }
+        $model['objetivos'] = $array;
 
         return $this->render('create', [
             'model' => $model,
+
         ]);
+    }
+
+    public function actionPagina($id){
+      $model = $this->findModel($id);
+      if ($model->load(Yii::$app->request->post())){
+        $objetivos = $_POST['Programa']['objetivos'] ;
+        if(sizeof($objetivos) > 0)
+          $objetivos_aux = $model->getObjetivos()->all();
+          foreach ($objetivos_aux as $key => $value) {
+            $value->delete();
+          }
+          foreach ($objetivos as $key => $value ) {
+            $obj = new Objetivo();
+            $obj->descripcion =$value;
+            $obj->programa_id = $model->id;
+            $obj->save();
+          }
+        if (  $model->save() )
+          return $this->redirect(['view', 'id' => $model->id]);
+        else
+          return $this->redirect(['pagina','id'=>$model->id]);
+      }
+      $objetivos_aux = $model->getObjetivos()->all();
+      $model->objetivos = $objetivos_aux;
+
+      return $this->render('pagina', [
+        'model' => $model
+      ]);
     }
 
     /**

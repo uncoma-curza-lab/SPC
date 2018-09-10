@@ -1,24 +1,25 @@
 <?php use unclead\multipleinput\MultipleInput;
-use unclead\multipleinput\MultipleInputColumn; ?>
+use unclead\multipleinput\MultipleInputColumn;
+use backend\models\Objetivo;
+use yii\data\ActiveDataProvider;
+?>
 <?=
-
-MultipleInput::widget([
-    'model' => $model,
-    'attribute' => 'objetivo_plan',
-    'min' => 1,
-    'allowEmptyList' => false,
-    'columns' => [
-      [
-          'name' => 'objetivo_plan',
-          'options' => [
-              'placeholder' => 'Objetivo'
-          ]
-      ]
-    ],
-    'addButtonPosition' => [
-            //MultipleInput::POS_HEADER,
-            MultipleInput::POS_FOOTER,
-            MultipleInput::POS_ROW
+ $form->field($model,'objetivos')->widget(
+    MultipleInput::className(),[
+      'model' => $model,
+      'allowEmptyList' => false,
+      'columns' => [
+        [
+          'name' => 'descripcion',
+        ],
+        [
+          'name'=> 'programa_id',
         ]
-])
+      ],
+      'addButtonPosition' => [
+              //MultipleInput::POS_HEADER,
+              MultipleInput::POS_FOOTER,
+              MultipleInput::POS_ROW
+          ]
+    ]);
  ?>
