@@ -80,10 +80,14 @@ class ProgramaController extends Controller
         ]);
     }
 
+    /**
+    * recibe un ID de programa y muestra el formulario para continuar con el mismo
+    * Falta aplicar transacciones
+    */
     public function actionPagina($id){
       $model = $this->findModel($id);
       if ($model->load(Yii::$app->request->post())){
-        $unidades = $_POST['Programa']['unidades'];
+        //procesa los objetivos
         $objetivos = $_POST['Programa']['objetivos'] ;
         if(sizeof($objetivos) > 0)
         {
@@ -98,6 +102,8 @@ class ProgramaController extends Controller
             $obj->save();
           }
         }
+        //procesa las unidades
+        $unidades = $_POST['Programa']['unidades'];
         if (sizeof($unidades) > 0)
         {
           $unidades_aux = $model->getUnidades()->all();
@@ -112,33 +118,51 @@ class ProgramaController extends Controller
             $unidad = new Unidad();
             $unidad->descripcion = $value['descripcion'];
             $unidad->programa_id = $model->id;
+          // intenta guardar cada unidad
             $unidad->save();
 
-            foreach ($value['temas']['tema'] as $indexTema => $descrTema) {
+            foreach ($value['temas']['temas'] as $indexTema => $descrTema) {
                 $tema = new Tema();
                 $tema->descripcion = $descrTema;
                 $tema->unidad_id = $unidad->id;
+                //inteta guardar cada tema
                 $tema->save();
             }
           }
         }
+        //intentamos guardar el modelo
         if (  $model->save() )
           //return $this->redirect(['view', 'id' => $model->id]);
           return $this->render('pagina',['model'=>$model]);
         else
           return $this->redirect(['pagina','id'=>$model->id]);
       }
+      //prepara los objetivos para la vista
       $objetivos_aux = $model->getObjetivos()->all();
       $model->objetivos = $objetivos_aux;
+      //prepara las unidades para la vista
 
       $unidades_aux = $model->getUnidades()->all();
 
-
-      foreach ($unidades_aux as $key => $value) {
-        $value->temas = $value->getTemas()->all();
-        
+      $unidades = [];
+      foreach ($unidades_aux as $key => $unidad) {
+        $mUnidad = new Unidad();
+        $mUnidad->id = $unidad->id;
+        $mUnidad->descripcion = $unidad['descripcion'];
+        $mUnidad->programa_id = $model->id;
+        $mUnidad->temas = $mUnidad->getTemas()->all();
+        $array = [];
+        foreach ($mUnidad->temas as $tkey => $tvalue) {
+          array_push($array,$tvalue->descripcion);
+        }
+        $unidad = [
+          "descripcion" => $mUnidad->descripcion,
+          "temas" => $array
+        ];
+        array_push($unidades,$unidad);
       }
-      $model->unidades = $unidades_aux;
+      $model->unidades = $unidades;
+
       return $this->render('pagina', [
         'model' => $model
       ]);

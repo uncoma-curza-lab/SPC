@@ -8,9 +8,12 @@ use unclead\multipleinput\MultipleInputColumn;
  $form->field($model,'unidades')->widget(
     MultipleInput::className(),[
       'model' => $model,
+      //'cloneButton' => true,
       'allowEmptyList' => false,
+
       'columns' => [
         [
+          'title' => "titulo de unidad",
           'name' => 'descripcion',
         ],
         [
@@ -19,7 +22,9 @@ use unclead\multipleinput\MultipleInputColumn;
             'options' => [
                 'columns' => [
                     [
-                        'name' => 'descripcion'
+                        'title' => 'Temas',
+                        'name' => 'temas',
+
                     ]
                 ]
             ]
