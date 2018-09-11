@@ -16,6 +16,7 @@ use Yii;
  */
 class Unidad extends \yii\db\ActiveRecord
 {
+  public $temas;
     /**
      * {@inheritdoc}
      */

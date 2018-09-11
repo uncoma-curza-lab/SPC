@@ -34,6 +34,7 @@ use Yii;
 class Programa extends \yii\db\ActiveRecord
 {
     public $objetivos;
+    public $unidades;
 
     /**
      * {@inheritdoc}
@@ -100,5 +101,9 @@ class Programa extends \yii\db\ActiveRecord
     public function getObjetivos()
     {
         return $this->hasMany(Objetivo::className(), ['programa_id' => 'id']);
+    }
+    public function getUnidades()
+    {
+        return $this->hasMany(Unidad::className(), ['programa_id' => 'id']);
     }
 }

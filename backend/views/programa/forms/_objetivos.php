@@ -1,7 +1,8 @@
-<?php use unclead\multipleinput\MultipleInput;
-use unclead\multipleinput\MultipleInputColumn;
-use backend\models\Objetivo;
-use yii\data\ActiveDataProvider;
+<?php
+  use unclead\multipleinput\MultipleInput;
+  use unclead\multipleinput\MultipleInputColumn;
+  use backend\models\Objetivo;
+  use yii\data\ActiveDataProvider;
 ?>
 <?=
  $form->field($model,'objetivos')->widget(
@@ -12,9 +13,9 @@ use yii\data\ActiveDataProvider;
         [
           'name' => 'descripcion',
         ],
-        [
+/*        [
           'name'=> 'programa_id',
-        ]
+        ]*/
       ],
       'addButtonPosition' => [
               //MultipleInput::POS_HEADER,

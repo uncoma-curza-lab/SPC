@@ -1,19 +1,37 @@
 <?php
-use kartik\tabs\TabsX;
+use unclead\multipleinput\MultipleInput;
+use unclead\multipleinput\MultipleInputColumn;
+
  ?>
 <h3>4. Contenidos analíticos</h3>
-<?= TabsX::widget([
-  'position' => TabsX::POS_LEFT,
-  'align' => TabsX::ALIGN_LEFT,
-  'encodeLabels' => false,
-  'items' => [
-    [
-      'label' => 'Unidad I',
-      'content' =>  'temas'
-    ],
-    [
-      'label' => 'Unidad II',
-      'content' => 'temas'
-    ]
-  ]
-])?>
+<?=
+ $form->field($model,'unidades')->widget(
+    MultipleInput::className(),[
+      'model' => $model,
+      'allowEmptyList' => false,
+      'columns' => [
+        [
+          'name' => 'descripcion',
+        ],
+        [
+            'name' => 'temas',
+            'type'  => MultipleInput::class,
+            'options' => [
+                'columns' => [
+                    [
+                        'name' => 'descripcion'
+                    ]
+                ]
+            ]
+        ]
+        /*[
+          'name'=> 'programa_id',
+        ]*/
+      ],
+      'addButtonPosition' => [
+              //MultipleInput::POS_HEADER,
+              MultipleInput::POS_FOOTER,
+              MultipleInput::POS_ROW
+          ]
+    ]);
+ ?>

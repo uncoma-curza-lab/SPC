@@ -10,11 +10,18 @@ use froala\froalaeditor\FroalaEditorWidget;
   'items' => [
     [
       'label' => 'Descripcion',
-      'content' =>  $this->render('_objetivos',['model' => $model, 'form' => $form])
+      'content' =>  FroalaEditorWidget::widget([
+                  'model' => $model,
+                  'attribute' => 'objetivo_plan',
+                  'name' => 'objetivo_plan',
+                  'options' => [
+                      'id'=>'objetivo_plan'
+                  ]
+      ])
     ],
     [
-      'label' => 'Unidades',
-      'content' => 'Añadir más'
+      'label' => 'Puntos',
+      'content' =>  $this->render('_objetivos',['model' => $model, 'form' => $form])
     ]
   ]
 ])?>

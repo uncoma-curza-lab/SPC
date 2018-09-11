@@ -40,7 +40,6 @@ class m180906_125933_programa extends Migration
           //'crono_tentativo' => $this->string()->notNull(), fk
           'actv_extracur' => $this->string()->notNull(),
 
-
           'created_at'  => $this->dateTime(),
           'updated_at'  => $this->dateTime(),
           'created_by'  => $this->integer(),

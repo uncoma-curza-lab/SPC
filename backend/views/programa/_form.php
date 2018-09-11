@@ -18,21 +18,9 @@ use froala\froalaeditor\FroalaEditorWidget;
         <div class="form-group">
             <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
         </div>
-        <?=
-         $form->field($model,'objetivos')->widget(
-            MultipleInput::className(),[
-              'model' => $model,
-              'allowEmptyList' => false,
 
-              'addButtonPosition' => [
-                      //MultipleInput::POS_HEADER,
-                      MultipleInput::POS_FOOTER,
-                      MultipleInput::POS_ROW
-                  ]
-            ]);
-         ?>
     <h3>Programa</h3>
-    <?= $this->render('_portada',['model'=>$model]); ?>
+    <?= $this->render('_portada', ['model' => $model]); ?>
 
     <?php ActiveForm::end(); ?>
 
