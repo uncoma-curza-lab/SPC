@@ -26,7 +26,9 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'biblio_consulta') ?>
 
-    <?= $form->field($model, 'programa_id') ?>
+    <?= $form->field($model, 'crono_tent') ?>
+
+    <?php // echo $form->field($model, 'programa_id') ?>
 
     <div class="form-group">
         <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>

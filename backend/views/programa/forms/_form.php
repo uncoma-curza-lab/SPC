@@ -25,7 +25,7 @@ use yii\widgets\ActiveForm;
   <?= $this->render('_eval-acred',['model'=>$model, 'form' => $form]); ?>
   <?= $this->render('_parc-rec-promo',['model'=>$model, 'form' => $form]); ?>
   <?= $this->render('_dist-horaria',['model'=>$model, 'form' => $form]); ?>
-  <?= $this->render('_crono-tentativo',['model'=>$model, 'form' => $form]); ?>
+  <!--<?= $this->render('_crono-tentativo',['model'=>$model, 'form' => $form]); ?>-->
   <?= $this->render('_activ-extrac',['model'=>$model, 'form' => $form]); ?>
   <div class="form-group">
       <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>

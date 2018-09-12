@@ -22,6 +22,10 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'descripcion') ?>
 
+    <?= $form->field($model, 'biblio_basica') ?>
+
+    <?= $form->field($model, 'biblio_consulta') ?>
+
     <?= $form->field($model, 'programa_id') ?>
 
     <div class="form-group">

@@ -120,6 +120,7 @@ class ProgramaController extends Controller
             $unidad->programa_id = $model->id;
             $unidad->biblio_basica = $value['biblio_basica'];
             $unidad->biblio_consulta = $value['biblio_consulta'];
+            $unidad->crono_tent = $value['crono_tent'];
           // intenta guardar cada unidad
             $unidad->save();
 
@@ -154,6 +155,7 @@ class ProgramaController extends Controller
         $mUnidad->programa_id = $model->id;
         $mUnidad->biblio_basica = $unidad['biblio_basica'];
         $mUnidad->biblio_consulta = $unidad['biblio_consulta'];
+        $mUnidad->crono_tent = $unidad['crono_tent'];
         $mUnidad->temas = $mUnidad->getTemas()->all();
         $array = [];
         foreach ($mUnidad->temas as $tkey => $tvalue) {
@@ -163,7 +165,8 @@ class ProgramaController extends Controller
           "descripcion" => $mUnidad->descripcion,
           "temas" => $array,
           'biblio_basica' => $mUnidad->biblio_basica,
-          'biblio_consulta' => $mUnidad->biblio_consulta
+          'biblio_consulta' => $mUnidad->biblio_consulta,
+          'crono_tent' => $mUnidad->crono_tent,
         ];
         array_push($unidades,$unidad);
       }

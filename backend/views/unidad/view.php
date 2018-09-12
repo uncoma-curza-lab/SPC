@@ -32,6 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'descripcion',
             'biblio_basica',
             'biblio_consulta',
+            'crono_tent',
             'programa_id',
         ],
     ]) ?>

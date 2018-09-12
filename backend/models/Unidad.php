@@ -11,6 +11,7 @@ use Yii;
  * @property string $descripcion
  * @property string $biblio_basica
  * @property string $biblio_consulta
+ * @property string $crono_tent
  * @property int $programa_id
  *
  * @property Tema[] $temas
@@ -18,7 +19,8 @@ use Yii;
  */
 class Unidad extends \yii\db\ActiveRecord
 {
-    public $temas;
+  public $temas;
+
     /**
      * {@inheritdoc}
      */
@@ -34,6 +36,7 @@ class Unidad extends \yii\db\ActiveRecord
     {
         return [
             [['descripcion'], 'required'],
+            [['crono_tent'], 'safe'],
             [['programa_id'], 'integer'],
             [['descripcion', 'biblio_basica', 'biblio_consulta'], 'string', 'max' => 255],
             [['programa_id'], 'exist', 'skipOnError' => true, 'targetClass' => Programa::className(), 'targetAttribute' => ['programa_id' => 'id']],
@@ -47,9 +50,10 @@ class Unidad extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'descripcion' => 'Descripción',
+            'descripcion' => 'Descripcion',
             'biblio_basica' => 'Bibliografía Basica',
             'biblio_consulta' => 'Bibliografía Consulta',
+            'crono_tent' => 'Cronograma Tentativo',
             'programa_id' => 'Programa ID',
         ];
     }

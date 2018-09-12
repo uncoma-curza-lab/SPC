@@ -21,6 +21,7 @@ class m180907_113947_unidad extends Migration
            'descripcion' => $this->string()->notNull(),
            'biblio_basica' => $this->string()->notNull(),
            'biblio_consulta' => $this->string()->notNull(),
+           'crono_tent' => $this->date(),
            'programa_id' => $this->integer()
        ], $options);
 

@@ -2,7 +2,7 @@
 use unclead\multipleinput\MultipleInput;
 use unclead\multipleinput\MultipleInputColumn;
 use froala\froalaeditor\FroalaEditorWidget;
-
+use yii\jui\DatePicker;
  ?>
 <h3>4. Contenidos analíticos</h3>
 <?=
@@ -58,7 +58,15 @@ use froala\froalaeditor\FroalaEditorWidget;
             ],
 
           ]
-        ]
+        ],
+        [
+          'title' => 'fecha p/ cronograma tentativo',
+          'name' => 'crono_tent',
+          'type' => DatePicker::class,
+          'options' =>[
+            'dateFormat' => 'yyyy-MM-dd'
+          ]
+        ],
         /*[
           'name'=> 'programa_id',
         ]*/

@@ -9,6 +9,8 @@ use Yii;
  *
  * @property int $id
  * @property string $descripcion
+ * @property string $biblio_basica
+ * @property string $biblio_consulta
  * @property int $programa_id
  *
  * @property Tema[] $temas
@@ -16,7 +18,7 @@ use Yii;
  */
 class Unidad extends \yii\db\ActiveRecord
 {
-  public $temas;
+    public $temas;
     /**
      * {@inheritdoc}
      */
@@ -33,7 +35,7 @@ class Unidad extends \yii\db\ActiveRecord
         return [
             [['descripcion'], 'required'],
             [['programa_id'], 'integer'],
-            [['descripcion'], 'string', 'max' => 255],
+            [['descripcion', 'biblio_basica', 'biblio_consulta'], 'string', 'max' => 255],
             [['programa_id'], 'exist', 'skipOnError' => true, 'targetClass' => Programa::className(), 'targetAttribute' => ['programa_id' => 'id']],
         ];
     }
@@ -45,7 +47,9 @@ class Unidad extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'descripcion' => 'Descripcion',
+            'descripcion' => 'Descripción',
+            'biblio_basica' => 'Bibliografía Basica',
+            'biblio_consulta' => 'Bibliografía Consulta',
             'programa_id' => 'Programa ID',
         ];
     }

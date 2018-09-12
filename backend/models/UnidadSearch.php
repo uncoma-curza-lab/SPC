@@ -19,7 +19,7 @@ class UnidadSearch extends Unidad
     {
         return [
             [['id', 'programa_id'], 'integer'],
-            [['descripcion', 'biblio_basica', 'biblio_consulta'], 'safe'],
+            [['descripcion', 'biblio_basica', 'biblio_consulta', 'crono_tent'], 'safe'],
         ];
     }
 
@@ -60,6 +60,7 @@ class UnidadSearch extends Unidad
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
+            'crono_tent' => $this->crono_tent,
             'programa_id' => $this->programa_id,
         ]);
 

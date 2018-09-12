@@ -18,6 +18,8 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'biblio_consulta')->textInput(['maxlength' => true]) ?>
 
+    <?= $form->field($model, 'crono_tent')->textInput() ?>
+
     <?= $form->field($model, 'programa_id')->textInput() ?>
 
     <div class="form-group">
