@@ -5,7 +5,7 @@ use yii\jui\DatePicker;
 <h3>10. Cronograma Tentativo</h3>
 <?php echo DatePicker::widget([
     'model' => $model,
-    'attribute' => 'from_date',
+    'attribute' => 'created_at',
     //'language' => 'ru',
     //'dateFormat' => 'yyyy-MM-dd',
 ]); ?>
