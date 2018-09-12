@@ -14,13 +14,13 @@ use yii\widgets\ActiveForm;
   'validateOnBlur'            => false,
 ]); ?>
 
-  
+
 
   <?= $this->render('_fundamentacion',['model'=>$model, 'form' => $form]); ?>
   <?= $this->render('_objetivo-plan',['model'=>$model, 'form' => $form]); ?>
   <?= $this->render('_contenido-plan',['model'=>$model, 'form' => $form]); ?>
   <?= $this->render('_contenido-analitico',['model'=>$model, 'form' => $form]); ?>
-  <?= $this->render('_biblio-byc',['model'=>$model, 'form' => $form]); ?>
+  <!--<?= $this->render('_biblio-byc',['model'=>$model, 'form' => $form]); ?>-->
   <?= $this->render('_propuesta-metodologica',['model'=>$model, 'form' => $form]); ?>
   <?= $this->render('_eval-acred',['model'=>$model, 'form' => $form]); ?>
   <?= $this->render('_parc-rec-promo',['model'=>$model, 'form' => $form]); ?>

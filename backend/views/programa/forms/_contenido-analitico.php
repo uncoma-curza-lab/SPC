@@ -1,6 +1,7 @@
 <?php
 use unclead\multipleinput\MultipleInput;
 use unclead\multipleinput\MultipleInputColumn;
+use froala\froalaeditor\FroalaEditorWidget;
 
  ?>
 <h3>4. Contenidos analíticos</h3>
@@ -28,6 +29,35 @@ use unclead\multipleinput\MultipleInputColumn;
                     ]
                 ]
             ]
+        ],
+        [
+          'title' => 'Bibliografía basica',
+          'name' => 'biblio_basica',
+          'type' =>  FroalaEditorWidget::class,
+          'options' => [
+            'clientOptions' => [
+              'height' => 100,
+              'language' => 'es',
+              'height' => 100,
+              'theme' => 'gray',
+              'toolbarButtons' => ['bold', 'italic', 'underline', '|', 'paragraphFormat', 'fontSize','color','|','undo','redo','align'],
+            ],
+
+          ]
+        ],
+        [
+          'title' => 'Bibliografía consulta',
+          'name' => 'biblio_consulta',
+          'type' =>  FroalaEditorWidget::class,
+          'options' => [
+            'clientOptions' => [
+              'language' => 'es',
+              'height' => 100,
+              'theme' => 'gray',
+              'toolbarButtons' => ['bold', 'italic', 'underline', '|', 'paragraphFormat', 'fontSize','color','|','undo','redo','align'],
+            ],
+
+          ]
         ]
         /*[
           'name'=> 'programa_id',

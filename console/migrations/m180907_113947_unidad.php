@@ -19,6 +19,8 @@ class m180907_113947_unidad extends Migration
        $this->createTable('{{unidad}}',[
            'id'      =>  $this->primaryKey(),
            'descripcion' => $this->string()->notNull(),
+           'biblio_basica' => $this->string()->notNull(),
+           'biblio_consulta' => $this->string()->notNull(),
            'programa_id' => $this->integer()
        ], $options);
 

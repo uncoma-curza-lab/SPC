@@ -14,10 +14,6 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'descripcion')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'biblio_basica')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'biblio_consulta')->textInput(['maxlength' => true]) ?>
-
     <?= $form->field($model, 'programa_id')->textInput() ?>
 
     <div class="form-group">

@@ -19,7 +19,7 @@ class UnidadSearch extends Unidad
     {
         return [
             [['id', 'programa_id'], 'integer'],
-            [['descripcion', 'biblio_basica', 'biblio_consulta'], 'safe'],
+            [['descripcion'], 'safe'],
         ];
     }
 
@@ -63,9 +63,7 @@ class UnidadSearch extends Unidad
             'programa_id' => $this->programa_id,
         ]);
 
-        $query->andFilterWhere(['like', 'descripcion', $this->descripcion])
-            ->andFilterWhere(['like', 'biblio_basica', $this->biblio_basica])
-            ->andFilterWhere(['like', 'biblio_consulta', $this->biblio_consulta]);
+        $query->andFilterWhere(['like', 'descripcion', $this->descripcion]);
 
         return $dataProvider;
     }

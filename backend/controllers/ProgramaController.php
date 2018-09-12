@@ -95,7 +95,7 @@ class ProgramaController extends Controller
           foreach ($objetivos_aux as $key => $value) {
             $value->delete();
           }
-          foreach ($objetivos as $key => $value ) {
+          foreach ($objetivos['descripcion'] as $key => $value ) {
             $obj = new Objetivo();
             $obj->descripcion =$value;
             $obj->programa_id = $model->id;
@@ -118,6 +118,8 @@ class ProgramaController extends Controller
             $unidad = new Unidad();
             $unidad->descripcion = $value['descripcion'];
             $unidad->programa_id = $model->id;
+            $unidad->biblio_basica = $value['biblio_basica'];
+            $unidad->biblio_consulta = $value['biblio_consulta'];
           // intenta guardar cada unidad
             $unidad->save();
 
@@ -150,6 +152,8 @@ class ProgramaController extends Controller
         $mUnidad->id = $unidad->id;
         $mUnidad->descripcion = $unidad['descripcion'];
         $mUnidad->programa_id = $model->id;
+        $mUnidad->biblio_basica = $unidad['biblio_basica'];
+        $mUnidad->biblio_consulta = $unidad['biblio_consulta'];
         $mUnidad->temas = $mUnidad->getTemas()->all();
         $array = [];
         foreach ($mUnidad->temas as $tkey => $tvalue) {
@@ -157,7 +161,9 @@ class ProgramaController extends Controller
         }
         $unidad = [
           "descripcion" => $mUnidad->descripcion,
-          "temas" => $array
+          "temas" => $array,
+          'biblio_basica' => $mUnidad->biblio_basica,
+          'biblio_consulta' => $mUnidad->biblio_consulta
         ];
         array_push($unidades,$unidad);
       }
