@@ -5,7 +5,13 @@
   use yii\helpers\ArrayHelper;
   use backend\models\Departamento;
 ?>
-<?php $form = ActiveForm::begin(); ?>
+<?php $form = ActiveForm::begin([
+  'enableAjaxValidation'      => true,
+  'enableClientValidation'    => false,
+  'validateOnChange'          => false,
+  'validateOnSubmit'          => true,
+  'validateOnBlur'            => false,
+]); ?>
 
 <?= $form->field($model, 'departamento_id')->widget(Select2::classname(),[
     'data' => ArrayHelper::map(Departamento::find()->all(),'id','nom'),
@@ -30,4 +36,7 @@
 <?= $form->field($model, 'ayudante_p')->textInput(['maxlength' => true]) ?>
 
 <?= $form->field($model, 'ayudante_s')->textInput(['maxlength' => true]) ?>
+<div class="form-group">
+    <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
+</div>
 <?php ActiveForm::end(); ?>

@@ -3,6 +3,7 @@
 namespace backend\models;
 
 use Yii;
+use yii\web\NotFoundHttpException;
 
 /**
  * This is the model class for table "programa".
@@ -52,6 +53,7 @@ class Programa extends \yii\db\ActiveRecord
         return [
             [['departamento_id', 'cuatrimestre', 'created_by', 'updated_by'], 'integer'],
           //  [['curso', 'profadj_regular', 'asist_regular', 'ayudante_p', 'ayudante_s', 'fundament', 'objetivo_plan', 'contenido_plan', 'propuesta_met', 'evycond_acreditacion', 'parcial_rec_promo', 'distr_horaria', 'actv_extracur'], 'required'],
+            //[['unidades'] ,'validateUnidades'],
             [['created_at', 'updated_at'], 'safe'],
             [['curso', 'profadj_regular', 'asist_regular', 'ayudante_p', 'ayudante_s'], 'string', 'max' => 60],
             [['year'], 'string', 'max' => 4],
@@ -106,5 +108,21 @@ class Programa extends \yii\db\ActiveRecord
     {
 
         return $this->hasMany(Unidad::className(), ['programa_id' => 'id']);
+    }
+    public function validateUnidades($attribute){
+      $items = $this->$attribute;
+      if(!is_array($items)){
+        $this->addError("Error no es arreglo");
+      }
+      foreach ($items as $key => $value) {
+        if($key=='unidades'){
+            if(strlen($value['descripcion'])<30){
+              $this->addError( 'The city must be either "London" or "Paris".');
+            //  throw new NotFoundHttpException('The requested page does not exist.');
+
+            }
+        }
+
+      }
     }
 }

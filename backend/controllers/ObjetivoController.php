@@ -62,12 +62,12 @@ class ObjetivoController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($id)
     {
         $model = new Objetivo();
-
+        $model->programa_id=$id;
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['programa/objetivo-plan', 'id' =>$id]);
         }
 
         return $this->render('create', [
@@ -87,7 +87,7 @@ class ObjetivoController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['programa/objetivo-plan', 'id' => $model->programa_id]);
         }
 
         return $this->render('update', [
@@ -104,9 +104,11 @@ class ObjetivoController extends Controller
      */
     public function actionDelete($id)
     {
+        $model = $this->findModel($id);
+        $programa_id = $model->programa_id;
         $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+        return $this->redirect(['programa/objetivo-plan','id'=>$programa_id]);
     }
 
     /**

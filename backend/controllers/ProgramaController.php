@@ -70,14 +70,133 @@ class ProgramaController extends Controller
     public function actionCreate()
     {
         $model = new Programa();
-
+/*
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['pagina', 'id' => $model->id]);
+        }*/
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['fundamentacion', 'id' => $model->id]);
         }
 
         return $this->render('create', [
             'model' => $model,
         ]);
+    }
+    public function actionFundamentacion($id){
+      $model = $this->findModel($id);
+
+      if ($model->load(Yii::$app->request->post()) && $model->save()) {
+          return $this->redirect(['objetivo-plan', 'id' => $model->id]);
+      }
+
+      return $this->render('forms/_fundamentacion', [
+          'model' => $model,
+      ]);
+    }
+    public function actionObjetivoPlan($id){
+      $model = $this->findModel($id);
+
+      if ($model->load(Yii::$app->request->post()) && $model->save()) {
+          return $this->redirect(['contenido-plan', 'id' => $model->id]);
+      }
+
+      return $this->render('forms/_objetivo-plan', [
+          'model' => $model,
+      ]);
+    }
+    public function actionContenidoPlan($id){
+      $model = $this->findModel($id);
+
+      if ($model->load(Yii::$app->request->post()) && $model->save()) {
+          return $this->redirect(['contenido-analitico', 'id' => $model->id]);
+      }
+
+      return $this->render('forms/_contenido-plan', [
+          'model' => $model,
+      ]);
+    }
+    public function actionContenidoAnalitico($id){
+      $model = $this->findModel($id);
+
+      if ($model->load(Yii::$app->request->post()) && $model->save()) {
+          return $this->redirect(['propuesta-metodologica', 'id' => $model->id]);
+      }
+
+      return $this->render('forms/_contenido-analitico', [
+          'model' => $model,
+      ]);
+    }
+
+    public function actionPropuestaMetodologica($id){
+      $model = $this->findModel($id);
+
+      if ($model->load(Yii::$app->request->post()) && $model->save()) {
+          return $this->redirect(['eval-acred', 'id' => $model->id]);
+      }
+
+      return $this->render('forms/_propuesta-metodologica', [
+          'model' => $model,
+      ]);
+    }
+
+    public function actionEvalAcred($id){
+      $model = $this->findModel($id);
+
+      if ($model->load(Yii::$app->request->post()) && $model->save()) {
+          return $this->redirect(['parcial-rec-promo', 'id' => $model->id]);
+      }
+
+      return $this->render('forms/_eval-acred', [
+          'model' => $model,
+      ]);
+    }
+
+    public function actionParcialRecPromo($id){
+      $model = $this->findModel($id);
+
+      if ($model->load(Yii::$app->request->post()) && $model->save()) {
+          return $this->redirect(['dist-horaria', 'id' => $model->id]);
+      }
+
+      return $this->render('forms/_parc-rec-promo', [
+          'model' => $model,
+      ]);
+    }
+
+    public function actionDistHoraria($id){
+      $model = $this->findModel($id);
+
+      if ($model->load(Yii::$app->request->post()) && $model->save()) {
+          return $this->redirect(['crono-tentativo', 'id' => $model->id]);
+      }
+
+      return $this->render('forms/_dist-horaria', [
+          'model' => $model,
+      ]);
+    }
+
+    public function actionCronoTentativo($id){
+      $model = $this->findModel($id);
+
+      if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['actividad-extracurricular', 'id' => $model->id]);
+      }
+
+      return $this->render('forms/_crono-tentativo', [
+          'model' => $model,
+      ]);
+    }
+
+    public function actionActividadExtracurricular($id){
+      $model = $this->findModel($id);
+
+      if ($model->load(Yii::$app->request->post()) && $model->save()) {
+          return $this->redirect(['index']);
+      }
+
+      return $this->render('forms/_activ-extrac', [
+          'model' => $model,
+      ]);
     }
 
     /**
@@ -85,10 +204,12 @@ class ProgramaController extends Controller
     * Falta aplicar transacciones
     */
     public function actionPagina($id){
+      //$model = DynamicModel::validateData([]);
       $model = $this->findModel($id);
-      if ($model->load(Yii::$app->request->post())){
+      if ( $model->load(Yii::$app->request->post()) ){
+        if($model->hasErrors()){
         //procesa los objetivos
-        $objetivos = $_POST['Programa']['objetivos'] ;
+        $objetivos = $_POST['Programa']['objetivos'];
         if(sizeof($objetivos) > 0)
         {
           $objetivos_aux = $model->getObjetivos()->all();
@@ -136,10 +257,11 @@ class ProgramaController extends Controller
         //intentamos guardar el modelo
         if (  $model->save() )
           //return $this->redirect(['view', 'id' => $model->id]);
-          return $this->render('pagina',['model'=>$model]);
-        else
-          return $this->redirect(['pagina','id'=>$model->id]);
-      }
+          //return $this->render('pagina',['model'=>$model]);
+          return $this->redirect(['index']);
+        //else
+          //return $this->redirect(['pagina','id'=>$model->id]);
+      }}
       //prepara los objetivos para la vista
       $objetivos_aux = $model->getObjetivos()->all();
       $model->objetivos = $objetivos_aux;
@@ -189,7 +311,7 @@ class ProgramaController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+                    return $this->redirect(['fundamentacion', 'id' => $model->id]);
         }
 
         return $this->render('update', [
@@ -226,4 +348,5 @@ class ProgramaController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
 }

@@ -1,6 +1,5 @@
 <?php
 use yii\helpers\Html;
-
 use yii\widgets\ActiveForm;
 /* @var $this yii\web\View */
 /* @var $model backend\models\Programa */
@@ -13,8 +12,6 @@ use yii\widgets\ActiveForm;
   'validateOnSubmit'          => true,
   'validateOnBlur'            => false,
 ]); ?>
-
-
 
   <?= $this->render('_fundamentacion',['model'=>$model, 'form' => $form]); ?>
   <?= $this->render('_objetivo-plan',['model'=>$model, 'form' => $form]); ?>

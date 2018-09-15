@@ -73,4 +73,15 @@ class Unidad extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Programa::className(), ['id' => 'programa_id']);
     }
+    public function validateUnidades($attribute)
+    {
+      $items = $this->$attribute;
+      if (!is_array($items)) {
+        $items = [];
+      }
+
+      foreach ($items as $key => $value) {
+
+      }
+    }
 }
