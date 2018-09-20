@@ -7,7 +7,7 @@ use yii\widgets\DetailView;
 /* @var $model backend\models\Objetivo */
 
 $this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Objetivos', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Objetivos', 'url' => ['programa/objetivo-plan','id' => $model->programa_id]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="objetivo-view">

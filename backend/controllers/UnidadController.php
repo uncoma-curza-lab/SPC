@@ -104,10 +104,17 @@ class UnidadController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        $temas = $model->getTemas()->all();
+        foreach ($temas as $key) {
+          $key->delete();
+        }
+        $programa_id = $model->programa_id;
+        $model->delete();
 
-        return $this->redirect(['index']);
+        return $this->redirect(['programa/contenido-analitico', 'id' => $programa_id]);
     }
+
 
     /**
      * Finds the Unidad model based on its primary key value.

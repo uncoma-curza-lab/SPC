@@ -52,7 +52,7 @@ class Programa extends \yii\db\ActiveRecord
     {
         return [
             [['departamento_id', 'cuatrimestre', 'created_by', 'updated_by'], 'integer'],
-          //  [['curso', 'profadj_regular', 'asist_regular', 'ayudante_p', 'ayudante_s', 'fundament', 'objetivo_plan', 'contenido_plan', 'propuesta_met', 'evycond_acreditacion', 'parcial_rec_promo', 'distr_horaria', 'actv_extracur'], 'required'],
+            //[['curso', 'profadj_regular', 'asist_regular', 'ayudante_p', 'ayudante_s', 'fundament', 'objetivo_plan', 'contenido_plan', 'propuesta_met', 'evycond_acreditacion', 'parcial_rec_promo', 'distr_horaria', 'actv_extracur'], 'required'],
             //[['unidades'] ,'validateUnidades'],
             [['created_at', 'updated_at'], 'safe'],
             [['curso', 'profadj_regular', 'asist_regular', 'ayudante_p', 'ayudante_s'], 'string', 'max' => 60],

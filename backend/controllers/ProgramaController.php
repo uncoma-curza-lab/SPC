@@ -70,7 +70,7 @@ class ProgramaController extends Controller
     public function actionCreate()
     {
         $model = new Programa();
-/*
+        /*
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['pagina', 'id' => $model->id]);
         }*/

@@ -9,16 +9,11 @@ use backend\models\TemaSearch;
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\TemaSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
-
 ?>
 <div class="tema-index">
 
+
     <?php Pjax::begin(); ?>
-
-    <p>
-        <?= Html::a('Create Tema', ['tema/create', 'id' => $model->id], ['class' => 'btn btn-success']) ?>
-    </p>
-
     <?= GridView::widget([
         'dataProvider' => new ActiveDataProvider([
           'query' => $model->getTemas()
@@ -28,7 +23,18 @@ use backend\models\TemaSearch;
             ['class' => 'yii\grid\SerialColumn'],
 
             'id',
-            'descripcion',
+            [
+              'attribute' => 'descripcion',
+              'format' => 'html',
+              'value' => function($data){
+                if(strlen($data->descripcion) > 40 ){
+                    return  substr($data->descripcion,0,50)."...";
+                } else {
+                  return $data->descripcion;
+                }
+
+              },
+            ],
             'unidad_id',
 
             [
@@ -38,4 +44,7 @@ use backend\models\TemaSearch;
         ],
     ]); ?>
     <?php Pjax::end(); ?>
+    <p>
+        <?= Html::a('Crear tema', ['tema/create', 'id' => $model->id], ['class' => 'btn btn-success']) ?>
+    </p>
 </div>

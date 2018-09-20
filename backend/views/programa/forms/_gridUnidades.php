@@ -12,10 +12,10 @@ use yii\data\ActiveDataProvider;
 
 ?>
 <div class="unidad-index">
+  <p>
+      <?= Html::a('Create Unidad', ['unidad/create' , 'id' => $model->id], ['class' => 'btn btn-success']) ?>
+  </p>
     <?php Pjax::begin(); ?>
-    <p>
-        <?= Html::a('Create Unidad', ['unidad/create' , 'id' => $model->id], ['class' => 'btn btn-success']) ?>
-    </p>
 
     <?= GridView::widget([
         'dataProvider' => new ActiveDataProvider([
@@ -26,7 +26,17 @@ use yii\data\ActiveDataProvider;
             ['class' => 'yii\grid\SerialColumn'],
 
             'id',
-            'descripcion',
+            [
+              'attribute' => 'descripcion',
+              'format' => 'html',
+              'value' => function($data){
+                if(strlen($data->descripcion) > 40){
+                  return substr($data->descripcion,0,50)."...";
+                } else {
+                  return $data->descripcion;
+                }
+              }
+            ],
             'biblio_basica',
             'biblio_consulta',
             'crono_tent',

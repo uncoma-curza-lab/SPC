@@ -18,7 +18,17 @@ use backend\models\UnidadSearch;
     'columns' => [
         ['class' => 'yii\grid\SerialColumn'],
 
-        'descripcion',
+        [
+          'attribute' => 'descripcion',
+          'format' => 'html',
+          'value' => function($data){
+            if(strlen($data->descripcion) > 40){
+              return substr($data->descripcion,0,50)."...";
+            } else {
+              return $data->descripcion;
+            }
+          }
+        ],
         'crono_tent',
 
         [

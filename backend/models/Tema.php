@@ -31,7 +31,7 @@ class Tema extends \yii\db\ActiveRecord
         return [
             [['descripcion'], 'required'],
             [['unidad_id'], 'integer'],
-            [['descripcion'], 'string', 'max' => 255],
+            //[['descripcion'], 'string', 'max' => 255],
             [['unidad_id'], 'exist', 'skipOnError' => true, 'targetClass' => Unidad::className(), 'targetAttribute' => ['unidad_id' => 'id']],
         ];
     }
