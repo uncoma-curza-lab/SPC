@@ -4,6 +4,7 @@
   use kartik\select2\Select2;
   use yii\helpers\ArrayHelper;
   use backend\models\Departamento;
+  use backend\models\Status;
 ?>
 <?php $form = ActiveForm::begin([
   'enableAjaxValidation'      => true,
@@ -12,6 +13,7 @@
   'validateOnSubmit'          => true,
   'validateOnBlur'            => false,
 ]); ?>
+
 <div class="row">
   <div class="col-xs-3">
     <?= $form->field($model, 'departamento_id')->widget(Select2::classname(),[
@@ -24,15 +26,39 @@
       ]) ?>
 
   </div>
-
-  <div class="col-xs-3">
-    <?= $form->field($model, 'cuatrimestre')->textInput() ?>
+  <div class="col-xs-4">
+    <?= $form->field($model, 'status_id')->widget(Select2::classname(),[
+        'data' => ArrayHelper::map(Status::find()->all(),'id','descripcion'),
+        'language' => 'es',
+        'options' => ['placeholder' => 'Seleccione un estado'],
+        'pluginOptions' => [
+          'allowClear' => true,
+        ],
+      ]) ?>
   </div>
+
+  <div class="col-xs-2">
+    <?= $form->field($model, 'cuatrimestre')->widget(Select2::classname(),[
+        'data' => [1,2],
+        'language' => 'es',
+        'options' => ['placeholder' => 'Seleccione un CUATRIMESTRE'],
+        'pluginOptions' => [
+          'allowClear' => true,
+        ],
+      ]) ?>
+  </div>
+
   <div class="col-xs-2">
     <?= $form->field($model, 'year')->textInput(['maxlength' => true]) ?>
   </div>
+
+</div>
+<div class="row">
   <div class="col-xs-4">
     <?= $form->field($model, 'curso')->textInput(['maxlength' => true]) ?>
+  </div>
+  <div class="col-xs-4">
+    <?= $form->field($model, 'asignatura')->textInput(['maxlength' => true]) ?>
   </div>
 </div>
 <hr>
@@ -55,6 +81,7 @@
 
 
 <div class="form-group">
-    <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
+    <?= Html::submitButton('Seguir', ['class' => 'btn btn-success']) ?>
+    <?= Html::a('Salir', ['index'],['class' => 'btn btn-warning']) ?>
 </div>
 <?php ActiveForm::end(); ?>

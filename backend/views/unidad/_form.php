@@ -85,13 +85,15 @@ use yii\jui\DatePicker;
     <div class="form-group">
         <?php
           if(!isset($model->id)) {
-            $buton= 'Guardar y agregar temas';
+            $button= 'Guardar y agregar temas';
           } else {
-            $buton= 'Guardar';
+            $button= 'Guardar';
           }
         ?>
         <div class="row">
-          <?= Html::submitButton(''.$buton, ['class' => 'btn btn-success']) ?>
+          <?= Html::submitButton(''.$button, ['class' => 'btn btn-success']) ?>
+          <?= Html::a('Volver', ['programa/contenido-analitico','id' => $model->programa_id],['class' => 'btn btn-warning']) ?>
+
         </div>
     </div>
     <?php if ( isset($model->id) ) {?>

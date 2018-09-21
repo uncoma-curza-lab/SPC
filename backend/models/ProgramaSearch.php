@@ -18,8 +18,8 @@ class ProgramaSearch extends Programa
     public function rules()
     {
         return [
-            [['id', 'departamento_id', 'cuatrimestre', 'created_by', 'updated_by'], 'integer'],
-            [['curso', 'year', 'profadj_regular', 'asist_regular', 'ayudante_p', 'ayudante_s', 'fundament', 'objetivo_plan', 'contenido_plan', 'propuesta_met', 'evycond_acreditacion', 'parcial_rec_promo', 'distr_horaria', 'actv_extracur', 'created_at', 'updated_at'], 'safe'],
+            [['id', 'departamento_id', 'status_id', 'cuatrimestre', 'created_by', 'updated_by'], 'integer'],
+            [['asignatura', 'curso', 'year', 'profadj_regular', 'asist_regular', 'ayudante_p', 'ayudante_s', 'fundament', 'objetivo_plan', 'contenido_plan', 'propuesta_met', 'evycond_acreditacion', 'parcial_rec_promo', 'distr_horaria', 'crono_tentativo', 'actv_extracur', 'created_at', 'updated_at'], 'safe'],
         ];
     }
 
@@ -61,6 +61,7 @@ class ProgramaSearch extends Programa
         $query->andFilterWhere([
             'id' => $this->id,
             'departamento_id' => $this->departamento_id,
+            'status_id' => $this->status_id,
             'cuatrimestre' => $this->cuatrimestre,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
@@ -68,7 +69,8 @@ class ProgramaSearch extends Programa
             'updated_by' => $this->updated_by,
         ]);
 
-        $query->andFilterWhere(['like', 'curso', $this->curso])
+        $query->andFilterWhere(['like', 'asignatura', $this->asignatura])
+            ->andFilterWhere(['like', 'curso', $this->curso])
             ->andFilterWhere(['like', 'year', $this->year])
             ->andFilterWhere(['like', 'profadj_regular', $this->profadj_regular])
             ->andFilterWhere(['like', 'asist_regular', $this->asist_regular])
@@ -81,6 +83,7 @@ class ProgramaSearch extends Programa
             ->andFilterWhere(['like', 'evycond_acreditacion', $this->evycond_acreditacion])
             ->andFilterWhere(['like', 'parcial_rec_promo', $this->parcial_rec_promo])
             ->andFilterWhere(['like', 'distr_horaria', $this->distr_horaria])
+            ->andFilterWhere(['like', 'crono_tentativo', $this->crono_tentativo])
             ->andFilterWhere(['like', 'actv_extracur', $this->actv_extracur]);
 
         return $dataProvider;

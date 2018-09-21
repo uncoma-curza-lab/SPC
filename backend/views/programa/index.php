@@ -17,7 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create Programa', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Crear Programa', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
@@ -25,9 +25,12 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
-            'departamento_id',
+            [
+              'attribute' => 'departamento_id',
+              'value' => function($data) {
+                return $data->getDepartamento()->one()->nom;
+              }
+            ],
             'curso',
             'year',
             'cuatrimestre',
@@ -48,7 +51,43 @@ $this->params['breadcrumbs'][] = $this->title;
             //'created_by',
             //'updated_by',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+              'class' => 'yii\grid\ActionColumn',
+              'template' => '{view}{update}{delete}{pdf}{status}',
+              'buttons' => [
+                'pdf' => function ($url,$model) {
+                    return Html::a(
+                        '<span style="padding:5px; font-size:20px;" class="glyphicon glyphicon-download"></span>',
+                        $url);
+                },
+                'status' => function ($url,$model) {
+                    return Html::a(
+                        '<span style="padding:5px; font-size:20px;" class="glyphicon glyphicon-info-sign"></span>',
+                        $url);
+                },
+                'view' => function ($url,$model) {
+                    return Html::a(
+                        '<span style="padding:5px; font-size:20px;" class="glyphicon glyphicon-eye-open"></span>',
+                        $url);
+                },
+                'update' => function ($url,$model) {
+                    return Html::a(
+                        '<span style="padding:5px; font-size:20px;" class="glyphicon glyphicon-pencil"></span>',
+                        $url);
+                },
+                'delete' => function ($url,$model) {
+                    return Html::a(
+                        '<span style="padding:5px; font-size:20px;" class="glyphicon glyphicon-trash"></span>',
+                        $url,
+                        [
+                            'title' => Yii::t('yii', 'Delete'),
+                            'data-confirm' => Yii::t('yii', 'Quiere eliminar el programa?'),
+                            'data-method' => 'post',
+                        ]
+                    );
+                },
+              ]
+            ],
         ],
     ]); ?>
     <?php Pjax::end(); ?>

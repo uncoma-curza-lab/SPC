@@ -17,7 +17,7 @@ use backend\models\ObjetivoSearch;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create Objetivo', ['objetivo/create', 'id' => $model->id], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Crear Objetivo', ['objetivo/create', 'id' => $model->id], ['class' => 'btn btn-success']) ?>
     </p>
     <?= GridView::widget([
         'dataProvider' => new ActiveDataProvider([
@@ -27,9 +27,17 @@ use backend\models\ObjetivoSearch;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
-            'descripcion',
-            'programa_id',
+            [
+              'attribute' => 'descripcion',
+              'format' => 'html',
+              'value' => function($data){
+                if(strlen($data->descripcion) > 40){
+                  return substr($data->descripcion,0,50)."...";
+                } else {
+                  return $data->descripcion;
+                }
+              }
+            ],
 
             [
               'class' => 'yii\grid\ActionColumn',

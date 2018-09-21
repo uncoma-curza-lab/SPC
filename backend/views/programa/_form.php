@@ -14,8 +14,6 @@ use froala\froalaeditor\FroalaEditorWidget;
 <div class="programa-form">
 
 
-
-
     <h3>Programa</h3>
     <?= $this->render('_portada', ['model' => $model]); ?>
 

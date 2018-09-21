@@ -32,7 +32,6 @@ use backend\models\TemaSearch;
                 } else {
                   return $data->descripcion;
                 }
-
               },
             ],
             'unidad_id',

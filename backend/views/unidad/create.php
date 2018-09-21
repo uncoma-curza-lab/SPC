@@ -6,8 +6,8 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model backend\models\Unidad */
 
-$this->title = 'Create Unidad';
-$this->params['breadcrumbs'][] = ['label' => 'Unidads', 'url' => ['programa/contenido-analitico','id' => $model->programa_id]];
+$this->title = 'Crear Unidad';
+$this->params['breadcrumbs'][] = ['label' => 'Unidades', 'url' => ['programa/contenido-analitico','id' => $model->programa_id]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="unidad-create">

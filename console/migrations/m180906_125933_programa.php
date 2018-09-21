@@ -19,7 +19,9 @@ class m180906_125933_programa extends Migration
       $this->createTable('{{programa}}',[
           'id'      =>  $this->primaryKey(),
           'departamento_id' => $this->integer(),
-          //'carrera'     => $this->integer(), fk
+          'status_id' => $this->integer(),
+          'asignatura' => $this->string(100)->notNull(),
+          //'carrera'     => $this->integer(),
           'curso'       => $this->string(60)->notNull(),
           'year'        => $this->string(4),
           'cuatrimestre'=> $this->integer(),
@@ -27,18 +29,19 @@ class m180906_125933_programa extends Migration
           'asist_regular'   => $this->string(60)->notNull(),
           'ayudante_p'             => $this->string(60)->notNull(),
           'ayudante_s'             => $this->string(60)->notNull(),
-          'fundament'       => $this->string()->notNull(),
-          'objetivo_plan'   => $this->string()->notNull(),
+          'fundament'       => $this->text()->notNull(),
+          'objetivo_plan'   => $this->text()->notNull(),
           //'objetivo_programa' => $this->string(255)->notNull(), fk
-          'contenido_plan'  => $this->string()->notNull(),
+          'contenido_plan'  => $this->text()->notNull(),
           //'contenido_analitico' => $this->string()->notNull(), fkxunidad
           //bibliografía basica fkxunidad
-          'propuesta_met'   => $this->string()->notNull(),
-          'evycond_acreditacion' => $this->string()->notNull(),
-          'parcial_rec_promo' => $this->string()->notNull(),
-          'distr_horaria' => $this->string()->notNull(),
-          //'crono_tentativo' => $this->string()->notNull(), fk
-          'actv_extracur' => $this->string()->notNull(),
+          'propuesta_met'   => $this->text()->notNull(),
+          'evycond_acreditacion' => $this->text()->notNull(),
+          'parcial_rec_promo' => $this->text()->notNull(),
+          'distr_horaria' => $this->text()->notNull(),
+          'crono_tentativo' => $this->text()->notNull(),
+          'actv_extracur' => $this->text()->notNull(),
+
 
           'created_at'  => $this->dateTime(),
           'updated_at'  => $this->dateTime(),
@@ -55,6 +58,15 @@ class m180906_125933_programa extends Migration
         'no action',
         'no action'
       );
+      $this->addForeignKey(
+        'statusprograma',
+        'programa',
+        'status_id',
+        'status',
+        'id',
+        'no action',
+        'no action'
+      );
     }
 
 
@@ -64,6 +76,7 @@ class m180906_125933_programa extends Migration
     public function safeDown()
     {
       $this->dropForeignKey('departamentoprograma','{{departamento}}');
+      $this->dropForeignKey('statusprograma','{{status}}');
       $this->dropTable('{{programa}}');
     }
 

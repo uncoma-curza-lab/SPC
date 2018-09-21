@@ -7,9 +7,14 @@ use yii\data\ActiveDataProvider;
 use yii\grid\GridView;
 use backend\models\Unidad;
 use backend\models\UnidadSearch;
+$this->params['breadcrumbs'][] = ['label' => '...'];
+$this->params['breadcrumbs'][] = ['label' => "Parciales, recuperatorios y coloquios", 'url' => ['parc-rec-promo', 'id' => $model->id]];
+$this->params['breadcrumbs'][] = ['label' => "Distribución Horaria", 'url' => ['dist-horaria', 'id' => $model->id]];
+$this->params['breadcrumbs'][] = 'Cronograma tentativo';
  ?>
 
-<h3>10. Cronograma Tentativo</h3>
+<h3>9. Cronograma Tentativo</h3>
+
 <?= GridView::widget([
     'dataProvider' => new ActiveDataProvider([
       'query' => $model->getUnidades()
@@ -38,5 +43,6 @@ use backend\models\UnidadSearch;
     ],
 ]); ?>
 <p>
-    <?= Html::a('Guardar', ['actividad-extracurricular' , 'id' => $model->id], ['class' => 'btn btn-success']) ?>
+    <?= Html::a('Seguir', ['actividad-extracurricular' , 'id' => $model->id], ['class' => 'btn btn-success']) ?>
+    <?= Html::a('Volver', ['dist-horaria', 'id' => $model->id],['class' => 'btn btn-warning']) ?>
 </p>

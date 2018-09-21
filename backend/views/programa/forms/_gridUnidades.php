@@ -13,7 +13,7 @@ use yii\data\ActiveDataProvider;
 ?>
 <div class="unidad-index">
   <p>
-      <?= Html::a('Create Unidad', ['unidad/create' , 'id' => $model->id], ['class' => 'btn btn-success']) ?>
+      <?= Html::a('Crear Unidad', ['unidad/create' , 'id' => $model->id], ['class' => 'btn btn-success']) ?>
   </p>
     <?php Pjax::begin(); ?>
 
@@ -25,7 +25,6 @@ use yii\data\ActiveDataProvider;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
             [
               'attribute' => 'descripcion',
               'format' => 'html',

@@ -13,7 +13,9 @@ use yii\widgets\ActiveForm;
 'validateOnSubmit'          => true,
 'validateOnBlur'            => false,
 ]); ?>
+
 <h3>4. Contenidos analíticos</h3>
+
 <?=
  $form->field($model,'unidades')->widget(
     MultipleInput::className(),[
@@ -94,6 +96,6 @@ use yii\widgets\ActiveForm;
     ]);
  ?>
  <div class="form-group">
-     <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
+     <?= Html::submitButton('Seguir', ['class' => 'btn btn-success']) ?>
  </div>
  <?php ActiveForm::end(); ?>

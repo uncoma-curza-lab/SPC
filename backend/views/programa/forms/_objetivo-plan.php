@@ -3,7 +3,12 @@ use kartik\tabs\TabsX;
 use froala\froalaeditor\FroalaEditorWidget;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+$this->params['breadcrumbs'][] = ['label' => '...'];
+$this->params['breadcrumbs'][] = ['label' => "Portada", 'url' => ['update', 'id' => $model->id]];
+$this->params['breadcrumbs'][] = ['label' => "Fundamentacion", 'url' => ['fundamentacion', 'id' => $model->id]];
+$this->params['breadcrumbs'][] = 'Objetivo según el plan de estudio';
 ?>
+
 <?php $form = ActiveForm::begin([
 'enableAjaxValidation'      => true,
 'enableClientValidation'    => false,
@@ -11,7 +16,9 @@ use yii\widgets\ActiveForm;
 'validateOnSubmit'          => true,
 'validateOnBlur'            => false,
 ]); ?>
+
 <h3>2. Objetivo según Plan de estudio</h3>
+
 <?= TabsX::widget([
   'position' => TabsX::POS_LEFT,
   'align' => TabsX::ALIGN_LEFT,
@@ -25,7 +32,14 @@ use yii\widgets\ActiveForm;
                   'name' => 'objetivo_plan',
                   'options' => [
                       'id'=>'objetivo_plan'
-                  ]
+                  ],
+                  'clientOptions' => [
+                    'height' => 100,
+                    'language' => 'es',
+                    'height' => 100,
+                    'theme' => 'gray',
+                    'toolbarButtons' => ['bold', 'italic', 'underline', '|', 'paragraphFormat', 'fontSize','color','|','undo','redo','align'],
+                  ],
       ])
     ],
     [
@@ -36,6 +50,8 @@ use yii\widgets\ActiveForm;
 ])?>
 
 <div class="form-group">
-    <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
+    <?= Html::submitButton('Seguir', ['class' => 'btn btn-success']) ?>
+    <?= Html::a('Volver', ['fundamentacion', 'id' => $model->id],['class' => 'btn btn-warning']) ?>
+
 </div>
 <?php ActiveForm::end(); ?>

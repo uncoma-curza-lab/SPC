@@ -2,6 +2,10 @@
 use froala\froalaeditor\FroalaEditorWidget;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+$this->params['breadcrumbs'][] = ['label' => '...'];
+$this->params['breadcrumbs'][] = ['label' => "Contenidos analíticos", 'url' => ['contenido-analitico', 'id' => $model->id]];
+$this->params['breadcrumbs'][] = ['label' => "Propuesta metodológica", 'url' => ['propuesta-metodologica', 'id' => $model->id]];
+$this->params['breadcrumbs'][] = 'Evaluación y condiciones de acreditación';
 ?>
 <?php $form = ActiveForm::begin([
   'enableAjaxValidation'      => true,
@@ -10,16 +14,28 @@ use yii\widgets\ActiveForm;
   'validateOnSubmit'          => true,
   'validateOnBlur'            => false,
 ]); ?>
-<h3>7. Evaluación y condiciones de acreditación</h3>
+
+<h3>6. Evaluación y condiciones de acreditación</h3>
+
 <?= FroalaEditorWidget::widget([
             'model' => $model,
             'attribute' => 'evycond_acreditacion',
             'name' => 'evycond_acreditacion',
             'options' => [
                 'id'=>'evycond_acreditacion'
-            ]
+            ],
+            'clientOptions' => [
+              'placeholderText' => 'Señalar alternativas de cursado regular, promocional, y libre y criterios de evaluación y acreditación de forma discriminada.',
+              'height' => 100,
+              'language' => 'es',
+              'height' => 100,
+              'theme' => 'gray',
+              'toolbarButtons' => ['bold', 'italic', 'underline', '|', 'paragraphFormat', 'fontSize','color','|','undo','redo','align'],
+            ],
 ]) ?>
+<br>
 <div class="form-group">
-    <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
+    <?= Html::submitButton('Seguir', ['class' => 'btn btn-success']) ?>
+    <?= Html::a('Volver', ['propuesta-metodologica', 'id' => $model->id],['class' => 'btn btn-warning']) ?>
 </div>
 <?php ActiveForm::end(); ?>
