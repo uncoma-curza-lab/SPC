@@ -6,6 +6,11 @@
   use backend\models\Departamento;
   use backend\models\Status;
 ?>
+<div class="progress">
+  <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+     0%
+  </div>
+</div>
 <?php $form = ActiveForm::begin([
   'enableAjaxValidation'      => true,
   'enableClientValidation'    => false,
@@ -81,7 +86,13 @@
 
 
 <div class="form-group">
-    <?= Html::submitButton('Seguir', ['class' => 'btn btn-success']) ?>
-    <?= Html::a('Salir', ['index'],['class' => 'btn btn-warning']) ?>
+    <div class="row">
+      <div class="col-xs-6 text-left">
+        <?= Html::a('Salir', ['index'],['class' => 'btn btn-warning']) ?>
+      </div>
+      <div class="col-xs-6 text-right">
+        <?= Html::submitButton('Seguir', ['class' => 'btn btn-success']) ?>
+      </div>
+    </div>
 </div>
 <?php ActiveForm::end(); ?>

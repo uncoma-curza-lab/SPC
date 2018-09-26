@@ -14,7 +14,11 @@ $this->params['breadcrumbs'][] = 'Activadades extracurriculares';
    'validateOnSubmit'          => true,
    'validateOnBlur'            => false,
  ]); ?>
-
+ <div class="progress">
+   <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="99" aria-valuemin="0" aria-valuemax="100" style="width: 99%">
+      99%
+   </div>
+ </div>
 <h3>10. Planificación de actividades Extracurriculares</h3>
 <?= FroalaEditorWidget::widget([
             'model' => $model,
@@ -34,7 +38,13 @@ $this->params['breadcrumbs'][] = 'Activadades extracurriculares';
 ]) ?>
 <br>
 <div class="form-group">
-    <?= Html::submitButton('Terminar', ['class' => 'btn btn-success']) ?>
-    <?= Html::a('Volver', ['crono-tentativo', 'id' => $model->id],['class' => 'btn btn-warning']) ?>
+    <div class="row">
+      <div class="col-xs-6 text-left">
+        <?= Html::a('Volver', ['crono-tentativo', 'id' => $model->id],['class' => 'btn btn-warning']) ?>
+      </div>
+      <div class="col-xs-6 text-right">
+        <?= Html::submitButton('Terminar', ['class' => 'btn btn-success']) ?>
+      </div>
+    </div>
 </div>
 <?php ActiveForm::end(); ?>

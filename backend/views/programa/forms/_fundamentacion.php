@@ -9,6 +9,11 @@
 
   $this->params['breadcrumbs'][] = 'Fundamentacion';
 ?>
+<div class="progress">
+  <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" style="width: 10%">
+     10%
+  </div>
+</div>
 <?php $form = ActiveForm::begin([
   'enableAjaxValidation'      => true,
   'enableClientValidation'    => false,
@@ -28,16 +33,22 @@
             ],
             'clientOptions' => [
               'placeholderText' => 'Ubicación de la asignatura dentro del Plan de estudios. Correlativas anteriores y posteriores. Sentido de la asignatura. Propósitos y estructura del programa.',
-              'height' => 100,
+              'height' => 300,
               'language' => 'es',
-              'height' => 100,
               'theme' => 'gray',
               'toolbarButtons' => ['bold', 'italic', 'underline', '|', 'paragraphFormat', 'fontSize','color','|','undo','redo','align'],
             ],
 ]) ?>
 <br>
+
 <div class="form-group">
-    <?= Html::submitButton('Seguir', ['class' => 'btn btn-success']) ?>
-    <?= Html::a('Volver', ['update', 'id' => $model->id],['class' => 'btn btn-warning']) ?>
+  <div class="row">
+    <div class="col-xs-6 text-left">
+      <?= Html::a('Volver', ['update', 'id' => $model->id],['class' => 'btn btn-warning']) ?>
+    </div>
+    <div class="col-xs-6 text-right">
+      <?= Html::submitButton('Seguir', ['class' => 'btn btn-success']) ?>
+    </div>
+  </div>
 </div>
 <?php ActiveForm::end(); ?>

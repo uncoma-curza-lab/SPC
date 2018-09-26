@@ -65,7 +65,7 @@ use yii\jui\DatePicker;
           ]) ?>
       </div>
     </div>
-    <div class="row">
+  <!--  <div class="row">
       <div class="col-xs-4">
         <?= $form->field($model, 'crono_tent')->widget(DatePicker::className(),[
           'language' => 'es',
@@ -81,26 +81,29 @@ use yii\jui\DatePicker;
           ],
           ]) ?>
       </div>
-    </div>
+    </div>-->
+    
     <div class="form-group">
-        <?php
-          if(!isset($model->id)) {
-            $button= 'Guardar y agregar temas';
-          } else {
-            $button= 'Guardar';
-          }
-        ?>
         <div class="row">
-          <?= Html::submitButton(''.$button, ['class' => 'btn btn-success']) ?>
-          <?= Html::a('Volver', ['programa/contenido-analitico','id' => $model->programa_id],['class' => 'btn btn-warning']) ?>
+          <div class="col-xs-6 text-left">
+            <?= Html::a('Volver', ['programa/contenido-analitico', 'id' => $model->programa_id],['class' => 'btn btn-warning']) ?>
+          </div>
+          <div class="col-xs-6 text-right">
+            <?php
+              if(!isset($model->id)) {
+                $button= 'Guardar y agregar temas';
+              } else {
+                $button= 'Guardar';
+              }
+            ?>
+            <div class="row">
+              <?= Html::submitButton(''.$button, ['class' => 'btn btn-success']) ?>
 
+            </div>
+          </div>
         </div>
     </div>
-    <?php if ( isset($model->id) ) {?>
-    <hr>
-    <h1>Temas</h1>
-    <?= $this->render('_gridTemas',['model' => $model]) ?>
-    <?php } ?>
+
 
     <?php ActiveForm::end(); ?>
 

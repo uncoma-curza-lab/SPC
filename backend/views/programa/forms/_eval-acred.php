@@ -14,7 +14,11 @@ $this->params['breadcrumbs'][] = 'Evaluación y condiciones de acreditación';
   'validateOnSubmit'          => true,
   'validateOnBlur'            => false,
 ]); ?>
-
+<div class="progress">
+  <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%">
+     60%
+  </div>
+</div>
 <h3>6. Evaluación y condiciones de acreditación</h3>
 
 <?= FroalaEditorWidget::widget([
@@ -35,7 +39,14 @@ $this->params['breadcrumbs'][] = 'Evaluación y condiciones de acreditación';
 ]) ?>
 <br>
 <div class="form-group">
-    <?= Html::submitButton('Seguir', ['class' => 'btn btn-success']) ?>
-    <?= Html::a('Volver', ['propuesta-metodologica', 'id' => $model->id],['class' => 'btn btn-warning']) ?>
+  <div class="row">
+    <div class="col-xs-6 text-left">
+      <?= Html::a('Volver', ['propuesta-metodologica', 'id' => $model->id],['class' => 'btn btn-warning']) ?>
+    </div>
+    <div class="col-xs-6 text-right">
+      <?= Html::submitButton('Seguir', ['class' => 'btn btn-success']) ?>
+    </div>
+  </div>
 </div>
+
 <?php ActiveForm::end(); ?>

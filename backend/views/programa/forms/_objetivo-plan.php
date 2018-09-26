@@ -8,7 +8,11 @@ $this->params['breadcrumbs'][] = ['label' => "Portada", 'url' => ['update', 'id'
 $this->params['breadcrumbs'][] = ['label' => "Fundamentacion", 'url' => ['fundamentacion', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Objetivo según el plan de estudio';
 ?>
-
+<div class="progress">
+  <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
+     20%
+  </div>
+</div>
 <?php $form = ActiveForm::begin([
 'enableAjaxValidation'      => true,
 'enableClientValidation'    => false,
@@ -19,39 +23,31 @@ $this->params['breadcrumbs'][] = 'Objetivo según el plan de estudio';
 
 <h3>2. Objetivo según Plan de estudio</h3>
 
-<?= TabsX::widget([
-  'position' => TabsX::POS_LEFT,
-  'align' => TabsX::ALIGN_LEFT,
-  'encodeLabels' => false,
-  'items' => [
-    [
-      'label' => 'Descripcion',
-      'content' =>  FroalaEditorWidget::widget([
-                  'model' => $model,
-                  'attribute' => 'objetivo_plan',
-                  'name' => 'objetivo_plan',
-                  'options' => [
-                      'id'=>'objetivo_plan'
-                  ],
-                  'clientOptions' => [
-                    'height' => 100,
-                    'language' => 'es',
-                    'height' => 100,
-                    'theme' => 'gray',
-                    'toolbarButtons' => ['bold', 'italic', 'underline', '|', 'paragraphFormat', 'fontSize','color','|','undo','redo','align'],
-                  ],
-      ])
-    ],
-    [
-      'label' => 'Puntos',
-      'content' =>  $this->renderAjax('_gridObjetivos', ['model'=>$model])
-    ]
-  ]
-])?>
+<?= FroalaEditorWidget::widget([
+            'model' => $model,
+            'attribute' => 'objetivo_plan',
+            'name' => 'objetivo_plan',
+            'options' => [
+                'id'=>'objetivo_plan'
+            ],
+            'clientOptions' => [
+              'placeholderText' => 'Se espera que los estudiantes puedan',
+              'language' => 'es',
+              'height' => 200,
+              'theme' => 'gray',
+              'toolbarButtons' => ['bold', 'italic', 'underline', '|','lineBreaker','paragraphFormat', 'fontSize','color','|','undo','redo','align'],
+            ],
+]) ?>
+<br>
 
 <div class="form-group">
-    <?= Html::submitButton('Seguir', ['class' => 'btn btn-success']) ?>
-    <?= Html::a('Volver', ['fundamentacion', 'id' => $model->id],['class' => 'btn btn-warning']) ?>
-
+    <div class="row">
+      <div class="col-xs-6 text-left">
+        <?= Html::a('Volver', ['fundamentacion', 'id' => $model->id],['class' => 'btn btn-warning']) ?>
+      </div>
+      <div class="col-xs-6 text-right">
+        <?= Html::submitButton('Seguir', ['class' => 'btn btn-success']) ?>
+      </div>
+    </div>
 </div>
 <?php ActiveForm::end(); ?>

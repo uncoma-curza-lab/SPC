@@ -95,7 +95,6 @@ class ProgramaController extends Controller
     }
     public function actionObjetivoPlan($id){
       $model = $this->findModel($id);
-
       if ($model->load(Yii::$app->request->post()) && $model->save()) {
           return $this->redirect(['contenido-plan', 'id' => $model->id]);
       }

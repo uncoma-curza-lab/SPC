@@ -7,6 +7,11 @@ $this->params['breadcrumbs'][] = ['label' => "Contenido según plan de estudio",
 $this->params['breadcrumbs'][] = ['label' => "Contenidos analíticos", 'url' => ['contenido-analitico', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Propuesta metodológica';
  ?>
+ <div class="progress">
+   <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%">
+      50%
+   </div>
+ </div>
 <h3>5. Propuesta Metodológica</h3>
 <?php $form = ActiveForm::begin([
   'enableAjaxValidation'      => true,
@@ -32,8 +37,15 @@ $this->params['breadcrumbs'][] = 'Propuesta metodológica';
             ],
 ]) ?>
 <br>
+
 <div class="form-group">
-    <?= Html::submitButton('Seguir', ['class' => 'btn btn-success']) ?>
-    <?= Html::a('Volver', ['contenido-analitico', 'id' => $model->id],['class' => 'btn btn-warning']) ?>
+    <div class="row">
+      <div class="col-xs-6 text-left">
+        <?= Html::a('Volver', ['contenido-analitico', 'id' => $model->id],['class' => 'btn btn-warning']) ?>
+      </div>
+      <div class="col-xs-6 text-right">
+        <?= Html::submitButton('Seguir', ['class' => 'btn btn-success']) ?>
+      </div>
+    </div>
 </div>
 <?php ActiveForm::end(); ?>

@@ -10,13 +10,15 @@ use yii\widgets\ActiveForm;
 
 <div class="objetivo-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin([
+  
+    ]); ?>
 
-    <?= $form->field($model, 'descripcion')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($modelObj, 'descripcion')->textInput(['maxlength' => true]) ?>
 
 
     <div class="form-group">
-        <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Submit'); ?>
     </div>
 
     <?php ActiveForm::end(); ?>

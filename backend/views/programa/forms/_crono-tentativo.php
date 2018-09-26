@@ -12,37 +12,34 @@ $this->params['breadcrumbs'][] = ['label' => "Parciales, recuperatorios y coloqu
 $this->params['breadcrumbs'][] = ['label' => "Distribución Horaria", 'url' => ['dist-horaria', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Cronograma tentativo';
  ?>
-
+ <div class="progress">
+   <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: 90%">
+      90%
+   </div>
+ </div>
 <h3>9. Cronograma Tentativo</h3>
 
-<?= GridView::widget([
-    'dataProvider' => new ActiveDataProvider([
-      'query' => $model->getUnidades()
-    ]),
-    'filterModel' => new UnidadSearch(),
-    'columns' => [
-        ['class' => 'yii\grid\SerialColumn'],
-
-        [
-          'attribute' => 'descripcion',
-          'format' => 'html',
-          'value' => function($data){
-            if(strlen($data->descripcion) > 40){
-              return substr($data->descripcion,0,50)."...";
-            } else {
-              return $data->descripcion;
-            }
-          }
-        ],
-        'crono_tent',
-
-        [
-          'class' => 'yii\grid\ActionColumn',
-          'controller' => 'unidad'
-        ],
-    ],
-]); ?>
-<p>
-    <?= Html::a('Seguir', ['actividad-extracurricular' , 'id' => $model->id], ['class' => 'btn btn-success']) ?>
+<?= FroalaEditorWidget::widget([
+            'model' => $model,
+            'attribute' => 'crono_tentativo',
+            'name' => 'crono_tentativo',
+            'options' => [
+                'id'=>'crono_tentativo'
+            ],
+            'clientOptions' => [
+              'placeholderText' => '',
+              'language' => 'es',
+              'height' => 200,
+              'theme' => 'gray',
+              'toolbarButtons' => ['bold', 'italic', 'underline', '|','lineBreaker','paragraphFormat', 'fontSize','color','|','undo','redo','align'],
+            ],
+]) ?>
+<br>
+<div class="row">
+  <div class="col-xs-6 text-left">
     <?= Html::a('Volver', ['dist-horaria', 'id' => $model->id],['class' => 'btn btn-warning']) ?>
-</p>
+  </div>
+  <div class="col-xs-6 text-right">
+    <?= Html::a('Seguir', ['actividad-extracurricular' , 'id' => $model->id], ['class' => 'btn btn-success']) ?>
+  </div>
+</div>

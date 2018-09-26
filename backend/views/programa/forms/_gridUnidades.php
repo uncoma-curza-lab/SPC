@@ -11,11 +11,13 @@ use yii\data\ActiveDataProvider;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 ?>
+
 <div class="unidad-index">
   <p>
-      <?= Html::a('Crear Unidad', ['unidad/create' , 'id' => $model->id], ['class' => 'btn btn-success']) ?>
+      <?= Html::a('Crear una Unidad', ['unidad/create' , 'id' => $model->id], ['class' => 'btn btn-success']) ?>
   </p>
     <?php Pjax::begin(); ?>
+
 
     <?= GridView::widget([
         'dataProvider' => new ActiveDataProvider([
@@ -30,15 +32,35 @@ use yii\data\ActiveDataProvider;
               'format' => 'html',
               'value' => function($data){
                 if(strlen($data->descripcion) > 40){
-                  return substr($data->descripcion,0,50)."...";
+                  return substr($data->descripcion,0,200)."...";
                 } else {
                   return $data->descripcion;
                 }
               }
             ],
-            'biblio_basica',
-            'biblio_consulta',
-            'crono_tent',
+            [
+              'attribute' => 'biblio_basica',
+              'format' => 'html',
+              'value' => function($data){
+                if(strlen($data->biblio_basica) > 40){
+                  return substr($data->biblio_basica,0,200)."...";
+                } else {
+                  return $data->biblio_basica;
+                }
+              }
+            ],
+            [
+              'attribute' => 'biblio_consulta',
+              'format' => 'html',
+              'value' => function($data){
+                if(strlen($data->biblio_consulta) > 40){
+                  return substr($data->biblio_consulta,0,200)."...";
+                } else {
+                  return $data->biblio_consulta;
+                }
+              }
+            ],
+            //'crono_tent',
             //'programa_id',
 
             [
