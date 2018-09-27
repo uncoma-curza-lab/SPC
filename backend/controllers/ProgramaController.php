@@ -15,7 +15,8 @@ use yii\filters\VerbFilter;
 use backend\models\Objetivo;
 
 /**
- * ProgramaController implements the CRUD actions for Programa model.
+ * Controlador de Programa
+ * @author Julián Murphy
  */
 class ProgramaController extends Controller
 {
@@ -35,7 +36,7 @@ class ProgramaController extends Controller
     }
 
     /**
-     * Lists all Programa models.
+     * Listado de programas
      * @return mixed
      */
     public function actionIndex()
@@ -50,10 +51,10 @@ class ProgramaController extends Controller
     }
 
     /**
-     * Displays a single Programa model.
+     * Muestra los datos del modelo
      * @param integer $id
      * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @throws NotFoundHttpException si el modelo no es encontrado
      */
     public function actionView($id)
     {
@@ -63,17 +64,14 @@ class ProgramaController extends Controller
     }
 
     /**
-     * Creates a new Programa model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
+     * Crea un programa nuevo
+     * @deprecated no se utiliza
      * @return mixed
      */
     public function actionCreate()
     {
         $model = new Programa();
-        /*
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['pagina', 'id' => $model->id]);
-        }*/
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['fundamentacion', 'id' => $model->id]);
         }
@@ -82,10 +80,20 @@ class ProgramaController extends Controller
             'model' => $model,
         ]);
     }
+
+    /**
+    *  Controla la vista _fundamentación
+    *  $_POST Guarda el modelo y redirecciona a la siguiente vista
+    *  @param integer $id del programa
+    *  @return mixed
+    */
     public function actionFundamentacion($id){
       $model = $this->findModel($id);
 
-      if ($model->load(Yii::$app->request->post()) && $model->save()) {
+      if(Yii::$app->request->post('submit') == 'salir' &&
+        $model->load(Yii::$app->request->post()) && $model->save()) {
+          return $this->redirect(['index']);
+      } else if ($model->load(Yii::$app->request->post()) && $model->save()) {
           return $this->redirect(['objetivo-plan', 'id' => $model->id]);
       }
 
@@ -93,9 +101,19 @@ class ProgramaController extends Controller
           'model' => $model,
       ]);
     }
+    /**
+    *  Controla la vista _objetivo-plan
+    *  $_POST Guarda el modelo y redirecciona a la siguiente vista
+    *  @param integer $id del programa
+    *  @return mixed
+    */
     public function actionObjetivoPlan($id){
       $model = $this->findModel($id);
-      if ($model->load(Yii::$app->request->post()) && $model->save()) {
+
+      if(Yii::$app->request->post('submit') == 'salir' &&
+        $model->load(Yii::$app->request->post()) && $model->save()) {
+          return $this->redirect(['index']);
+      } else if ($model->load(Yii::$app->request->post()) && $model->save()) {
           return $this->redirect(['contenido-plan', 'id' => $model->id]);
       }
 
@@ -103,10 +121,20 @@ class ProgramaController extends Controller
           'model' => $model,
       ]);
     }
+
+    /**
+    *  Controla la vista _contenido-plan
+    *  $_POST Guarda el modelo y redirecciona a la siguiente vista
+    *  @param integer $id del programa
+    *  @return mixed
+    */
     public function actionContenidoPlan($id){
       $model = $this->findModel($id);
 
-      if ($model->load(Yii::$app->request->post()) && $model->save()) {
+      if(Yii::$app->request->post('submit') == 'salir' &&
+        $model->load(Yii::$app->request->post()) && $model->save()) {
+          return $this->redirect(['index']);
+      } else if ($model->load(Yii::$app->request->post()) && $model->save()) {
           return $this->redirect(['contenido-analitico', 'id' => $model->id]);
       }
 
@@ -114,10 +142,19 @@ class ProgramaController extends Controller
           'model' => $model,
       ]);
     }
+    /**
+    *  Controla la vista _contenido-analitico
+    *  $_POST Guarda el modelo y redirecciona a la siguiente vista
+    *  @param integer $id del programa
+    *  @return mixed
+    */
     public function actionContenidoAnalitico($id){
       $model = $this->findModel($id);
 
-      if ($model->load(Yii::$app->request->post()) && $model->save()) {
+      if(Yii::$app->request->post('submit') == 'salir' &&
+        $model->load(Yii::$app->request->post()) && $model->save()) {
+          return $this->redirect(['index']);
+      } else if ($model->load(Yii::$app->request->post()) && $model->save()) {
           return $this->redirect(['propuesta-metodologica', 'id' => $model->id]);
       }
 
@@ -125,11 +162,19 @@ class ProgramaController extends Controller
           'model' => $model,
       ]);
     }
-
+    /**
+    *  Controla la vista _propuesta-metodologica
+    *  $_POST Guarda el modelo y redirecciona a la siguiente vista
+    *  @param integer $id del programa
+    *  @return mixed
+    */
     public function actionPropuestaMetodologica($id){
       $model = $this->findModel($id);
 
-      if ($model->load(Yii::$app->request->post()) && $model->save()) {
+      if(Yii::$app->request->post('submit') == 'salir' &&
+        $model->load(Yii::$app->request->post()) && $model->save()) {
+          return $this->redirect(['index']);
+      } else if ($model->load(Yii::$app->request->post()) && $model->save()) {
           return $this->redirect(['eval-acred', 'id' => $model->id]);
       }
 
@@ -137,11 +182,19 @@ class ProgramaController extends Controller
           'model' => $model,
       ]);
     }
-
+    /**
+    *  Controla la vista _eval-acred
+    *  $_POST Guarda el modelo y redirecciona a la siguiente vista
+    *  @param integer $id del programa
+    *  @return mixed
+    */
     public function actionEvalAcred($id){
       $model = $this->findModel($id);
 
-      if ($model->load(Yii::$app->request->post()) && $model->save()) {
+      if(Yii::$app->request->post('submit') == 'salir' &&
+        $model->load(Yii::$app->request->post()) && $model->save()) {
+          return $this->redirect(['index']);
+      } else if ($model->load(Yii::$app->request->post()) && $model->save()) {
           return $this->redirect(['parcial-rec-promo', 'id' => $model->id]);
       }
 
@@ -149,11 +202,19 @@ class ProgramaController extends Controller
           'model' => $model,
       ]);
     }
-
+    /**
+    *  Controla la vista _parc-rec-promo
+    *  $_POST Guarda el modelo y redirecciona a la siguiente vista
+    *  @param integer $id del programa
+    *  @return mixed
+    */
     public function actionParcialRecPromo($id){
       $model = $this->findModel($id);
 
-      if ($model->load(Yii::$app->request->post()) && $model->save()) {
+      if(Yii::$app->request->post('submit') == 'salir' &&
+        $model->load(Yii::$app->request->post()) && $model->save()) {
+          return $this->redirect(['index']);
+      } else if ($model->load(Yii::$app->request->post()) && $model->save()) {
           return $this->redirect(['dist-horaria', 'id' => $model->id]);
       }
 
@@ -161,11 +222,19 @@ class ProgramaController extends Controller
           'model' => $model,
       ]);
     }
-
+    /**
+    *  Controla la vista _dist-horaria
+    *  $_POST Guarda el modelo y redirecciona a la siguiente vista
+    *  @param integer $id del programa
+    *  @return mixed
+    */
     public function actionDistHoraria($id){
       $model = $this->findModel($id);
 
-      if ($model->load(Yii::$app->request->post()) && $model->save()) {
+      if(Yii::$app->request->post('submit') == 'salir' &&
+        $model->load(Yii::$app->request->post()) && $model->save()) {
+          return $this->redirect(['index']);
+      } else if ($model->load(Yii::$app->request->post()) && $model->save()) {
           return $this->redirect(['crono-tentativo', 'id' => $model->id]);
       }
 
@@ -173,11 +242,19 @@ class ProgramaController extends Controller
           'model' => $model,
       ]);
     }
-
+    /**
+    *  Controla la vista _crono-tentativo
+    *  $_POST Guarda el modelo y redirecciona a la siguiente vista
+    *  @param integer $id del programa
+    *  @return mixed
+    */
     public function actionCronoTentativo($id){
       $model = $this->findModel($id);
 
-      if ($model->load(Yii::$app->request->post()) && $model->save()) {
+      if(Yii::$app->request->post('submit') == 'salir' &&
+        $model->load(Yii::$app->request->post()) && $model->save()) {
+          return $this->redirect(['index']);
+      } else if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['actividad-extracurricular', 'id' => $model->id]);
       }
 
@@ -185,11 +262,19 @@ class ProgramaController extends Controller
           'model' => $model,
       ]);
     }
-
+    /**
+    *  Controla la vista _activ-extrac
+    *  $_POST Guarda el modelo y redirecciona a la siguiente vista
+    *  @param integer $id del programa
+    *  @return mixed
+    */
     public function actionActividadExtracurricular($id){
       $model = $this->findModel($id);
 
-      if ($model->load(Yii::$app->request->post()) && $model->save()) {
+      if(Yii::$app->request->post('submit') == 'salir' &&
+        $model->load(Yii::$app->request->post()) && $model->save()) {
+          return $this->redirect(['index']);
+      } else if ($model->load(Yii::$app->request->post()) && $model->save()) {
           return $this->redirect(['index']);
       }
 
@@ -201,6 +286,7 @@ class ProgramaController extends Controller
     /**
     * recibe un ID de programa y muestra el formulario para continuar con el mismo
     * Falta aplicar transacciones
+    * @deprecated no se utiliza más
     */
     public function actionPagina($id){
       //$model = DynamicModel::validateData([]);
@@ -299,18 +385,39 @@ class ProgramaController extends Controller
     }
 
     /**
-     * Updates an existing Programa model.
-     * If update is successful, the browser will be redirected to the 'view' page.
+     * Actualiza un programa existente
+     * Si se guarda de manera exitosa entonces redirecciona a fundamentacion
      * @param integer $id
      * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @throws NotFoundHttpException Si el modelo no se encuentra
      */
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        if(Yii::$app->request->post('submit') == 'salir' &&
+          $model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['index']);
+        } else if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['fundamentacion', 'id' => $model->id]);
+        }
+
+        return $this->render('update', [
+            'model' => $model,
+        ]);
+    }
+    /**
+    *  Botón de guardado
+    *  Si guarda el modelo entonces redirecciona al index
+    *  @deprecated no está en funcionamiento
+    *  @param integer $id del programa
+    *  @return mixed
+    */
+    public function actionGuardarSalir($id)
+    {
+        $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                    return $this->redirect(['fundamentacion', 'id' => $model->id]);
+                    return $this->redirect(['index', 'id' => $model->id]);
         }
 
         return $this->render('update', [
@@ -319,11 +426,11 @@ class ProgramaController extends Controller
     }
 
     /**
-     * Deletes an existing Programa model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * Elimina un programa existente
+     * Si se elimina con éxito entonces redirecciona al index
      * @param integer $id
      * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @throws NotFoundHttpException si no existe el programa
      */
     public function actionDelete($id)
     {
@@ -347,11 +454,11 @@ class ProgramaController extends Controller
     }
 
     /**
-     * Finds the Programa model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
+     * Busca un programa por su $id
+     * Si el modelo no existe retorna un error 404
      * @param integer $id
-     * @return Programa the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
+     * @return Programa el modelo programa
+     * @throws NotFoundHttpException si no se encuentra
      */
     protected function findModel($id)
     {
@@ -359,7 +466,7 @@ class ProgramaController extends Controller
             return $model;
         }
 
-        throw new NotFoundHttpException('The requested page does not exist.');
+        throw new NotFoundHttpException('El programa no existe.');
     }
 
 }

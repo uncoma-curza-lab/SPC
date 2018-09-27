@@ -19,6 +19,7 @@ use Yii;
  */
 class Unidad extends \yii\db\ActiveRecord
 {
+  // listado de temas de esta instancia
   public $temas;
 
     /**
@@ -54,7 +55,7 @@ class Unidad extends \yii\db\ActiveRecord
             'biblio_basica' => 'Bibliografía Basica',
             'biblio_consulta' => 'Bibliografía Consulta',
             'crono_tent' => 'Cronograma Tentativo',
-            'programa_id' => 'Programa ID',
+            'programa_id' => 'Programa ',
         ];
     }
 

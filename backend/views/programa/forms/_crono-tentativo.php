@@ -13,7 +13,7 @@ $this->params['breadcrumbs'][] = ['label' => "Distribución Horaria", 'url' => [
 $this->params['breadcrumbs'][] = 'Cronograma tentativo';
  ?>
  <div class="progress">
-   <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: 90%">
+   <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: 90%">
       90%
    </div>
  </div>
@@ -38,6 +38,7 @@ $this->params['breadcrumbs'][] = 'Cronograma tentativo';
 <div class="row">
   <div class="col-xs-6 text-left">
     <?= Html::a('Volver', ['dist-horaria', 'id' => $model->id],['class' => 'btn btn-warning']) ?>
+    <?= Html::submitButton('Guardar y salir',['class' => 'btn btn-info' , 'name'=>'submit','value' => 'salir']) ?>
   </div>
   <div class="col-xs-6 text-right">
     <?= Html::a('Seguir', ['actividad-extracurricular' , 'id' => $model->id], ['class' => 'btn btn-success']) ?>

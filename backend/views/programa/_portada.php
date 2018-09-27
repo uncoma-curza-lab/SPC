@@ -6,11 +6,14 @@
   use backend\models\Departamento;
   use backend\models\Status;
 ?>
+
+<br>
 <div class="progress">
-  <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
-     0%
+  <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="1" aria-valuemin="0" aria-valuemax="100" style="width: 1%">
+     1%
   </div>
 </div>
+
 <?php $form = ActiveForm::begin([
   'enableAjaxValidation'      => true,
   'enableClientValidation'    => false,
@@ -44,7 +47,7 @@
 
   <div class="col-xs-2">
     <?= $form->field($model, 'cuatrimestre')->widget(Select2::classname(),[
-        'data' => [1,2],
+        'data' => [1=>'1',2=>'2'],
         'language' => 'es',
         'options' => ['placeholder' => 'Seleccione un CUATRIMESTRE'],
         'pluginOptions' => [
@@ -89,6 +92,7 @@
     <div class="row">
       <div class="col-xs-6 text-left">
         <?= Html::a('Salir', ['index'],['class' => 'btn btn-warning']) ?>
+        <?= Html::submitButton('Guardar y salir',['class' => 'btn btn-info' , 'name'=>'submit','value' => 'salir']) ?>
       </div>
       <div class="col-xs-6 text-right">
         <?= Html::submitButton('Seguir', ['class' => 'btn btn-success']) ?>

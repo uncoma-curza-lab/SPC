@@ -8,7 +8,7 @@ $this->params['breadcrumbs'][] = ['label' => "Evaluacion y acreditación", 'url'
 $this->params['breadcrumbs'][] = 'Parciales, recuperatorios y coloquios';
 ?>
 <div class="progress">
-  <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width: 70%">
+  <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width: 70%">
      70%
   </div>
 </div>
@@ -43,6 +43,7 @@ $this->params['breadcrumbs'][] = 'Parciales, recuperatorios y coloquios';
     <div class="row">
       <div class="col-xs-6 text-left">
         <?= Html::a('Volver', ['eval-acred', 'id' => $model->id],['class' => 'btn btn-warning']) ?>
+        <?= Html::submitButton('Guardar y salir',['class' => 'btn btn-info' , 'name'=>'submit','value' => 'salir']) ?>
       </div>
       <div class="col-xs-6 text-right">
         <?= Html::submitButton('Seguir', ['class' => 'btn btn-success']) ?>

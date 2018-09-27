@@ -35,10 +35,13 @@ use Yii;
  * @property Objetivo[] $objetivos
  * @property Departamento $departamento
  * @property Status $status
- * @property Unidad[] $unidads
+ * @property Unidad[] $unidades
  */
 class Programa extends \yii\db\ActiveRecord
 {
+    /**
+    * @deprecated objetivos del programa
+    */
     public $objetivos;
     public $unidades;
     /**
@@ -56,7 +59,8 @@ class Programa extends \yii\db\ActiveRecord
     {
         return [
             [['departamento_id', 'status_id', 'cuatrimestre', 'created_by', 'updated_by'], 'integer'],
-          //  [['asignatura', 'curso', 'profadj_regular', 'asist_regular', 'ayudante_p', 'ayudante_s', 'fundament', 'objetivo_plan', 'contenido_plan', 'propuesta_met', 'evycond_acreditacion', 'parcial_rec_promo', 'distr_horaria', 'crono_tentativo', 'actv_extracur'], 'required'],
+            // se comentan los campos requeridos (DEV)
+            //  [['asignatura', 'curso', 'profadj_regular', 'asist_regular', 'ayudante_p', 'ayudante_s', 'fundament', 'objetivo_plan', 'contenido_plan', 'propuesta_met', 'evycond_acreditacion', 'parcial_rec_promo', 'distr_horaria', 'crono_tentativo', 'actv_extracur'], 'required'],
             [['fundament', 'objetivo_plan', 'contenido_plan', 'propuesta_met', 'evycond_acreditacion', 'parcial_rec_promo', 'distr_horaria', 'crono_tentativo', 'actv_extracur'], 'string'],
             [['created_at', 'updated_at'], 'safe'],
             [['asignatura'], 'string', 'max' => 100],
@@ -74,33 +78,34 @@ class Programa extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'departamento_id' => 'Departamento ID',
-            'status_id' => 'Status ID',
+            'departamento_id' => 'Departamento',
+            'status_id' => 'Estado',
             'asignatura' => 'Asignatura',
             'curso' => 'Curso',
-            'year' => 'Year',
+            'year' => 'Año',
             'cuatrimestre' => 'Cuatrimestre',
-            'profadj_regular' => 'Profadj Regular',
-            'asist_regular' => 'Asist Regular',
-            'ayudante_p' => 'Ayudante P',
-            'ayudante_s' => 'Ayudante S',
-            'fundament' => 'Fundament',
-            'objetivo_plan' => 'Objetivo Plan',
-            'contenido_plan' => 'Contenido Plan',
-            'propuesta_met' => 'Propuesta Met',
-            'evycond_acreditacion' => 'Evycond Acreditacion',
-            'parcial_rec_promo' => 'Parcial Rec Promo',
-            'distr_horaria' => 'Distr Horaria',
-            'crono_tentativo' => 'Crono Tentativo',
-            'actv_extracur' => 'Actv Extracur',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
-            'created_by' => 'Created By',
-            'updated_by' => 'Updated By',
+            'profadj_regular' => 'Profesor adj. Regular',
+            'asist_regular' => 'Asistente Regular',
+            'ayudante_p' => 'Ayudante Primera',
+            'ayudante_s' => 'Ayudante Segunda',
+            'fundament' => 'Fundamentacion',
+            'objetivo_plan' => 'Objetivo del Plan',
+            'contenido_plan' => 'Contenido del Plan',
+            'propuesta_met' => 'Propuesta Metodologica',
+            'evycond_acreditacion' => 'Evaluación y condiciones de acreditacion',
+            'parcial_rec_promo' => 'Parciales, Recuperatorios y Promocios',
+            'distr_horaria' => 'Distribución horaria',
+            'crono_tentativo' => 'Cronograma Tentativo',
+            'actv_extracur' => 'Actvidad Extracurricular',
+            'created_at' => 'Se creó',
+            'updated_at' => 'Se actualizó',
+            'created_by' => 'Creado por',
+            'updated_by' => 'Actualizado por',
         ];
     }
 
     /**
+     * Obtiene todos los objetivos del programa
      * @return \yii\db\ActiveQuery
      */
     public function getObjetivos()
@@ -109,6 +114,7 @@ class Programa extends \yii\db\ActiveRecord
     }
 
     /**
+     * Obtiene el departamento al que pertenece
      * @return \yii\db\ActiveQuery
      */
     public function getDepartamento()
@@ -117,6 +123,7 @@ class Programa extends \yii\db\ActiveRecord
     }
 
     /**
+     * Obtiene el estado del programa
      * @return \yii\db\ActiveQuery
      */
     public function getStatus()
@@ -125,6 +132,7 @@ class Programa extends \yii\db\ActiveRecord
     }
 
     /**
+     * Obtiene las unidades del programa
      * @return \yii\db\ActiveQuery
      */
     public function getUnidades()

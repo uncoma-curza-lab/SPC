@@ -14,8 +14,9 @@ $this->params['breadcrumbs'][] = 'Activadades extracurriculares';
    'validateOnSubmit'          => true,
    'validateOnBlur'            => false,
  ]); ?>
+
  <div class="progress">
-   <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="99" aria-valuemin="0" aria-valuemax="100" style="width: 99%">
+   <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="99" aria-valuemin="0" aria-valuemax="100" style="width: 99%">
       99%
    </div>
  </div>
@@ -41,6 +42,7 @@ $this->params['breadcrumbs'][] = 'Activadades extracurriculares';
     <div class="row">
       <div class="col-xs-6 text-left">
         <?= Html::a('Volver', ['crono-tentativo', 'id' => $model->id],['class' => 'btn btn-warning']) ?>
+        <?= Html::submitButton('Guardar y salir',['class' => 'btn btn-info' , 'name'=>'submit','value' => 'salir']) ?>
       </div>
       <div class="col-xs-6 text-right">
         <?= Html::submitButton('Terminar', ['class' => 'btn btn-success']) ?>
