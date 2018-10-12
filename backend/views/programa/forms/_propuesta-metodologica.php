@@ -14,10 +14,10 @@ $this->params['breadcrumbs'][] = 'Propuesta metodológica';
  </div>
 <h3>5. Propuesta Metodológica</h3>
 <?php $form = ActiveForm::begin([
-  'enableAjaxValidation'      => true,
+  'enableAjaxValidation'      => false,
   'enableClientValidation'    => false,
-  'validateOnChange'          => false,
-  'validateOnSubmit'          => true,
+  'validateOnChange'          => true,
+  'validateOnSubmit'          => false,
   'validateOnBlur'            => false,
 ]); ?>
 <?= FroalaEditorWidget::widget([
@@ -41,7 +41,7 @@ $this->params['breadcrumbs'][] = 'Propuesta metodológica';
 <div class="form-group">
     <div class="row">
       <div class="col-xs-6 text-left">
-        <?= Html::a('Volver', ['contenido-analitico', 'id' => $model->id],['class' => 'btn btn-warning']) ?>
+        <?= Html::a('Atrás', ['contenido-analitico', 'id' => $model->id],['class' => 'btn btn-warning']) ?>
         <?= Html::submitButton('Guardar y salir',['class' => 'btn btn-info' , 'name'=>'submit','value' => 'salir']) ?>
       </div>
       <div class="col-xs-6 text-right">

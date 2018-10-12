@@ -43,7 +43,7 @@ $this->params['breadcrumbs'][] = 'Distribución Horaria';
 
 <div class="row">
   <div class="col-xs-6 text-left">
-      <?= Html::a('Volver', ['parcial-rec-promo', 'id' => $model->id],['class' => 'btn btn-warning']) ?>
+      <?= Html::a('Atrás', ['parcial-rec-promo', 'id' => $model->id],['class' => 'btn btn-warning']) ?>
       <?= Html::submitButton('Guardar y salir',['class' => 'btn btn-info' , 'name'=>'submit','value' => 'salir']) ?>
   </div>
   <div class="col-xs-6 text-right">

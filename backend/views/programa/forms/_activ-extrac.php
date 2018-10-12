@@ -8,10 +8,10 @@ $this->params['breadcrumbs'][] = ['label' => "Cronograma tentativo", 'url' => ['
 $this->params['breadcrumbs'][] = 'Activadades extracurriculares';
  ?>
  <?php $form = ActiveForm::begin([
-   'enableAjaxValidation'      => true,
+   'enableAjaxValidation'      => false,
    'enableClientValidation'    => false,
-   'validateOnChange'          => false,
-   'validateOnSubmit'          => true,
+   'validateOnChange'          => true,
+   'validateOnSubmit'          => false,
    'validateOnBlur'            => false,
  ]); ?>
 
@@ -41,7 +41,7 @@ $this->params['breadcrumbs'][] = 'Activadades extracurriculares';
 <div class="form-group">
     <div class="row">
       <div class="col-xs-6 text-left">
-        <?= Html::a('Volver', ['crono-tentativo', 'id' => $model->id],['class' => 'btn btn-warning']) ?>
+        <?= Html::a('Atrás', ['crono-tentativo', 'id' => $model->id],['class' => 'btn btn-warning']) ?>
         <?= Html::submitButton('Guardar y salir',['class' => 'btn btn-info' , 'name'=>'submit','value' => 'salir']) ?>
       </div>
       <div class="col-xs-6 text-right">

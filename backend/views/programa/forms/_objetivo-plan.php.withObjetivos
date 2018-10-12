@@ -10,10 +10,10 @@ $this->params['breadcrumbs'][] = 'Objetivo según el plan de estudio';
 ?>
 
 <?php $form = ActiveForm::begin([
-'enableAjaxValidation'      => true,
+'enableAjaxValidation'      => false,
 'enableClientValidation'    => false,
-'validateOnChange'          => false,
-'validateOnSubmit'          => true,
+'validateOnChange'          => true,
+'validateOnSubmit'          => false,
 'validateOnBlur'            => false,
 ]); ?>
 

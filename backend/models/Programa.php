@@ -44,6 +44,7 @@ class Programa extends \yii\db\ActiveRecord
     */
     public $objetivos;
     public $unidades;
+    public $carreras;
     /**
      * {@inheritdoc}
      */
@@ -59,16 +60,69 @@ class Programa extends \yii\db\ActiveRecord
     {
         return [
             [['departamento_id', 'status_id', 'cuatrimestre', 'created_by', 'updated_by'], 'integer'],
-            // se comentan los campos requeridos (DEV)
+
             //  [['asignatura', 'curso', 'profadj_regular', 'asist_regular', 'ayudante_p', 'ayudante_s', 'fundament', 'objetivo_plan', 'contenido_plan', 'propuesta_met', 'evycond_acreditacion', 'parcial_rec_promo', 'distr_horaria', 'crono_tentativo', 'actv_extracur'], 'required'],
+            [['status_id'], function($attribute,$params){
+              if ( $this->$attribute == 'Borrador') {
+                $cont =0;
+                $attributes_validates = [
+                  'departamento_id', 'cuatrimestre', 'year',
+                  'asignatura', 'curso', 'fundament'
+                ];
+                foreach ($attributes_validates as $key ) {
+                  if (!isset($this->$key)){
+                      $this->addError($attribute,"estado no posible");
+                  }
+                }
+              }
+            }],
+            [[
+              'departamento_id', 'year', 'status_id',
+              'cuatrimestre', 'asignatura', 'curso',
+               'fundament', 'objetivo_plan', 'contenido_plan',
+               'propuesta_met', 'evycond_acreditacion', 'parcial_rec_promo',
+               'distr_horaria', 'crono_tentativo', 'actv_extracur'
+             ], 'required'],
             [['fundament', 'objetivo_plan', 'contenido_plan', 'propuesta_met', 'evycond_acreditacion', 'parcial_rec_promo', 'distr_horaria', 'crono_tentativo', 'actv_extracur'], 'string'],
             [['created_at', 'updated_at'], 'safe'],
             [['asignatura'], 'string', 'max' => 100],
-            [['curso', 'profadj_regular', 'asist_regular', 'ayudante_p', 'ayudante_s'], 'string', 'max' => 60],
+//            [['curso', 'profadj_regular', 'asist_regular', 'ayudante_p', 'ayudante_s'], 'string', 'max' => 60],
+            [['curso'], 'string', 'max' => 60],
             [['year'], 'string', 'max' => 4],
             [['departamento_id'], 'exist', 'skipOnError' => true, 'targetClass' => Departamento::className(), 'targetAttribute' => ['departamento_id' => 'id']],
             [['status_id'], 'exist', 'skipOnError' => true, 'targetClass' => Status::className(), 'targetAttribute' => ['status_id' => 'id']],
         ];
+    }
+
+    public function scenarios(){
+      $scenarios = parent::scenarios();
+      $scenarios['crear'] = [
+        'departamento_id',
+        'curso',
+        'status_id',
+        'cuatrimestre',
+        'year',
+        'asignatura'
+      ];
+      $scenarios['update'] = [
+        'departamento_id',
+        'curso',
+        'status_id',
+        'cuatrimestre',
+        'year',
+        'asignatura'
+      ];
+      $scenarios['fundamentacion'] = ['fundament'];
+      $scenarios['obj-plan'] = ['objetivo_plan'];
+      $scenarios['cont-plan'] = ['contenido_plan'];
+      $scenarios['cont-analitico'] = [];
+      $scenarios['prop-met'] = ['propuesta_met'];
+      $scenarios['eval-acred'] = ['evycond_acreditacion'];
+      $scenarios['parc-rec-promo'] = ['parcial_rec_promo'];
+      $scenarios['dist-horaria'] = ['distr_horaria'];
+      $scenarios['crono-tent'] = ['crono_tentativo'];
+      $scenarios['actv-extra'] = ['actv_extracur'];
+      return $scenarios;
     }
 
     /**
@@ -84,10 +138,10 @@ class Programa extends \yii\db\ActiveRecord
             'curso' => 'Curso',
             'year' => 'Año',
             'cuatrimestre' => 'Cuatrimestre',
-            'profadj_regular' => 'Profesor adj. Regular',
-            'asist_regular' => 'Asistente Regular',
-            'ayudante_p' => 'Ayudante Primera',
-            'ayudante_s' => 'Ayudante Segunda',
+            //'profadj_regular' => 'Profesor adj. Regular',
+            //'asist_regular' => 'Asistente Regular',
+          //  'ayudante_p' => 'Ayudante Primera',
+          //  'ayudante_s' => 'Ayudante Segunda',
             'fundament' => 'Fundamentacion',
             'objetivo_plan' => 'Objetivo del Plan',
             'contenido_plan' => 'Contenido del Plan',
@@ -138,5 +192,17 @@ class Programa extends \yii\db\ActiveRecord
     public function getUnidades()
     {
         return $this->hasMany(Unidad::className(), ['programa_id' => 'id']);
+    }
+    /**
+     * Obtiene los cargos del programa
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCargos()
+    {
+        return $this->hasMany(Cargo::className(), ['programa_id' => 'id']);
+    }
+
+    public function getCarreras(){
+      return $this->hasMany(CarreraPrograma::className(), ['programa_id' => 'id']);
     }
 }

@@ -3,7 +3,11 @@
   use yii\widgets\ActiveForm;
   use kartik\select2\Select2;
   use yii\helpers\ArrayHelper;
+  use unclead\multipleinput\MultipleInput;
   use backend\models\Departamento;
+  use backend\models\Carrera;
+  use yii\widgets\Pjax;
+
   use backend\models\Status;
 ?>
 
@@ -13,12 +17,13 @@
      1%
   </div>
 </div>
+<?php Pjax::begin(); ?>
 
 <?php $form = ActiveForm::begin([
-  'enableAjaxValidation'      => true,
+  'enableAjaxValidation'      => false,
   'enableClientValidation'    => false,
-  'validateOnChange'          => false,
-  'validateOnSubmit'          => true,
+  'validateOnChange'          => true,
+  'validateOnSubmit'          => false,
   'validateOnBlur'            => false,
 ]); ?>
 
@@ -32,7 +37,6 @@
           'allowClear' => true,
         ],
       ]) ?>
-
   </div>
   <div class="col-xs-4">
     <?= $form->field($model, 'status_id')->widget(Select2::classname(),[
@@ -44,7 +48,17 @@
         ],
       ]) ?>
   </div>
-
+  <div class="col-xs-4">
+    <?= $form->field($model, 'carreras')->widget(Select2::classname(),[
+        'data' => ArrayHelper::map(Carrera::find()->all(),'id','nom'),
+        'language' => 'es',
+        'options' => ['placeholder' => 'Seleccione las carreras'],
+        'pluginOptions' => [
+          'allowClear' => true,
+          'multiple' => true
+        ],
+      ]) ?>
+  </div>
   <div class="col-xs-2">
     <?= $form->field($model, 'cuatrimestre')->widget(Select2::classname(),[
         'data' => [1=>'1',2=>'2'],
@@ -55,11 +69,9 @@
         ],
       ]) ?>
   </div>
-
   <div class="col-xs-2">
     <?= $form->field($model, 'year')->textInput(['maxlength' => true]) ?>
   </div>
-
 </div>
 <div class="row">
   <div class="col-xs-4">
@@ -71,19 +83,28 @@
 </div>
 <hr>
 <div class="row">
+  <?= $this->render('forms/_gridCargos',['model' => $model]) ?>
+
+</div>
+
+<div class="row">
   <div class="col-xs-6">
-    <?= $form->field($model, 'profadj_regular')->textInput(['maxlength' => true]) ?>
+    <!--<?// $form->field($model, 'profadj_regular')->textInput(['maxlength' => true]) ?>-->
   </div>
   <div class="col-xs-6">
-    <?= $form->field($model, 'asist_regular')->textInput(['maxlength' => true]) ?>
+    <!--<?// $form->field($model, 'asist_regular')->textInput(['maxlength' => true]) ?>-->
   </div>
 </div>
 <div class="row">
   <div class="col-xs-6">
-    <?= $form->field($model, 'ayudante_p')->textInput(['maxlength' => true]) ?>
+    <!--<?// $form->field($model, 'ayudante_p')->textInput(['maxlength' => true]) ?>-->
+<!--    <?// $form->field($model, 'ayudante_p')->widget(MultipleInput::Classname(),
+      [
+        'name' => 'ayudante_p',
+      ]) ?>-->
   </div>
   <div class="col-xs-6">
-    <?= $form->field($model, 'ayudante_s')->textInput(['maxlength' => true]) ?>
+    <!--<?// $form->field($model, 'ayudante_s')->textInput(['maxlength' => true]) ?>-->
   </div>
 </div>
 
@@ -100,3 +121,4 @@
     </div>
 </div>
 <?php ActiveForm::end(); ?>
+<?php Pjax::end(); ?>

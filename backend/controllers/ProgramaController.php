@@ -13,6 +13,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use backend\models\Objetivo;
+use Mpdf;
 
 /**
  * Controlador de Programa
@@ -71,8 +72,15 @@ class ProgramaController extends Controller
     public function actionCreate()
     {
         $model = new Programa();
+        $model->scenario = 'crear';
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if(Yii::$app->request->post('submit') == 'salir' &&
+          $model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['index']);
+        } else if(Yii::$app->request->post('submit') == 'cargo' &&
+            $model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['cargo/create', 'id'=>$model->id]);
+        } else if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['fundamentacion', 'id' => $model->id]);
         }
 
@@ -89,6 +97,7 @@ class ProgramaController extends Controller
     */
     public function actionFundamentacion($id){
       $model = $this->findModel($id);
+      $model->scenario = 'fundamentacion';
 
       if(Yii::$app->request->post('submit') == 'salir' &&
         $model->load(Yii::$app->request->post()) && $model->save()) {
@@ -109,7 +118,7 @@ class ProgramaController extends Controller
     */
     public function actionObjetivoPlan($id){
       $model = $this->findModel($id);
-
+      $model->scenario = 'obj-plan';
       if(Yii::$app->request->post('submit') == 'salir' &&
         $model->load(Yii::$app->request->post()) && $model->save()) {
           return $this->redirect(['index']);
@@ -130,7 +139,7 @@ class ProgramaController extends Controller
     */
     public function actionContenidoPlan($id){
       $model = $this->findModel($id);
-
+      $model->scenario = 'cont-plan';
       if(Yii::$app->request->post('submit') == 'salir' &&
         $model->load(Yii::$app->request->post()) && $model->save()) {
           return $this->redirect(['index']);
@@ -150,6 +159,7 @@ class ProgramaController extends Controller
     */
     public function actionContenidoAnalitico($id){
       $model = $this->findModel($id);
+      $model->scenario = 'cont-analitico';
 
       if(Yii::$app->request->post('submit') == 'salir' &&
         $model->load(Yii::$app->request->post()) && $model->save()) {
@@ -170,6 +180,7 @@ class ProgramaController extends Controller
     */
     public function actionPropuestaMetodologica($id){
       $model = $this->findModel($id);
+      $model->scenario = 'prop-met';
 
       if(Yii::$app->request->post('submit') == 'salir' &&
         $model->load(Yii::$app->request->post()) && $model->save()) {
@@ -190,6 +201,7 @@ class ProgramaController extends Controller
     */
     public function actionEvalAcred($id){
       $model = $this->findModel($id);
+      $model->scenario = 'eval-acred';
 
       if(Yii::$app->request->post('submit') == 'salir' &&
         $model->load(Yii::$app->request->post()) && $model->save()) {
@@ -210,6 +222,7 @@ class ProgramaController extends Controller
     */
     public function actionParcialRecPromo($id){
       $model = $this->findModel($id);
+      $model->scenario = 'parc-rec-promo';
 
       if(Yii::$app->request->post('submit') == 'salir' &&
         $model->load(Yii::$app->request->post()) && $model->save()) {
@@ -230,6 +243,7 @@ class ProgramaController extends Controller
     */
     public function actionDistHoraria($id){
       $model = $this->findModel($id);
+      $model->scenario = 'dist-horaria';
 
       if(Yii::$app->request->post('submit') == 'salir' &&
         $model->load(Yii::$app->request->post()) && $model->save()) {
@@ -250,6 +264,7 @@ class ProgramaController extends Controller
     */
     public function actionCronoTentativo($id){
       $model = $this->findModel($id);
+      $model->scenario = 'crono-tent';
 
       if(Yii::$app->request->post('submit') == 'salir' &&
         $model->load(Yii::$app->request->post()) && $model->save()) {
@@ -270,6 +285,7 @@ class ProgramaController extends Controller
     */
     public function actionActividadExtracurricular($id){
       $model = $this->findModel($id);
+      $model->scenario = 'actv-extra';
 
       if(Yii::$app->request->post('submit') == 'salir' &&
         $model->load(Yii::$app->request->post()) && $model->save()) {
@@ -394,11 +410,17 @@ class ProgramaController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $model->scenario = 'update';
         if(Yii::$app->request->post('submit') == 'salir' &&
           $model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['index']);
+        } else if(Yii::$app->request->post('submit') == 'cargo' &&
+            $model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['cargo/create', 'id'=>$model->id]);
         } else if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['fundamentacion', 'id' => $model->id]);
+
+            //return $this->render('update',['model' => $model]);
         }
 
         return $this->render('update', [
@@ -452,7 +474,25 @@ class ProgramaController extends Controller
 
         return $this->redirect(['index']);
     }
-
+    /*
+    * Comienzan las funciones para crear y exportar un PDF
+    */
+    public function actionExportPdf($id){
+      $model = $this->findModel($id);
+      $mpdf = new Mpdf\Mpdf(['tempDir' => __DIR__ . '/tmp']);
+      $mpdf->WriteHTML($this->renderPartial('pdf',['model'=>$model]));
+      //$mpdf->WriteHTML('<h1>Hello World!</h1>');
+      //$mpdf->Output($model->asignatura.".pdf", 'D');
+      $mpdf->Output();
+      //return $this->renderPartial('mpdf');
+    }
+    public function actionForceDownloadPdf()
+   {
+       $mpdf = new Mpdf();
+       $mpdf->WriteHTML($this->renderPartial('mpdf'));
+       $mpdf->Output('MyPDF.pdf', 'D');
+       exit;
+   }
     /**
      * Busca un programa por su $id
      * Si el modelo no existe retorna un error 404

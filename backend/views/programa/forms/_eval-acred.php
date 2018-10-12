@@ -8,10 +8,10 @@ $this->params['breadcrumbs'][] = ['label' => "Propuesta metodológica", 'url' =>
 $this->params['breadcrumbs'][] = 'Evaluación y condiciones de acreditación';
 ?>
 <?php $form = ActiveForm::begin([
-  'enableAjaxValidation'      => true,
+  'enableAjaxValidation'      => false,
   'enableClientValidation'    => false,
-  'validateOnChange'          => false,
-  'validateOnSubmit'          => true,
+  'validateOnChange'          => true,
+  'validateOnSubmit'          => false,
   'validateOnBlur'            => false,
 ]); ?>
 <div class="progress">
@@ -41,7 +41,7 @@ $this->params['breadcrumbs'][] = 'Evaluación y condiciones de acreditación';
 <div class="form-group">
   <div class="row">
     <div class="col-xs-6 text-left">
-      <?= Html::a('Volver', ['propuesta-metodologica', 'id' => $model->id],['class' => 'btn btn-warning']) ?>
+      <?= Html::a('Atrás', ['propuesta-metodologica', 'id' => $model->id],['class' => 'btn btn-warning']) ?>
       <?= Html::submitButton('Guardar y salir',['class' => 'btn btn-info' , 'name'=>'submit','value' => 'salir']) ?>
     </div>
     <div class="col-xs-6 text-right">

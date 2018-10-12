@@ -13,13 +13,12 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="programa-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-    <?php Pjax::begin(); ?>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
         <?= Html::a('Crear Programa', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
-
+    
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -58,7 +57,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'pdf' => function ($url,$model) {
                     return Html::a(
                         '<span style="padding:5px; font-size:20px;" class="glyphicon glyphicon-download"></span>',
-                        $url);
+                        ['export-pdf','id'=> $model->id],['target' => '_blank']);
                 },
                 'status' => function ($url,$model) {
                     return Html::a(
@@ -90,5 +89,4 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ],
     ]); ?>
-    <?php Pjax::end(); ?>
 </div>

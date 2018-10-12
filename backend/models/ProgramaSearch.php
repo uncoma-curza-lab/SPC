@@ -19,7 +19,8 @@ class ProgramaSearch extends Programa
     {
         return [
             [['id', 'departamento_id', 'status_id', 'cuatrimestre', 'created_by', 'updated_by'], 'integer'],
-            [['asignatura', 'curso', 'year', 'profadj_regular', 'asist_regular', 'ayudante_p', 'ayudante_s', 'fundament', 'objetivo_plan', 'contenido_plan', 'propuesta_met', 'evycond_acreditacion', 'parcial_rec_promo', 'distr_horaria', 'crono_tentativo', 'actv_extracur', 'created_at', 'updated_at'], 'safe'],
+        //    [['asignatura', 'curso', 'year', 'profadj_regular', 'asist_regular', 'ayudante_p', 'ayudante_s', 'fundament', 'objetivo_plan', 'contenido_plan', 'propuesta_met', 'evycond_acreditacion', 'parcial_rec_promo', 'distr_horaria', 'crono_tentativo', 'actv_extracur', 'created_at', 'updated_at'], 'safe'],
+           [['asignatura', 'curso', 'year', 'fundament', 'objetivo_plan', 'contenido_plan', 'propuesta_met', 'evycond_acreditacion', 'parcial_rec_promo', 'distr_horaria', 'crono_tentativo', 'actv_extracur', 'created_at', 'updated_at'], 'safe'],
         ];
     }
 
@@ -72,10 +73,10 @@ class ProgramaSearch extends Programa
         $query->andFilterWhere(['like', 'asignatura', $this->asignatura])
             ->andFilterWhere(['like', 'curso', $this->curso])
             ->andFilterWhere(['like', 'year', $this->year])
-            ->andFilterWhere(['like', 'profadj_regular', $this->profadj_regular])
-            ->andFilterWhere(['like', 'asist_regular', $this->asist_regular])
-            ->andFilterWhere(['like', 'ayudante_p', $this->ayudante_p])
-            ->andFilterWhere(['like', 'ayudante_s', $this->ayudante_s])
+        //    ->andFilterWhere(['like', 'profadj_regular', $this->profadj_regular])
+          //  ->andFilterWhere(['like', 'asist_regular', $this->asist_regular])
+          //  ->andFilterWhere(['like', 'ayudante_p', $this->ayudante_p])
+          //  ->andFilterWhere(['like', 'ayudante_s', $this->ayudante_s])
             ->andFilterWhere(['like', 'fundament', $this->fundament])
             ->andFilterWhere(['like', 'objetivo_plan', $this->objetivo_plan])
             ->andFilterWhere(['like', 'contenido_plan', $this->contenido_plan])

@@ -44,7 +44,7 @@ $this->params['breadcrumbs'][] = 'Contenido según el plan de estudio';
 <div class="form-group">
   <div class="row">
     <div class="col-xs-6 text-left">
-      <?= Html::a('Volver', ['objetivo-plan', 'id' => $model->id],['class' => 'btn btn-warning']) ?>
+      <?= Html::a('Atrás', ['objetivo-plan', 'id' => $model->id],['class' => 'btn btn-warning']) ?>
       <?= Html::submitButton('Guardar y salir',['class' => 'btn btn-info' , 'name'=>'submit','value' => 'salir']) ?>
     </div>
     <div class="col-xs-6 text-right">
