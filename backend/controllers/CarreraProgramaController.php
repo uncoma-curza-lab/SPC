@@ -8,6 +8,8 @@ use backend\models\CarreraProgramaSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use common\models\PermisosHelpers;
+
 
 /**
  * CarreraProgramaController implements the CRUD actions for CarreraPrograma model.
@@ -20,6 +22,30 @@ class CarreraProgramaController extends Controller
     public function behaviors()
     {
         return [
+          'access' => [
+                 'class' => \yii\filters\AccessControl::className(),
+                 'only' => ['index', 'view','create', 'update', 'delete'],
+                 'rules' => [
+                     [
+                         'actions' => ['index', 'view',],
+                         'allow' => true,
+                         'roles' => ['@'],
+                         'matchCallback' => function ($rule, $action) {
+                          return PermisosHelpers::requerirMinimoRol('Usuario')
+                          && PermisosHelpers::requerirEstado('Activo');
+                         }
+                     ],
+                      [
+                         'actions' => [ 'create', 'update', 'delete'],
+                         'allow' => true,
+                         'roles' => ['@'],
+                         'matchCallback' => function ($rule, $action) {
+                          return PermisosHelpers::requerirMinimoRol('Profesor')
+                          && PermisosHelpers::requerirEstado('Activo');
+                         }
+                     ],
+                 ],
+             ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -62,12 +88,13 @@ class CarreraProgramaController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($id)
     {
         $model = new CarreraPrograma();
+        $model->programa_id=$id;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['programa/update', 'id' => $id]);
         }
 
         return $this->render('create', [
@@ -87,7 +114,7 @@ class CarreraProgramaController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['programa/update', 'id' => $model->programa_id]);
         }
 
         return $this->render('update', [

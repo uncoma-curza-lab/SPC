@@ -6,19 +6,29 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use backend\models\Programa;
+use frontend\models\Perfil;
+use common\models\PermisosHelpers;
+use common\models\User;
 
 /**
  * ProgramaSearch represents the model behind the search form of `backend\models\Programa`.
  */
 class ProgramaSearch extends Programa
 {
+    public function attributes(){
+        return array_merge(parent::attributes(),['user.username']);
+    }
+
+    public function attributeLabels(){
+        return array_merge(parent::attributeLabels(),['user.username'=>'nombre de usuario']);
+    }
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['id', 'departamento_id', 'status_id', 'cuatrimestre', 'created_by', 'updated_by'], 'integer'],
+            [['id',  'status_id', 'cuatrimestre', 'created_by', 'updated_by'], 'integer'],
         //    [['asignatura', 'curso', 'year', 'profadj_regular', 'asist_regular', 'ayudante_p', 'ayudante_s', 'fundament', 'objetivo_plan', 'contenido_plan', 'propuesta_met', 'evycond_acreditacion', 'parcial_rec_promo', 'distr_horaria', 'crono_tentativo', 'actv_extracur', 'created_at', 'updated_at'], 'safe'],
            [['asignatura', 'curso', 'year', 'fundament', 'objetivo_plan', 'contenido_plan', 'propuesta_met', 'evycond_acreditacion', 'parcial_rec_promo', 'distr_horaria', 'crono_tentativo', 'actv_extracur', 'created_at', 'updated_at'], 'safe'],
         ];
@@ -42,9 +52,10 @@ class ProgramaSearch extends Programa
      */
     public function search($params)
     {
-        $query = Programa::find();
+        $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
+        $userId = \Yii::$app->user->identity->id;
 
-        // add conditions that should always apply here
+        $query = Programa::find();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -53,15 +64,17 @@ class ProgramaSearch extends Programa
         $this->load($params);
 
         if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
             return $dataProvider;
         }
 
-        // grid filtering conditions
+        $query->joinWith('user');
+
+        $query->andFilterWhere(
+                ['LIKE','user.username',$this->getAttribute('user.username')]
+        );
+
         $query->andFilterWhere([
             'id' => $this->id,
-            'departamento_id' => $this->departamento_id,
             'status_id' => $this->status_id,
             'cuatrimestre' => $this->cuatrimestre,
             'created_at' => $this->created_at,
@@ -70,6 +83,20 @@ class ProgramaSearch extends Programa
             'updated_by' => $this->updated_by,
         ]);
 
+        if(!$esAdmin){ //si no es admin refuerza el user id con el usuario logueado
+          if (PermisosHelpers::requerirRol('Departamento')){
+            $perfil = \Yii::$app->user->identity->perfil;
+            $query->joinWith(['carreras']);
+            $query->andFilterWhere(['=','carrera.departamento_id', $perfil->departamento_id])->all();
+          } else if (PermisosHelpers::requerirRol('Profesor')) {
+            $query->andFilterWhere([
+                'created_by' => $userId,
+            ]);
+          }else if (PermisosHelpers::requerirRol('Usuario')) {
+            $query->joinWith(['status']);
+            $query->andFilterWhere(['like','status.descripcion', 'publicado']);
+          }
+        }
         $query->andFilterWhere(['like', 'asignatura', $this->asignatura])
             ->andFilterWhere(['like', 'curso', $this->curso])
             ->andFilterWhere(['like', 'year', $this->year])

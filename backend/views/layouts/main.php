@@ -2,6 +2,7 @@
 
 /* @var $this \yii\web\View */
 /* @var $content string */
+use yii\bootstrap\ButtonDropdown;
 
 use backend\assets\AppAsset;
 use yii\helpers\Html;
@@ -9,6 +10,7 @@ use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use common\widgets\Alert;
+use common\models\PermisosHelpers;
 
 AppAsset::register($this);
 ?>
@@ -41,14 +43,26 @@ AppAsset::register($this);
     if (Yii::$app->user->isGuest) {
         $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
     } else {
-        $menuItems[] = '<li>'
-            . Html::beginForm(['/site/logout'], 'post')
-            . Html::submitButton(
-                'Logout (' . Yii::$app->user->identity->username . ')',
-                ['class' => 'btn btn-link logout']
-            )
-            . Html::endForm()
-            . '</li>';
+        if(PermisosHelpers::requerirMinimoRol('Usuario')){
+          $menuItems[] = ['label' => 'Programas', 'url' => ['/programa/index']
+            //$menuItems[] = ['label' => 'Informes', 'url' => ['/informes/index']];
+          ];
+        if(PermisosHelpers::requerirMinimoRol('Admin')){
+          $menuItems[]=['label' => 'Controles', 'items' => [
+          ['label' => 'Carreras', 'url' => ['/carrera/index']],
+          ['label' => 'Departamento', 'url' => ['/departamento/index']],
+          ['label' => 'Personas', 'url' => ['/persona/index']],
+          ['label' => 'Roles', 'url' => ['/rol/index']],
+          ['label' => 'Estados', 'url' => ['/status/index']],
+          ['label' => 'Usuarios', 'url' => ['/user/index']],
+          ['label' => 'Perfiles', 'url' => ['perfil/index']],
+        ]];
+        }
+        $menuItems[] = ['label' => 'Logout (' . Yii::$app->user->identity->username . ')',
+              'url' => ['/site/logout'],
+              'linkOptions' => ['data-method' => 'post']
+        ];
+      }
     }
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
@@ -57,13 +71,34 @@ AppAsset::register($this);
     NavBar::end();
     ?>
 
-    <div class="container">
-        <?= Breadcrumbs::widget([
-            'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-        ]) ?>
-        <?= Alert::widget() ?>
-        <?= $content ?>
-    </div>
+
+        <div class="container">
+            <div class="row">
+              <div class="col-xs-8">
+                <?= Breadcrumbs::widget([
+                    'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+                ]) ?>
+              </div>
+              <div class="col-xs-4 text-right">
+                <?php
+                if(isset($this->params['items'] ))
+                  echo ButtonDropdown::widget([
+                    'label' => 'Ir a...',
+                    'options' => [
+                      'class' => "btn btn-primary "
+                    ],
+                    'dropdown' => [
+                        'options' => ['class' => 'dropdown-menu-right', 'id' => 'buttons'],
+                        'items' => isset($this->params['items']) ? $this->params['items'] : [],
+                    ],
+                  ]);
+                ?>
+              </div>
+            </div>
+            <?= Alert::widget() ?>
+
+            <?= $content ?>
+        </div>
 </div>
 
 <footer class="footer">

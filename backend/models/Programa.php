@@ -3,6 +3,10 @@
 namespace backend\models;
 
 use Yii;
+use yii\db\Expression;
+use yii\behaviors\BlameableBehavior;
+use yii\db\ActiveRecord;
+use common\models\User;
 
 /**
  * This is the model class for table "programa".
@@ -44,7 +48,6 @@ class Programa extends \yii\db\ActiveRecord
     */
     public $objetivos;
     public $unidades;
-    public $carreras;
     /**
      * {@inheritdoc}
      */
@@ -77,7 +80,7 @@ class Programa extends \yii\db\ActiveRecord
               }
             }],
             [[
-              'departamento_id', 'year', 'status_id',
+              'year', 'status_id',
               'cuatrimestre', 'asignatura', 'curso',
                'fundament', 'objetivo_plan', 'contenido_plan',
                'propuesta_met', 'evycond_acreditacion', 'parcial_rec_promo',
@@ -94,10 +97,28 @@ class Programa extends \yii\db\ActiveRecord
         ];
     }
 
+    public function behaviors()
+    {
+      return [
+        'timestamp' => [
+            'class' => 'yii\behaviors\TimestampBehavior',
+            'attributes' => [
+                ActiveRecord::EVENT_BEFORE_INSERT => ['created_at', 'updated_at'],
+                ActiveRecord::EVENT_BEFORE_UPDATE => ['updated_at'],
+            ],
+            'value' => new Expression('NOW()'),
+        ],
+        'blameable' => [
+            'class' => BlameableBehavior::className(),
+            'createdByAttribute' => 'created_by',
+            'updatedByAttribute' => 'updated_by',
+        ],
+      ];
+    }
+
     public function scenarios(){
       $scenarios = parent::scenarios();
       $scenarios['crear'] = [
-        'departamento_id',
         'curso',
         'status_id',
         'cuatrimestre',
@@ -105,7 +126,6 @@ class Programa extends \yii\db\ActiveRecord
         'asignatura'
       ];
       $scenarios['update'] = [
-        'departamento_id',
         'curso',
         'status_id',
         'cuatrimestre',
@@ -167,14 +187,7 @@ class Programa extends \yii\db\ActiveRecord
         return $this->hasMany(Objetivo::className(), ['programa_id' => 'id']);
     }
 
-    /**
-     * Obtiene el departamento al que pertenece
-     * @return \yii\db\ActiveQuery
-     */
-    public function getDepartamento()
-    {
-        return $this->hasOne(Departamento::className(), ['id' => 'departamento_id']);
-    }
+
 
     /**
      * Obtiene el estado del programa
@@ -202,7 +215,19 @@ class Programa extends \yii\db\ActiveRecord
         return $this->hasMany(Cargo::className(), ['programa_id' => 'id']);
     }
 
-    public function getCarreras(){
+    public function getCarrerap(){
       return $this->hasMany(CarreraPrograma::className(), ['programa_id' => 'id']);
+    }
+    public function getCarreras(){
+      return $this->hasMany(Carrera::className(),['id' =>'carrera_id'])->via('carrerap');
+    }
+
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUser()
+    {
+        return $this->hasOne(User::className(), ['id' => 'created_by']);
     }
 }

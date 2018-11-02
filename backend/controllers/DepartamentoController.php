@@ -8,6 +8,8 @@ use backend\models\DepartamentoSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use common\models\PermisosHelpers;
+
 
 /**
  * DepartamentoController implements the CRUD actions for Departamento model.
@@ -20,6 +22,30 @@ class DepartamentoController extends Controller
     public function behaviors()
     {
         return [
+          'access' => [
+                 'class' => \yii\filters\AccessControl::className(),
+                 'only' => ['index', 'view','create', 'update', 'delete'],
+                 'rules' => [
+                     [
+                         'actions' => ['index', 'view',],
+                         'allow' => true,
+                         'roles' => ['@'],
+                         'matchCallback' => function ($rule, $action) {
+                          return PermisosHelpers::requerirMinimoRol('Usuario')
+                          && PermisosHelpers::requerirEstado('Activo');
+                         }
+                     ],
+                      [
+                         'actions' => [ 'create', 'update', 'delete'],
+                         'allow' => true,
+                         'roles' => ['@'],
+                         'matchCallback' => function ($rule, $action) {
+                          return PermisosHelpers::requerirMinimoRol('Admin')
+                          && PermisosHelpers::requerirEstado('Activo');
+                         }
+                     ],
+                 ],
+             ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [

@@ -43,7 +43,7 @@ class Departamento extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'nom' => 'Nom',
+            'nom' => 'Nombre',
             'codigo' => 'Codigo',
         ];
     }

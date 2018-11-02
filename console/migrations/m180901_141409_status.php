@@ -20,7 +20,16 @@ class m180901_141409_status extends Migration
         'id'      =>  $this->primaryKey(),
         'descripcion'     => $this->string()->notNull(),
       ], $options);
+      $this->insert('{{%status}}', [
+          'id' => 1,
+          'descripcion' => 'Borrador',
+      ]);
+      $this->insert('{{%status}}', [
+          'id' => 1,
+          'descripcion' => 'Departamento',
+      ]);
     }
+
 
     /**
      * {@inheritdoc}

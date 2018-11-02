@@ -8,6 +8,7 @@ use backend\models\TemaSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use common\models\PermisosHelpers;
 
 /**
  * TemaController implements the CRUD actions for Tema model.
@@ -20,6 +21,30 @@ class TemaController extends Controller
     public function behaviors()
     {
         return [
+          'access' => [
+                 'class' => \yii\filters\AccessControl::className(),
+                 'only' => ['index', 'view','create', 'update', 'delete'],
+                 'rules' => [
+                     [
+                         'actions' => ['index', 'view',],
+                         'allow' => true,
+                         'roles' => ['@'],
+                         'matchCallback' => function ($rule, $action) {
+                          return PermisosHelpers::requerirMinimoRol('Usuario')
+                          && PermisosHelpers::requerirEstado('Activo');
+                         }
+                     ],
+                      [
+                         'actions' => [ 'create', 'update', 'delete'],
+                         'allow' => true,
+                         'roles' => ['@'],
+                         'matchCallback' => function ($rule, $action) {
+                          return PermisosHelpers::requerirMinimoRol('Admin')
+                          && PermisosHelpers::requerirEstado('Activo');
+                         }
+                     ],
+                 ],
+             ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [

@@ -24,11 +24,8 @@ return [
           'class' => \yii\console\controllers\MigrateController::class,
           'migrationPath' => [
             '@app/migrations',
-            '@yii/rbac/migrations',
           ],
-          'migrationNamespaces' => [
-                'Da\User\Migration',
-            ],
+
         ],
     ],
 

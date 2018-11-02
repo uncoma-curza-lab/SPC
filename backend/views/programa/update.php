@@ -7,7 +7,7 @@ use yii\helpers\Html;
 
 $this->title = ' ' ;
 $this->params['breadcrumbs'][] = ['label' => 'Programas', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->getDepartamento()->one()->nom . " " . $model->curso, 'url' => ['view', 'id' => $model->id]];
+$this->params['breadcrumbs'][] = ['label' => $model->asignatura .  " " . $model->curso, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Portada';
 ?>
 <div class="programa-update">

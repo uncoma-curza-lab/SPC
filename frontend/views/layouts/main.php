@@ -9,7 +9,7 @@ use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use frontend\assets\AppAsset;
 use common\widgets\Alert;
-
+use common\models\PermisosHelpers;
 AppAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
@@ -40,10 +40,19 @@ AppAsset::register($this);
         ['label' => 'About', 'url' => ['/site/about']],
         ['label' => 'Contact', 'url' => ['/site/contact']],
     ];
+
     if (Yii::$app->user->isGuest) {
         $menuItems[] = ['label' => 'Signup', 'url' => ['/site/signup']];
         $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
     } else {
+      $menuItems[] = ['label' => Yii::$app->user->identity->username, 'items' =>[
+          ['label' => 'Perfil', 'url' => ['/perfil/view']],
+          [
+             'label' => 'Logout (' . Yii::$app->user->identity->username . ')',
+             'url' => ['/site/logout'],
+             'linkOptions' => ['data-method' => 'post']
+          ],
+          ]];
         $menuItems[] = '<li>'
             . Html::beginForm(['/site/logout'], 'post')
             . Html::submitButton(
@@ -52,6 +61,7 @@ AppAsset::register($this);
             )
             . Html::endForm()
             . '</li>';
+
     }
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],

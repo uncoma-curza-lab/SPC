@@ -18,7 +18,7 @@ class m180906_125933_programa extends Migration
       }
       $this->createTable('{{programa}}',[
           'id'      =>  $this->primaryKey(),
-          'departamento_id' => $this->integer(),
+          //'departamento_id' => $this->integer(),
           'status_id' => $this->integer(),
           'asignatura' => $this->string(100)->notNull(),
           //'carrera'     => $this->integer(),
@@ -49,15 +49,7 @@ class m180906_125933_programa extends Migration
           'updated_by'  => $this->integer(),
       ], $options);
 
-      $this->addForeignKey(
-        'departamentoprograma',
-        'programa',
-        'departamento_id',
-        'departamento',
-        'id',
-        'no action',
-        'no action'
-      );
+
       $this->addForeignKey(
         'statusprograma',
         'programa',
@@ -75,7 +67,6 @@ class m180906_125933_programa extends Migration
      */
     public function safeDown()
     {
-      $this->dropForeignKey('departamentoprograma','{{departamento}}');
       $this->dropForeignKey('statusprograma','{{status}}');
       $this->dropTable('{{programa}}');
     }

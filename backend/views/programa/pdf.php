@@ -17,7 +17,7 @@
   <h4>
     UNIVERSIDAD NACIONAL DEL COMAHUE <br>
     CENTRO UNIVERSITARIO REGIONAL ZONA ATLANTICA <br> <br>
-    Departamento de <?= Html::encode(Departamento::find($model->departamento_id)->one()->nom); ?> <br>
+    <!--Departamento de <? //Html::encode(Departamento::find($model->departamento_id)->one()->nom); ?> <br>-->
     PROGRAMA DE LA ASIGNATURA: <?= Html::encode($model->asignatura) ?> <br>
     CARRERA:
     <br>

@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use backend\models\Cargo;
+use backend\models\Persona;
 use backend\models\CargoSearch;
 use yii\data\ActiveDataProvider;
 /* @var $this yii\web\View */
@@ -11,7 +12,7 @@ use yii\data\ActiveDataProvider;
 
 ?>
 
-<div class="unidad-index">
+<div class="cargos-index">
   <p>
       <?= Html::submitButton('Insertar nuevo cargo',['class' => 'btn btn-success' , 'name'=>'submit','value' => 'cargo']) ?>
   </p>
@@ -26,12 +27,20 @@ use yii\data\ActiveDataProvider;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
             'designacion',
-            'persona_id',
-            'programa_id',
+            [
+              'attribute' => 'persona_id',
+              'format' => 'text',
+              'value' => function($model) {
+                $persona= Persona::findOne($model->persona_id);
+                return $persona->nombre." ".$persona->apellido;
+              }
+            ],
 
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+              'class' => 'yii\grid\ActionColumn',
+              'controller' => 'cargo'
+            ],
         ],
     ]); ?>
 

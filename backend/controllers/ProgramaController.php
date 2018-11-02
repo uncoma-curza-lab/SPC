@@ -13,6 +13,10 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use backend\models\Objetivo;
+use backend\models\Carrera;
+use backend\models\Status;
+use backend\models\CarreraPrograma;
+use common\models\PermisosHelpers;
 use Mpdf;
 
 /**
@@ -27,6 +31,42 @@ class ProgramaController extends Controller
     public function behaviors()
     {
         return [
+          'access' => [
+                 'class' => \yii\filters\AccessControl::className(),
+                 'only' => [
+                   'index', 'view', 'create', 'update','delete',
+                   'fundamentacion', 'objetivo-plan', 'contenido-analitico',
+                   'contenido-plan', 'eval-acred', 'propuesta-metodologica',
+                   'parcial-rec-promo', 'dist-horaria', 'crono-tentativo',
+                   'actividad-extracurricular'
+                 ],
+                 'rules' => [
+                     [
+                         'actions' => ['index', 'view'],
+                         'allow' => true,
+                         'roles' => ['@'],
+                         'matchCallback' => function ($rule, $action) {
+                          return PermisosHelpers::requerirMinimoRol('Usuario')
+                          && PermisosHelpers::requerirEstado('Activo');
+                         }
+                     ],
+                     [
+                          'actions' => [
+                            'create','update','delete','fundamentacion',
+                            'objetivo-plan', 'contenido-analitico',
+                            'contenido-plan', 'eval-acred', 'propuesta-metodologica',
+                            'parcial-rec-promo', 'dist-horaria', 'crono-tentativo',
+                            'actividad-extracurricular'
+                          ],
+                          'allow' => true,
+                          'roles' => ['@'],
+                          'matchCallback' => function($rule,$action) {
+                            return PermisosHelpers::requerirMinimoRol('Profesor')
+                              && PermisosHelpers::requerirEstado('Activo');
+                          }
+                     ],
+                 ],
+             ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -59,9 +99,23 @@ class ProgramaController extends Controller
      */
     public function actionView($id)
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
+        $model = $this->findModel($id);
+        $mostrar = false;
+
+        if ( PermisosHelpers::requerirRol('Usuario') &&
+         Status::findOne($model->status_id)->descripcion == 'Finalizado' ) {
+            $mostrar = true;
+        } else if (PermisosHelpers::requerirMinimoRol('Profesor')) {
+            $mostrar = true;
+        }
+        if ( $mostrar )
+          return $this->render('view', [
+              'model' => $model,
+          ]);
+
+        throw new NotFoundHttpException('No tiene permisos para ver este elemento');
+
+
     }
 
     /**
@@ -73,20 +127,27 @@ class ProgramaController extends Controller
     {
         $model = new Programa();
         $model->scenario = 'crear';
-
-        if(Yii::$app->request->post('submit') == 'salir' &&
-          $model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
-        } else if(Yii::$app->request->post('submit') == 'cargo' &&
+        //esta validación no es necesaria. Desde RULES se está validando
+        if (PermisosHelpers::requerirMinimoRol('Profesor')) {
+          if(Yii::$app->request->post('submit') == 'salir' &&
             $model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['cargo/create', 'id'=>$model->id]);
-        } else if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['fundamentacion', 'id' => $model->id]);
-        }
+              return $this->redirect(['index']);
+          } else if(Yii::$app->request->post('submit') == 'cargo' &&
+              $model->load(Yii::$app->request->post()) && $model->save()) {
+              return $this->redirect(['cargo/create', 'id'=>$model->id]);
+          } else if(Yii::$app->request->post('submit') == 'carrera' &&
+              $model->load(Yii::$app->request->post()) && $model->save()) {
+              return $this->redirect(['carrera-programa/create', 'id'=>$model->id]);
+          } else if ($model->load(Yii::$app->request->post()) && $model->save()) {
+              return $this->redirect(['fundamentacion', 'id' => $model->id]);
+          }
 
-        return $this->render('create', [
-            'model' => $model,
-        ]);
+          return $this->render('create', [
+              'model' => $model,
+          ]);
+        }
+        throw new NotFoundHttpException('No tiene permisos para crear este tipo de elementos');
+
     }
 
     /**
@@ -96,19 +157,25 @@ class ProgramaController extends Controller
     *  @return mixed
     */
     public function actionFundamentacion($id){
+
       $model = $this->findModel($id);
       $model->scenario = 'fundamentacion';
+      $estado = Status::findOne($model->status_id);
+      $validarPermisos = $this->validarPermisos($model, $estado);
 
-      if(Yii::$app->request->post('submit') == 'salir' &&
-        $model->load(Yii::$app->request->post()) && $model->save()) {
-          return $this->redirect(['index']);
-      } else if ($model->load(Yii::$app->request->post()) && $model->save()) {
-          return $this->redirect(['objetivo-plan', 'id' => $model->id]);
+      if ($validarPermisos) {
+        if(Yii::$app->request->post('submit') == 'salir' &&
+          $model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['index']);
+        } else if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['objetivo-plan', 'id' => $model->id]);
+        }
+
+        return $this->render('forms/_fundamentacion', [
+            'model' => $model,
+        ]);
       }
-
-      return $this->render('forms/_fundamentacion', [
-          'model' => $model,
-      ]);
+      throw new NotFoundHttpException('No tiene permisos para actualizar este elemento');
     }
     /**
     *  Controla la vista _objetivo-plan
@@ -119,16 +186,22 @@ class ProgramaController extends Controller
     public function actionObjetivoPlan($id){
       $model = $this->findModel($id);
       $model->scenario = 'obj-plan';
-      if(Yii::$app->request->post('submit') == 'salir' &&
-        $model->load(Yii::$app->request->post()) && $model->save()) {
-          return $this->redirect(['index']);
-      } else if ($model->load(Yii::$app->request->post()) && $model->save()) {
-          return $this->redirect(['contenido-plan', 'id' => $model->id]);
-      }
+      $estado = Status::findOne($model->status_id);
+      $validarPermisos = $this->validarPermisos($model, $estado);
 
-      return $this->render('forms/_objetivo-plan', [
-          'model' => $model,
-      ]);
+      if ($validarPermisos) {
+        if(Yii::$app->request->post('submit') == 'salir' &&
+          $model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['index']);
+        } else if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['contenido-plan', 'id' => $model->id]);
+        }
+
+        return $this->render('forms/_objetivo-plan', [
+            'model' => $model,
+        ]);
+      }
+      throw new NotFoundHttpException('No tiene permisos para actualizar este elemento');
     }
 
     /**
@@ -140,16 +213,22 @@ class ProgramaController extends Controller
     public function actionContenidoPlan($id){
       $model = $this->findModel($id);
       $model->scenario = 'cont-plan';
-      if(Yii::$app->request->post('submit') == 'salir' &&
-        $model->load(Yii::$app->request->post()) && $model->save()) {
-          return $this->redirect(['index']);
-      } else if ($model->load(Yii::$app->request->post()) && $model->save()) {
-          return $this->redirect(['contenido-analitico', 'id' => $model->id]);
-      }
+      $estado = Status::findOne($model->status_id);
+      $validarPermisos = $this->validarPermisos($model, $estado);
 
-      return $this->render('forms/_contenido-plan', [
-          'model' => $model,
-      ]);
+      if ($validarPermisos) {
+        if(Yii::$app->request->post('submit') == 'salir' &&
+          $model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['index']);
+        } else if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['contenido-analitico', 'id' => $model->id]);
+        }
+
+        return $this->render('forms/_contenido-plan', [
+            'model' => $model,
+        ]);
+      }
+      throw new NotFoundHttpException('No tiene permisos para actualizar este elemento');
     }
     /**
     *  Controla la vista _contenido-analitico
@@ -160,17 +239,22 @@ class ProgramaController extends Controller
     public function actionContenidoAnalitico($id){
       $model = $this->findModel($id);
       $model->scenario = 'cont-analitico';
+      $estado = Status::findOne($model->status_id);
+      $validarPermisos = $this->validarPermisos($model, $estado);
 
-      if(Yii::$app->request->post('submit') == 'salir' &&
-        $model->load(Yii::$app->request->post()) && $model->save()) {
-          return $this->redirect(['index']);
-      } else if ($model->load(Yii::$app->request->post()) && $model->save()) {
-          return $this->redirect(['propuesta-metodologica', 'id' => $model->id]);
+      if ($validarPermisos) {
+        if(Yii::$app->request->post('submit') == 'salir' &&
+          $model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['index']);
+        } else if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['propuesta-metodologica', 'id' => $model->id]);
+        }
+
+        return $this->render('forms/_contenido-analitico', [
+            'model' => $model,
+        ]);
       }
-
-      return $this->render('forms/_contenido-analitico', [
-          'model' => $model,
-      ]);
+      throw new NotFoundHttpException('No tiene permisos para actualizar este elemento');
     }
     /**
     *  Controla la vista _propuesta-metodologica
@@ -181,17 +265,22 @@ class ProgramaController extends Controller
     public function actionPropuestaMetodologica($id){
       $model = $this->findModel($id);
       $model->scenario = 'prop-met';
+      $estado = Status::findOne($model->status_id);
+      $validarPermisos = $this->validarPermisos($model, $estado);
 
-      if(Yii::$app->request->post('submit') == 'salir' &&
-        $model->load(Yii::$app->request->post()) && $model->save()) {
-          return $this->redirect(['index']);
-      } else if ($model->load(Yii::$app->request->post()) && $model->save()) {
-          return $this->redirect(['eval-acred', 'id' => $model->id]);
+      if ($validarPermisos) {
+        if(Yii::$app->request->post('submit') == 'salir' &&
+          $model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['index']);
+        } else if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['eval-acred', 'id' => $model->id]);
+        }
+
+        return $this->render('forms/_propuesta-metodologica', [
+            'model' => $model,
+        ]);
       }
-
-      return $this->render('forms/_propuesta-metodologica', [
-          'model' => $model,
-      ]);
+      throw new NotFoundHttpException('No tiene permisos para actualizar este elemento');
     }
     /**
     *  Controla la vista _eval-acred
@@ -202,17 +291,22 @@ class ProgramaController extends Controller
     public function actionEvalAcred($id){
       $model = $this->findModel($id);
       $model->scenario = 'eval-acred';
+      $estado = Status::findOne($model->status_id);
+      $validarPermisos = $this->validarPermisos($model, $estado);
 
-      if(Yii::$app->request->post('submit') == 'salir' &&
-        $model->load(Yii::$app->request->post()) && $model->save()) {
-          return $this->redirect(['index']);
-      } else if ($model->load(Yii::$app->request->post()) && $model->save()) {
-          return $this->redirect(['parcial-rec-promo', 'id' => $model->id]);
+      if ($validarPermisos) {
+        if(Yii::$app->request->post('submit') == 'salir' &&
+          $model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['index']);
+        } else if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['parcial-rec-promo', 'id' => $model->id]);
+        }
+
+        return $this->render('forms/_eval-acred', [
+            'model' => $model,
+        ]);
       }
-
-      return $this->render('forms/_eval-acred', [
-          'model' => $model,
-      ]);
+      throw new NotFoundHttpException('No tiene permisos para actualizar este elemento');
     }
     /**
     *  Controla la vista _parc-rec-promo
@@ -223,17 +317,22 @@ class ProgramaController extends Controller
     public function actionParcialRecPromo($id){
       $model = $this->findModel($id);
       $model->scenario = 'parc-rec-promo';
+      $estado = Status::findOne($model->status_id);
+      $validarPermisos = $this->validarPermisos($model, $estado);
 
-      if(Yii::$app->request->post('submit') == 'salir' &&
-        $model->load(Yii::$app->request->post()) && $model->save()) {
-          return $this->redirect(['index']);
-      } else if ($model->load(Yii::$app->request->post()) && $model->save()) {
-          return $this->redirect(['dist-horaria', 'id' => $model->id]);
+      if ($validarPermisos) {
+        if(Yii::$app->request->post('submit') == 'salir' &&
+          $model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['index']);
+        } else if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['dist-horaria', 'id' => $model->id]);
+        }
+
+        return $this->render('forms/_parc-rec-promo', [
+            'model' => $model,
+        ]);
       }
-
-      return $this->render('forms/_parc-rec-promo', [
-          'model' => $model,
-      ]);
+      throw new NotFoundHttpException('No tiene permisos para actualizar este elemento');
     }
     /**
     *  Controla la vista _dist-horaria
@@ -244,17 +343,22 @@ class ProgramaController extends Controller
     public function actionDistHoraria($id){
       $model = $this->findModel($id);
       $model->scenario = 'dist-horaria';
+      $estado = Status::findOne($model->status_id);
+      $validarPermisos = $this->validarPermisos($model, $estado);
 
-      if(Yii::$app->request->post('submit') == 'salir' &&
-        $model->load(Yii::$app->request->post()) && $model->save()) {
-          return $this->redirect(['index']);
-      } else if ($model->load(Yii::$app->request->post()) && $model->save()) {
-          return $this->redirect(['crono-tentativo', 'id' => $model->id]);
+      if ($validarPermisos) {
+        if(Yii::$app->request->post('submit') == 'salir' &&
+          $model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['index']);
+        } else if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['crono-tentativo', 'id' => $model->id]);
+        }
+
+        return $this->render('forms/_dist-horaria', [
+            'model' => $model,
+        ]);
       }
-
-      return $this->render('forms/_dist-horaria', [
-          'model' => $model,
-      ]);
+      throw new NotFoundHttpException('No tiene permisos para actualizar este elemento');
     }
     /**
     *  Controla la vista _crono-tentativo
@@ -265,17 +369,22 @@ class ProgramaController extends Controller
     public function actionCronoTentativo($id){
       $model = $this->findModel($id);
       $model->scenario = 'crono-tent';
+      $estado = Status::findOne($model->status_id);
+      $validarPermisos = $this->validarPermisos($model, $estado);
 
-      if(Yii::$app->request->post('submit') == 'salir' &&
-        $model->load(Yii::$app->request->post()) && $model->save()) {
-          return $this->redirect(['index']);
-      } else if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['actividad-extracurricular', 'id' => $model->id]);
+      if ($validarPermisos) {
+        if(Yii::$app->request->post('submit') == 'salir' &&
+          $model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['index']);
+        } else if ($model->load(Yii::$app->request->post()) && $model->save()) {
+              return $this->redirect(['actividad-extracurricular', 'id' => $model->id]);
+        }
+
+        return $this->render('forms/_crono-tentativo', [
+            'model' => $model,
+        ]);
       }
-
-      return $this->render('forms/_crono-tentativo', [
-          'model' => $model,
-      ]);
+      throw new NotFoundHttpException('No tiene permisos para actualizar este elemento');
     }
     /**
     *  Controla la vista _activ-extrac
@@ -286,17 +395,23 @@ class ProgramaController extends Controller
     public function actionActividadExtracurricular($id){
       $model = $this->findModel($id);
       $model->scenario = 'actv-extra';
+      $estado = Status::findOne($model->status_id);
+      $validarPermisos = $this->validarPermisos($model, $estado);
 
-      if(Yii::$app->request->post('submit') == 'salir' &&
-        $model->load(Yii::$app->request->post()) && $model->save()) {
-          return $this->redirect(['index']);
-      } else if ($model->load(Yii::$app->request->post()) && $model->save()) {
-          return $this->redirect(['index']);
+      if ($validarPermisos) {
+        if(Yii::$app->request->post('submit') == 'salir' &&
+          $model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['index']);
+        } else if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['index']);
+        }
+
+        return $this->render('forms/_activ-extrac', [
+            'model' => $model,
+        ]);
       }
+      throw new NotFoundHttpException('No tiene permisos para actualizar este elemento');
 
-      return $this->render('forms/_activ-extrac', [
-          'model' => $model,
-      ]);
     }
 
     /**
@@ -411,22 +526,52 @@ class ProgramaController extends Controller
     {
         $model = $this->findModel($id);
         $model->scenario = 'update';
-        if(Yii::$app->request->post('submit') == 'salir' &&
-          $model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
-        } else if(Yii::$app->request->post('submit') == 'cargo' &&
-            $model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['cargo/create', 'id'=>$model->id]);
-        } else if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['fundamentacion', 'id' => $model->id]);
+        $estado = Status::findOne($model->status_id);
+        $validarPermisos = $this->validarPermisos($model, $estado);
 
-            //return $this->render('update',['model' => $model]);
+        if ($validarPermisos) {
+            /*
+            * Intenta hacer un save del post y
+            * redirecciona a una vista según el botón
+            */
+            if(Yii::$app->request->post('submit') == 'salir' &&
+              $model->load(Yii::$app->request->post()) && $model->save()) {
+                return $this->redirect(['index']);
+            } else if(Yii::$app->request->post('submit') == 'cargo' &&
+                $model->load(Yii::$app->request->post()) && $model->save()) {
+                return $this->redirect(['cargo/create', 'id'=>$model->id]);
+            } else if(Yii::$app->request->post('submit') == 'carrera' &&
+                $model->load(Yii::$app->request->post()) && $model->save()) {
+                return $this->redirect(['carrera-programa/create', 'id'=>$model->id]);
+            } else if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                return $this->redirect(['fundamentacion', 'id' => $model->id]);
+                //return $this->render('update',['model' => $model]);
+            }
+
+            return $this->render('update', [
+                'model' => $model,
+            ]);
         }
-
-        return $this->render('update', [
-            'model' => $model,
-        ]);
+        throw new NotFoundHttpException('No tiene permisos para actualizar este elemento');
     }
+
+    protected function validarPermisos($model, $estado) {
+      $userId = \Yii::$app->user->identity->id;
+
+      if (PermisosHelpers::requerirRol('Profesor') &&
+        ($estado->descripcion == "Borrador") && ($model->created_by == $userId)) {
+          return true;
+      } else if (PermisosHelpers::requerirRol('Departamento') &&
+        ($estado->descripcion == "Departamento")) {
+          $perfil = \Yii::$app->user->identity->perfil;
+          $carreras = $model->getCarreras();
+          if ($carreras->where(['=','departamento_id', $perfil->departamento_id])->one()) {
+            return true;
+          }
+      }
+      return false;
+    }
+
     /**
     *  Botón de guardado
     *  Si guarda el modelo entonces redirecciona al index
@@ -437,14 +582,19 @@ class ProgramaController extends Controller
     public function actionGuardarSalir($id)
     {
         $model = $this->findModel($id);
+        $estado = Status::findOne($model->status_id);
+        $validarPermisos = $this->validarPermisos($model, $estado);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                    return $this->redirect(['index', 'id' => $model->id]);
+        if ($validarPermisos) {
+          if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                      return $this->redirect(['index', 'id' => $model->id]);
+          }
+
+          return $this->render('update', [
+              'model' => $model,
+          ]);
         }
-
-        return $this->render('update', [
-            'model' => $model,
-        ]);
+        throw new NotFoundHttpException('No se puede realizar esta acción.');
     }
 
     /**
@@ -457,22 +607,32 @@ class ProgramaController extends Controller
     public function actionDelete($id)
     {
         $model = $this->findModel($id);
-        $unidades = $model->getUnidades()->all();
-        $objetivos = $model->getObjetivos()->all();
-        foreach ($unidades as $key) {
-          $temas = $key->getTemas()->all();
-          foreach ($temas as $tk) {
-            $tk->delete();
+        $estado = Status::findOne($model->status_id);
+        //$validarPermisos = $this->validarPermisos($model, $estado);
+        $userId = \Yii::$app->user->identity->id;
+
+        if (PermisosHelpers::requerirRol('Profesor')
+          && $model->created_by == $userId
+          && $estado->descripcion == 'Borrador') {
+          $unidades = $model->getUnidades()->all();
+          $objetivos = $model->getObjetivos()->all();
+          foreach ($unidades as $key) {
+            $temas = $key->getTemas()->all();
+            foreach ($temas as $tk) {
+              $tk->delete();
+            }
+            $key->delete();
           }
-          $key->delete();
-        }
-        foreach ($objetivos as $key) {
-          $key->delete();
-        }
+          foreach ($objetivos as $key) {
+            $key->delete();
+          }
 
-        $model->delete();
+          $model->delete();
 
-        return $this->redirect(['index']);
+          return $this->redirect(['index']);
+        }
+        throw new NotFoundHttpException('No se puede eliminar');
+
     }
     /*
     * Comienzan las funciones para crear y exportar un PDF
@@ -502,11 +662,36 @@ class ProgramaController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = Programa::findOne($id)) !== null) {
-            return $model;
-        }
+      $esusuario = PermisosHelpers::requerirMinimoRol('Usuario');
+      $userId = \Yii::$app->user->identity->id;
 
-        throw new NotFoundHttpException('El programa no existe.');
+      if (($model = Programa::findOne($id)) !== null) {
+        if ($esusuario)
+          return $model;
+
+        throw new NotFoundHttpException('No se puede acceder al elemento.');
+
+        /*if(PermisosHelpers::requerirRol('Profesor')){
+          if ($model->created_by == $userId)
+            return $model;
+          throw new NotFoundHttpException('No se puede acceder al elemento.');
+        } else if (PermisosHelpers::requerirRol('Departamento')) {
+          $perfil = \Yii::$app->user->identity->perfil;
+          $carreras = $model->getCarreras();
+          if ( $carreras->where(['=','departamento_id', $perfil->departamento_id])->one()  ) {
+            return $model;
+          }
+          throw new NotFoundHttpException('No se puede acceder al elemento.');*/
+          //$carreraprograma =CarreraPrograma::find()->where(['=','programa_id',$model->id])->all();
+          /*foreach ($carreraprograma as $carrera) {
+            if ( Carrera::find()->where(['=','id',$carrera->carrera_id])->one()->departamento_id == $perfil->departamento_id )
+              return $model;
+          }*/
+
+      }
+
+      throw new NotFoundHttpException('No se puede acceder al elemento.');
+
     }
 
 }
