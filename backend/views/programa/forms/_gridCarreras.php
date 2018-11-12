@@ -3,7 +3,8 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
-use backend\models\CarreraSearch;
+use backend\models\CarreraProgramaSearch;
+use backend\models\CarreraPrograma;
 use backend\models\Carrera;
 use yii\data\ActiveDataProvider;
 /* @var $this yii\web\View */
@@ -24,12 +25,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= GridView::widget([
       'dataProvider' => new ActiveDataProvider([
-        'query' => $model->getCarreras()
+        'query' => $model->getCarrerap()
       ]),
-      'filterModel' => new CarreraSearch(),
+      'filterModel' => new CarreraProgramaSearch(),
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
             [
               'attribute' => 'carrera_id',
               'format' => 'text',
@@ -37,7 +37,17 @@ $this->params['breadcrumbs'][] = $this->title;
                 return Carrera::findOne($model->id)->nom;
               }
             ],
-
+            [
+              'attribute' => 'estado',
+              'value' => function($model){
+                if (!isset($model->estado))
+                  return "Sin evaluar";
+                else if ($model->estado == 1){
+                  return "Aprobado";
+                }  else
+                  return "Desaprobado";
+              }
+            ],
             [
               'class' => 'yii\grid\ActionColumn',
               'controller' => 'carrera-programa'

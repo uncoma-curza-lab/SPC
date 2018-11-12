@@ -3,9 +3,9 @@
 use yii\db\Migration;
 
 /**
- * Class m181004_124905_carreraprograma
+ * Class m181112_195754_observacion
  */
-class m181004_124905_carreraprograma extends Migration
+class m181112_195754_observacion extends Migration
 {
     /**
      * {@inheritdoc}
@@ -16,25 +16,14 @@ class m181004_124905_carreraprograma extends Migration
       if ( $this->db->driverName=='mysql' ) {
         $options = 'CHARACTER SET utf8 COLLATE utf8_spanish_ci ENGINE=innodb';
       }
-      $this->createTable('{{carreraprograma}}',[
+      $this->createTable('{{observacion}}',[
         'id'      =>  $this->primaryKey(),
-        'carrera_id' => $this->integer(),
+        'texto'   =>  $this->text()->notNull(),
         'programa_id' => $this->integer(),
-        'estado' => $this->boolean(),
       ], $options);
-
       $this->addForeignKey(
-        'carreracarreraP',
-        'carreraprograma',
-        'carrera_id',
-        'carrera',
-        'id',
-        'no action',
-        'no action'
-      );
-      $this->addForeignKey(
-        'programacarrera',
-        'carreraprograma',
+        'programaobservacion',
+        'observacion',
         'programa_id',
         'programa',
         'id',
@@ -48,9 +37,8 @@ class m181004_124905_carreraprograma extends Migration
      */
     public function safeDown()
     {
-      $this->dropForeignKey('carreracarreaP','{{carerra}}');
-      $this->dropForeignKey('programacarrera','{{programa}}');
-      $this->dropTable('{{carreraprograma}}');
+      $this->dropForeignKey('programaobservacion','{{programa}}');
+      $this->dropTable('{{observacion}}');
     }
 
     /*
@@ -62,7 +50,7 @@ class m181004_124905_carreraprograma extends Migration
 
     public function down()
     {
-        echo "m181004_124905_carreraprograma cannot be reverted.\n";
+        echo "m181112_195754_observacion cannot be reverted.\n";
 
         return false;
     }

@@ -543,6 +543,9 @@ class ProgramaController extends Controller
             } else if(Yii::$app->request->post('submit') == 'carrera' &&
                 $model->load(Yii::$app->request->post()) && $model->save()) {
                 return $this->redirect(['carrera-programa/create', 'id'=>$model->id]);
+            } else if(Yii::$app->request->post('submit') == 'observacion' &&
+                $model->load(Yii::$app->request->post()) && $model->save()) {
+                return $this->redirect(['observacion/create', 'id'=>$model->id]);
             } else if ($model->load(Yii::$app->request->post()) && $model->save()) {
                 return $this->redirect(['fundamentacion', 'id' => $model->id]);
                 //return $this->render('update',['model' => $model]);
@@ -647,6 +650,7 @@ class ProgramaController extends Controller
       //$mpdf->WriteHTML('<h1>Hello World!</h1>');
       //$mpdf->Output($model->asignatura.".pdf", 'D');
       $mpdf->Output();
+      
       //return $this->renderPartial('mpdf');
     }
     public function actionForceDownloadPdf()

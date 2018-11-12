@@ -32,8 +32,18 @@ class m180901_141409_status extends Migration
           'value' => 10,
       ]);
       $this->insert('{{%status}}', [
+          'id' => 4,
+          'descripcion' => 'Administración Académica',
+          'value' => 20,
+      ]);
+      $this->insert('{{%status}}', [
+          'id' => 5,
+          'descripcion' => 'Secretaría Académica',
+          'value' => 30,
+      ]);
+      $this->insert('{{%status}}', [
           'id' => 3,
-          'descripcion' => 'Finalizado',
+          'descripcion' => 'Biblioteca',
           'value' => 50,
       ]);
     }

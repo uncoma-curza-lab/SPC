@@ -4,25 +4,20 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\CargoSearch */
+/* @var $model backend\models\search\ObservacionSearch */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="cargo-search">
+<div class="observacion-search">
 
     <?php $form = ActiveForm::begin([
         'action' => ['index'],
         'method' => 'get',
-        'options' => [
-            'data-pjax' => 1
-        ],
     ]); ?>
 
     <?= $form->field($model, 'id') ?>
 
-    <?= $form->field($model, 'designacion') ?>
-
-    <?= $form->field($model, 'nombre_persona') ?>
+    <?= $form->field($model, 'texto') ?>
 
     <?= $form->field($model, 'programa_id') ?>
 

@@ -28,14 +28,8 @@ use yii\data\ActiveDataProvider;
             ['class' => 'yii\grid\SerialColumn'],
 
             'designacion',
-            [
-              'attribute' => 'persona_id',
-              'format' => 'text',
-              'value' => function($model) {
-                $persona= Persona::findOne($model->persona_id);
-                return $persona->nombre." ".$persona->apellido;
-              }
-            ],
+            'nombre_persona',
+
 
             [
               'class' => 'yii\grid\ActionColumn',

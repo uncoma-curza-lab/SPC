@@ -12,35 +12,29 @@
   use backend\models\Status;
   use backend\models\StatusSearch;
   use yii\helpers\Url;
-  use froala\froalaeditor\FroalaEditorWidget;
 
-  function filtrarEstados(){
+  function filtrarEstados($model){
     $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
     $userId = \Yii::$app->user->identity->id;
     $query = Status::find();
     if(!$esAdmin){
-
-      if(PermisosHelpers::requerirRol('Profesor')) {
-        // $perfil = \Yii::$app->user->identity->perfil;
+     if(PermisosHelpers::requerirRol('Profesor')) {
+        //obtiene el peso de departamnto
         $status = EstadoHelpers::getValue('Departamento');
-        //Status::find()->where(['like','descripcion','Departamento'])->one()->value;
       } else if(PermisosHelpers::requerirRol('Departamento')) {
-        //obtiene el peso de sec academica
+        //obtiene el peso de adm academica
         $status = EstadoHelpers::getValue('Administración Académica');
-        //Status::find()->where(['like','descripcion','Secretaría académica'])->one()->value;
-        //filtra todos los menores al peso
       } else if(PermisosHelpers::requerirRol('Adm_academica')) {
         //obtiene el peso de sec academica
         $status = EstadoHelpers::getValue('Secretaría Académica');
-        //Status::find()->where(['like','descripcion','Secretaría académica'])->one()->value;
-        //filtra todos los menores al peso
       } else if(PermisosHelpers::requerirRol('Sec_academica')) {
-        //obtiene el peso de sec academica
+        //obtiene el peso de biblioteca
         $status = EstadoHelpers::getValue('Biblioteca');
-        //Status::find()->where(['like','descripcion','Secretaría académica'])->one()->value;
-        //filtra todos los menores al peso
       } else {
         $status = 0;
+      }
+      if (!isset($model->id)) {
+        $status = EstadoHelpers::getValue('Borrador');
       }
 
       $query->andFilterWhere(['<=','value' ,$status]);
@@ -84,22 +78,10 @@
 <?php if ( PermisosHelpers::requerirMinimoRol('Departamento') ) : ?>
   <br>
   <h3> OBSERVACIONES: </h3>
-<?= FroalaEditorWidget::widget([
-            'model' => $model,
-            'attribute' => 'observaciones',
-            'name' => 'observaciones',
-            'options' => [
-                'id'=>'observaciones'
-            ],
-            'clientOptions' => [
-              'placeholderText' => 'Ingrese las observaciones para que el profesor pueda corregir el programa',
-              'height' => 100,
-              'language' => 'es',
-              'height' => 100,
-              'theme' => 'gray',
-              'toolbarButtons' => ['bold', 'italic', 'underline', '|', 'paragraphFormat', 'fontSize','color','|','undo','redo','align'],
-            ],
-]) ?>
+  <div class="row">
+    <?= $this->render('forms/_gridObservaciones',['model' => $model]) ?>
+  </div>
+
 <br>
 <?php endif; ?>
 <div class="row">
@@ -108,7 +90,7 @@
   </div>
   <div class="col-xs-4">
     <?= $form->field($model, 'status_id')->widget(Select2::classname(),[
-        'data' => filtrarEstados(),
+        'data' => filtrarEstados($model),
         //'data' =>ArrayHelper::map(((new StatusSearch())->search(['model' => 'backend\models\Status'])),'id','descripcion'),
         //'data' => (new StatusSearch())->search(['model' => 'backend\models\Status'])->id,
 

@@ -9,10 +9,8 @@ use Yii;
  *
  * @property int $id
  * @property string $designacion
- * @property int $persona_id
  * @property int $programa_id
  *
- * @property Persona $persona
  * @property Programa $programa
  */
 class Cargo extends \yii\db\ActiveRecord
@@ -35,7 +33,6 @@ class Cargo extends \yii\db\ActiveRecord
             [[ 'programa_id'], 'integer'],
             [['designacion'], 'string', 'max' => 255],
             [['nombre_persona'],'string','max' => 100],
-            [['nombre_persona'], 'exist', 'skipOnError' => true, 'targetClass' => Persona::className(), 'targetAttribute' => ['persona_id' => 'id']],
             [['programa_id'], 'exist', 'skipOnError' => true, 'targetClass' => Programa::className(), 'targetAttribute' => ['programa_id' => 'id']],
         ];
     }
@@ -48,18 +45,11 @@ class Cargo extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'designacion' => 'Designacion',
-            'persona_id' => 'Persona ID',
+            'nombre_persona' => 'Nombre y apellido',
             'programa_id' => 'Programa ID',
         ];
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getPersona()
-    {
-        return $this->hasOne(Persona::className(), ['id' => 'persona_id']);
-    }
 
     /**
      * @return \yii\db\ActiveQuery

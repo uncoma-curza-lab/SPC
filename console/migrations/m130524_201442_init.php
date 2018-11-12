@@ -83,6 +83,14 @@ class m130524_201442_init extends Migration
                 'departamento_id' => 1,
             ]);
             $this->insert('{{%perfil}}', [
+                'id' => 3,
+                'user_id' => '10',
+                'nombre' => 'departamento2',
+                'apellido' => 'departamento2',
+                'genero_id' => 1,
+                'departamento_id' => 2,
+            ]);
+            $this->insert('{{%perfil}}', [
                 'id' => 4,
                 'user_id' => '9',
                 'nombre' => 'profesor2',
@@ -232,6 +240,19 @@ class m130524_201442_init extends Migration
                 'password_hash' => '$2y$13$qXmkrgjd99oVALp.i7Ake.XOpldPn0vtyHtcwWEZkJYBm9EJ1zFG2', //departamento
                 'password_reset_token' => null,
                 'email' => 'departamento@email.com',
+                'rol_id' => 5,
+                'estado_id' => 1,
+                'tipo_usuario_id' => 1,
+                'created_at' => '2015-01-01 00:00:00',
+                'updated_at' => '2015-01-01 00:00:00',
+            ]);
+            $this->insert('{{%user}}', [
+                'id' => 10,
+                'username' => 'departamento2',
+                'auth_key' => 's9Bwu2WIpDuTf1-MwNg1idNdpXpd9Q3J',
+                'password_hash' => '$2y$13$qXmkrgjd99oVALp.i7Ake.XOpldPn0vtyHtcwWEZkJYBm9EJ1zFG2', //departamento
+                'password_reset_token' => null,
+                'email' => 'departamento2@email.com',
                 'rol_id' => 5,
                 'estado_id' => 1,
                 'tipo_usuario_id' => 1,

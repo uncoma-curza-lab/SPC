@@ -2,22 +2,21 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
-use yii\widgets\Pjax;
+
 /* @var $this yii\web\View */
-/* @var $searchModel backend\models\CarreraProgramaSearch */
+/* @var $searchModel backend\models\search\ObservacionSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Carrera Programas';
+$this->title = 'Observacions';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="carrera-programa-index">
+<div class="observacion-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-    <?php Pjax::begin(); ?>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create Carrera Programa', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Create Observacion', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
@@ -27,12 +26,10 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'id',
-            'estado',
-            'carrera_id',
+            'texto:ntext',
             'programa_id',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
-    <?php Pjax::end(); ?>
 </div>

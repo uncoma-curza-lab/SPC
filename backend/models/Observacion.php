@@ -5,23 +5,22 @@ namespace backend\models;
 use Yii;
 
 /**
- * This is the model class for table "carreraprograma".
+ * This is the model class for table "observacion".
  *
  * @property int $id
- * @property int $carrera_id
+ * @property string $texto
  * @property int $programa_id
  *
- * @property Carrera $carrera
  * @property Programa $programa
  */
-class CarreraPrograma extends \yii\db\ActiveRecord
+class Observacion extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'carreraprograma';
+        return 'observacion';
     }
 
     /**
@@ -30,10 +29,9 @@ class CarreraPrograma extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['carrera_id', 'programa_id'], 'integer'],
-            [['estado'], 'boolean'],
-            [['carrera_id'], 'required'],
-            [['carrera_id'], 'exist', 'skipOnError' => true, 'targetClass' => Carrera::className(), 'targetAttribute' => ['carrera_id' => 'id']],
+            [['texto'], 'required'],
+            [['texto'], 'string'],
+            [['programa_id'], 'integer'],
             [['programa_id'], 'exist', 'skipOnError' => true, 'targetClass' => Programa::className(), 'targetAttribute' => ['programa_id' => 'id']],
         ];
     }
@@ -45,18 +43,9 @@ class CarreraPrograma extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'carrera_id' => 'Carrera ID',
-            'estado' => 'Estado',
+            'texto' => 'Texto',
             'programa_id' => 'Programa ID',
         ];
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getCarrera()
-    {
-        return $this->hasOne(Carrera::className(), ['id' => 'carrera_id']);
     }
 
     /**

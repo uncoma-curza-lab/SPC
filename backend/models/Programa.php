@@ -7,6 +7,8 @@ use yii\db\Expression;
 use yii\behaviors\BlameableBehavior;
 use yii\db\ActiveRecord;
 use common\models\User;
+use frontend\models\Perfil;
+use backend\models\Observacion;
 
 /**
  * This is the model class for table "programa".
@@ -223,7 +225,9 @@ class Programa extends \yii\db\ActiveRecord
       return $this->hasMany(Carrera::className(),['id' =>'carrera_id'])->via('carrerap');
     }
 
-
+    public function getObservaciones(){
+      return $this->hasMany(Observacion::className(),['programa_id' =>'id']);
+    }
     /**
      * @return \yii\db\ActiveQuery
      */

@@ -83,12 +83,17 @@ class ProgramaSearch extends Programa
             'updated_by' => $this->updated_by,
         ]);
 
-        if(!$esAdmin){ //si no es admin refuerza el user id con el usuario logueado
+        if(!$esAdmin) { //si no es admin refuerza el user id con el usuario logueado
           if (PermisosHelpers::requerirRol('Departamento')){
             $perfil = \Yii::$app->user->identity->perfil;
-            if($perfil->departamento_id != 2) {
+            if (isset($perfil)){
+              //if($perfil->departamento_id != 2) {
               $query->joinWith(['carreras']);
               $query->andFilterWhere(['=','carrera.departamento_id', $perfil->departamento_id])->all();
+              //  }
+            } else {
+                $query->joinWith(['carreras']);
+                $query->andFilterWhere(['=','carrera.departamento_id',-1 ])->all();
             }
           } else if (PermisosHelpers::requerirRol('Profesor')) {
             $query->andFilterWhere([
