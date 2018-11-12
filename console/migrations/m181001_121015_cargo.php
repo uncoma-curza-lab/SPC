@@ -19,7 +19,7 @@ class m181001_121015_cargo extends Migration
       $this->createTable('{{cargo}}',[
           'id'      =>  $this->primaryKey(),
           'designacion' => $this->string()->notNull(),
-          'nombre_persona' => $this->string(100)->notNull,
+          'nombre_persona' => $this->string(100)->notNull(),
           'programa_id' => $this->integer()
       ], $options);
 
@@ -32,15 +32,7 @@ class m181001_121015_cargo extends Migration
         'no action',
         'no action'
       );
-      $this->addForeignKey(
-        'personacargo',
-        'cargo',
-        'persona_id',
-        'persona',
-        'id',
-        'no action',
-        'no action'
-      );
+
     }
 
     /**
@@ -49,7 +41,6 @@ class m181001_121015_cargo extends Migration
     public function safeDown()
     {
       $this->dropForeignKey('programacargo','{{programa}}');
-      $this->dropForeignKey('personacargo','{{persona}}');
       $this->dropTable('{{cargo}}');
     }
 

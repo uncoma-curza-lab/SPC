@@ -31,10 +31,11 @@ class Cargo extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['designacion'], 'required'],
-            [['persona_id', 'programa_id'], 'integer'],
+            [['nombre_persona','designacion'], 'required'],
+            [[ 'programa_id'], 'integer'],
             [['designacion'], 'string', 'max' => 255],
-            [['persona_id'], 'exist', 'skipOnError' => true, 'targetClass' => Persona::className(), 'targetAttribute' => ['persona_id' => 'id']],
+            [['nombre_persona'],'string','max' => 100],
+            [['nombre_persona'], 'exist', 'skipOnError' => true, 'targetClass' => Persona::className(), 'targetAttribute' => ['persona_id' => 'id']],
             [['programa_id'], 'exist', 'skipOnError' => true, 'targetClass' => Programa::className(), 'targetAttribute' => ['programa_id' => 'id']],
         ];
     }
