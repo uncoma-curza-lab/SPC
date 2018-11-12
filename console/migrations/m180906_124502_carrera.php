@@ -32,6 +32,25 @@ class m180906_124502_carrera extends Migration
         'no action',
         'no action'
       );
+
+      $this->insert('{{%carrera}}', [
+          'id' => 1,
+          'nom' => 'Tec. en administración de sistemas y soft libre',
+          'codigo' => 123,
+          'departamento_id' => '1',
+      ]);
+      $this->insert('{{%carrera}}', [
+          'id' => 2,
+          'nom' => 'Profesorado en lengua y comunicación',
+          'codigo' => 433,
+          'departamento_id' => '2',
+      ]);
+      $this->insert('{{%carrera}}', [
+          'id' => 3,
+          'nom' => 'Licenciatura',
+          'codigo' => 45,
+          'departamento_id' => '3',
+      ]);
     }
 
     /**

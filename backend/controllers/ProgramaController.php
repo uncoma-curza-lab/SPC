@@ -569,6 +569,9 @@ class ProgramaController extends Controller
             return true;
           }
       }
+      if(PermisosHelpers::requerirMinimoRol('Admin')){
+        return true;
+      }
       return false;
     }
 

@@ -19,7 +19,7 @@ class m181001_121015_cargo extends Migration
       $this->createTable('{{cargo}}',[
           'id'      =>  $this->primaryKey(),
           'designacion' => $this->string()->notNull(),
-          'persona_id' => $this->integer(),
+          'nombre_persona' => $this->string(100)->notNull,
           'programa_id' => $this->integer()
       ], $options);
 

@@ -29,6 +29,7 @@ class Status extends \yii\db\ActiveRecord
     {
         return [
             [['descripcion'], 'required'],
+            [['value'], 'integer'],
             [['descripcion'], 'string', 'max' => 255],
         ];
     }
@@ -40,6 +41,7 @@ class Status extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
+            'value' => 'Valor',
             'descripcion' => 'Descripcion',
         ];
     }

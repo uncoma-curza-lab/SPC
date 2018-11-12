@@ -66,6 +66,31 @@ class m130524_201442_init extends Migration
             'updated_by' => Schema::TYPE_INTEGER . "(11) NOT NULL",
         ], $this->tableOptions);
 
+            $this->insert('{{%perfil}}', [
+                'id' => 1,
+                'user_id' => '4',
+                'nombre' => 'profesor',
+                'apellido' => 'profesor',
+                'genero_id' => 1,
+                'departamento_id' => 1,
+            ]);
+            $this->insert('{{%perfil}}', [
+                'id' => 2,
+                'user_id' => '5',
+                'nombre' => 'departamento',
+                'apellido' => 'departamento',
+                'genero_id' => 1,
+                'departamento_id' => 1,
+            ]);
+            $this->insert('{{%perfil}}', [
+                'id' => 4,
+                'user_id' => '9',
+                'nombre' => 'profesor2',
+                'apellido' => 'profesor2',
+                'genero_id' => 2,
+                'departamento_id' => 2,
+            ]);
+
         // rol
         $this->createTable('{{%rol}}', [
             'id' => Schema::TYPE_PK,
@@ -226,6 +251,21 @@ class m130524_201442_init extends Migration
                 'created_at' => '2015-01-01 00:00:00',
                 'updated_at' => '2015-01-01 00:00:00',
             ]);
+            $this->insert('{{%user}}', [
+                'id' => 9,
+                'username' => 'profesor2',
+                //profesor pass
+                'auth_key' => 'bQYCliZJp_Pxx81t56_tMZ5ojXA84g5p',
+                'password_hash' => '$2y$13$5Zcu8bOU3g38XxSQduUKNe2sbBf1Cssd7rZ8qJgL/Xzif6bWjllKm', //profesor
+                'password_reset_token' => null,
+                'email' => 'profesor@email.com',
+                'rol_id' => 4,
+                'estado_id' => 1,
+                'tipo_usuario_id' => 1,
+                'created_at' => '2015-01-01 00:00:00',
+                'updated_at' => '2015-01-01 00:00:00',
+            ]);
+
 
         // fk: perfil
         $this->addForeignKey('fk_perfil_genero_id', '{{%perfil}}', 'genero_id', '{{%genero}}', 'id','RESTRICT','CASCADE'); // $delete= 'RESTRICT' $update='CASCADE'

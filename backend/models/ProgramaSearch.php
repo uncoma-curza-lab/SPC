@@ -86,8 +86,10 @@ class ProgramaSearch extends Programa
         if(!$esAdmin){ //si no es admin refuerza el user id con el usuario logueado
           if (PermisosHelpers::requerirRol('Departamento')){
             $perfil = \Yii::$app->user->identity->perfil;
-            $query->joinWith(['carreras']);
-            $query->andFilterWhere(['=','carrera.departamento_id', $perfil->departamento_id])->all();
+            if($perfil->departamento_id != 2) {
+              $query->joinWith(['carreras']);
+              $query->andFilterWhere(['=','carrera.departamento_id', $perfil->departamento_id])->all();
+            }
           } else if (PermisosHelpers::requerirRol('Profesor')) {
             $query->andFilterWhere([
                 'created_by' => $userId,

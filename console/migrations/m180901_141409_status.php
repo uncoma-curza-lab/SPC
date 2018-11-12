@@ -19,14 +19,22 @@ class m180901_141409_status extends Migration
       $this->createTable('{{status}}',[
         'id'      =>  $this->primaryKey(),
         'descripcion'     => $this->string()->notNull(),
+        'value'           => $this->integer(3),
       ], $options);
       $this->insert('{{%status}}', [
           'id' => 1,
           'descripcion' => 'Borrador',
+          'value' => 5,
       ]);
       $this->insert('{{%status}}', [
-          'id' => 1,
+          'id' => 2,
           'descripcion' => 'Departamento',
+          'value' => 10,
+      ]);
+      $this->insert('{{%status}}', [
+          'id' => 3,
+          'descripcion' => 'Finalizado',
+          'value' => 50,
       ]);
     }
 

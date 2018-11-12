@@ -21,6 +21,22 @@ class m120906_124454_departamento extends Migration
         'nom'     => $this->string()->notNull(),
         'codigo'  => $this->integer(),
       ], $options);
+
+      $this->insert('{{%departamento}}', [
+          'id' => 1,
+          'nom' => 'CyT',
+          'codigo' => 50,
+      ]);
+      $this->insert('{{%departamento}}', [
+          'id' => 2,
+          'nom' => 'Lengua y comunicación',
+          'codigo' => 10,
+      ]);
+      $this->insert('{{%departamento}}', [
+          'id' => 3,
+          'nom' => 'Pedagogía',
+          'codigo' => 60,
+      ]);
     }
 
     /**

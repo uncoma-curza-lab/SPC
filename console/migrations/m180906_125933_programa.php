@@ -33,6 +33,7 @@ class m180906_125933_programa extends Migration
           'objetivo_plan'   => $this->text()->notNull(),
           //'objetivo_programa' => $this->string(255)->notNull(), fk
           'contenido_plan'  => $this->text()->notNull(),
+          'observaciones'  => $this->text(),
           //'contenido_analitico' => $this->string()->notNull(), fkxunidad
           //bibliografía basica fkxunidad
           'propuesta_met'   => $this->text()->notNull(),
@@ -41,8 +42,6 @@ class m180906_125933_programa extends Migration
           'distr_horaria' => $this->text()->notNull(),
           'crono_tentativo' => $this->text()->notNull(),
           'actv_extracur' => $this->text()->notNull(),
-
-
           'created_at'  => $this->dateTime(),
           'updated_at'  => $this->dateTime(),
           'created_by'  => $this->integer(),

@@ -67,6 +67,7 @@ class Programa extends \yii\db\ActiveRecord
             //  [['asignatura', 'curso', 'profadj_regular', 'asist_regular', 'ayudante_p', 'ayudante_s', 'fundament', 'objetivo_plan', 'contenido_plan', 'propuesta_met', 'evycond_acreditacion', 'parcial_rec_promo', 'distr_horaria', 'crono_tentativo', 'actv_extracur'], 'required'],
             [['status_id'], function($attribute,$params){
               if ( $this->$attribute == 'Borrador') {
+                //Si es borrador no puede cambiar
                 $cont =0;
                 $attributes_validates = [
                   'departamento_id', 'cuatrimestre', 'year',
