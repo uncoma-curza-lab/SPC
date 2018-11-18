@@ -23,14 +23,14 @@ use yii\helpers\ArrayHelper;
           'allowClear' => true,
         ],
       ]) ?>
-    <?= $form->field($model, 'estado')->widget(Select2::classname(),[
+  <!--  <?= $form->field($model, 'estado')->widget(Select2::classname(),[
         'data' => [1=>'Aprobado',2=>'Desaprobado'],
         'language' => 'es',
         'options' => ['placeholder' => 'Apruebe o no el programa para esta carrera'],
         'pluginOptions' => [
           'allowClear' => true,
         ],
-      ]) ?>
+      ]) ?>-->
 
     <div class="form-group">
         <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>

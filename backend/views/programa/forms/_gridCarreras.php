@@ -34,7 +34,12 @@ $this->params['breadcrumbs'][] = $this->title;
               'attribute' => 'carrera_id',
               'format' => 'text',
               'value' => function($model){
-                return Carrera::findOne($model->id)->nom;
+                $carrera= Carrera::findOne($model->carrera_id);
+                if(isset($carrera))
+                return $carrera->nom;
+                else {
+                  return "ERROR#11001";
+                }
               }
             ],
             [
@@ -50,7 +55,8 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
               'class' => 'yii\grid\ActionColumn',
-              'controller' => 'carrera-programa'
+              'controller' => 'carrera-programa',
+            
             ],
         ],
     ]); ?>

@@ -4,12 +4,12 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use backend\models\ObservacionSearch;
 use yii\data\ActiveDataProvider;
-
+use common\models\PermisosHelpers;
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\search\ObservacionSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->params['breadcrumbs'][] = $this->title;
+//$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="observacion-index">
 
@@ -17,8 +17,9 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
+      <?php if(PermisosHelpers::requerirMinimoRol('Departamento')): ?>
       <?= Html::submitButton('Añadir una observación',['class' => 'btn btn-warning' , 'name'=>'submit','value' => 'observacion']) ?>
-
+      <?php endif; ?>
     </p>
 
     <?= GridView::widget([
@@ -42,8 +43,35 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
               'class' => 'yii\grid\ActionColumn',
-              'controller' => 'observacion'
+              'controller' => 'observacion',
+              'template' => '{view} {update} {delete}',
+              'buttons' => [
+                'update' => function ($url,$model) {
+                    if (PermisosHelpers::requerirMinimoRol('Admin')) {
+                      return Html::a(
+                        '<span style="padding:5px; font-size:20px;" class="glyphicon glyphicon-pencil"></span>',
+                        $url);
+                    } else {
+                      return null;
+                    }
+                },
+                'view' => function ($url,$model) {
+                      return Html::a(
+                        '<span style="padding:5px; font-size:20px;" class="glyphicon glyphicon-eye-open"></span>',
+                        $url);
+                },
+                'delete' => function ($url,$model) {
+                    if (PermisosHelpers::requerirMinimoRol('Admin')) {
+                      return Html::a(
+                        '<span style="padding:5px; font-size:20px;" class="glyphicon glyphicon-trash"></span>',
+                        $url);
+                    } else {
+                      return null;
+                    }
+                },
+              ]
             ],
         ],
     ]); ?>
+
 </div>

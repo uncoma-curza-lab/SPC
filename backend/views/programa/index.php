@@ -7,6 +7,7 @@ use yii\widgets\Pjax;
 use common\models\PermisosHelpers;
 use backend\models\Status;
 use common\models\RegistrosHelpers;
+
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\ProgramaSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -15,7 +16,6 @@ $this->title = 'Programas';
 $this->params['breadcrumbs'][] = $this->title;
 $show_this_nav = PermisosHelpers::requerirMinimoRol('Profesor');
 $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
-
 ?>
 <div class="programa-index">
 
@@ -85,18 +85,30 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
 
             [
               'class' => 'yii\grid\ActionColumn',
-              'template' => $show_this_nav? '{view} {update} {delete} {pdf} {status}':'{view} {status} {pdf}',
-
+              //'template' => $show_this_nav? '{view} {update} {delete} {pdf} {status}':'{view} {status} {pdf}',
+              'template' => $show_this_nav? '{subir} {update} {delete} {pdf} {status}':'{subir} {status} {pdf}',
               'buttons' => [
                 'pdf' => function ($url,$model) {
                     return Html::a(
                         '<span style="padding:5px; font-size:20px;" class="glyphicon glyphicon-download"></span>',
                         ['export-pdf','id'=> $model->id],['target' => '_blank']);
                 },
+                'subir' => function ($url,$model){
+                    if ((Status::findOne($model->status_id)->descripcion == "Borrador"
+                      && PermisosHelpers::requerirRol('Profesor'))
+                      || PermisosHelpers::requerirMinimoRol('Admin'))
+                    {
+                      return Html::a(
+                        '<span style="padding:5px; font-size:20px;" class="glyphicon glyphicon-upload"></span>',
+                        ['subir-estado','id' => $model->id]
+                      );
+                    }
+                },
                 'status' => function ($url,$model) {
                     return Html::a(
                         '<span style="padding:5px; font-size:20px;" class="glyphicon glyphicon-info-sign"></span>',
-                        $url);
+                        //$url);
+                        ['status','id' => $model->id]);
                 },
                 'view' => function ($url,$model) {
                     return Html::a(
@@ -104,20 +116,32 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
                         $url);
                 },
                 'update' => function ($url,$model) {
-                    return Html::a(
+                    $userid  = Yii::$app->user->identity->id;
+                    
+                    if ((Status::findOne($model->status_id)->descripcion == "Borrador" && $model->created_by == $userid) || PermisosHelpers::requerirMinimoRol('Admin'))
+                    {
+                      return Html::a(
                         '<span style="padding:5px; font-size:20px;" class="glyphicon glyphicon-pencil"></span>',
                         $url);
+                    } else {
+                      return null;
+                    }
                 },
                 'delete' => function ($url,$model) {
-                    return Html::a(
+                    $userid  = Yii::$app->user->identity->id;
+                    if ((Status::findOne($model->status_id)->descripcion == "Borrador" && $model->created_by == $userid) || PermisosHelpers::requerirMinimoRol('Admin'))
+                    {
+                      return Html::a(
                         '<span style="padding:5px; font-size:20px;" class="glyphicon glyphicon-trash"></span>',
                         $url,
                         [
-                            'title' => Yii::t('yii', 'Delete'),
-                            'data-confirm' => Yii::t('yii', 'Quiere eliminar el programa?'),
+                            'title' => Yii::t('yii', 'Eliminar'),
+                            'data-confirm' => Yii::t('yii', '¿Quiere eliminar el programa?'),
                             'data-method' => 'post',
                         ]
-                    );
+                      );
+                    }
+
                 },
               ]
             ],

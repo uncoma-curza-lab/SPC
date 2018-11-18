@@ -48,8 +48,9 @@ class Programa extends \yii\db\ActiveRecord
     /**
     * @deprecated objetivos del programa
     */
-    public $objetivos;
-    public $unidades;
+    //public $objetivos;
+    //public $unidades;
+
     /**
      * {@inheritdoc}
      */
@@ -64,10 +65,10 @@ class Programa extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['departamento_id', 'status_id', 'cuatrimestre', 'created_by', 'updated_by'], 'integer'],
+            [[ 'status_id', 'cuatrimestre', 'created_by', 'updated_by'], 'integer'],
 
             //  [['asignatura', 'curso', 'profadj_regular', 'asist_regular', 'ayudante_p', 'ayudante_s', 'fundament', 'objetivo_plan', 'contenido_plan', 'propuesta_met', 'evycond_acreditacion', 'parcial_rec_promo', 'distr_horaria', 'crono_tentativo', 'actv_extracur'], 'required'],
-            [['status_id'], function($attribute,$params){
+          /*  [['status_id'], function($attribute,$params){
               if ( $this->$attribute == 'Borrador') {
                 //Si es borrador no puede cambiar
                 $cont =0;
@@ -81,7 +82,7 @@ class Programa extends \yii\db\ActiveRecord
                   }
                 }
               }
-            }],
+            }],*/
             [[
               'year', 'status_id',
               'cuatrimestre', 'asignatura', 'curso',
@@ -95,7 +96,7 @@ class Programa extends \yii\db\ActiveRecord
 //            [['curso', 'profadj_regular', 'asist_regular', 'ayudante_p', 'ayudante_s'], 'string', 'max' => 60],
             [['curso'], 'string', 'max' => 60],
             [['year'], 'string', 'max' => 4],
-            [['departamento_id'], 'exist', 'skipOnError' => true, 'targetClass' => Departamento::className(), 'targetAttribute' => ['departamento_id' => 'id']],
+          //  [['departamento_id'], 'exist', 'skipOnError' => true, 'targetClass' => Departamento::className(), 'targetAttribute' => ['departamento_id' => 'id']],
             [['status_id'], 'exist', 'skipOnError' => true, 'targetClass' => Status::className(), 'targetAttribute' => ['status_id' => 'id']],
         ];
     }
@@ -121,6 +122,7 @@ class Programa extends \yii\db\ActiveRecord
 
     public function scenarios(){
       $scenarios = parent::scenarios();
+      $scenarios['carrerap'] = ['status_id'];
       $scenarios['crear'] = [
         'curso',
         'status_id',
@@ -155,7 +157,7 @@ class Programa extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'departamento_id' => 'Departamento',
+            //'departamento_id' => 'Departamento',
             'status_id' => 'Estado',
             'asignatura' => 'Asignatura',
             'curso' => 'Curso',
@@ -234,5 +236,9 @@ class Programa extends \yii\db\ActiveRecord
     public function getUser()
     {
         return $this->hasOne(User::className(), ['id' => 'created_by']);
+    }
+
+    public function setStatus($status_id){
+      $this->status_id = $status_id;
     }
 }

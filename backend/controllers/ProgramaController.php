@@ -103,7 +103,7 @@ class ProgramaController extends Controller
         $mostrar = false;
 
         if ( PermisosHelpers::requerirRol('Usuario') &&
-         Status::findOne($model->status_id)->descripcion == 'Finalizado' ) {
+          Status::findOne($model->status_id)->descripcion == 'Finalizado' ) {
             $mostrar = true;
         } else if (PermisosHelpers::requerirMinimoRol('Profesor')) {
             $mostrar = true;
@@ -640,6 +640,22 @@ class ProgramaController extends Controller
         throw new NotFoundHttpException('No se puede eliminar');
 
     }
+
+    public function actionSubirEstado($id){
+        $programa = $this->findModel($id);
+        $programa->scenario = 'carrerap';
+        $userId = \Yii::$app->user->identity->id;
+
+        if ($userId == $programa->created_by){
+          //$programa->status_id = Status::findOne(['descripcion','=','Departamento'])->id;
+          $programa->status_id = Status::find()->where(['=','descripcion','Departamento'])->one()->id;
+          if( $programa->save())
+            return $this->redirect(['index']);
+          else
+            throw new NotFoundHttpException("Ocurrió un error");
+        }
+    }
+
     /*
     * Comienzan las funciones para crear y exportar un PDF
     */
@@ -650,7 +666,7 @@ class ProgramaController extends Controller
       //$mpdf->WriteHTML('<h1>Hello World!</h1>');
       //$mpdf->Output($model->asignatura.".pdf", 'D');
       $mpdf->Output();
-      
+
       //return $this->renderPartial('mpdf');
     }
     public function actionForceDownloadPdf()
@@ -660,6 +676,13 @@ class ProgramaController extends Controller
        $mpdf->Output('MyPDF.pdf', 'D');
        exit;
    }
+
+   public function actionStatus($id) {
+     $model = $this->findModel($id);
+     return $this->render('info',['model' => $model]);
+
+   }
+
     /**
      * Busca un programa por su $id
      * Si el modelo no existe retorna un error 404

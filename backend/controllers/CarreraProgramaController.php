@@ -9,7 +9,8 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use common\models\PermisosHelpers;
-
+use common\models\EstadoHelpers;
+use backend\models\Programa;
 
 /**
  * CarreraProgramaController implements the CRUD actions for CarreraPrograma model.
@@ -119,6 +120,41 @@ class CarreraProgramaController extends Controller
 
         return $this->render('update', [
             'model' => $model,
+        ]);
+    }
+
+    public function actionDesaprobar($id)
+    {
+        $model = $this->findModel($id);
+        $model->estado = 0;
+
+        if ($return = $model->save()) {
+          $programa = Programa::findOne(['id','=',$model->programa_id]);
+          $programa->scenario = 'carrerap';
+          $programa->status_id = 1;
+          if ($programa->save()){
+            return $this->redirect(['programa/index']);
+            //CARTEL DE EXITO
+            //return $this->redirect(['programa/update', 'id' => $model->programa_id]);
+          }
+        } else {
+          throw new NotFoundHttpException($return);
+        }
+
+        return $this->redirect(['programa/status',
+            'id' => $model->programa_id
+        ]);
+    }
+    public function actionAprobar($id)
+    {
+        $model = $this->findModel($id);
+        $model->estado = 1;
+        if ($model->save()) {
+          //CARTEL DE EXITO
+            //return $this->redirect(['programa/update', 'id' => $model->programa_id]);
+        }
+        return $this->redirect(['programa/status',
+            'id' => $model->programa_id
         ]);
     }
 
