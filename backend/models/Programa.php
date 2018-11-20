@@ -125,7 +125,7 @@ class Programa extends \yii\db\ActiveRecord
       $scenarios['carrerap'] = ['status_id'];
       $scenarios['crear'] = [
         'curso',
-        'status_id',
+        //'status_id',
         'cuatrimestre',
         'year',
         'asignatura'

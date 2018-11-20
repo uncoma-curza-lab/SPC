@@ -80,7 +80,8 @@
   <div class="col-xs-6">
     <?= $form->field($model, 'asignatura')->textInput(['maxlength' => true]) ?>
   </div>
-  <!-- <div class="col-xs-4">
+  <?php if (PermisosHelpers::requerirMinimoRol('Admin')) : ?>
+  <div class="col-xs-4">
     <?= $form->field($model, 'status_id')->widget(Select2::classname(),[
         'data' => filtrarEstados($model),
         //'data' =>ArrayHelper::map(((new StatusSearch())->search(['model' => 'backend\models\Status'])),'id','descripcion'),
@@ -92,7 +93,8 @@
           'allowClear' => true,
         ],
       ]) ?>
-  </div>-->
+  </div>
+<?php endif; ?>
 
   <div class="col-xs-2">
     <?= $form->field($model, 'year')->textInput(['maxlength' => true, 'placeholder'=> 2018]) ?>

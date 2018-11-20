@@ -11,6 +11,7 @@ use yii\filters\VerbFilter;
 use common\models\PermisosHelpers;
 use common\models\EstadoHelpers;
 use backend\models\Programa;
+use backend\models\Status;
 
 /**
  * CarreraProgramaController implements the CRUD actions for CarreraPrograma model.
@@ -150,6 +151,25 @@ class CarreraProgramaController extends Controller
         $model = $this->findModel($id);
         $model->estado = 1;
         if ($model->save()) {
+          $programa = Programa::findOne(['=','id',$model->programa_id]);
+          $programa->scenario = 'carrerap';
+          $actualizar = true;
+          $carrerasp = CarreraPrograma::find()->where(['=','programa_id',$model->id])->all();
+          foreach ($carrerasp as $key ) {
+            if ($key['estado'] != 1){
+              $actualizar = false;
+              break;
+            }
+          }
+          if ($actualizar) {
+            $valor_estado = Status::findOne(['=','id',$programa->status_id])->value;
+            $siguiente_estado = Status::find()->where(['>','value',$valor_estado])->orderBy(['value'=>  SORT_ASC])->one();
+            $programa->status_id = $siguiente_estado->id;
+            if ($programa->save())
+              $this->redirect(['programa/index']);
+            else
+              throw new NotFoundHttpException ("error cambio de estado");
+          }
           //CARTEL DE EXITO
             //return $this->redirect(['programa/update', 'id' => $model->programa_id]);
         }

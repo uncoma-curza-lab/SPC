@@ -18,7 +18,7 @@ use kartik\tabs\TabsX;
 
 $show_this_nav = PermisosHelpers::requerirMinimoRol('Profesor');
 $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
-$estado_programa = Status::findOne('id','=',$model->status_id);
+$estado_programa = Status::findOne(['=','id',$model->status_id]);
 $mostrar = isset($estado_programa) && ($estado_programa->value > EstadoHelpers::getValue('Borrador'));
 $items = [
     [
@@ -69,7 +69,7 @@ $items = [
                     'aprobar' => function ($url,$model) {
                       $perfil_user  = Yii::$app->user->identity->perfil;
                       $carrera = Carrera::findOne(['id','=',$model->carrera_id]);
-                      if(PermisosHelpers::requerirMinimoRol('Departamento') && $perfil_user->departamento_id == $carrera->departamento_id ){
+                      if((PermisosHelpers::requerirMinimoRol('Departamento') && isset($perfil_user->departamento_id ) && $perfil_user->departamento_id == $carrera->departamento_id) ||  PermisosHelpers::requerirMinimoRol('Admin')){
                         return Html::a(
                             '<span style="padding:5px; font-size:20px;" class="glyphicon glyphicon-ok"></span>',
                             ['carrera-programa/aprobar','id' => $model->id],
@@ -83,7 +83,7 @@ $items = [
                     'desaprobar' => function ($url,$model) {
                       $perfil_user  = Yii::$app->user->identity->perfil;
                       $carrera = Carrera::findOne(['id','=',$model->carrera_id]);
-                      if(PermisosHelpers::requerirMinimoRol('Departamento') && $perfil_user->departamento_id == $carrera->departamento_id ){
+                      if((PermisosHelpers::requerirMinimoRol('Departamento') && isset($perfil_user->departamento_id ) && $perfil_user->departamento_id == $carrera->departamento_id ) || PermisosHelpers::requerirMinimoRol('Admin') ){
                         return Html::a(
                             '<span style="padding:5px; font-size:20px;" class="glyphicon glyphicon-remove"></span>',
                             ['carrera-programa/desaprobar','id' => $model->id],

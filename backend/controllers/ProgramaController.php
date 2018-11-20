@@ -127,6 +127,7 @@ class ProgramaController extends Controller
     {
         $model = new Programa();
         $model->scenario = 'crear';
+        $model->status_id = Status::find()->where(['=','descripcion','Borrador'])->one()->id;
         //esta validación no es necesaria. Desde RULES se está validando
         if (PermisosHelpers::requerirMinimoRol('Profesor')) {
           if(Yii::$app->request->post('submit') == 'salir' &&
