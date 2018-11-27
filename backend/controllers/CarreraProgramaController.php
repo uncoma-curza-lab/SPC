@@ -131,9 +131,14 @@ class CarreraProgramaController extends Controller
 
         if ($return = $model->save()) {
           $programa = Programa::findOne(['id','=',$model->programa_id]);
+          $carrerasp = CarreraPrograma::find()->where(['=','programa_id',$model->id])->all();
           $programa->scenario = 'carrerap';
           $programa->status_id = 1;
           if ($programa->save()){
+            foreach ($carrerasp as $key ) {
+              $key->estado = null;
+              $key->save();
+            }
             return $this->redirect(['programa/index']);
             //CARTEL DE EXITO
             //return $this->redirect(['programa/update', 'id' => $model->programa_id]);
@@ -165,6 +170,11 @@ class CarreraProgramaController extends Controller
             $valor_estado = Status::findOne(['=','id',$programa->status_id])->value;
             $siguiente_estado = Status::find()->where(['>','value',$valor_estado])->orderBy(['value'=>  SORT_ASC])->one();
             $programa->status_id = $siguiente_estado->id;
+            //dejar todos los estados en falso
+            foreach ($carrerasp as $key ) {
+              $key->estado = null;
+              $key->save();
+            }
             if ($programa->save())
               $this->redirect(['programa/index']);
             else
