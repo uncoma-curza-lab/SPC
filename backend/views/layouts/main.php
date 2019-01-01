@@ -38,10 +38,10 @@ AppAsset::register($this);
         ],
     ]);
     $menuItems = [
-        ['label' => 'Home', 'url' => ['/site/index']],
+        ['label' => 'Inicio', 'url' => ['/site/index']],
     ];
     if (Yii::$app->user->isGuest) {
-        $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
+        $menuItems[] = ['label' => 'Ingresar', 'url' => ['/site/login']];
     } else {
         if(PermisosHelpers::requerirMinimoRol('Usuario')){
           $menuItems[] = ['label' => 'Programas', 'url' => ['/programa/index']
@@ -58,7 +58,7 @@ AppAsset::register($this);
           ['label' => 'Perfiles', 'url' => ['perfil/index']],
         ]];
         }
-        $menuItems[] = ['label' => 'Logout (' . Yii::$app->user->identity->username . ')',
+        $menuItems[] = ['label' => 'Salir (' . Yii::$app->user->identity->username . ')',
               'url' => ['/site/logout'],
               'linkOptions' => ['data-method' => 'post']
         ];

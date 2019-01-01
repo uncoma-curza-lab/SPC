@@ -68,6 +68,7 @@ $items = [
               <li><i class="glyphicon glyphicon-star"></i> Carolina Juárez</li>
               <li><i class="glyphicon glyphicon-star"></i> Cecilia Camera</li>
               <li><i class="glyphicon glyphicon-star"></i> Juan Carlos Brocca</li>
+              <li><i class="glyphicon glyphicon-star"></i> Diego Martinez Diaz</li>
             </ul>
           </div>
         </div>
