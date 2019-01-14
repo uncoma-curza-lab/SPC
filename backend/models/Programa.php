@@ -3,12 +3,10 @@
 namespace backend\models;
 
 use Yii;
+//behaviors library
 use yii\db\Expression;
 use yii\behaviors\BlameableBehavior;
 use yii\db\ActiveRecord;
-use common\models\User;
-use frontend\models\Perfil;
-use backend\models\Observacion;
 
 /**
  * This is the model class for table "programa".
@@ -16,14 +14,10 @@ use backend\models\Observacion;
  * @property int $id
  * @property int $departamento_id
  * @property int $status_id
- * @property string $asignatura
+ * @property int $asignatura_id
  * @property string $curso
- * @property string $year
+ * @property int $year
  * @property int $cuatrimestre
- * @property string $profadj_regular
- * @property string $asist_regular
- * @property string $ayudante_p
- * @property string $ayudante_s
  * @property string $fundament
  * @property string $objetivo_plan
  * @property string $contenido_plan
@@ -38,19 +32,17 @@ use backend\models\Observacion;
  * @property int $created_by
  * @property int $updated_by
  *
+ * @property Carreraprograma[] $carreraprogramas
+ * @property Designacion[] $designacions
  * @property Objetivo[] $objetivos
+ * @property Observacion[] $observacions
+ * @property Asignatura $asignatura
  * @property Departamento $departamento
  * @property Status $status
- * @property Unidad[] $unidades
+ * @property Unidad[] $unidads
  */
 class Programa extends \yii\db\ActiveRecord
 {
-    /**
-    * @deprecated objetivos del programa
-    */
-    //public $objetivos;
-    //public $unidades;
-
     /**
      * {@inheritdoc}
      */
@@ -65,38 +57,12 @@ class Programa extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [[ 'status_id', 'cuatrimestre', 'created_by', 'updated_by'], 'integer'],
-
-            //  [['asignatura', 'curso', 'profadj_regular', 'asist_regular', 'ayudante_p', 'ayudante_s', 'fundament', 'objetivo_plan', 'contenido_plan', 'propuesta_met', 'evycond_acreditacion', 'parcial_rec_promo', 'distr_horaria', 'crono_tentativo', 'actv_extracur'], 'required'],
-          /*  [['status_id'], function($attribute,$params){
-              if ( $this->$attribute == 'Borrador') {
-                //Si es borrador no puede cambiar
-                $cont =0;
-                $attributes_validates = [
-                  'departamento_id', 'cuatrimestre', 'year',
-                  'asignatura', 'curso', 'fundament'
-                ];
-                foreach ($attributes_validates as $key ) {
-                  if (!isset($this->$key)){
-                      $this->addError($attribute,"estado no posible");
-                  }
-                }
-              }
-            }],*/
-            [[
-              'year', 'status_id',
-              'cuatrimestre', 'asignatura', 'curso',
-               'fundament', 'objetivo_plan', 'contenido_plan',
-               'propuesta_met', 'evycond_acreditacion', 'parcial_rec_promo',
-               'distr_horaria', 'crono_tentativo', 'actv_extracur'
-             ], 'required'],
+            [['departamento_id', 'status_id', 'asignatura_id', 'year', 'created_by', 'updated_by'], 'integer'],
+            [[ 'fundament', 'objetivo_plan', 'contenido_plan', 'propuesta_met', 'evycond_acreditacion', 'parcial_rec_promo', 'distr_horaria', 'crono_tentativo', 'actv_extracur'], 'required'],
             [['fundament', 'objetivo_plan', 'contenido_plan', 'propuesta_met', 'evycond_acreditacion', 'parcial_rec_promo', 'distr_horaria', 'crono_tentativo', 'actv_extracur'], 'string'],
             [['created_at', 'updated_at'], 'safe'],
-            [['asignatura'], 'string', 'max' => 100],
-//            [['curso', 'profadj_regular', 'asist_regular', 'ayudante_p', 'ayudante_s'], 'string', 'max' => 60],
-            [['curso'], 'string', 'max' => 60],
-            [['year'], 'string', 'max' => 4],
-          //  [['departamento_id'], 'exist', 'skipOnError' => true, 'targetClass' => Departamento::className(), 'targetAttribute' => ['departamento_id' => 'id']],
+            [['asignatura_id'], 'exist', 'skipOnError' => true, 'targetClass' => Asignatura::className(), 'targetAttribute' => ['asignatura_id' => 'id']],
+            [['departamento_id'], 'exist', 'skipOnError' => true, 'targetClass' => Departamento::className(), 'targetAttribute' => ['departamento_id' => 'id']],
             [['status_id'], 'exist', 'skipOnError' => true, 'targetClass' => Status::className(), 'targetAttribute' => ['status_id' => 'id']],
         ];
     }
@@ -120,16 +86,45 @@ class Programa extends \yii\db\ActiveRecord
       ];
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function attributeLabels()
+    {
+        return [
+            'id' => 'ID',
+            'departamento_id' => 'Departamento',
+            'status_id' => 'Estado',
+            'asignatura_id' => 'Asignatura',
+            'curso' => 'Curso',
+            'year' => 'Año',
+            'cuatrimestre' => 'Cuatrimestre',
+            'fundament' => 'Fundament',
+            'objetivo_plan' => 'Objetivo Plan',
+            'contenido_plan' => 'Contenido Plan',
+            'propuesta_met' => 'Propuesta Met',
+            'evycond_acreditacion' => 'Evycond Acreditacion',
+            'parcial_rec_promo' => 'Parcial Rec Promo',
+            'distr_horaria' => 'Distr Horaria',
+            'crono_tentativo' => 'Crono Tentativo',
+            'actv_extracur' => 'Actv Extracur',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
+            'created_by' => 'Created By',
+            'updated_by' => 'Updated By',
+        ];
+    }
+
     public function scenarios(){
       $scenarios = parent::scenarios();
       $scenarios['carrerap'] = ['status_id'];
       $scenarios['crear'] = [
-        'curso',
-        //'status_id',
-        'cuatrimestre',
-        'year',
-        'asignatura'
+      //  'curso',
+        'asignatura_id',
+      //  'cuatrimestre',
+      //  'year',
       ];
+      $scenarios['enviarProfesor'] = ['status_id'];
       $scenarios['update'] = [
         'curso',
         'status_id',
@@ -151,40 +146,22 @@ class Programa extends \yii\db\ActiveRecord
     }
 
     /**
-     * {@inheritdoc}
+     * @return \yii\db\ActiveQuery
      */
-    public function attributeLabels()
+    public function getCarreraprogramas()
     {
-        return [
-            'id' => 'ID',
-            //'departamento_id' => 'Departamento',
-            'status_id' => 'Estado',
-            'asignatura' => 'Asignatura',
-            'curso' => 'Curso',
-            'year' => 'Año',
-            'cuatrimestre' => 'Cuatrimestre',
-            //'profadj_regular' => 'Profesor adj. Regular',
-            //'asist_regular' => 'Asistente Regular',
-          //  'ayudante_p' => 'Ayudante Primera',
-          //  'ayudante_s' => 'Ayudante Segunda',
-            'fundament' => 'Fundamentacion',
-            'objetivo_plan' => 'Objetivo del Plan',
-            'contenido_plan' => 'Contenido del Plan',
-            'propuesta_met' => 'Propuesta Metodologica',
-            'evycond_acreditacion' => 'Evaluación y condiciones de acreditacion',
-            'parcial_rec_promo' => 'Parciales, Recuperatorios y Promocios',
-            'distr_horaria' => 'Distribución horaria',
-            'crono_tentativo' => 'Cronograma Tentativo',
-            'actv_extracur' => 'Actvidad Extracurricular',
-            'created_at' => 'Se creó',
-            'updated_at' => 'Se actualizó',
-            'created_by' => 'Creado por',
-            'updated_by' => 'Actualizado por',
-        ];
+        return $this->hasMany(Carreraprograma::className(), ['programa_id' => 'id']);
     }
 
     /**
-     * Obtiene todos los objetivos del programa
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDesignaciones()
+    {
+        return $this->hasMany(Designacion::className(), ['programa_id' => 'id']);
+    }
+
+    /**
      * @return \yii\db\ActiveQuery
      */
     public function getObjetivos()
@@ -192,10 +169,31 @@ class Programa extends \yii\db\ActiveRecord
         return $this->hasMany(Objetivo::className(), ['programa_id' => 'id']);
     }
 
-
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getObservaciones()
+    {
+        return $this->hasMany(Observacion::className(), ['programa_id' => 'id']);
+    }
 
     /**
-     * Obtiene el estado del programa
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAsignatura()
+    {
+        return $this->hasOne(Asignatura::className(), ['id' => 'asignatura_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDepartamento()
+    {
+        return $this->hasOne(Departamento::className(), ['id' => 'departamento_id']);
+    }
+
+    /**
      * @return \yii\db\ActiveQuery
      */
     public function getStatus()
@@ -204,41 +202,19 @@ class Programa extends \yii\db\ActiveRecord
     }
 
     /**
-     * Obtiene las unidades del programa
      * @return \yii\db\ActiveQuery
      */
     public function getUnidades()
     {
         return $this->hasMany(Unidad::className(), ['programa_id' => 'id']);
     }
-    /**
-     * Obtiene los cargos del programa
-     * @return \yii\db\ActiveQuery
-     */
-    public function getCargos()
+
+    public function getNomenclatura()
     {
-        return $this->hasMany(Cargo::className(), ['programa_id' => 'id']);
+      return $this->getAsignatura()->one()->getNomenclatura();
     }
-
-    public function getCarrerap(){
-      return $this->hasMany(CarreraPrograma::className(), ['programa_id' => 'id']);
-    }
-    public function getCarreras(){
-      return $this->hasMany(Carrera::className(),['id' =>'carrera_id'])->via('carrerap');
-    }
-
-    public function getObservaciones(){
-      return $this->hasMany(Observacion::className(),['programa_id' =>'id']);
-    }
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getUser()
+    public function getCurso()
     {
-        return $this->hasOne(User::className(), ['id' => 'created_by']);
-    }
-
-    public function setStatus($status_id){
-      $this->status_id = $status_id;
+      return $this->getAsignatura()->one()->getCurso();
     }
 }

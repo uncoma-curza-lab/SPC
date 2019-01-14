@@ -58,7 +58,6 @@ class m130524_201442_init extends Migration
             'apellido' => Schema::TYPE_TEXT . " NULL",
             'fecha_nacimiento' => Schema::TYPE_DATE . " NULL",
             'genero_id' => Schema::TYPE_INTEGER . "(11) NOT NULL",
-            'departamento_id' => Schema::TYPE_INTEGER . "(11) NOT NULL",
             'imagen' => Schema::TYPE_STRING . "(80) NOT NULL",
             'created_at' => Schema::TYPE_DATETIME . " NULL",
             'updated_at' => Schema::TYPE_DATETIME . " NULL",
@@ -72,7 +71,6 @@ class m130524_201442_init extends Migration
                 'nombre' => 'profesor',
                 'apellido' => 'profesor',
                 'genero_id' => 1,
-                'departamento_id' => 1,
             ]);
             $this->insert('{{%perfil}}', [
                 'id' => 2,
@@ -80,7 +78,6 @@ class m130524_201442_init extends Migration
                 'nombre' => 'departamento',
                 'apellido' => 'departamento',
                 'genero_id' => 1,
-                'departamento_id' => 1,
             ]);
             $this->insert('{{%perfil}}', [
                 'id' => 3,
@@ -88,7 +85,6 @@ class m130524_201442_init extends Migration
                 'nombre' => 'departamento2',
                 'apellido' => 'departamento2',
                 'genero_id' => 1,
-                'departamento_id' => 2,
             ]);
             $this->insert('{{%perfil}}', [
                 'id' => 4,
@@ -96,7 +92,6 @@ class m130524_201442_init extends Migration
                 'nombre' => 'profesor2',
                 'apellido' => 'profesor2',
                 'genero_id' => 2,
-                'departamento_id' => 2,
             ]);
 
         // rol
@@ -290,14 +285,12 @@ class m130524_201442_init extends Migration
 
         // fk: perfil
         $this->addForeignKey('fk_perfil_genero_id', '{{%perfil}}', 'genero_id', '{{%genero}}', 'id','RESTRICT','CASCADE'); // $delete= 'RESTRICT' $update='CASCADE'
-        $this->addForeignKey('fk_perfil_departamento_id', '{{%perfil}}', 'departamento_id', '{{%departamento}}', 'id','RESTRICT','CASCADE'); // $delete= 'RESTRICT' $update='CASCADE'
 
     }
 
     public function down()
     {
         $this->dropForeignKey('fk_perfil_genero_id', '{{%perfil}}');
-        $this->dropForeignKey('fk_perfil_departamento_id', '{{%departamento}}');
         $this->dropTable('{{%estado}}');
         $this->truncateTable('{{%perfil}}');
         $this->dropTable('{{%perfil}}'); // fk: genero_id

@@ -6,31 +6,20 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use backend\models\Programa;
-use frontend\models\Perfil;
-use common\models\PermisosHelpers;
-use common\models\User;
 
 /**
  * ProgramaSearch represents the model behind the search form of `backend\models\Programa`.
  */
 class ProgramaSearch extends Programa
 {
-    public function attributes(){
-        return array_merge(parent::attributes(),['user.username']);
-    }
-
-    public function attributeLabels(){
-        return array_merge(parent::attributeLabels(),['user.username'=>'nombre de usuario']);
-    }
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['id',  'status_id', 'cuatrimestre', 'created_by', 'updated_by'], 'integer'],
-        //    [['asignatura', 'curso', 'year', 'profadj_regular', 'asist_regular', 'ayudante_p', 'ayudante_s', 'fundament', 'objetivo_plan', 'contenido_plan', 'propuesta_met', 'evycond_acreditacion', 'parcial_rec_promo', 'distr_horaria', 'crono_tentativo', 'actv_extracur', 'created_at', 'updated_at'], 'safe'],
-           [['asignatura', 'curso', 'year', 'fundament', 'objetivo_plan', 'contenido_plan', 'propuesta_met', 'evycond_acreditacion', 'parcial_rec_promo', 'distr_horaria', 'crono_tentativo', 'actv_extracur', 'created_at', 'updated_at'], 'safe'],
+            [['id', 'departamento_id', 'status_id', 'asignatura_id', 'year', 'created_by', 'updated_by'], 'integer'],
+            [[ 'fundament', 'objetivo_plan', 'contenido_plan', 'propuesta_met', 'evycond_acreditacion', 'parcial_rec_promo', 'distr_horaria', 'crono_tentativo', 'actv_extracur', 'created_at', 'updated_at'], 'safe'],
         ];
     }
 
@@ -52,10 +41,9 @@ class ProgramaSearch extends Programa
      */
     public function search($params)
     {
-        $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
-        $userId = \Yii::$app->user->identity->id;
-
         $query = Programa::find();
+
+        // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -64,54 +52,25 @@ class ProgramaSearch extends Programa
         $this->load($params);
 
         if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
             return $dataProvider;
         }
 
-        $query->joinWith('user');
-
-        $query->andFilterWhere(
-                ['LIKE','user.username',$this->getAttribute('user.username')]
-        );
-
+        // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
+            'departamento_id' => $this->departamento_id,
             'status_id' => $this->status_id,
-            'cuatrimestre' => $this->cuatrimestre,
+            'asignatura_id' => $this->asignatura_id,
+            'year' => $this->year,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'created_by' => $this->created_by,
             'updated_by' => $this->updated_by,
         ]);
 
-        if(!$esAdmin) { //si no es admin refuerza el user id con el usuario logueado
-          if (PermisosHelpers::requerirRol('Departamento')){
-            $perfil = \Yii::$app->user->identity->perfil;
-            if (isset($perfil)){
-              //if($perfil->departamento_id != 2) {
-              $query->joinWith(['carreras']);
-              $query->andFilterWhere(['=','carrera.departamento_id', $perfil->departamento_id])->all();
-              //  }
-            } else {
-                $query->joinWith(['carreras']);
-                $query->andFilterWhere(['=','carrera.departamento_id',-1 ])->all();
-            }
-          } else if (PermisosHelpers::requerirRol('Profesor')) {
-            $query->andFilterWhere([
-                'created_by' => $userId,
-            ]);
-          }else if (PermisosHelpers::requerirRol('Usuario')) {
-            $query->joinWith(['status']);
-            $query->andFilterWhere(['like','status.descripcion', 'publicado']);
-          }
-        }
-        $query->andFilterWhere(['like', 'asignatura', $this->asignatura])
-            ->andFilterWhere(['like', 'curso', $this->curso])
-            ->andFilterWhere(['like', 'year', $this->year])
-        //    ->andFilterWhere(['like', 'profadj_regular', $this->profadj_regular])
-          //  ->andFilterWhere(['like', 'asist_regular', $this->asist_regular])
-          //  ->andFilterWhere(['like', 'ayudante_p', $this->ayudante_p])
-          //  ->andFilterWhere(['like', 'ayudante_s', $this->ayudante_s])
-            ->andFilterWhere(['like', 'fundament', $this->fundament])
+        $query->andFilterWhere(['like', 'fundament', $this->fundament])
             ->andFilterWhere(['like', 'objetivo_plan', $this->objetivo_plan])
             ->andFilterWhere(['like', 'contenido_plan', $this->contenido_plan])
             ->andFilterWhere(['like', 'propuesta_met', $this->propuesta_met])

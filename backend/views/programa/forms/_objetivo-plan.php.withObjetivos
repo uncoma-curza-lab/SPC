@@ -5,7 +5,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 $this->params['breadcrumbs'][] = ['label' => '...'];
 $this->params['breadcrumbs'][] = ['label' => "Portada", 'url' => ['update', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = ['label' => "Fundamentacion", 'url' => ['fundamentacion', 'id' => $model->id]];
+$this->params['breadcrumbs'][] = ['label' => "Fundamentacion", 'url' => ['cargar', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Objetivo según el plan de estudio';
 ?>
 

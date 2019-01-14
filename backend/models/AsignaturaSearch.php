@@ -5,12 +5,12 @@ namespace backend\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use backend\models\Unidad;
+use backend\models\Asignatura;
 
 /**
- * UnidadSearch represents the model behind the search form of `backend\models\Unidad`.
+ * AsignaturaSearch represents the model behind the search form of `backend\models\Asignatura`.
  */
-class UnidadSearch extends Unidad
+class AsignaturaSearch extends Asignatura
 {
     /**
      * {@inheritdoc}
@@ -18,8 +18,8 @@ class UnidadSearch extends Unidad
     public function rules()
     {
         return [
-            [['id', 'programa_id'], 'integer'],
-            [['descripcion', 'biblio_basica', 'biblio_consulta'], 'safe'],
+            [['id', 'curso', 'cuatrimestre', 'carga_horaria_sem', 'carga_horaria_cuatr', 'plan_id', 'departamento_id'], 'integer'],
+            [['nomenclatura'], 'safe'],
         ];
     }
 
@@ -41,7 +41,7 @@ class UnidadSearch extends Unidad
      */
     public function search($params)
     {
-        $query = Unidad::find();
+        $query = Asignatura::find();
 
         // add conditions that should always apply here
 
@@ -60,12 +60,15 @@ class UnidadSearch extends Unidad
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'programa_id' => $this->programa_id,
+            'curso' => $this->curso,
+		        'cuatrimestre' => $this->cuatrimestre, 
+		        'carga_horaria_sem' => $this->carga_horaria_sem,
+		        'carga_horaria_cuatr' => $this->carga_horaria_cuatr,
+            'departamento_id' => $this->departamento_id,
+            'plan_id' => $this->plan_id,
         ]);
 
-        $query->andFilterWhere(['like', 'descripcion', $this->descripcion])
-            ->andFilterWhere(['like', 'biblio_basica', $this->biblio_basica])
-            ->andFilterWhere(['like', 'biblio_consulta', $this->biblio_consulta]);
+        $query->andFilterWhere(['like', 'nomenclatura', $this->nomenclatura]);
 
         return $dataProvider;
     }

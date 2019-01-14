@@ -64,7 +64,6 @@ $photo = Html::img($photoInfo['url'],['alt'=>$photoInfo['alt']]);
             //'localidad',
         //    'telefono',
             //'cargo',
-            'departamento_id',
             'created_at',
             'updated_at',
             //'user_id',

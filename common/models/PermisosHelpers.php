@@ -4,8 +4,37 @@ use common\models\ValorHelpers;
 use yii;
 use yii\web\Controller;
 use yii\helpers\Url;
+use backend\models\Cargo;
+use backend\models\Programa;
 class PermisosHelpers
 {
+    public static function requerirProfesorAdjunto($programaID){
+      $programa = Programa::find()->where(['=','id',$programaID])->one();
+      if (isset($programa)){
+          $cargoProfAdj = Cargo::find()->where(['=','carga_programa',1])->one();
+          $designaciones = $programa->getDesignaciones();
+          $profesor = $designaciones->where(['=','cargo_id',$cargoProfAdj->id])->one();
+          $userId = \Yii::$app->user->identity->id;
+          if ($userId == $profesor->user_id) {
+            return true;
+          } else {
+            return false;
+          }
+      }
+      return false;
+    }
+
+    public static function requerirDirector($programaID){
+      $programa = Programa::findOne($programaID);
+      $userId = \Yii::$app->user->identity->id;
+
+      if ($programa->getDepartamento()->one()->director == $userId){
+        return true;
+      } else {
+        return false;
+      }
+    }
+
     public static function requerirUpgradeA($tipo_usuario_nombre)
     {
         if (!ValorHelpers::tipoUsuarioCoincide($tipo_usuario_nombre)) {

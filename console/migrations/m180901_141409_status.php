@@ -42,9 +42,14 @@ class m180901_141409_status extends Migration
           'value' => 30,
       ]);
       $this->insert('{{%status}}', [
-          'id' => 3,
+          'id' => 6,
           'descripcion' => 'Biblioteca',
           'value' => 50,
+      ]);
+      $this->insert('{{%status}}', [
+          'id' => 3,
+          'descripcion' => 'Profesor',
+          'value' => 7,
       ]);
     }
 

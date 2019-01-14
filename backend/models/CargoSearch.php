@@ -18,9 +18,8 @@ class CargoSearch extends Cargo
     public function rules()
     {
         return [
-            [['id', 'programa_id'], 'integer'],
-            [['nombre_persona'] , 'string'],
-            [['designacion'], 'safe'],
+            [['id', 'carga_programa'], 'integer'],
+            [['nomenclatura'], 'safe'],
         ];
     }
 
@@ -61,11 +60,10 @@ class CargoSearch extends Cargo
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'programa_id' => $this->programa_id,
+            'carga_programa' => $this->carga_programa,
         ]);
 
-        $query->andFilterWhere(['like', 'designacion', $this->designacion])
-        ->andFilterWhere(['like', 'nombre_persona', $this->nombre_persona]);
+        $query->andFilterWhere(['like', 'nomenclatura', $this->nomenclatura]);
 
         return $dataProvider;
     }

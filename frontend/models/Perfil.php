@@ -6,7 +6,7 @@ use Yii;
 
 use yii\db\ActiveRecord;
 use common\models\User;
-use backend\models\Departamento;
+//use backend\models\Departamento;
 use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
@@ -64,8 +64,8 @@ class Perfil extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'genero_id','departamento_id'], 'required'],
-            [['user_id', 'genero_id','departamento_id'], 'integer'],
+            [['user_id', 'genero_id'], 'required'],
+            [['user_id', 'genero_id'], 'integer'],
             [['nombre', 'apellido'], 'string'],
             //[['localidad', 'telefono','cargo','imagen'], 'string','max'=>255],
             //[['imagen'], 'string','max'=>255],
@@ -144,12 +144,16 @@ class Perfil extends \yii\db\ActiveRecord
         $droptions = Genero::find()->asArray()->all();
         return ArrayHelper::map($droptions, 'id', 'genero_nombre');
     }
-
+  /**
+  * @deprecated
+  */
+  /*
     public static function getDepartamentoLista()
     {
         $droptions = Departamento::find()->asArray()->all();
         return ArrayHelper::map($droptions, 'id', 'nom');
     }
+    */
 
     /**
      * @return \yii\db\ActiveQuery

@@ -5,7 +5,7 @@
   use yii\widgets\ActiveForm;
 use yii\helpers\Url;
   $this->params['breadcrumbs'][] = ['label' => 'Programas', 'url' => ['index']];
-  $this->params['breadcrumbs'][] = ['label' =>  $model->asignatura . " " . $model->curso, 'url' => ['view', 'id' => $model->id]];
+  $this->params['breadcrumbs'][] = ['label' =>  $model->getNomenclatura(). " " . $model->getCurso(), 'url' => ['view', 'id' => $model->id]];
   $this->params['breadcrumbs'][] = ['label' => "Portada", 'url' => ['update', 'id' => $model->id]];
 
   $mensaje = [ 'onclick'=>"return confirm('No se guardarán los cambios de esta pestaña, ¿desea salir?')"];

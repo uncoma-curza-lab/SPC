@@ -54,7 +54,6 @@ $photo = Html::img($photoInfo['url'],['alt'=>$photoInfo['alt']]);
         ]) ?>
 
     <?= $form->field($model, 'genero_id')->dropDownList($model->generoLista, ['prompt' => 'Por favor Seleccione Uno' ]);?>
-<?= $form->field($model, 'departamento_id')->dropDownList($model->departamentoLista, ['prompt' => 'Por favor Seleccione Uno' ]);?>
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>

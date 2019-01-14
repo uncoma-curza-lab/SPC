@@ -3,9 +3,9 @@
 use yii\db\Migration;
 
 /**
- * Class m180906_111933_programa
+ * Class m180907_113937_programa
  */
-class m180906_125933_programa extends Migration
+class m180907_113937_programa extends Migration
 {
     /**
      * {@inheritdoc}
@@ -18,14 +18,13 @@ class m180906_125933_programa extends Migration
       }
       $this->createTable('{{programa}}',[
           'id'      =>  $this->primaryKey(),
-          //'departamento_id' => $this->integer(),
+          'departamento_id' => $this->integer(),
           'status_id' => $this->integer(),
-          'asignatura' => $this->string(100)->notNull(),
+          'asignatura_id' => $this->integer(),
           //'carrera'     => $this->integer(),
-          'curso'       => $this->string(60)->notNull(),
-          'year'        => $this->string(4),
-          'cuatrimestre'=> $this->integer(),
-          //'profadj_regular' => $this->string(60)->notNull(),
+      //    'curso'       => $this->string(60)->notNull(),
+          'year'        => $this->integer(4),
+        //  'cuatrimestre'=> $this->integer(),
           //'asist_regular'   => $this->string(60)->notNull(),
           //'ayudante_p'             => $this->string(60)->notNull(),
           //'ayudante_s'             => $this->string(60)->notNull(),
@@ -33,7 +32,7 @@ class m180906_125933_programa extends Migration
           'objetivo_plan'   => $this->text()->notNull(),
           //'objetivo_programa' => $this->string(255)->notNull(), fk
           'contenido_plan'  => $this->text()->notNull(),
-          'observaciones'  => $this->text(),
+          //'observaciones'  => $this->text(),
           //'contenido_analitico' => $this->string()->notNull(), fkxunidad
           //bibliografía basica fkxunidad
           'propuesta_met'   => $this->text()->notNull(),
@@ -58,6 +57,24 @@ class m180906_125933_programa extends Migration
         'no action',
         'no action'
       );
+      $this->addForeignKey(
+        'departamentoprograma',
+        'programa',
+        'departamento_id',
+        'departamento',
+        'id',
+        'no action',
+        'no action'
+      );
+      $this->addForeignKey(
+        'asignaturaprograma',
+        'programa',
+        'asignatura_id',
+        'asignatura',
+        'id',
+        'no action',
+        'no action'
+      );
     }
 
 
@@ -67,6 +84,8 @@ class m180906_125933_programa extends Migration
     public function safeDown()
     {
       $this->dropForeignKey('statusprograma','{{status}}');
+      $this->dropForeignKey('departamentoprograma','{{departamento}}');
+      $this->dropForeignKey('asignaturaprograma','{{asignatura}}');
       $this->dropTable('{{programa}}');
     }
 

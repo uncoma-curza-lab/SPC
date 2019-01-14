@@ -9,19 +9,25 @@ class ValorHelpers
 {
     public static function rolCoincide($rol_nombre)
     {
+      if(!Yii::$app->user->isGuest){
         $userTieneRolNombre = Yii::$app->user->identity->rol->rol_nombre;
         return $userTieneRolNombre == $rol_nombre ? true : false;
+      }
+        return false;
     }
     public static function getUsersRolValor($userId=null)
     {
-        if ($userId == null){
-            $usersRolValor = Yii::$app->user->identity->rol->rol_valor;
-            return isset($usersRolValor) ? $usersRolValor : false;
-        } else {
-            $user = User::findOne($userId);
-            $usersRolValor = $user->rol->rol_valor;
-            return isset($usersRolValor) ? $usersRolValor : false;
+        if(!Yii::$app->user->isGuest){
+          if ($userId == null){
+              $usersRolValor = Yii::$app->user->identity->rol->rol_valor;
+              return isset($usersRolValor) ? $usersRolValor : false;
+          } else {
+              $user = User::findOne($userId);
+              $usersRolValor = $user->rol->rol_valor;
+              return isset($usersRolValor) ? $usersRolValor : false;
+          }
         }
+          return false;
     }
     public static function getRolValor($rol_nombre)
     {

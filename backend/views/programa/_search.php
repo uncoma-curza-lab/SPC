@@ -13,28 +13,21 @@ use yii\widgets\ActiveForm;
     <?php $form = ActiveForm::begin([
         'action' => ['index'],
         'method' => 'get',
-        'options' => [
-            'data-pjax' => 1
-        ],
     ]); ?>
 
     <?= $form->field($model, 'id') ?>
 
     <?= $form->field($model, 'departamento_id') ?>
 
+    <?= $form->field($model, 'status_id') ?>
+
+    <?= $form->field($model, 'asignatura_id') ?>
+
     <?= $form->field($model, 'curso') ?>
 
-    <?= $form->field($model, 'year') ?>
+    <?php // echo $form->field($model, 'year') ?>
 
-    <?= $form->field($model, 'cuatrimestre') ?>
-
-    <?php // echo $form->field($model, 'profadj_regular') ?>
-
-    <?php // echo $form->field($model, 'asist_regular') ?>
-
-    <?php // echo $form->field($model, 'ayudante_p') ?>
-
-    <?php // echo $form->field($model, 'ayudante_s') ?>
+    <?php // echo $form->field($model, 'cuatrimestre') ?>
 
     <?php // echo $form->field($model, 'fundament') ?>
 
@@ -49,6 +42,8 @@ use yii\widgets\ActiveForm;
     <?php // echo $form->field($model, 'parcial_rec_promo') ?>
 
     <?php // echo $form->field($model, 'distr_horaria') ?>
+
+    <?php // echo $form->field($model, 'crono_tentativo') ?>
 
     <?php // echo $form->field($model, 'actv_extracur') ?>
 

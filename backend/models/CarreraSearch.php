@@ -18,7 +18,7 @@ class CarreraSearch extends Carrera
     public function rules()
     {
         return [
-            [['id', 'codigo', 'departamento_id'], 'integer'],
+            [['id', 'departamento_id'], 'integer'],
             [['nom'], 'safe'],
         ];
     }
@@ -60,7 +60,6 @@ class CarreraSearch extends Carrera
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'codigo' => $this->codigo,
             'departamento_id' => $this->departamento_id,
         ]);
 

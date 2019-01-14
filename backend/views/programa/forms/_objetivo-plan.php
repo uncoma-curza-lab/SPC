@@ -6,7 +6,7 @@ use yii\widgets\ActiveForm;
 use yii\helpers\Url;
 $mensaje = [ 'onclick'=>"return confirm('No se guardarán los cambios de esta pestaña, ¿desea salir?')"];
 $this->params['items'][] = ['label' => 'Portada', 'url' => Url::to(['update', 'id' => $model->id]), 'options'=> $mensaje ];
-$this->params['items'][] = ['label' => '1. Fundamentación','url' => Url::to(['fundamentacion', 'id' => $model->id]), 'options'=>[ 'onclick'=>"return confirm('No se guardarán los cambios de esta pestaña, ¿desea salir?')"]];
+$this->params['items'][] = ['label' => '1. Fundamentación','url' => Url::to(['cargar', 'id' => $model->id]), 'options'=>[ 'onclick'=>"return confirm('No se guardarán los cambios de esta pestaña, ¿desea salir?')"]];
 $this->params['items'][] = ['label' => '2. Objetivo según plan de estudio'];
 $this->params['items'][] = ['label' => '3. Contenido según plan de estudio', 'url' => Url::to(['contenido-plan', 'id' => $model->id]), 'options'=> $mensaje];
 $this->params['items'][] = ['label' => '4. Contenidos analíticos', 'url' => Url::to(['contenido-analitico', 'id' => $model->id]), 'options'=> $mensaje];
@@ -56,7 +56,7 @@ $this->params['breadcrumbs'][] = 'Objetivo según el plan de estudio';
 <div class="form-group">
     <div class="row">
       <div class="col-xs-6 text-left">
-        <?= Html::a('Atrás', ['fundamentacion', 'id' => $model->id],['class' => 'btn btn-warning']) ?>
+        <?= Html::a('Atrás', ['cargar', 'id' => $model->id],['class' => 'btn btn-warning']) ?>
         <?= Html::submitButton('Guardar y salir',['class' => 'btn btn-info' , 'name'=>'submit','value' => 'salir']) ?>
       </div>
       <div class="col-xs-6 text-right">

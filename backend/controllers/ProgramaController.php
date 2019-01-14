@@ -3,25 +3,23 @@
 namespace backend\controllers;
 
 use Yii;
+use yii\data\ActiveDataProvider;
+
 use backend\models\Programa;
-use backend\models\Unidad;
-use backend\models\Tema;
 use backend\models\ProgramaSearch;
+use backend\models\AsignaturaSearch;
+use backend\models\Designacion;
+use backend\models\DesignacionSearch;
+
+use backend\models\Status;
+use common\models\PermisosHelpers;
 use backend\models\Departamento;
-use backend\models\DepartamentoSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use backend\models\Objetivo;
-use backend\models\Carrera;
-use backend\models\Status;
-use backend\models\CarreraPrograma;
-use common\models\PermisosHelpers;
-use Mpdf;
 
 /**
- * Controlador de Programa
- * @author Julián Murphy
+ * ProgramaController implements the CRUD actions for Programa model.
  */
 class ProgramaController extends Controller
 {
@@ -35,10 +33,10 @@ class ProgramaController extends Controller
                  'class' => \yii\filters\AccessControl::className(),
                  'only' => [
                    'index', 'view', 'create', 'update','delete',
-                   'fundamentacion', 'objetivo-plan', 'contenido-analitico',
+              /*     'fundamentacion', 'objetivo-plan', 'contenido-analitico',
                    'contenido-plan', 'eval-acred', 'propuesta-metodologica',
                    'parcial-rec-promo', 'dist-horaria', 'crono-tentativo',
-                   'actividad-extracurricular'
+                   'actividad-extracurricular'*/
                  ],
                  'rules' => [
                      [
@@ -77,7 +75,7 @@ class ProgramaController extends Controller
     }
 
     /**
-     * Listado de programas
+     * Lists all Programa models.
      * @return mixed
      */
     public function actionIndex()
@@ -91,93 +89,114 @@ class ProgramaController extends Controller
         ]);
     }
 
+
     /**
-     * Muestra los datos del modelo
+     * Displays a single Programa model.
      * @param integer $id
      * @return mixed
-     * @throws NotFoundHttpException si el modelo no es encontrado
+     * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionView($id)
     {
+        return $this->render('view', [
+            'model' => $this->findModel($id),
+        ]);
+    }
+    /**
+     * Displays a single Designacion model.
+     * @param integer $id
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionVer($id)
+    {
         $model = $this->findModel($id);
-        $mostrar = false;
+        $searchModelDesignacion = new DesignacionSearch();
+        $dataProvDesignacion =  new ActiveDataProvider([
+          'query' => $model->getDesignaciones()
+        ]);
+        return $this->render('ver', [
+            'model' => $model,
+            'dataProvDesignacion' => $dataProvDesignacion,
+            'searchModelDesignacion' => $searchModelDesignacion
+        ]);
+    }
 
-        if ( PermisosHelpers::requerirRol('Usuario') &&
-          Status::findOne($model->status_id)->descripcion == 'Finalizado' ) {
-            $mostrar = true;
-        } else if (PermisosHelpers::requerirMinimoRol('Profesor')) {
-            $mostrar = true;
+    public function actionSubirEstado($id){
+        $programa = $this->findModel($id);
+        $programa->scenario = 'carrerap';
+        $userId = \Yii::$app->user->identity->id;
+        $estadoActual = Status::findOne($programa->status_id);
+        if((PermisosHelpers::requerirProfesorAdjunto($id) && $estadoActual->descripcion == "Profesor") ||
+          (PermisosHelpers::requerirDirector($id) && $estadoActual->descripcion == "Departamento")){
+          //$programa->status_id = Status::findOne(['descripcion','=','Departamento'])->id;
+
+          $estadoSiguiente = Status::find()->where(['>','value',$estadoActual->value])->orderBy('value')->one();
+          $programa->status_id = $estadoSiguiente->id;
+          if( $programa->save()){
+            return $this->redirect(['index']);
+          } else {
+            throw new NotFoundHttpException("Ocurrió un error");
+          }
         }
-        if ( $mostrar )
-          return $this->render('view', [
-              'model' => $model,
-          ]);
-
-        throw new NotFoundHttpException('No tiene permisos para ver este elemento');
-
-
     }
 
     /**
-     * Crea un programa nuevo
-     * @deprecated no se utiliza
+     * Creates a new Programa model.
+     * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
         $model = new Programa();
         $model->scenario = 'crear';
+        // se crea en estado borrador
         $model->status_id = Status::find()->where(['=','descripcion','Borrador'])->one()->id;
-        //esta validación no es necesaria. Desde RULES se está validando
-        if (PermisosHelpers::requerirMinimoRol('Profesor')) {
+        //obtener el id del director
+        $userId = \Yii::$app->user->identity->id;
+        if (PermisosHelpers::requerirRol('Departamento')){
+          $depto = Departamento::find()->where(['=','director',$userId])->one();
+          if (isset($depto)){
+            //filtrar todas las asignaturas
+            $searchModel = new AsignaturaSearch();
+            $asignaturas = new ActiveDataProvider([
+              //'query' => Asignatura::find()->where(['=','departamento_id',$depto->id])->all()
+              'query' => $depto->getAsignaturas()
+            ]);
+            return $this->render('create', [
+                'model' => $model,
+                'asignaturas' => $asignaturas
+            ]);
+          } else {
+            //no puede crear programas
+          }
+        }
+
+        //$asignaturas =
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
+        }
+    }
+
+    public function actionCargar($id)
+    {
+        $model = $this->findModel($id);
+        $model->scenario = 'fundamentacion';
+        $estado = Status::findOne($model->status_id);
+        $validarPermisos = $this->validarPermisos($model, $estado);
+
+        if ($validarPermisos) {
           if(Yii::$app->request->post('submit') == 'salir' &&
             $model->load(Yii::$app->request->post()) && $model->save()) {
               return $this->redirect(['index']);
-          } else if(Yii::$app->request->post('submit') == 'cargo' &&
-              $model->load(Yii::$app->request->post()) && $model->save()) {
-              return $this->redirect(['cargo/create', 'id'=>$model->id]);
-          } else if(Yii::$app->request->post('submit') == 'carrera' &&
-              $model->load(Yii::$app->request->post()) && $model->save()) {
-              return $this->redirect(['carrera-programa/create', 'id'=>$model->id]);
           } else if ($model->load(Yii::$app->request->post()) && $model->save()) {
-              return $this->redirect(['fundamentacion', 'id' => $model->id]);
+              return $this->redirect(['objetivo-plan', 'id' => $model->id]);
           }
-
-          return $this->render('create', [
-              'model' => $model,
-          ]);
+          return $this->render('forms/_fundamentacion',['model'=>$model]);
         }
-        throw new NotFoundHttpException('No tiene permisos para crear este tipo de elementos');
-
+        throw new NotFoundHttpException('No tiene permisos para actualizar este elemento');
     }
 
-    /**
-    *  Controla la vista _fundamentación
-    *  $_POST Guarda el modelo y redirecciona a la siguiente vista
-    *  @param integer $id del programa
-    *  @return mixed
-    */
-    public function actionFundamentacion($id){
-
-      $model = $this->findModel($id);
-      $model->scenario = 'fundamentacion';
-      $estado = Status::findOne($model->status_id);
-      $validarPermisos = $this->validarPermisos($model, $estado);
-
-      if ($validarPermisos) {
-        if(Yii::$app->request->post('submit') == 'salir' &&
-          $model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
-        } else if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['objetivo-plan', 'id' => $model->id]);
-        }
-
-        return $this->render('forms/_fundamentacion', [
-            'model' => $model,
-        ]);
-      }
-      throw new NotFoundHttpException('No tiene permisos para actualizar este elemento');
-    }
     /**
     *  Controla la vista _objetivo-plan
     *  $_POST Guarda el modelo y redirecciona a la siguiente vista
@@ -415,155 +434,137 @@ class ProgramaController extends Controller
 
     }
 
-    /**
-    * recibe un ID de programa y muestra el formulario para continuar con el mismo
-    * Falta aplicar transacciones
-    * @deprecated no se utiliza más
-    */
-    public function actionPagina($id){
-      //$model = DynamicModel::validateData([]);
+    public function actionAnadir()
+    {
+        $model = new Programa();
+        $model->scenario = 'crear';
+        //$model->year =Yii::$app->formatter->asDatetime(date('Y-m-d'), "php:d-m-Y H:i:s");
+        $model->year =date('Y');
+        $model->status_id = Status::find()->where(['=','descripcion','Borrador'])->one()->id;
+        //obtener el id del director
+        $userId = \Yii::$app->user->identity->id;
+        if (PermisosHelpers::requerirRol('Departamento')){
+          $depto = Departamento::find()->where(['=','director',$userId])->one();
+          if (isset($depto)){
+            $model->departamento_id = $depto->id;
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                return $this->redirect(['designacion/asignar', 'id' => $model->id]);
+            }
+            return $this->render('anadir', [
+                'model' => $model,
+                'deptoId' => $depto->id,
+            ]);
+          } else {
+            //no puede crear programas
+          }
+
+        }
+
+    }
+
+
+    public function actionEnviarProfesor($id)
+    {
       $model = $this->findModel($id);
-      if ( $model->load(Yii::$app->request->post()) ){
-        if($model->hasErrors()){
-        //procesa los objetivos
-        $objetivos = $_POST['Programa']['objetivos'];
-        if(sizeof($objetivos) > 0)
-        {
-          $objetivos_aux = $model->getObjetivos()->all();
-          foreach ($objetivos_aux as $key => $value) {
-            $value->delete();
-          }
-          foreach ($objetivos['descripcion'] as $key => $value ) {
-            $obj = new Objetivo();
-            $obj->descripcion =$value;
-            $obj->programa_id = $model->id;
-            $obj->save();
-          }
-        }
-        //procesa las unidades
-        $unidades = $_POST['Programa']['unidades'];
-        if (sizeof($unidades) > 0)
-        {
-          $unidades_aux = $model->getUnidades()->all();
-          foreach ($unidades_aux as $key => $value) {
-            $temas_aux = $value->getTemas()->all();
-            foreach ($temas_aux as $tkey => $tvalue) {
-              $tvalue->delete();
-            }
-            $value->delete();
-          }
-          foreach ($unidades as $key => $value) {
-            $unidad = new Unidad();
-            $unidad->descripcion = $value['descripcion'];
-            $unidad->programa_id = $model->id;
-            $unidad->biblio_basica = $value['biblio_basica'];
-            $unidad->biblio_consulta = $value['biblio_consulta'];
-            $unidad->crono_tent = $value['crono_tent'];
-          // intenta guardar cada unidad
-            $unidad->save();
-
-            foreach ($value['temas']['temas'] as $indexTema => $descrTema) {
-                $tema = new Tema();
-                $tema->descripcion = $descrTema;
-                $tema->unidad_id = $unidad->id;
-                //inteta guardar cada tema
-                $tema->save();
-            }
-          }
-        }
-        //intentamos guardar el modelo
-        if (  $model->save() )
-          //return $this->redirect(['view', 'id' => $model->id]);
-          //return $this->render('pagina',['model'=>$model]);
-          return $this->redirect(['index']);
-        //else
-          //return $this->redirect(['pagina','id'=>$model->id]);
-      }}
-      //prepara los objetivos para la vista
-      $objetivos_aux = $model->getObjetivos()->all();
-      $model->objetivos = $objetivos_aux;
-      //prepara las unidades para la vista
-
-      $unidades_aux = $model->getUnidades()->all();
-
-      $unidades = [];
-      foreach ($unidades_aux as $key => $unidad) {
-        $mUnidad = new Unidad();
-        $mUnidad->id = $unidad->id;
-        $mUnidad->descripcion = $unidad['descripcion'];
-        $mUnidad->programa_id = $model->id;
-        $mUnidad->biblio_basica = $unidad['biblio_basica'];
-        $mUnidad->biblio_consulta = $unidad['biblio_consulta'];
-        $mUnidad->crono_tent = $unidad['crono_tent'];
-        $mUnidad->temas = $mUnidad->getTemas()->all();
-        $array = [];
-        foreach ($mUnidad->temas as $tkey => $tvalue) {
-          array_push($array,$tvalue->descripcion);
-        }
-        $unidad = [
-          "descripcion" => $mUnidad->descripcion,
-          "temas" => $array,
-          'biblio_basica' => $mUnidad->biblio_basica,
-          'biblio_consulta' => $mUnidad->biblio_consulta,
-          'crono_tent' => $mUnidad->crono_tent,
-        ];
-        array_push($unidades,$unidad);
+      $model->scenario = 'enviarProfesor';
+      $nuevo_status = Status::find()->where(['=','descripcion','Profesor'])->one();
+      $model->status_id = $nuevo_status->id;
+      if ($model->save()) {
+        //enviar al profesor en estado
+        return $this->redirect(['index']);
       }
-      $model->unidades = $unidades;
+    }
 
-      return $this->render('pagina', [
-        'model' => $model
-      ]);
+    public function actionAsignar($id) {
+      if(Yii::$app->request->post('submit') == 'designacion' &&
+        $model->load(Yii::$app->request->post()) && $model->save()) {
+          return $this->redirect(['anadir']);
+      } else {
+        $asignaturaId = $id;
+        $asignatura = Asignatura::findOne($asignaturaId);
+        if(isset($asignatura))
+        {
+          $model = new Programa();
+          $model->scenario = 'crear';
+          // se crea en estado borrador
+          $model->status_id = Status::find()->where(['=','descripcion','Borrador'])->one()->id;
+          $model->asignatura_id = $asignaturaId;
+          $designacion = new Designacion();
+
+          if ($model->save()){
+            $designacion->programa_id = $model->id;
+            return $this->render('asignar', [
+                'model' => $model,
+                'designacion' => $designacion,
+            ]);
+          }
+        }
+      }
+
     }
 
     /**
-     * Actualiza un programa existente
-     * Si se guarda de manera exitosa entonces redirecciona a fundamentacion
+     * Updates an existing Programa model.
+     * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
-     * @throws NotFoundHttpException Si el modelo no se encuentra
+     * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        $model->scenario = 'update';
-        $estado = Status::findOne($model->status_id);
-        $validarPermisos = $this->validarPermisos($model, $estado);
 
-        if ($validarPermisos) {
-            /*
-            * Intenta hacer un save del post y
-            * redirecciona a una vista según el botón
-            */
-            if(Yii::$app->request->post('submit') == 'salir' &&
-              $model->load(Yii::$app->request->post()) && $model->save()) {
-                return $this->redirect(['index']);
-            } else if(Yii::$app->request->post('submit') == 'cargo' &&
-                $model->load(Yii::$app->request->post()) && $model->save()) {
-                return $this->redirect(['cargo/create', 'id'=>$model->id]);
-            } else if(Yii::$app->request->post('submit') == 'carrera' &&
-                $model->load(Yii::$app->request->post()) && $model->save()) {
-                return $this->redirect(['carrera-programa/create', 'id'=>$model->id]);
-            } else if(Yii::$app->request->post('submit') == 'observacion' &&
-                $model->load(Yii::$app->request->post()) && $model->save()) {
-                return $this->redirect(['observacion/create', 'id'=>$model->id]);
-            } else if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                return $this->redirect(['fundamentacion', 'id' => $model->id]);
-                //return $this->render('update',['model' => $model]);
-            }
-
-            return $this->render('update', [
-                'model' => $model,
-            ]);
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
         }
-        throw new NotFoundHttpException('No tiene permisos para actualizar este elemento');
+
+        return $this->render('update', [
+            'model' => $model,
+        ]);
+    }
+
+    /**
+     * Deletes an existing Programa model.
+     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * @param integer $id
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionDelete($id)
+    {
+        $model = $this->findModel($id);
+        $designaciones = $model->getDesignaciones()->all();
+        foreach ($designaciones as $key) {
+          $key->delete();
+        }
+        $model->delete();
+
+        return $this->redirect(['index']);
+    }
+
+    /**
+     * Finds the Programa model based on its primary key value.
+     * If the model is not found, a 404 HTTP exception will be thrown.
+     * @param integer $id
+     * @return Programa the loaded model
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    protected function findModel($id)
+    {
+        if (($model = Programa::findOne($id)) !== null) {
+            return $model;
+        }
+
+        throw new NotFoundHttpException('The requested page does not exist.');
     }
 
     protected function validarPermisos($model, $estado) {
       $userId = \Yii::$app->user->identity->id;
 
+      //if (PermisosHelpers::requerirRol('Profesor') &&
+      //  ($estado->descripcion == "Profesor") && ($model->created_by == $userId)) {
       if (PermisosHelpers::requerirRol('Profesor') &&
-        ($estado->descripcion == "Borrador") && ($model->created_by == $userId)) {
+        ($estado->descripcion == "Profesor")) {
           return true;
       } else if (PermisosHelpers::requerirRol('Departamento') &&
         ($estado->descripcion == "Departamento")) {
@@ -578,151 +579,4 @@ class ProgramaController extends Controller
       }
       return false;
     }
-
-    /**
-    *  Botón de guardado
-    *  Si guarda el modelo entonces redirecciona al index
-    *  @deprecated no está en funcionamiento
-    *  @param integer $id del programa
-    *  @return mixed
-    */
-    public function actionGuardarSalir($id)
-    {
-        $model = $this->findModel($id);
-        $estado = Status::findOne($model->status_id);
-        $validarPermisos = $this->validarPermisos($model, $estado);
-
-        if ($validarPermisos) {
-          if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                      return $this->redirect(['index', 'id' => $model->id]);
-          }
-
-          return $this->render('update', [
-              'model' => $model,
-          ]);
-        }
-        throw new NotFoundHttpException('No se puede realizar esta acción.');
-    }
-
-    /**
-     * Elimina un programa existente
-     * Si se elimina con éxito entonces redirecciona al index
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException si no existe el programa
-     */
-    public function actionDelete($id)
-    {
-        $model = $this->findModel($id);
-        $estado = Status::findOne($model->status_id);
-        //$validarPermisos = $this->validarPermisos($model, $estado);
-        $userId = \Yii::$app->user->identity->id;
-
-        if (PermisosHelpers::requerirRol('Profesor')
-          && $model->created_by == $userId
-          && $estado->descripcion == 'Borrador') {
-          $unidades = $model->getUnidades()->all();
-          $objetivos = $model->getObjetivos()->all();
-          foreach ($unidades as $key) {
-            $temas = $key->getTemas()->all();
-            foreach ($temas as $tk) {
-              $tk->delete();
-            }
-            $key->delete();
-          }
-          foreach ($objetivos as $key) {
-            $key->delete();
-          }
-
-          $model->delete();
-
-          return $this->redirect(['index']);
-        }
-        throw new NotFoundHttpException('No se puede eliminar');
-
-    }
-
-    public function actionSubirEstado($id){
-        $programa = $this->findModel($id);
-        $programa->scenario = 'carrerap';
-        $userId = \Yii::$app->user->identity->id;
-
-        if ($userId == $programa->created_by){
-          //$programa->status_id = Status::findOne(['descripcion','=','Departamento'])->id;
-          $programa->status_id = Status::find()->where(['=','descripcion','Departamento'])->one()->id;
-          if( $programa->save())
-            return $this->redirect(['index']);
-          else
-            throw new NotFoundHttpException("Ocurrió un error");
-        }
-    }
-
-    /*
-    * Comienzan las funciones para crear y exportar un PDF
-    */
-    public function actionExportPdf($id){
-      $model = $this->findModel($id);
-      $mpdf = new Mpdf\Mpdf(['tempDir' => __DIR__ . '/tmp']);
-      $mpdf->WriteHTML($this->renderPartial('pdf',['model'=>$model]));
-      //$mpdf->WriteHTML('<h1>Hello World!</h1>');
-      //$mpdf->Output($model->asignatura.".pdf", 'D');
-      $mpdf->Output();
-
-      //return $this->renderPartial('mpdf');
-    }
-    public function actionForceDownloadPdf()
-   {
-       $mpdf = new Mpdf();
-       $mpdf->WriteHTML($this->renderPartial('mpdf'));
-       $mpdf->Output('MyPDF.pdf', 'D');
-       exit;
-   }
-
-   public function actionStatus($id) {
-     $model = $this->findModel($id);
-     return $this->render('info',['model' => $model]);
-
-   }
-
-    /**
-     * Busca un programa por su $id
-     * Si el modelo no existe retorna un error 404
-     * @param integer $id
-     * @return Programa el modelo programa
-     * @throws NotFoundHttpException si no se encuentra
-     */
-    protected function findModel($id)
-    {
-      $esusuario = PermisosHelpers::requerirMinimoRol('Usuario');
-      $userId = \Yii::$app->user->identity->id;
-
-      if (($model = Programa::findOne($id)) !== null) {
-        if ($esusuario)
-          return $model;
-
-        throw new NotFoundHttpException('No se puede acceder al elemento.');
-
-        /*if(PermisosHelpers::requerirRol('Profesor')){
-          if ($model->created_by == $userId)
-            return $model;
-          throw new NotFoundHttpException('No se puede acceder al elemento.');
-        } else if (PermisosHelpers::requerirRol('Departamento')) {
-          $perfil = \Yii::$app->user->identity->perfil;
-          $carreras = $model->getCarreras();
-          if ( $carreras->where(['=','departamento_id', $perfil->departamento_id])->one()  ) {
-            return $model;
-          }
-          throw new NotFoundHttpException('No se puede acceder al elemento.');*/
-          //$carreraprograma =CarreraPrograma::find()->where(['=','programa_id',$model->id])->all();
-          /*foreach ($carreraprograma as $carrera) {
-            if ( Carrera::find()->where(['=','id',$carrera->carrera_id])->one()->departamento_id == $perfil->departamento_id )
-              return $model;
-          }*/
-
-      }
-
-      throw new NotFoundHttpException('No se puede acceder al elemento.');
-
-    }
-
 }

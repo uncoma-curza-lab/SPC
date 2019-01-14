@@ -31,7 +31,7 @@ class Carrera extends \yii\db\ActiveRecord
     {
         return [
             [['nom'], 'required'],
-            [['codigo', 'departamento_id'], 'integer'],
+            [['departamento_id'], 'integer'],
             [['nom'], 'string', 'max' => 255],
             [['departamento_id'], 'exist', 'skipOnError' => true, 'targetClass' => Departamento::className(), 'targetAttribute' => ['departamento_id' => 'id']],
         ];
@@ -45,9 +45,16 @@ class Carrera extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'nom' => 'Nom',
-            'codigo' => 'Codigo',
             'departamento_id' => 'Departamento ID',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPlanes()
+    {
+        return $this->hasMany(Plan::className(), ['carrera_id' => 'id']);
     }
 
     /**

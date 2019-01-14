@@ -14,10 +14,12 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'nom')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'codigo')->textInput() ?>
+    <?= $form->field($model, 'slug')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'director')->textInput() ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
