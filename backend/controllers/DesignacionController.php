@@ -5,7 +5,7 @@ namespace backend\controllers;
 use Yii;
 use backend\models\Designacion;
 use backend\models\Cargo;
-
+use common\models\PermisosHelpers;
 use backend\models\DesignacionSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -59,7 +59,7 @@ class DesignacionController extends Controller
         ]);
     }
 
-    
+
 
     /**
      * Creates a new Designacion model.
@@ -83,16 +83,16 @@ class DesignacionController extends Controller
     {
       $model = new Designacion();
       $model->programa_id = $id;
-      if ($model->load(Yii::$app->request->post()) && $model->save()) {
-          //return $this->redirect(['programa/index', 'id' => $model->id]);
-          //es el profesor adjunto?
-          $se_designo = Cargo::find()->where(['=','id',$model->cargo_id])->one();
-          if(isset($se_designo) && $se_designo->carga_programa == 1){
-            return $this->redirect(['programa/enviar-profesor', 'id'=>$model->programa_id]);
+
+      if ($model->load(Yii::$app->request->post())) {
+          $cargoProfAdj = Cargo::find()->where(['=','carga_programa',1])->one();
+          if ($cargoProfAdj->id == $model->cargo_id && PermisosHelpers::existeProfAdjunto($id)){
+            throw new NotFoundHttpException('Ya existe un Profesor Adjunto');
+          }
+          if ($model->save()){
+            $this->redirect(['programa/index', 'id' => $id]);
           } else {
-            //debe crear el profesor adjunto
             $this->redirect(['asignar', 'id' => $id]);
-          //return $this->redirect([''])
           }
       }
 

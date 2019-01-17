@@ -4,7 +4,7 @@ namespace backend\controllers;
 
 use Yii;
 use yii\data\ActiveDataProvider;
-
+use backend\models\Asignatura;
 use backend\models\Programa;
 use backend\models\ProgramaSearch;
 use backend\models\AsignaturaSearch;
@@ -102,13 +102,24 @@ class ProgramaController extends Controller
             'model' => $this->findModel($id),
         ]);
     }
+
+    public function actionVer($id) {
+      $model = $this->findModel($id);
+      if(Yii::$app->request->post('submit') == 'observacion' &&
+          $model->load(Yii::$app->request->post()) && $model->save()) {
+          return $this->redirect(['observacion/create', 'id'=>$model->id]);
+      }
+      return $this->render('info',['model' => $model]);
+
+    }
+
     /**
      * Displays a single Designacion model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionVer($id)
+  /*  public function actionVer($id)
     {
         $model = $this->findModel($id);
         $searchModelDesignacion = new DesignacionSearch();
@@ -120,9 +131,27 @@ class ProgramaController extends Controller
             'dataProvDesignacion' => $dataProvDesignacion,
             'searchModelDesignacion' => $searchModelDesignacion
         ]);
-    }
+    }*/
 
-    public function actionSubirEstado($id){
+    public function actionAprobar($id){
+        $programa = $this->findModel($id);
+        $programa->scenario = 'carrerap';
+        $userId = \Yii::$app->user->identity->id;
+        $estadoActual = Status::findOne($programa->status_id);
+        if((PermisosHelpers::requerirProfesorAdjunto($id) && $estadoActual->descripcion == "Profesor") ||
+          (PermisosHelpers::requerirDirector($id) && ($estadoActual->descripcion == "Departamento"|| $estadoActual->descripcion == "Borrador"))){
+          //$programa->status_id = Status::findOne(['descripcion','=','Departamento'])->id;
+
+          $estadoSiguiente = Status::find()->where(['>','value',$estadoActual->value])->orderBy('value')->one();
+          $programa->status_id = $estadoSiguiente->id;
+          if( $programa->save()){
+            return $this->redirect(['index']);
+          } else {
+            throw new NotFoundHttpException("Ocurrió un error");
+          }
+        }
+    }
+    public function actionRechazar($id){
         $programa = $this->findModel($id);
         $programa->scenario = 'carrerap';
         $userId = \Yii::$app->user->identity->id;
@@ -131,7 +160,7 @@ class ProgramaController extends Controller
           (PermisosHelpers::requerirDirector($id) && $estadoActual->descripcion == "Departamento")){
           //$programa->status_id = Status::findOne(['descripcion','=','Departamento'])->id;
 
-          $estadoSiguiente = Status::find()->where(['>','value',$estadoActual->value])->orderBy('value')->one();
+          $estadoSiguiente = Status::find()->where(['<','value',$estadoActual->value])->orderBy('value DESC')->one();
           $programa->status_id = $estadoSiguiente->id;
           if( $programa->save()){
             return $this->redirect(['index']);
@@ -463,7 +492,7 @@ class ProgramaController extends Controller
     }
 
 
-    public function actionEnviarProfesor($id)
+  /*  public function actionEnviarProfesor($id)
     {
       $model = $this->findModel($id);
       $model->scenario = 'enviarProfesor';
@@ -501,7 +530,7 @@ class ProgramaController extends Controller
         }
       }
 
-    }
+    }*/
 
     /**
      * Updates an existing Programa model.

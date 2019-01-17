@@ -8,6 +8,25 @@ use backend\models\Cargo;
 use backend\models\Programa;
 class PermisosHelpers
 {
+    /**
+    * Verifica si ya existe un profesor adjunto al programa
+    */
+    public static function existeProfAdjunto($programaID){
+      $programa = Programa::find()->where(['=','id',$programaID])->one();
+      if (isset($programa)){
+        $cargoProfAdj = Cargo::find()->where(['=','carga_programa',1])->one();
+        $profAdjunto = $programa->getDesignaciones()->where(['=','cargo_id',$cargoProfAdj->id])->one();
+        if (isset($profAdjunto) && $profAdjunto->cargo_id == $cargoProfAdj->id ){
+          return true;
+        } else {
+          return false;
+        }
+      }
+      return false;
+    }
+    /**
+    * Verifica si el usuario logueado es el Profesor Adjunto del programa
+    */
     public static function requerirProfesorAdjunto($programaID){
       $programa = Programa::find()->where(['=','id',$programaID])->one();
       if (isset($programa)){
@@ -23,12 +42,15 @@ class PermisosHelpers
       }
       return false;
     }
-
+    /**
+    * Verifica si el usuario logueado es director del departamento
+    * y si posee rol Departamento
+    */
     public static function requerirDirector($programaID){
       $programa = Programa::findOne($programaID);
       $userId = \Yii::$app->user->identity->id;
-
-      if ($programa->getDepartamento()->one()->director == $userId){
+      $departamento = $programa->getDepartamento()->one();
+      if (PermisosHelpers::requerirRol("Departamento") && isset($departamento) && $departamento->director == $userId){
         return true;
       } else {
         return false;

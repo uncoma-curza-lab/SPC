@@ -31,6 +31,7 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
+            'id',
             'departamento_id',
             'status_id',
             'asignatura_id',
@@ -81,14 +82,29 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
             [
               'class' => 'yii\grid\ActionColumn',
               //'template' => $show_this_nav? '{view} {update} {delete} {pdf} {status}':'{view} {status} {pdf}',
-              'template' => $show_this_nav? '{subir} {delete} {pdf} {ver} {cargar}':'{subir} {status} {pdf}',
+              'template' => $show_this_nav? '{asignar} {aprobar} {rechazar} {delete} {pdf} {ver} {cargar}':'{subir} {status} {pdf}',
               'buttons' => [
-                'pdf' => function ($url,$model) {
+                /*'pdf' => function ($url,$model) {
                     return Html::a(
                         '<span style="padding:5px; font-size:20px;" class="glyphicon glyphicon-download"></span>',
                         ['export-pdf','id'=> $model->id],['target' => '_blank']);
+                },*/
+                'aprobar' => function ($url,$model){
+                    if ((Status::findOne($model->status_id)->descripcion == "Borrador"
+                        && PermisosHelpers::requerirRol('Departamento') && PermisosHelpers::requerirDirector($model->id) && PermisosHelpers::existeProfAdjunto($model->id))
+                      || (Status::findOne($model->status_id)->descripcion == "Profesor"
+                        && PermisosHelpers::requerirRol('Profesor') && PermisosHelpers::requerirProfesorAdjunto($model->id))
+                      || (Status::findOne($model->status_id)->descripcion == "Departamento"
+                        && PermisosHelpers::requerirRol('Departamento') && PermisosHelpers::requerirDirector($model->id))
+                      || PermisosHelpers::requerirMinimoRol('Admin'))
+                    {
+                        return Html::a(
+                          '<span style="padding:5px; font-size:20px;" class="glyphicon glyphicon-ok"></span>',
+                          ['aprobar','id' => $model->id]
+                        );
+                    }
                 },
-                'subir' => function ($url,$model){
+                'rechazar' => function ($url,$model){
                     if ((Status::findOne($model->status_id)->descripcion == "Profesor"
                       && PermisosHelpers::requerirRol('Profesor') && PermisosHelpers::requerirProfesorAdjunto($model->id))
                       || (Status::findOne($model->status_id)->descripcion == "Departamento"
@@ -96,10 +112,23 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
                       || PermisosHelpers::requerirMinimoRol('Admin'))
                     {
                         return Html::a(
-                          '<span style="padding:5px; font-size:20px;" class="glyphicon glyphicon-upload"></span>',
-                          ['subir-estado','id' => $model->id]
+                          '<span style="padding:5px; font-size:20px;" class="glyphicon glyphicon-remove"></span>',
+                          ['rechazar','id' => $model->id]
                         );
                     }
+                },
+                'asignar' => function ($url,$model) {
+
+                  if ((Status::findOne($model->status_id)->descripcion == "Borrador"
+                    && PermisosHelpers::requerirRol('Departamento')
+                     && PermisosHelpers::requerirDirector($model->id))
+                    || PermisosHelpers::requerirMinimoRol('Admin'))
+                  {
+                    return Html::a(
+                      '<span style="padding:5px; font-size:20px;" class="glyphicon glyphicon-user"></span>',
+                      ['designacion/asignar','id' => $model->id]
+                    );
+                  }
                 },
                 'cargar' => function ($url,$model) {
                   if ((Status::findOne($model->status_id)->descripcion == "Profesor"

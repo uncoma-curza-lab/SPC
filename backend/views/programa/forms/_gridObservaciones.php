@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use backend\models\ObservacionSearch;
+use backend\models\Status;
 use yii\data\ActiveDataProvider;
 use common\models\PermisosHelpers;
 /* @var $this yii\web\View */
@@ -17,8 +18,8 @@ use common\models\PermisosHelpers;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-      <?php if(PermisosHelpers::requerirMinimoRol('Departamento')): ?>
-      <?= Html::submitButton('Añadir una observación',['class' => 'btn btn-warning' , 'name'=>'submit','value' => 'observacion']) ?>
+      <?php if(PermisosHelpers::requerirDirector($model->id) && Status::findOne($model->status_id)->descripcion == "Departamento"): ?>
+      <?= Html::a('Añadir Observacion', ['observacion/create','id' => $model->id], ['class' => 'btn btn-success']) ?>
       <?php endif; ?>
     </p>
 
