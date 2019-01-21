@@ -67,8 +67,13 @@ class ObservacionController extends Controller
         $model = new Observacion();
         $model->programa_id = $id;
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['programa/update', 'id' => $model->programa_id]);
+        if ($model->load(Yii::$app->request->post())) {
+          if($model->save()){
+            Yii::$app->session->setFlash('success','Observación agregada exitosamente');
+            return $this->redirect(['programa/ver', 'id' => $model->programa_id]);
+          } else {
+            Yii::$app->session->setFlash('danger','Observación no agregada');
+          }
         }
 
         return $this->render('create', [

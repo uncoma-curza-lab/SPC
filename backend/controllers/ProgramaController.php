@@ -109,6 +109,7 @@ class ProgramaController extends Controller
           $model->load(Yii::$app->request->post()) && $model->save()) {
           return $this->redirect(['observacion/create', 'id'=>$model->id]);
       }
+      
       return $this->render('info',['model' => $model]);
 
     }
@@ -139,14 +140,19 @@ class ProgramaController extends Controller
         $userId = \Yii::$app->user->identity->id;
         $estadoActual = Status::findOne($programa->status_id);
         if((PermisosHelpers::requerirProfesorAdjunto($id) && $estadoActual->descripcion == "Profesor") ||
-          (PermisosHelpers::requerirDirector($id) && ($estadoActual->descripcion == "Departamento"|| $estadoActual->descripcion == "Borrador"))){
+          (PermisosHelpers::requerirDirector($id) && ($estadoActual->descripcion == "Departamento"|| $estadoActual->descripcion == "Borrador")) ||
+          (PermisosHelpers::requerirRol("Adm_academica") && $estadoActual->descripcion == "Administración Académica") ||
+          (PermisosHelpers::requerirRol("Sec_academica") && $estadoActual->descripcion == "Secretaría Académica")
+        ){
           //$programa->status_id = Status::findOne(['descripcion','=','Departamento'])->id;
 
           $estadoSiguiente = Status::find()->where(['>','value',$estadoActual->value])->orderBy('value')->one();
           $programa->status_id = $estadoSiguiente->id;
           if( $programa->save()){
+            Yii::$app->session->setFlash('success','Se confirmó el programa exitosamente');
             return $this->redirect(['index']);
           } else {
+          //  Yii::$app->session->setFlash('danger','Observación no agregada');
             throw new NotFoundHttpException("Ocurrió un error");
           }
         }
@@ -157,12 +163,17 @@ class ProgramaController extends Controller
         $userId = \Yii::$app->user->identity->id;
         $estadoActual = Status::findOne($programa->status_id);
         if((PermisosHelpers::requerirProfesorAdjunto($id) && $estadoActual->descripcion == "Profesor") ||
-          (PermisosHelpers::requerirDirector($id) && $estadoActual->descripcion == "Departamento")){
+          (PermisosHelpers::requerirDirector($id) && $estadoActual->descripcion == "Departamento") ||
+          (PermisosHelpers::requerirRol("Adm_academica") && $estadoActual->descripcion == "Administración Académica") ||
+          (PermisosHelpers::requerirRol("Sec_academica") && $estadoActual->descripcion == "Secretaría Académica")
+        ){
           //$programa->status_id = Status::findOne(['descripcion','=','Departamento'])->id;
 
           $estadoSiguiente = Status::find()->where(['<','value',$estadoActual->value])->orderBy('value DESC')->one();
           $programa->status_id = $estadoSiguiente->id;
           if( $programa->save()){
+            Yii::$app->session->setFlash('warning','Se rechazó el programa correctamente');
+
             return $this->redirect(['index']);
           } else {
             throw new NotFoundHttpException("Ocurrió un error");
@@ -477,6 +488,7 @@ class ProgramaController extends Controller
           if (isset($depto)){
             $model->departamento_id = $depto->id;
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                Yii::$app->session->setFlash('warning','El programa se creó correctamente. <br>Asigne un profesor adjunto al programa para enviar');
                 return $this->redirect(['designacion/asignar', 'id' => $model->id]);
             }
             return $this->render('anadir', [

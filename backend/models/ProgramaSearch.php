@@ -86,8 +86,9 @@ class ProgramaSearch extends Programa
             'created_by' => $this->created_by,
             'updated_by' => $this->updated_by,
         ]);
-
+        $query->joinWith(['status']);
         if(!$esAdmin){
+
           if (PermisosHelpers::requerirRol('Departamento')){
             $depto = Departamento::find()->where(['=','director',$userId])->one();
 
@@ -106,10 +107,21 @@ class ProgramaSearch extends Programa
             $cargo = Cargo::find()->where(['=','carga_programa',1])->one();
             $query->andFilterWhere(['=','designacion.cargo_id',$cargo->id])->andFilterWhere(['=','designacion.user_id',$userId]);
 
-          }else if (PermisosHelpers::requerirRol('Usuario')) {
-            $query->joinWith(['status']);
-            $query->andFilterWhere(['like','status.descripcion', 'publicado']);
+          }else if (PermisosHelpers::requerirRol('Adm_academica')){
+            //$query->joinWith(['status']);
+            $query->andFilterWhere(['like','status.descripcion', 'Administración Académica'])->orFilterWhere(['like','status.descripcion', 'Secretaría Académica']);
+            $query->orFilterWhere(['like','status.descripcion', 'Biblioteca']);
+            
+          } else if (PermisosHelpers::requerirRol('Sec_academica')){
+            //$query->joinWith(['status']);
+            $query->andFilterWhere(['like','status.descripcion', 'Administración Académica'])->orFilterWhere(['like','status.descripcion', 'Secretaría Académica']);
+            $query->orFilterWhere(['like','status.descripcion', 'Biblioteca']);
+
+          } else {
+            //$query->joinWith(['status']);
+            $query->andFilterWhere(['like','status.descripcion', 'Biblioteca']);
           }
+
         }
 
         $query->andFilterWhere(['like', 'fundament', $this->fundament])

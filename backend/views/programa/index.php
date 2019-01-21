@@ -31,10 +31,20 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-            'id',
-            'departamento_id',
-            'status_id',
-            'asignatura_id',
+            [
+              'attribute' =>'departamento_id',
+              'value' => function($model){
+                $depto = $model->getDepartamento()->one();
+                return isset($depto) ? $depto->nom : "NN";
+              }
+            ],
+            [
+              'attribute' => 'asignatura_id',
+              'value' => function($model){
+                $asignatura = $model->getAsignatura()->one();
+                return isset($asignatura) ? $asignatura->nomenclatura : "NN";
+              }
+            ],
           /*  [
               'attribute' => 'cuatrimestre',
               'format' => 'text',
@@ -91,16 +101,23 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
                 },*/
                 'aprobar' => function ($url,$model){
                     if ((Status::findOne($model->status_id)->descripcion == "Borrador"
-                        && PermisosHelpers::requerirRol('Departamento') && PermisosHelpers::requerirDirector($model->id) && PermisosHelpers::existeProfAdjunto($model->id))
+                        && PermisosHelpers::requerirDirector($model->id) && PermisosHelpers::existeProfAdjunto($model->id))
+                        || (Status::findOne($model->status_id)->descripcion == "Departamento"
+                          && PermisosHelpers::requerirRol('Departamento') && PermisosHelpers::requerirDirector($model->id))
                       || (Status::findOne($model->status_id)->descripcion == "Profesor"
                         && PermisosHelpers::requerirRol('Profesor') && PermisosHelpers::requerirProfesorAdjunto($model->id))
-                      || (Status::findOne($model->status_id)->descripcion == "Departamento"
-                        && PermisosHelpers::requerirRol('Departamento') && PermisosHelpers::requerirDirector($model->id))
+                      || (Status::findOne($model->status_id)->descripcion == "Administración Académica"
+                        && PermisosHelpers::requerirRol('Adm_academica'))
+                      || (Status::findOne($model->status_id)->descripcion == "Secretaría Académica"
+                        && PermisosHelpers::requerirRol('Sec_academica'))
                       || PermisosHelpers::requerirMinimoRol('Admin'))
                     {
                         return Html::a(
                           '<span style="padding:5px; font-size:20px;" class="glyphicon glyphicon-ok"></span>',
-                          ['aprobar','id' => $model->id]
+                          ['aprobar','id' => $model->id],
+                          [
+                              'title' => Yii::t('yii', 'Aprobar'),
+                          ]
                         );
                     }
                 },
@@ -109,11 +126,18 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
                       && PermisosHelpers::requerirRol('Profesor') && PermisosHelpers::requerirProfesorAdjunto($model->id))
                       || (Status::findOne($model->status_id)->descripcion == "Departamento"
                         && PermisosHelpers::requerirRol('Departamento') && PermisosHelpers::requerirDirector($model->id))
+                      || (Status::findOne($model->status_id)->descripcion == "Administración Académica"
+                        && PermisosHelpers::requerirRol('Adm_academica'))
+                      || (Status::findOne($model->status_id)->descripcion == "Secretaría Académica"
+                        && PermisosHelpers::requerirRol('Sec_academica'))
                       || PermisosHelpers::requerirMinimoRol('Admin'))
                     {
                         return Html::a(
                           '<span style="padding:5px; font-size:20px;" class="glyphicon glyphicon-remove"></span>',
-                          ['rechazar','id' => $model->id]
+                          ['rechazar','id' => $model->id],
+                          [
+                              'title' => Yii::t('yii', 'Rechazar'),
+                          ]
                         );
                     }
                 },
@@ -126,7 +150,10 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
                   {
                     return Html::a(
                       '<span style="padding:5px; font-size:20px;" class="glyphicon glyphicon-user"></span>',
-                      ['designacion/asignar','id' => $model->id]
+                      ['designacion/asignar','id' => $model->id],
+                      [
+                          'title' => Yii::t('yii', 'Asignar cargo'),
+                      ]
                     );
                   }
                 },
@@ -145,12 +172,19 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
                     return Html::a(
                         '<span style="padding:5px; font-size:20px;" class="glyphicon glyphicon-info-sign"></span>',
                         //$url);
-                        ['ver','id' => $model->id]);
+                        ['ver','id' => $model->id],
+                        [
+                            'title' => Yii::t('yii', 'Información'),
+                        ]);
                 },
                 'view' => function ($url,$model) {
                     return Html::a(
                         '<span style="padding:5px; font-size:20px;" class="glyphicon glyphicon-eye-open"></span>',
-                        $url);
+                        $url,
+                        [
+                            'title' => Yii::t('yii', 'Eliminar'),
+                        ]
+                      );
                 },
 
                 'delete' => function ($url,$model) {

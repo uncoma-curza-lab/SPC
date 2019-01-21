@@ -23,8 +23,6 @@ $show_this_nav = (Status::findOne($model->status_id)->descripcion == "Borrador")
   </p>
   <?php endif; ?>
 
-
-
     <?= GridView::widget([
         'dataProvider' => new ActiveDataProvider([
           'query' => $model->getDesignaciones()

@@ -47,9 +47,9 @@ class Designacion extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'cargo_id' => 'Cargo ID',
-            'user_id' => 'User ID',
-            'programa_id' => 'Programa ID',
+            'cargo_id' => 'Cargo',
+            'user_id' => 'Usuario',
+            'programa_id' => 'Programa',
         ];
     }
 

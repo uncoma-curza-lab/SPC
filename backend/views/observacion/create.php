@@ -6,8 +6,9 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model backend\models\Observacion */
 
-$this->title = 'Create Observacion';
-$this->params['breadcrumbs'][] = ['label' => 'Observacions', 'url' => ['index']];
+$this->title = 'Agregar observacion';
+$programa = $model->getPrograma()->one();
+$this->params['breadcrumbs'][] = ['label' => isset($programa) ? $programa->getAsignatura()->one()->nomenclatura: null, 'url' => ['programa/ver', 'id' => $model->programa_id]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="observacion-create">

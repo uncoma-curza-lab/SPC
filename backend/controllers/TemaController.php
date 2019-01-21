@@ -39,7 +39,7 @@ class TemaController extends Controller
                          'allow' => true,
                          'roles' => ['@'],
                          'matchCallback' => function ($rule, $action) {
-                          return PermisosHelpers::requerirMinimoRol('Admin')
+                          return PermisosHelpers::requerirMinimoRol('Profesor')
                           && PermisosHelpers::requerirEstado('Activo');
                          }
                      ],

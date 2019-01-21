@@ -34,7 +34,7 @@ class PermisosHelpers
           $designaciones = $programa->getDesignaciones();
           $profesor = $designaciones->where(['=','cargo_id',$cargoProfAdj->id])->one();
           $userId = \Yii::$app->user->identity->id;
-          if ($userId == $profesor->user_id) {
+          if (isset($profesor) && $userId == $profesor->user_id) {
             return true;
           } else {
             return false;

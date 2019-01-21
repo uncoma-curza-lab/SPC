@@ -12,27 +12,27 @@ use froala\froalaeditor\FroalaEditorWidget;
 <div class="observacion-form">
 
     <?php $form = ActiveForm::begin(); ?>
+      <?= FroalaEditorWidget::widget([
+                  'model' => $model,
+                  'attribute' => 'texto',
+                  'name' => 'texto',
+                  'options' => [
+                      'id'=>'texto'
+                  ],
+                  'clientOptions' => [
+                    'placeholderText' => 'Ingrese las observaciones para que el profesor pueda corregir el programa',
+                    'height' => 100,
+                    'language' => 'es',
+                    'height' => 100,
+                    'theme' => 'gray',
+                    'toolbarButtons' => ['bold', 'italic', 'underline', '|', 'paragraphFormat', 'fontSize','color','|','undo','redo','align'],
+                  ],
+      ]) ?>
 
-    <?= FroalaEditorWidget::widget([
-                'model' => $model,
-                'attribute' => 'texto',
-                'name' => 'texto',
-                'options' => [
-                    'id'=>'texto'
-                ],
-                'clientOptions' => [
-                  'placeholderText' => 'Ingrese las observaciones para que el profesor pueda corregir el programa',
-                  'height' => 100,
-                  'language' => 'es',
-                  'height' => 100,
-                  'theme' => 'gray',
-                  'toolbarButtons' => ['bold', 'italic', 'underline', '|', 'paragraphFormat', 'fontSize','color','|','undo','redo','align'],
-                ],
-    ]) ?>
 
-  
+      <br>
     <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

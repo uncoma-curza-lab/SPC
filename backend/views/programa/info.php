@@ -32,6 +32,7 @@ $mostrar = //(isset($estado_programa) && ($estado_programa->value > EstadoHelper
             || ($estado_programa->descripcion == "Secretaría Académica"
               && PermisosHelpers::requerirRol('Sec_academica'))
             || $esAdmin;
+
 $items = [
     [
       'label' => 'Programa',
@@ -43,13 +44,21 @@ $items = [
         'content'=>// if (PermisosHelpers::requerirMinimoRol('Departamento'))
                   $this->render('forms/_gridObservaciones',['model' => $model]),
         'visible' =>  PermisosHelpers::requerirProfesorAdjunto($model->id)
-                      || PermisosHelpers::requerirDirector($model->id),
+                      || PermisosHelpers::requerirDirector($model->id)
+                      || ($estado_programa->descripcion == "Administración Académica"
+                        && PermisosHelpers::requerirRol('Adm_academica'))
+                      || ($estado_programa->descripcion == "Secretaría Académica"
+                        && PermisosHelpers::requerirRol('Sec_academica')),
     ],
     [
         'label' => 'Designación de Cargos',
         'content' => $this->render('forms/_gridDesignaciones',['model' => $model,]),
         'visible' =>  PermisosHelpers::requerirProfesorAdjunto($model->id)
-                      || PermisosHelpers::requerirDirector($model->id),
+                      || PermisosHelpers::requerirDirector($model->id)
+                      || ($estado_programa->descripcion == "Administración Académica"
+                        && PermisosHelpers::requerirRol('Adm_academica'))
+                      || ($estado_programa->descripcion == "Secretaría Académica"
+                        && PermisosHelpers::requerirRol('Sec_academica')),
     ],
 
 ]; ?>

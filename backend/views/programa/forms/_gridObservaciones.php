@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
-use backend\models\ObservacionSearch;
+use backend\models\search\ObservacionSearch;
 use backend\models\Status;
 use yii\data\ActiveDataProvider;
 use common\models\PermisosHelpers;
@@ -11,6 +11,8 @@ use common\models\PermisosHelpers;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 //$this->params['breadcrumbs'][] = $this->title;
+$estado_programa = Status::findOne(['=','id',$model->status_id]);
+
 ?>
 <div class="observacion-index">
 
@@ -18,8 +20,13 @@ use common\models\PermisosHelpers;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-      <?php if(PermisosHelpers::requerirDirector($model->id) && Status::findOne($model->status_id)->descripcion == "Departamento"): ?>
-      <?= Html::a('Añadir Observacion', ['observacion/create','id' => $model->id], ['class' => 'btn btn-success']) ?>
+      <?php if((PermisosHelpers::requerirDirector($model->id) && $estado_programa->descripcion == "Departamento")
+                || ($estado_programa->descripcion == "Administración Académica"
+                && PermisosHelpers::requerirRol('Adm_academica'))
+                || ($estado_programa->descripcion == "Secretaría Académica"
+                && PermisosHelpers::requerirRol('Sec_academica'))
+              ): ?>
+        <?= Html::a('Añadir Observacion', ['observacion/create','id' => $model->id], ['class' => 'btn btn-success']) ?>
       <?php endif; ?>
     </p>
 

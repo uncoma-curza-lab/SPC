@@ -90,8 +90,10 @@ class DesignacionController extends Controller
             throw new NotFoundHttpException('Ya existe un Profesor Adjunto');
           }
           if ($model->save()){
+            Yii::$app->session->setFlash('success','Se asignó el cargo exitosamente');
             $this->redirect(['programa/index', 'id' => $id]);
           } else {
+            Yii::$app->session->setFlash('warning','Hubo un problema al asignar el cargo');
             $this->redirect(['asignar', 'id' => $id]);
           }
       }
