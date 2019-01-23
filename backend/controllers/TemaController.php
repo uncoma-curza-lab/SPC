@@ -93,6 +93,7 @@ class TemaController extends Controller
         $model = new Tema();
         $model->unidad_id = $id;
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            Yii::$app->session->setFlash('success','El tema de la unidad: '.$model->getUnidad()->one()->descripcion.' Se guardó exitosamente');
             return $this->redirect(['unidad/update', 'id' => $model->unidad_id]);
         }
 

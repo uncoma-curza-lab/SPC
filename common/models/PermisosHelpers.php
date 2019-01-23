@@ -4,8 +4,8 @@ use common\models\ValorHelpers;
 use yii;
 use yii\web\Controller;
 use yii\helpers\Url;
-use backend\models\Cargo;
-use backend\models\Programa;
+use common\models\Cargo;
+use common\models\Programa;
 class PermisosHelpers
 {
     /**

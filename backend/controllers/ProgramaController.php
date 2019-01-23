@@ -109,7 +109,7 @@ class ProgramaController extends Controller
           $model->load(Yii::$app->request->post()) && $model->save()) {
           return $this->redirect(['observacion/create', 'id'=>$model->id]);
       }
-      
+
       return $this->render('info',['model' => $model]);
 
     }
@@ -227,10 +227,20 @@ class ProgramaController extends Controller
 
         if ($validarPermisos) {
           if(Yii::$app->request->post('submit') == 'salir' &&
-            $model->load(Yii::$app->request->post()) && $model->save()) {
-              return $this->redirect(['index']);
-          } else if ($model->load(Yii::$app->request->post()) && $model->save()) {
-              return $this->redirect(['objetivo-plan', 'id' => $model->id]);
+            $model->load(Yii::$app->request->post())) {
+              if($model->save()){
+                Yii::$app->session->setFlash('success','El programa se guardó exitosamente');
+                return $this->redirect(['index']);
+              } else {
+                Yii::$app->session->setFlash('danger','Hubo un problema al intentar guardar el programa');
+              }
+          } else if ($model->load(Yii::$app->request->post())) {
+              if($model->save()){
+                Yii::$app->session->setFlash('success','Se guardó fundamentación exitosamente');
+                return $this->redirect(['objetivo-plan', 'id' => $model->id]);
+              } else {
+                Yii::$app->session->setFlash('danger','Hubo un problema al intentar guardar el programa');
+              }
           }
           return $this->render('forms/_fundamentacion',['model'=>$model]);
         }
@@ -252,8 +262,10 @@ class ProgramaController extends Controller
       if ($validarPermisos) {
         if(Yii::$app->request->post('submit') == 'salir' &&
           $model->load(Yii::$app->request->post()) && $model->save()) {
+            Yii::$app->session->setFlash('success','El programa se guardó exitosamente');
             return $this->redirect(['index']);
         } else if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            Yii::$app->session->setFlash('success','Objetivos según el plan de estudio se guardó exitosamente');
             return $this->redirect(['contenido-plan', 'id' => $model->id]);
         }
 
@@ -279,8 +291,10 @@ class ProgramaController extends Controller
       if ($validarPermisos) {
         if(Yii::$app->request->post('submit') == 'salir' &&
           $model->load(Yii::$app->request->post()) && $model->save()) {
+            Yii::$app->session->setFlash('success','El programa se guardó exitosamente');
             return $this->redirect(['index']);
         } else if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            Yii::$app->session->setFlash('success','El contenido según el plan de estudio se guardó exitosamente');
             return $this->redirect(['contenido-analitico', 'id' => $model->id]);
         }
 
@@ -304,10 +318,20 @@ class ProgramaController extends Controller
 
       if ($validarPermisos) {
         if(Yii::$app->request->post('submit') == 'salir' &&
-          $model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
-        } else if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['propuesta-metodologica', 'id' => $model->id]);
+          $model->load(Yii::$app->request->post())) {
+            if($model->save()){
+              Yii::$app->session->setFlash('success','El programa se guardó exitosamente');
+              return $this->redirect(['index']);
+            } else {
+              Yii::$app->session->setFlash('danger','Hubo un problema al guardar');
+            }
+        } else if ($model->load(Yii::$app->request->post())) {
+            if($model->save()){
+              Yii::$app->session->setFlash('success','El contenido analítico se guardó exitosamente');
+              return $this->redirect(['propuesta-metodologica', 'id' => $model->id]);
+            } else {
+              Yii::$app->session->setFlash('danger','Hubo un problema al guardar');
+            }
         }
 
         return $this->render('forms/_contenido-analitico', [
@@ -330,10 +354,21 @@ class ProgramaController extends Controller
 
       if ($validarPermisos) {
         if(Yii::$app->request->post('submit') == 'salir' &&
-          $model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
-        } else if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['eval-acred', 'id' => $model->id]);
+          $model->load(Yii::$app->request->post())) {
+            if($model->save()){
+              Yii::$app->session->setFlash('success','El programa se guardó exitosamente');
+              return $this->redirect(['index']);
+            } else {
+              Yii::$app->session->setFlash('danger','hubo problemas al guardar la propuesta metodológica');
+            }
+        } else if ($model->load(Yii::$app->request->post())) {
+            if ($model->save()) {
+              Yii::$app->session->setFlash('success','La propuesta metodológica se guardó exitosamente');
+              return $this->redirect(['eval-acred', 'id' => $model->id]);
+            } else {
+              Yii::$app->session->setFlash('danger','hubo problemas al guardar la propuesta metodológica');
+            }
+
         }
 
         return $this->render('forms/_propuesta-metodologica', [
@@ -356,10 +391,20 @@ class ProgramaController extends Controller
 
       if ($validarPermisos) {
         if(Yii::$app->request->post('submit') == 'salir' &&
-          $model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
-        } else if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['parcial-rec-promo', 'id' => $model->id]);
+          $model->load(Yii::$app->request->post())) {
+            if ($model->save()) {
+              Yii::$app->session->setFlash('success','El programa se guardó con éxito');
+              return $this->redirect(['index']);
+            } else {
+              Yii::$app->session->setFlash('danger','hubo problemas al guardar Evaluación y condiciones de acreditación');
+            }
+        } else if ($model->load(Yii::$app->request->post()) ) {
+            if ($model->save()) {
+              Yii::$app->session->setFlash('success','Evaluación y condiciones de acreditación se guardó con éxito');
+              return $this->redirect(['parcial-rec-promo', 'id' => $model->id]);
+            } else {
+              Yii::$app->session->setFlash('danger','Hubo problemas al guardar Evaluación y condiciones de acreditación');
+            }
         }
 
         return $this->render('forms/_eval-acred', [
@@ -382,10 +427,20 @@ class ProgramaController extends Controller
 
       if ($validarPermisos) {
         if(Yii::$app->request->post('submit') == 'salir' &&
-          $model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
-        } else if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['dist-horaria', 'id' => $model->id]);
+          $model->load(Yii::$app->request->post())) {
+            if ($model->save()) {
+              Yii::$app->session->setFlash('success','El programa se guardó con éxito');
+              return $this->redirect(['index']);
+            } else {
+              Yii::$app->session->setFlash('danger','Hubo problemas al guardar la sección de parciales, recuperatorios y coloquios');
+            }
+        } else if ($model->load(Yii::$app->request->post())) {
+            if ($model->save()) {
+              Yii::$app->session->setFlash('success','La sección de parciales, recuperatorios y coloquios se guardó con éxito');
+              return $this->redirect(['dist-horaria', 'id' => $model->id]);
+            } else {
+              Yii::$app->session->setFlash('danger','Hubo problemas al guardar la sección de parciales, recuperatorios y coloquios');
+            }
         }
 
         return $this->render('forms/_parc-rec-promo', [
@@ -408,10 +463,20 @@ class ProgramaController extends Controller
 
       if ($validarPermisos) {
         if(Yii::$app->request->post('submit') == 'salir' &&
-          $model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
-        } else if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['crono-tentativo', 'id' => $model->id]);
+          $model->load(Yii::$app->request->post())) {
+            if ($model->save()) {
+              Yii::$app->session->setFlash('success','El programa se guardó con éxito');
+              return $this->redirect(['index']);
+            } else {
+              Yii::$app->session->setFlash('danger','Hubo problemas al guardar la sección de Distribución horaria');
+            }
+        } else if ($model->load(Yii::$app->request->post())) {
+            if ($model->save()) {
+              Yii::$app->session->setFlash('success','La sección de Distribución horaria se guardó con éxito');
+              return $this->redirect(['crono-tentativo', 'id' => $model->id]);
+            } else {
+              Yii::$app->session->setFlash('danger','Hubo problemas al guardar la sección de Distribución horaria');
+            }
         }
 
         return $this->render('forms/_dist-horaria', [
@@ -434,10 +499,20 @@ class ProgramaController extends Controller
 
       if ($validarPermisos) {
         if(Yii::$app->request->post('submit') == 'salir' &&
-          $model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
-        } else if ($model->load(Yii::$app->request->post()) && $model->save()) {
+          $model->load(Yii::$app->request->post())) {
+            if ($model->save()) {
+              Yii::$app->session->setFlash('success','El programa se guardó con éxito');
+              return $this->redirect(['index']);
+            } else {
+              Yii::$app->session->setFlash('danger','Hubo problemas al guardar la sección de cronograma tentativo');
+            }
+        } else if ($model->load(Yii::$app->request->post())) {
+            if ($model->save()) {
+              Yii::$app->session->setFlash('success','La sección de cronograma tentativo se guardó con éxito');
               return $this->redirect(['actividad-extracurricular', 'id' => $model->id]);
+            } else {
+              Yii::$app->session->setFlash('danger','Hubo problemas al guardar la sección de cronograma tentativo');
+            }
         }
 
         return $this->render('forms/_crono-tentativo', [
@@ -460,10 +535,20 @@ class ProgramaController extends Controller
 
       if ($validarPermisos) {
         if(Yii::$app->request->post('submit') == 'salir' &&
-          $model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
-        } else if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
+          $model->load(Yii::$app->request->post())) {
+            if ($model->save()) {
+              Yii::$app->session->setFlash('success','El programa se guardó con éxito');
+              return $this->redirect(['index']);
+            } else {
+              Yii::$app->session->setFlash('danger','Hubo problemas al guardar la sección de actividades extracurriculares');
+            }
+        } else if ($model->load(Yii::$app->request->post())) {
+            if ($model->save()) {
+              Yii::$app->session->setFlash('success','El programa se guardó con éxito');
+              return $this->redirect(['index']);
+            } else {
+              Yii::$app->session->setFlash('danger','Hubo problemas al guardar la sección de actividades extracurriculares');
+            }
         }
 
         return $this->render('forms/_activ-extrac', [
@@ -596,7 +681,7 @@ class ProgramaController extends Controller
             return $model;
         }
 
-        throw new NotFoundHttpException('The requested page does not exist.');
+        throw new NotFoundHttpException('No se pudo encontrar lo que buscaba');
     }
 
     protected function validarPermisos($model, $estado) {

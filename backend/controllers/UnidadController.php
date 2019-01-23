@@ -7,6 +7,7 @@ use backend\models\Unidad;
 use backend\models\UnidadSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\web\ForbiddenHttpException;
 use yii\filters\VerbFilter;
 use common\models\PermisosHelpers;
 
@@ -91,7 +92,11 @@ class UnidadController extends Controller
     {
         $model = new Unidad();
         $model->programa_id = $id;
+        if (!$this->validarPermisos($model)) {
+            throw new ForbiddenHttpException('Usted no tiene permisos para hacer esto');
+        }
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            Yii::$app->session->setFlash('success','La unidad se guardó exitosamente. <br> Cree un tema para ésta unidad.');
             return $this->redirect(['tema/create', 'id' => $model->id]);
         }
 
@@ -111,6 +116,9 @@ class UnidadController extends Controller
     {
         $model = $this->findModel($id);
 
+        if (!$this->validarPermisos($model)) {
+            throw new ForbiddenHttpException('Usted no tiene permisos para hacer esto');
+        }
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['programa/contenido-analitico', 'id' => $model->programa_id]);
         }
@@ -123,7 +131,9 @@ class UnidadController extends Controller
     public function actionEdit($id)
     {
         $model = $this->findModel($id);
-
+        if (!$this->validarPermisos($model)) {
+            throw new ForbiddenHttpException('Usted no tiene permisos para hacer esto');
+        }
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['update', 'id' => $model->id]);
         }
@@ -168,5 +178,27 @@ class UnidadController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+    protected function validarPermisos($model) {
+      $programa = $model->getPrograma()->one();
+      if (!isset($programa))
+        throw new NotFoundHttpException('Error! no se encontró lo que busca.');
+      $estado = $programa->getStatus()->one();
+      if (!isset($estado))
+        throw new NotFoundHttpException('Error! no se encontró un programa con buen estado.');
+      //if (PermisosHelpers::requerirRol('Profesor') &&
+      //  ($estado->descripcion == "Profesor") && ($model->created_by == $userId)) {
+      if (PermisosHelpers::requerirRol('Profesor')
+        && ($estado->descripcion == "Profesor")
+        && PermisosHelpers::requerirProfesorAdjunto($model->programa_id)) {
+          return true;
+      } /*else if (PermisosHelpers::requerirDirector($model->programa_id)
+        && ($estado->descripcion == "Departamento")) {
+            return true;
+      }*/
+      if(PermisosHelpers::requerirMinimoRol('Admin')){
+        return true;
+      }
+      return false;
     }
 }

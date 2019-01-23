@@ -50,7 +50,9 @@ AppAsset::register($this);
         if(PermisosHelpers::requerirMinimoRol('Admin')){
           $menuItems[]=['label' => 'Controles', 'items' => [
           ['label' => 'Carreras', 'url' => ['/carrera/index']],
-          ['label' => 'Departamento', 'url' => ['/departamento/index']],
+          ['label' => 'Departamentos', 'url' => ['/departamento/index']],
+          ['label' => 'Planes', 'url' => ['/plan/index']],
+          ['label' => 'Asignaturas', 'url' => ['/asignatura/index']],
           ['label' => 'Personas', 'url' => ['/persona/index']],
           ['label' => 'Roles', 'url' => ['/rol/index']],
           ['label' => 'Estados', 'url' => ['/status/index']],
@@ -76,6 +78,10 @@ AppAsset::register($this);
             <div class="row">
               <div class="col-xs-8">
                 <?= Breadcrumbs::widget([
+                    'homeLink' => [
+                        'label' => Yii::t('yii', 'Inicio'),
+                        'url' => Yii::$app->homeUrl,
+                   ],
                     'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
                 ]) ?>
               </div>

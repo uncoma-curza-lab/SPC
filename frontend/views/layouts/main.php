@@ -36,32 +36,38 @@ AppAsset::register($this);
         ],
     ]);
     $menuItems = [
-        ['label' => 'Home', 'url' => ['/site/index']],
-        ['label' => 'About', 'url' => ['/site/about']],
-        ['label' => 'Contact', 'url' => ['/site/contact']],
+        ['label' => 'Inicio', 'url' => ['/site/index']],
+      //  ['label' => 'About', 'url' => ['/site/about']],
+      //  ['label' => 'Contact', 'url' => ['/site/contact']],
     ];
 
     if (Yii::$app->user->isGuest) {
-        $menuItems[] = ['label' => 'Signup', 'url' => ['/site/signup']];
-        $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
+        //$menuItems[] = ['label' => 'Signup', 'url' => ['/site/signup']];
+        $menuItems[] = ['label' => 'Acceder', 'url' => ['/site/login']];
     } else {
-      $menuItems[] = ['label' => Yii::$app->user->identity->username, 'items' =>[
-          ['label' => 'Perfil', 'url' => ['/perfil/view']],
-          [
-             'label' => 'Logout (' . Yii::$app->user->identity->username . ')',
-             'url' => ['/site/logout'],
-             'linkOptions' => ['data-method' => 'post']
-          ],
-          ]];
-        $menuItems[] = '<li>'
+        $menuItems[] = [
+          'label' => 'Programa', 'url' => ['/programa/index'],
+        ];
+        $menuItems[] = [
+          'label' => Yii::$app->user->identity->username,
+          'items' =>[
+            ['label' => 'Perfil', 'url' => ['/perfil/view']],
+            [
+               'label' => 'Salir (' . Yii::$app->user->identity->username . ')',
+               'url' => ['/site/logout'],
+               'linkOptions' => ['data-method' => 'post']
+            ],
+            ]
+        ];
+        /*$menuItems[] = '<li>'
             . Html::beginForm(['/site/logout'], 'post')
             . Html::submitButton(
-                'Logout (' . Yii::$app->user->identity->username . ')',
+                'Salir (' . Yii::$app->user->identity->username . ')',
                 ['class' => 'btn btn-link logout']
             )
             . Html::endForm()
             . '</li>';
-
+        */
     }
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
@@ -83,7 +89,7 @@ AppAsset::register($this);
     <div class="container">
         <p class="pull-left">&copy; <?= Html::encode(Yii::$app->name) ?> <?= date('Y') ?></p>
 
-        <p class="pull-right"><?= Yii::powered() ?></p>
+        <p class="pull-right">Desarrollado por: <i>Departamento de Informática</i><? Yii::powered() ?></p>
     </div>
 </footer>
 

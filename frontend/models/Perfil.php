@@ -6,7 +6,7 @@ use Yii;
 
 use yii\db\ActiveRecord;
 use common\models\User;
-//use backend\models\Departamento;
+//use common\models\Departamento;
 use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
