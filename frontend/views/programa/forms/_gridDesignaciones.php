@@ -15,36 +15,38 @@ use yii\data\ActiveDataProvider;
 $show_this_nav = (Status::findOne($model->status_id)->descripcion == "Borrador") &&
                   (PermisosHelpers::requerirDirector($model->id));
 ?>
+<div class="row">
 
-<div class="cargos-index">
-  <?php if($show_this_nav): ?>
-  <p>
-      <?= Html::submitButton('Insertar nueva desingacion',['class' => 'btn btn-success' , 'name'=>'submit','value' => 'cargo']) ?>
-  </p>
-  <?php endif; ?>
+  <div class="cargos-index">
 
-    <?= GridView::widget([
-        'dataProvider' => new ActiveDataProvider([
-          'query' => $model->getDesignaciones()
-        ]),
-        'filterModel' => new DesignacionSearch(),
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-            [
-              'attribute' => 'cargo_id',
-              'format' => 'html',
-              'value' => function($data){
-                  return Cargo::findOne($data->cargo_id)->nomenclatura;
-              }
-            ],
-            'user_id',
-            [
-              'class' => 'yii\grid\ActionColumn',
-              'controller' => 'designacion',
-              'template' => $show_this_nav? '{view} {delete} {update}':'{view}',
 
-            ],
-        ],
-    ]); ?>
+      <?= GridView::widget([
+          'dataProvider' => new ActiveDataProvider([
+            'query' => $model->getDesignaciones()
+          ]),
+    //      'filterModel' => new DesignacionSearch(),
+          'columns' => [
+        //      ['class' => 'yii\grid\SerialColumn'],
+              [
+                'attribute' => 'cargo_id',
+                'format' => 'html',
+                'value' => function($data){
+                    return Cargo::findOne($data->cargo_id)->nomenclatura;
+                }
+              ],
+              'user_id',
+              [
+                'class' => 'yii\grid\ActionColumn',
+                'controller' => 'designacion',
+                'template' => $show_this_nav? '{view} {delete} {update}':'{view}',
 
+              ],
+          ],
+      ]); ?>
+      <?php if($show_this_nav): ?>
+      <p class="pull-right">
+          <?= Html::a('Agregar una designación', ['designacion/asignar', 'id' => $model->id], ['class' => 'btn btn-success']) ?>
+      </p>
+      <?php endif; ?>
+  </div>
 </div>

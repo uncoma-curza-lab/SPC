@@ -16,7 +16,6 @@ $estado_programa = Status::findOne(['=','id',$model->status_id]);
 ?>
 <div class="observacion-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
@@ -34,9 +33,9 @@ $estado_programa = Status::findOne(['=','id',$model->status_id]);
         'dataProvider' => new ActiveDataProvider([
           'query' => $model->getObservaciones()
         ]),
-        'filterModel' => new ObservacionSearch(),
+        //'filterModel' => new ObservacionSearch(),
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+        //    ['class' => 'yii\grid\SerialColumn'],
 
             [
               'attribute' => 'texto',

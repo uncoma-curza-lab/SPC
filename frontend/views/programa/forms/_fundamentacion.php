@@ -3,7 +3,7 @@
   use froala\froalaeditor\FroalaEditorWidget;
   use yii\helpers\Html;
   use yii\widgets\ActiveForm;
-use yii\helpers\Url;
+  use yii\helpers\Url;
   $this->params['breadcrumbs'][] = ['label' => 'Programas', 'url' => ['index']];
   $this->params['breadcrumbs'][] = ['label' =>  $model->getNomenclatura(). " " . $model->getCurso(), 'url' => ['view', 'id' => $model->id]];
   $this->params['breadcrumbs'][] = ['label' => "Portada", 'url' => ['update', 'id' => $model->id]];
@@ -21,11 +21,12 @@ use yii\helpers\Url;
   $this->params['items'][] = ['label' => '9. Cronograma tentativo', 'url' => Url::to(['crono-tentativo', 'id' => $model->id]), 'options'=> $mensaje];
   $this->params['items'][] = ['label' => '10. Actividad extracurricular', 'url' => Url::to(['actividad-extracurricular', 'id' => $model->id]), 'options'=> $mensaje];
   $this->params['breadcrumbs'][] = 'Fundamentacion';
+  $porcentaje = $model->calcularPorcentajeCarga();
 ?>
 
 <div class="progress">
-  <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" style="width: 10%">
-     10%
+  <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?= $porcentaje ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?= $porcentaje ?>%">
+     <?= $porcentaje ?> %
   </div>
 </div>
 
@@ -38,10 +39,10 @@ use yii\helpers\Url;
 ]); ?>
 <h3>1. Fundamentación</h3>
 
-<?= FroalaEditorWidget::widget([
+<?= $form->field($model, 'fundament')->widget(FroalaEditorWidget::classname(),[
             'model' => $model,
             'attribute' => 'fundament',
-            'name' => 'fundament',
+            'name' => 'Fundamentación',
 
             'options' => [
                 'id'=>'fundament'
@@ -53,7 +54,7 @@ use yii\helpers\Url;
               'theme' => 'gray',
               'toolbarButtons' => ['bold', 'italic', 'underline', '|', 'paragraphFormat', 'fontSize','color','|','undo','redo','align'],
             ],
-]) ?>
+])->label('') ?>
 <br>
 
 <div class="form-group">

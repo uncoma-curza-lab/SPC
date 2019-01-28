@@ -19,10 +19,11 @@ $this->params['breadcrumbs'][] = ['label' => '...'];
 $this->params['breadcrumbs'][] = ['label' => "Contenido según plan de estudio", 'url' => ['contenido-plan', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = ['label' => "Contenidos analíticos", 'url' => ['contenido-analitico', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Propuesta metodológica';
- ?>
+$porcentaje = $model->calcularPorcentajeCarga();
+?>
  <div class="progress">
-   <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%">
-      50%
+   <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?= $porcentaje ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?= $porcentaje ?>%">
+      <?= $porcentaje ?>%
    </div>
  </div>
 <h3>5. Propuesta Metodológica</h3>
@@ -33,7 +34,7 @@ $this->params['breadcrumbs'][] = 'Propuesta metodológica';
   'validateOnSubmit'          => false,
   'validateOnBlur'            => false,
 ]); ?>
-<?= FroalaEditorWidget::widget([
+<?= $form->field($model, 'propuesta_met')->widget(FroalaEditorWidget::classname(),[
             'model' => $model,
             'attribute' => 'propuesta_met',
             'name' => 'propuesta_met',
@@ -48,7 +49,7 @@ $this->params['breadcrumbs'][] = 'Propuesta metodológica';
               'theme' => 'gray',
               'toolbarButtons' => ['bold', 'italic', 'underline', '|', 'paragraphFormat', 'fontSize','color','|','undo','redo','align'],
             ],
-]) ?>
+])->label('') ?>
 <br>
 
 <div class="form-group">

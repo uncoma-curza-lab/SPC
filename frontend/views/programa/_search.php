@@ -23,7 +23,6 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'asignatura_id') ?>
 
-    <?= $form->field($model, 'curso') ?>
 
     <?php // echo $form->field($model, 'year') ?>
 

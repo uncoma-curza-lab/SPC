@@ -19,7 +19,8 @@ $this->params['breadcrumbs'][] = ['label' => '...'];
 $this->params['breadcrumbs'][] = ['label' => "Distribución Horaria", 'url' => ['dist-horaria', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = ['label' => "Cronograma tentativo", 'url' => ['crono-tentativo', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Activadades extracurriculares';
- ?>
+$porcentaje = $model->calcularPorcentajeCarga();
+?>
  <?php $form = ActiveForm::begin([
    'enableAjaxValidation'      => false,
    'enableClientValidation'    => false,
@@ -29,12 +30,12 @@ $this->params['breadcrumbs'][] = 'Activadades extracurriculares';
  ]); ?>
 
  <div class="progress">
-   <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="99" aria-valuemin="0" aria-valuemax="100" style="width: 99%">
-      99%
+   <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?= $porcentaje ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?= $porcentaje ?>%">
+      <?= $porcentaje ?>%
    </div>
  </div>
 <h3>10. Planificación de actividades Extracurriculares</h3>
-<?= FroalaEditorWidget::widget([
+<?= $form->field($model, 'actv_extracur')->widget(FroalaEditorWidget::classname(),[
             'model' => $model,
             'attribute' => 'actv_extracur',
             'name' => 'actv_extracur',
@@ -49,7 +50,7 @@ $this->params['breadcrumbs'][] = 'Activadades extracurriculares';
               'theme' => 'gray',
               'toolbarButtons' => ['bold', 'italic', 'underline', '|', 'paragraphFormat', 'fontSize','color','|','undo','redo','align'],
             ],
-]) ?>
+])->label('') ?>
 <br>
 <div class="form-group">
     <div class="row">

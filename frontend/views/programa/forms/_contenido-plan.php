@@ -19,10 +19,11 @@ $this->params['breadcrumbs'][] = ['label' => '...'];
 $this->params['breadcrumbs'][] = ['label' => "Fundamentacion", 'url' => ['fundamentacion', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = ['label' => "Obj. según el plan de estudio", 'url' => ['objetivo-plan', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Contenido según el plan de estudio';
+$porcentaje = $model->calcularPorcentajeCarga();
  ?>
  <div class="progress">
-   <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100" style="width: 30%">
-      30%
+   <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?= $porcentaje ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?= $porcentaje ?>%">
+      <?= $porcentaje ?>%
    </div>
  </div>
  <?php $form = ActiveForm::begin([
@@ -35,7 +36,7 @@ $this->params['breadcrumbs'][] = 'Contenido según el plan de estudio';
 
 <h3>3. Contenido según Plan de Estudio</h3>
 
-<?= FroalaEditorWidget::widget([
+<?= $form->field($model, 'contenido_plan')->widget(FroalaEditorWidget::classname(),[
             'model' => $model,
             'attribute' => 'contenido_plan',
             'name' => 'contenido_plan',
@@ -50,7 +51,7 @@ $this->params['breadcrumbs'][] = 'Contenido según el plan de estudio';
               'theme' => 'gray',
               'toolbarButtons' => ['bold', 'italic', 'underline', '|', 'paragraphFormat', 'fontSize','color','|','undo','redo','align'],
             ],
-]) ?>
+])->label('') ?>
 <br>
 
 <div class="form-group">

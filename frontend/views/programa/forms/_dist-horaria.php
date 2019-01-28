@@ -19,10 +19,11 @@ $this->params['breadcrumbs'][] = ['label' => '...'];
 $this->params['breadcrumbs'][] = ['label' => "Evaluacion y acreditación", 'url' => ['eval-acred', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = ['label' => "Parciales, recuperatorios y coloquios", 'url' => ['parc-rec-promo', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Distribución Horaria';
+$porcentaje = $model->calcularPorcentajeCarga();
  ?>
  <div class="progress">
-   <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%">
-      80%
+   <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?= $porcentaje ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?= $porcentaje ?>%">
+      <?= $porcentaje ?>%
    </div>
  </div>
  <?php $form = ActiveForm::begin([
@@ -36,7 +37,7 @@ $this->params['breadcrumbs'][] = 'Distribución Horaria';
 
 <h3>8. Distribución horaria</h3>
 
-<?= FroalaEditorWidget::widget([
+<?= $form->field($model, 'distr_horaria')->widget(FroalaEditorWidget::classname(),[
             'model' => $model,
             'attribute' => 'distr_horaria',
             'name' => 'distr_horaria',
@@ -51,7 +52,7 @@ $this->params['breadcrumbs'][] = 'Distribución Horaria';
               'theme' => 'gray',
               'toolbarButtons' => ['bold', 'italic', 'underline', '|', 'paragraphFormat', 'fontSize','color','|','undo','redo','align'],
             ],
-]) ?>
+])->label('') ?>
 <br>
 
 <div class="row">

@@ -20,13 +20,14 @@ $this->params['breadcrumbs'][] = ['label' => '...'];
 $this->params['breadcrumbs'][] = ['label' => "Portada", 'url' => ['update', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = ['label' => "Fundamentacion", 'url' => ['fundamentacion', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Objetivo según el plan de estudio';
+$porcentaje = $model->calcularPorcentajeCarga();
 ?>
 <div class="progress">
-  <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
-     20%
+  <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?= $porcentaje ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?= $porcentaje ?>%">
+     <?= $porcentaje ?>%
   </div>
 </div>
-  
+
 <?php $form = ActiveForm::begin([
 'enableAjaxValidation'      => false,
 'enableClientValidation'    => false,
@@ -37,7 +38,7 @@ $this->params['breadcrumbs'][] = 'Objetivo según el plan de estudio';
 
 <h3>2. Objetivo según Plan de estudio</h3>
 
-<?= FroalaEditorWidget::widget([
+<?= $form->field($model, 'objetivo_plan')->widget(FroalaEditorWidget::classname(),[
             'model' => $model,
             'attribute' => 'objetivo_plan',
             'name' => 'objetivo_plan',
@@ -51,7 +52,7 @@ $this->params['breadcrumbs'][] = 'Objetivo según el plan de estudio';
               'theme' => 'gray',
               'toolbarButtons' => ['bold', 'italic', 'underline', '|','lineBreaker','paragraphFormat', 'fontSize','color','|','undo','redo','align'],
             ],
-]) ?>
+])->label('') ?>
 <br>
 
 <div class="form-group">

@@ -33,16 +33,17 @@ class ProgramaController extends Controller
         return [
           'access' => [
                  'class' => \yii\filters\AccessControl::className(),
-                 'only' => [
+                 /*'only' => [
                    'index', 'view', 'create', 'update','delete',
-              /*     'fundamentacion', 'objetivo-plan', 'contenido-analitico',
+                   'ver', 'anadir','fundamentacion','cargar',
+                   'fundamentacion', 'objetivo-plan', 'contenido-analitico',
                    'contenido-plan', 'eval-acred', 'propuesta-metodologica',
                    'parcial-rec-promo', 'dist-horaria', 'crono-tentativo',
-                   'actividad-extracurricular'*/
-                 ],
+                   'actividad-extracurricular', 'aprobar', 'rechazar'
+                 ],*/
                  'rules' => [
                      [
-                         'actions' => ['index', 'view'],
+                         'actions' => ['index', 'view','editar'],
                          'allow' => true,
                          'roles' => ['@'],
                          'matchCallback' => function ($rule, $action) {
@@ -50,13 +51,11 @@ class ProgramaController extends Controller
                           && PermisosHelpers::requerirEstado('Activo');
                          }
                      ],
+
                      [
                           'actions' => [
-                            'create','update','delete','fundamentacion',
-                            'objetivo-plan', 'contenido-analitico',
-                            'contenido-plan', 'eval-acred', 'propuesta-metodologica',
-                            'parcial-rec-promo', 'dist-horaria', 'crono-tentativo',
-                            'actividad-extracurricular'
+                            'create','update','delete','anadir', 'ver',
+                            'aprobar', 'rechazar'
                           ],
                           'allow' => true,
                           'roles' => ['@'],
@@ -64,6 +63,22 @@ class ProgramaController extends Controller
                             return PermisosHelpers::requerirMinimoRol('Profesor')
                               && PermisosHelpers::requerirEstado('Activo');
                           }
+                     ],
+                     [
+                          'actions' => [
+                            'fundamentacion',
+                            'objetivo-plan', 'contenido-analitico',
+                            'contenido-plan', 'eval-acred', 'propuesta-metodologica',
+                            'parcial-rec-promo', 'dist-horaria', 'crono-tentativo',
+                            'actividad-extracurricular', 'cargar'
+                          ],
+                          'allow' => true,
+                          'roles' => ['@'],
+                          'matchCallback' => function($rule,$action) {
+                            return PermisosHelpers::requerirRol('Profesor')
+                              && PermisosHelpers::requerirEstado('Activo');
+                          },
+
                      ],
                  ],
              ],
@@ -141,8 +156,11 @@ class ProgramaController extends Controller
         $programa->scenario = 'carrerap';
         $userId = \Yii::$app->user->identity->id;
         $estadoActual = Status::findOne($programa->status_id);
-        if((PermisosHelpers::requerirProfesorAdjunto($id) && $estadoActual->descripcion == "Profesor") ||
-          (PermisosHelpers::requerirDirector($id) && ($estadoActual->descripcion == "Departamento"|| $estadoActual->descripcion == "Borrador")) ||
+        if((PermisosHelpers::requerirProfesorAdjunto($id) && $estadoActual->descripcion == "Profesor") && $programa->getPorcentajeCarga() < 40){
+              Yii::$app->session->setFlash('danger','Debe completar el programa un 30%');
+              return $this->redirect(['cargar','id' => $programa->id]);
+        } else if((PermisosHelpers::requerirProfesorAdjunto($id) && $estadoActual->descripcion == "Profesor")||
+          (PermisosHelpers::requerirDirector($id) && ($estadoActual->descripcion == "Departamento" || $estadoActual->descripcion == "Borrador")) ||
           (PermisosHelpers::requerirRol("Adm_academica") && $estadoActual->descripcion == "Administración Académica") ||
           (PermisosHelpers::requerirRol("Sec_academica") && $estadoActual->descripcion == "Secretaría Académica")
         ){
@@ -221,9 +239,9 @@ class ProgramaController extends Controller
     }
 
     public function actionCargar($id)
-    {
-        $model = $this->findModel($id);
-        $model->scenario = 'fundamentacion';
+      {
+          $model = $this->findModel($id);
+          $model->scenario = 'fundamentacion';
         $estado = Status::findOne($model->status_id);
         $validarPermisos = $this->validarPermisos($model, $estado);
 
@@ -566,7 +584,6 @@ class ProgramaController extends Controller
         $model = new Programa();
         $model->scenario = 'crear';
         //$model->year =Yii::$app->formatter->asDatetime(date('Y-m-d'), "php:d-m-Y H:i:s");
-        $model->year =date('Y');
         $model->status_id = Status::find()->where(['=','descripcion','Borrador'])->one()->id;
         //obtener el id del director
         $userId = \Yii::$app->user->identity->id;
@@ -574,10 +591,20 @@ class ProgramaController extends Controller
           $depto = Departamento::find()->where(['=','director',$userId])->one();
           if (isset($depto)){
             $model->departamento_id = $depto->id;
-            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            if ($model->load(Yii::$app->request->post())) {
+              $yaExiste = Programa::find()->where(['=','asignatura_id',$model->asignatura_id]);
+              $yaExiste = $yaExiste->where(['=','year', $model->year])->one();
+              if($yaExiste)
+                Yii::$app->session->setFlash('danger','El programa ya existe. Verifique la información');
+              else if($model->save()){
                 Yii::$app->session->setFlash('warning','El programa se creó correctamente. <br>Asigne un profesor adjunto al programa para enviar');
                 return $this->redirect(['designacion/asignar', 'id' => $model->id]);
+              }
+            } else {
+                $model->year= date('Y');
             }
+
+
             return $this->render('anadir', [
                 'model' => $model,
                 'deptoId' => $depto->id,
@@ -650,6 +677,25 @@ class ProgramaController extends Controller
             'model' => $model,
         ]);
     }
+    public function actionEditar($id)
+    {
+        if(PermisosHelpers::requerirDirector($id)){
+          $model = $this->findModel($id);
+          $searchModel = new ProgramaSearch();
+          $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+          if ($model->load(Yii::$app->request->post()) && $model->save()) {
+              return $this->redirect(['index', 'id' => $model->id]);
+          }
+
+          return $this->render('editar', [
+            'model' => $model,
+            'searchModel' => $searchModel
+          ]);
+        } else {
+            Yii::$app->session->setFlash('danger','Usted no puede editar este programa');
+            return $this->redirect(['index']);
+        }
+    }
 
     /**
      * Deletes an existing Programa model.
@@ -687,23 +733,21 @@ class ProgramaController extends Controller
     }
 
     protected function validarPermisos($model, $estado) {
-      $userId = \Yii::$app->user->identity->id;
+      if (!Yii::$app->user->isGuest) {
+        $userId = \Yii::$app->user->identity->id;
 
-      //if (PermisosHelpers::requerirRol('Profesor') &&
-      //  ($estado->descripcion == "Profesor") && ($model->created_by == $userId)) {
-      if (PermisosHelpers::requerirRol('Profesor') &&
-        ($estado->descripcion == "Profesor")) {
-          return true;
-      } else if (PermisosHelpers::requerirRol('Departamento') &&
-        ($estado->descripcion == "Departamento")) {
-          $perfil = \Yii::$app->user->identity->perfil;
-          $carreras = $model->getCarreras();
-          if ($carreras->where(['=','departamento_id', $perfil->departamento_id])->one()) {
+        //if (PermisosHelpers::requerirRol('Profesor') &&
+        //  ($estado->descripcion == "Profesor") && ($model->created_by == $userId)) {
+        if (PermisosHelpers::requerirRol('Profesor') &&
+          ($estado->descripcion == "Profesor")) {
             return true;
-          }
-      }
-      if(PermisosHelpers::requerirMinimoRol('Admin')){
-        return true;
+        } else if (PermisosHelpers::requerirDirector($model->id) &&
+          ($estado->descripcion == "Borrador")) {
+              return true;
+        }
+        if(PermisosHelpers::requerirMinimoRol('Admin')){
+          return true;
+        }
       }
       return false;
     }

@@ -19,10 +19,11 @@ $this->params['breadcrumbs'][] = ['label' => '...'];
 $this->params['breadcrumbs'][] = ['label' => "Propuesta metodológica", 'url' => ['propuesta-metodologica', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = ['label' => "Evaluacion y acreditación", 'url' => ['eval-acred', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Parciales, recuperatorios y coloquios';
+$porcentaje = $model->calcularPorcentajeCarga();
 ?>
 <div class="progress">
-  <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width: 70%">
-     70%
+  <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?= $porcentaje ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?= $porcentaje ?>%">
+     <?= $porcentaje ?>%
   </div>
 </div>
 <?php $form = ActiveForm::begin([
@@ -34,7 +35,7 @@ $this->params['breadcrumbs'][] = 'Parciales, recuperatorios y coloquios';
 ]); ?>
 <h3>7. Parciales, Recuperatorios y coloquios</h3>
 
-<?= FroalaEditorWidget::widget([
+<?= $form->field($model, 'parcial_rec_promo')->widget(FroalaEditorWidget::classname(),[
             'model' => $model,
             'attribute' => 'parcial_rec_promo',
             'name' => 'parcial_rec_promo',
@@ -49,7 +50,7 @@ $this->params['breadcrumbs'][] = 'Parciales, recuperatorios y coloquios';
               'theme' => 'gray',
               'toolbarButtons' => ['bold', 'italic', 'underline', '|', 'paragraphFormat', 'fontSize','color','|','undo','redo','align'],
             ],
-]) ?>
+])->label('') ?>
 <br>
 
 <div class="form-group">

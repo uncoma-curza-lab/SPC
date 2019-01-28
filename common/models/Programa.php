@@ -58,7 +58,9 @@ class Programa extends \yii\db\ActiveRecord
     {
         return [
             [['departamento_id', 'status_id', 'asignatura_id', 'year', 'created_by', 'updated_by'], 'integer'],
-            [[ 'fundament', 'objetivo_plan', 'contenido_plan', 'propuesta_met', 'evycond_acreditacion', 'parcial_rec_promo', 'distr_horaria', 'crono_tentativo', 'actv_extracur'], 'required'],
+            [['asignatura_id','year'], 'required', 'on' => 'crear', 'message'=>"Debe completar este campo"],
+            //[['fundament'], 'required', 'on' => 'fundamentacion', 'message'=>"Debe completar este campo"],
+            [['fundament', 'objetivo_plan', 'contenido_plan', 'propuesta_met', 'evycond_acreditacion', 'parcial_rec_promo', 'distr_horaria', 'crono_tentativo', 'actv_extracur'], 'required','message'=>"Debe completar este campo"],
             [['fundament', 'objetivo_plan', 'contenido_plan', 'propuesta_met', 'evycond_acreditacion', 'parcial_rec_promo', 'distr_horaria', 'crono_tentativo', 'actv_extracur'], 'string'],
             [['created_at', 'updated_at'], 'safe'],
             [['asignatura_id'], 'exist', 'skipOnError' => true, 'targetClass' => Asignatura::className(), 'targetAttribute' => ['asignatura_id' => 'id']],
@@ -66,6 +68,7 @@ class Programa extends \yii\db\ActiveRecord
             [['status_id'], 'exist', 'skipOnError' => true, 'targetClass' => Status::className(), 'targetAttribute' => ['status_id' => 'id']],
         ];
     }
+
 
     public function behaviors()
     {
@@ -121,8 +124,9 @@ class Programa extends \yii\db\ActiveRecord
       $scenarios['crear'] = [
       //  'curso',
         'asignatura_id',
+
       //  'cuatrimestre',
-      //  'year',
+        'year',
       ];
       $scenarios['enviarProfesor'] = ['status_id'];
       $scenarios['update'] = [
@@ -142,7 +146,8 @@ class Programa extends \yii\db\ActiveRecord
       $scenarios['dist-horaria'] = ['distr_horaria'];
       $scenarios['crono-tent'] = ['crono_tentativo'];
       $scenarios['actv-extra'] = ['actv_extracur'];
-      return $scenarios;
+      return array_merge(parent::scenarios(), $scenarios);
+      //return $scenarios;
     }
 
     /**
@@ -216,5 +221,72 @@ class Programa extends \yii\db\ActiveRecord
     public function getCurso()
     {
       return $this->getAsignatura()->one()->getCurso();
+    }
+    public function getFundamentacion(){
+      return $this->fundament;
+    }
+    public function getObjetivoPlan(){
+      return $this->objetivo_plan;
+    }
+    public function getContenidoPlan(){
+      return $this->contenido_plan;
+    }
+    public function countContenidoAnalitico(){
+      $unidades = $this->getUnidades()->count();
+      return $unidades;
+    }
+    public function getPropuestaMetodologica(){
+      return $this->propuesta_met;
+    }
+    public function getEyCAcreditacion(){
+      return $this->evycond_acreditacion;
+    }
+    public function getParcRecyPromo(){
+      return $this->parcial_rec_promo;
+    }
+    public function getDistHoraria(){
+      return $this->distr_horaria;
+    }
+    public function getCronoTent(){
+      return $this->crono_tentativo;
+    }
+    public function getActividadExtrac(){
+      return $this->actv_extracur;
+    }
+
+
+    public function calcularPorcentajeCarga(){
+      $porcentaje = 0;
+      if(strlen($this->getFundamentacion()) > 10){
+        $porcentaje = $porcentaje+10;
+      }
+      if(strlen($this->getObjetivoPlan()) > 10){
+        $porcentaje = $porcentaje+10;
+      }
+      if(strlen($this->getContenidoPlan()) > 10){
+        $porcentaje = $porcentaje+10;
+      }
+      if($this->countContenidoAnalitico() > 0){
+        $porcentaje = $porcentaje+10;
+      }
+      if(strlen($this->getPropuestaMetodologica()) > 10){
+        $porcentaje = $porcentaje+10;
+      }
+      if(strlen($this->getEyCAcreditacion()) > 10){
+        $porcentaje = $porcentaje+10;
+      }
+      if(strlen($this->getParcRecyPromo()) > 10){
+        $porcentaje = $porcentaje+10;
+      }
+      if(strlen($this->getDistHoraria()) > 10){
+        $porcentaje = $porcentaje+10;
+      }
+      if(strlen($this->getCronoTent()) > 10){
+        $porcentaje += 10;
+      }
+      if(strlen($this->getActividadExtrac()) > 10){
+        $porcentaje += 10;
+      }
+      return $porcentaje;
     }
 }

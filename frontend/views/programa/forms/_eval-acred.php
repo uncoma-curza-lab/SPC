@@ -19,6 +19,7 @@ $this->params['breadcrumbs'][] = ['label' => '...'];
 $this->params['breadcrumbs'][] = ['label' => "Contenidos analíticos", 'url' => ['contenido-analitico', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = ['label' => "Propuesta metodológica", 'url' => ['propuesta-metodologica', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Evaluación y condiciones de acreditación';
+$porcentaje = $model->calcularPorcentajeCarga();
 ?>
 <?php $form = ActiveForm::begin([
   'enableAjaxValidation'      => false,
@@ -28,13 +29,13 @@ $this->params['breadcrumbs'][] = 'Evaluación y condiciones de acreditación';
   'validateOnBlur'            => false,
 ]); ?>
 <div class="progress">
-  <div class="progress-bar progress-bar-success " role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%">
-     60%
+  <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?= $porcentaje ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?= $porcentaje ?>%">
+     <?= $porcentaje ?>%
   </div>
 </div>
 <h3>6. Evaluación y condiciones de acreditación</h3>
 
-<?= FroalaEditorWidget::widget([
+<?= $form->field($model, 'evycond_acreditacion')->widget(FroalaEditorWidget::classname(),[
             'model' => $model,
             'attribute' => 'evycond_acreditacion',
             'name' => 'evycond_acreditacion',
@@ -49,7 +50,7 @@ $this->params['breadcrumbs'][] = 'Evaluación y condiciones de acreditación';
               'theme' => 'gray',
               'toolbarButtons' => ['bold', 'italic', 'underline', '|', 'paragraphFormat', 'fontSize','color','|','undo','redo','align'],
             ],
-]) ?>
+])->label('') ?>
 <br>
 <div class="form-group">
   <div class="row">

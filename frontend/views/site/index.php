@@ -2,7 +2,6 @@
 
 /* @var $this yii\web\View */
 use kartik\tabs\TabsX;
-
 $this->title = 'Programas CURZA';
 
 $items = [
@@ -36,6 +35,7 @@ $items = [
 ];
 ?>
 <div class="site-index">
+  <!--<a href="#" id="tour" class="btn btn-dark">Tour</a>-->
 
     <div class="jumbotron">
         <img src="curza_logo.png" width=15% alt="">

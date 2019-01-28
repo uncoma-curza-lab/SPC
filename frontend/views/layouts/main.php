@@ -2,7 +2,7 @@
 
 /* @var $this \yii\web\View */
 /* @var $content string */
-
+use  yii\web\View;
 use yii\helpers\Html;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
@@ -21,7 +21,9 @@ AppAsset::register($this);
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
+
     <?php $this->head() ?>
+
 </head>
 <body>
 <?php $this->beginBody() ?>
@@ -46,7 +48,7 @@ AppAsset::register($this);
         $menuItems[] = ['label' => 'Acceder', 'url' => ['/site/login']];
     } else {
         $menuItems[] = [
-          'label' => 'Programa', 'url' => ['/programa/index'],
+          'label' => 'Programa', 'url' => ['/programa/index'],'options'=> ['id'=>'programaLink'],
         ];
         $menuItems[] = [
           'label' => Yii::$app->user->identity->username,
@@ -92,7 +94,6 @@ AppAsset::register($this);
         <p class="pull-right">Desarrollado por: <i>Departamento de Informática</i><? Yii::powered() ?></p>
     </div>
 </footer>
-
 <?php $this->endBody() ?>
 </body>
 </html>

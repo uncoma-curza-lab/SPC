@@ -12,6 +12,8 @@ use common\models\Status;
 /* @var $searchModel backend\models\ProgramaSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
+
+
 $this->title = 'Programas';
 $this->params['breadcrumbs'][] = $this->title;
 $show_this_nav = PermisosHelpers::requerirMinimoRol('Profesor');
@@ -22,8 +24,8 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
     <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
     <?php if (PermisosHelpers::requerirRol('Departamento')) : ?>
-    <p>
-        <?= Html::a('Añadir Programa', ['anadir'], ['class' => 'btn btn-success']) ?>
+    <p id="">
+        <?= Html::a('Añadir Programa', ['anadir'],['id'=> 'agregar','class' => 'btn btn-success']) ?>
     </p>
   <?php endif; ?>
     <?= GridView::widget([
@@ -92,7 +94,7 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
             [
               'class' => 'yii\grid\ActionColumn',
               //'template' => $show_this_nav? '{view} {update} {delete} {pdf} {status}':'{view} {status} {pdf}',
-              'template' => $show_this_nav? '{asignar} {aprobar} {rechazar} {delete} {pdf} {ver} {cargar}':'{subir} {status} {pdf}',
+              'template' => $show_this_nav? '{editar} {asignar} {aprobar} {rechazar} {delete} {pdf} {ver} {cargar}':'{subir} {status} {pdf}',
               'buttons' => [
                 /*'pdf' => function ($url,$model) {
                     return Html::a(
@@ -165,6 +167,18 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
                     return Html::a(
                       '<span style="padding:5px; font-size:20px;" class="glyphicon glyphicon-pencil"></span>',
                       ['cargar','id' => $model->id]
+                    );
+                  }
+                },
+                'editar' => function ($url,$model) {
+                  if ((Status::findOne($model->status_id)->descripcion == "Borrador"
+                      && PermisosHelpers::requerirDirector($model->id) && PermisosHelpers::existeProfAdjunto($model->id))
+                      || (Status::findOne($model->status_id)->descripcion == "Departamento"
+                        && PermisosHelpers::requerirRol('Departamento') && PermisosHelpers::requerirDirector($model->id)))
+                  {
+                    return Html::a(
+                      '<span style="padding:5px; font-size:20px;" class="glyphicon glyphicon-pencil"></span>',
+                      ['editar','id' => $model->id]
                     );
                   }
                 },
