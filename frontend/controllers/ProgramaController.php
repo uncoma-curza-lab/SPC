@@ -610,7 +610,8 @@ class ProgramaController extends Controller
                 'deptoId' => $depto->id,
             ]);
           } else {
-            //no puede crear programas
+            Yii::$app->session->setFlash('info','Lo lamentamos, usted aún no posee permisos para agregar programas');
+            return $this->redirect(['index']);
           }
 
         }
