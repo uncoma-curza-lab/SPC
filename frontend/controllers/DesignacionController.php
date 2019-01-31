@@ -29,7 +29,7 @@ class DesignacionController extends Controller
                       [
                            'actions' => [
                              'index',
-                             'create','update',
+                             'create',
                            ],
                            'allow' => true,
                            'roles' => ['@'],
@@ -40,7 +40,7 @@ class DesignacionController extends Controller
                       ],
                       [
                            'actions' => [
-                             'asignar', 'view','delete',
+                             'asignar', 'view','delete','update',
                            ],
                            'allow' => true,
                            'roles' => ['@'],
