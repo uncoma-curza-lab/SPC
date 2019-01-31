@@ -9,6 +9,7 @@ use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use frontend\assets\AppAsset;
 use common\widgets\Alert;
+use yii\bootstrap\ButtonDropdown;
 use common\models\PermisosHelpers;
 AppAsset::register($this);
 ?>
@@ -79,9 +80,32 @@ AppAsset::register($this);
     ?>
 
     <div class="container">
-        <?= Breadcrumbs::widget([
-            'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-        ]) ?>
+      <div class="row">
+        <div class="col-xs-8">
+          <?= Breadcrumbs::widget([
+              'homeLink' => [
+                  'label' => Yii::t('yii', 'Inicio'),
+                  'url' => Yii::$app->homeUrl,
+             ],
+              'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+          ]) ?>
+        </div>
+        <div class="col-xs-4 text-right">
+          <?php
+          if(isset($this->params['items'] ))
+            echo ButtonDropdown::widget([
+              'label' => 'Ir a...',
+              'options' => [
+                'class' => "btn btn-primary "
+              ],
+              'dropdown' => [
+                  'options' => ['class' => 'dropdown-menu-right', 'id' => 'buttons'],
+                  'items' => isset($this->params['items']) ? $this->params['items'] : [],
+              ],
+            ]);
+          ?>
+        </div>
+      </div>
         <?= Alert::widget() ?>
         <?= $content ?>
     </div>

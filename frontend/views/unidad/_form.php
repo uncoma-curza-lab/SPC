@@ -22,6 +22,7 @@ use yii\jui\DatePicker;
             'id'=>'descripcion',
         ],
         'clientOptions' => [
+          'placeholderText' => "Añadir una descripción breve de la unidad",
           'height' => 100,
           'language' => 'es',
           'height' => 100,
@@ -40,6 +41,7 @@ use yii\jui\DatePicker;
                 'id'=>'biblio_basica',
             ],
             'clientOptions' => [
+              'placeholderText' => "Añadir la bibliografía básica u obligatoria de esta unidad",
               'height' => 100,
               'language' => 'es',
               'height' => 100,
@@ -56,6 +58,7 @@ use yii\jui\DatePicker;
                 'id'=>'biblio_consulta',
             ],
             'clientOptions' => [
+              'placeholderText' => "Añadir la bibliografía de consulta u opcional de esta unidad",
               'height' => 100,
               'language' => 'es',
               'height' => 100,
@@ -82,11 +85,11 @@ use yii\jui\DatePicker;
           ]) ?>
       </div>
     </div>-->
-    
+
     <div class="form-group">
         <div class="row">
           <div class="col-xs-6 text-left">
-            <?= Html::a('Volver', ['programa/contenido-analitico', 'id' => $model->programa_id],['class' => 'btn btn-warning']) ?>
+            <?= Html::a('Volver al programa', ['programa/contenido-analitico', 'id' => $model->programa_id],['class' => 'btn btn-warning']) ?>
           </div>
           <div class="col-xs-6 text-right">
             <?php

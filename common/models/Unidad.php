@@ -36,7 +36,7 @@ class Unidad extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['descripcion'], 'required'],
+            [['descripcion'], 'required', 'message'=>"Debe completar este campo"],
             [['crono_tent'], 'safe'],
             [['programa_id'], 'integer'],
             [['descripcion', 'biblio_basica', 'biblio_consulta'], 'string', 'max' => 255],

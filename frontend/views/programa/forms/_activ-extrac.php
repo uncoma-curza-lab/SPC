@@ -29,9 +29,16 @@ $porcentaje = $model->calcularPorcentajeCarga();
    'validateOnBlur'            => false,
  ]); ?>
 
- <div class="progress">
-   <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?= $porcentaje ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?= $porcentaje ?>%">
-      <?= $porcentaje ?>%
+ <div class="row">
+   <div class="col-md-2 text-right">
+     <label>Programa completado: </label>
+   </div>
+   <div class="col-md-10 ">
+     <div class="progress">
+       <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?= $porcentaje ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?= $porcentaje ?>%">
+          <?= $porcentaje ?>%
+       </div>
+     </div>
    </div>
  </div>
 <h3>10. Planificación de actividades Extracurriculares</h3>
@@ -55,7 +62,7 @@ $porcentaje = $model->calcularPorcentajeCarga();
 <div class="form-group">
     <div class="row">
       <div class="col-xs-6 text-left">
-        <?= Html::a('Atrás', ['crono-tentativo', 'id' => $model->id],['class' => 'btn btn-warning']) ?>
+        <?= Html::a('Atrás', ['crono-tentativo', 'id' => $model->id],['onclick'=>"return confirm('No se guardarán los cambios de esta sección, ¿desea salir?')",'class' => 'btn btn-warning']) ?>
         <?= Html::submitButton('Guardar y salir',['class' => 'btn btn-info' , 'name'=>'submit','value' => 'salir']) ?>
       </div>
       <div class="col-xs-6 text-right">

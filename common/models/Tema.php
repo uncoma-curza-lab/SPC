@@ -29,7 +29,7 @@ class Tema extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['descripcion'], 'required'],
+            [['descripcion'], 'required','message'=>"Debe completar este campo"],
             [['unidad_id'], 'integer'],
             //[['descripcion'], 'string', 'max' => 255],
             [['unidad_id'], 'exist', 'skipOnError' => true, 'targetClass' => Unidad::className(), 'targetAttribute' => ['unidad_id' => 'id']],
@@ -54,5 +54,8 @@ class Tema extends \yii\db\ActiveRecord
     public function getUnidad()
     {
         return $this->hasOne(Unidad::className(), ['id' => 'unidad_id']);
+    }
+    public function getUnidadId(){
+      return $this->unidad_id;
     }
 }

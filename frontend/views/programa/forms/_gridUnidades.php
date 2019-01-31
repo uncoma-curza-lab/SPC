@@ -14,7 +14,7 @@ use yii\data\ActiveDataProvider;
 
 <div class="unidad-index">
   <p>
-      <?= Html::a('Crear una Unidad', ['unidad/create' , 'id' => $model->id], ['class' => 'btn btn-success']) ?>
+      <?= Html::a('Añadir una Unidad', ['unidad/create' , 'id' => $model->id], ['class' => 'btn btn-success']) ?>
   </p>
     <?php Pjax::begin(); ?>
 

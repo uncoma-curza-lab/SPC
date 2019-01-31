@@ -253,7 +253,9 @@ class Programa extends \yii\db\ActiveRecord
     public function getActividadExtrac(){
       return $this->actv_extracur;
     }
-
+    public function getYear(){
+      return $this->year;
+    }
 
     public function calcularPorcentajeCarga(){
       $porcentaje = 0;
@@ -289,4 +291,5 @@ class Programa extends \yii\db\ActiveRecord
       }
       return $porcentaje;
     }
+
 }

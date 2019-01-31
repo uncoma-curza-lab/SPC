@@ -2,7 +2,6 @@
 
 /* @var $this \yii\web\View */
 /* @var $content string */
-use yii\bootstrap\ButtonDropdown;
 
 use backend\assets\AppAsset;
 use yii\helpers\Html;
@@ -44,9 +43,9 @@ AppAsset::register($this);
         $menuItems[] = ['label' => 'Ingresar', 'url' => ['/site/login']];
     } else {
         if(PermisosHelpers::requerirMinimoRol('Usuario')){
-          $menuItems[] = ['label' => 'Programas', 'url' => ['/programa/index']
+          //$menuItems[] = ['label' => 'Programas', 'url' => ['/programa/index']
             //$menuItems[] = ['label' => 'Informes', 'url' => ['/informes/index']];
-          ];
+          //];
         if(PermisosHelpers::requerirMinimoRol('Admin')){
           $menuItems[]=['label' => 'Controles', 'items' => [
           ['label' => 'Carreras', 'url' => ['/carrera/index']],
@@ -75,8 +74,6 @@ AppAsset::register($this);
 
 
         <div class="container">
-            <div class="row">
-              <div class="col-xs-8">
                 <?= Breadcrumbs::widget([
                     'homeLink' => [
                         'label' => Yii::t('yii', 'Inicio'),
@@ -84,23 +81,7 @@ AppAsset::register($this);
                    ],
                     'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
                 ]) ?>
-              </div>
-              <div class="col-xs-4 text-right">
-                <?php
-                if(isset($this->params['items'] ))
-                  echo ButtonDropdown::widget([
-                    'label' => 'Ir a...',
-                    'options' => [
-                      'class' => "btn btn-primary "
-                    ],
-                    'dropdown' => [
-                        'options' => ['class' => 'dropdown-menu-right', 'id' => 'buttons'],
-                        'items' => isset($this->params['items']) ? $this->params['items'] : [],
-                    ],
-                  ]);
-                ?>
-              </div>
-            </div>
+
             <?= Alert::widget() ?>
 
             <?= $content ?>
