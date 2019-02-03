@@ -62,8 +62,8 @@ $items = [
     ],
 
 ]; ?>
-<h1>Programa de <?= Html::encode($model->getAsignatura()->one()->nomenclatura)?> <br></h1>
-<h2> Está siendo evaluado por: <?= Html::encode(Status::findOne($model->status_id)->descripcion)?></h2>
+<h3>Programa de <?= Html::encode($model->getAsignatura()->one()->nomenclatura)?> <br></h3>
+<h4> Está siendo evaluado por: <?= Html::encode(Status::findOne($model->status_id)->descripcion)?></h4>
 
 <?=  TabsX::widget([
     'items'=>$items,

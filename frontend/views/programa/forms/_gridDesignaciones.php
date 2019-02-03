@@ -15,9 +15,9 @@ use yii\data\ActiveDataProvider;
 $show_this_nav = (Status::findOne($model->status_id)->descripcion == "Borrador") &&
                   (PermisosHelpers::requerirDirector($model->id));
 ?>
-<div class="row">
+<div class="col align-self-center">
 
-  <div class="cargos-index">
+  <div  class="cargos-index">
 
 
       <?= GridView::widget([
@@ -31,22 +31,26 @@ $show_this_nav = (Status::findOne($model->status_id)->descripcion == "Borrador")
                 'attribute' => 'cargo_id',
                 'format' => 'html',
                 'value' => function($data){
-                    return Cargo::findOne($data->cargo_id)->nomenclatura;
+                    $cargo =  Cargo::findOne($data->cargo_id);
+                    return isset($cargo) ? $cargo->nomenclatura : "N/N";
                 }
               ],
               'user_id',
               [
                 'class' => 'yii\grid\ActionColumn',
                 'controller' => 'designacion',
-                'template' => $show_this_nav? '{view} {delete} {update}':'{view}',
+                'template' => $show_this_nav? '{view} {delete}':'{view}',
 
               ],
           ],
       ]); ?>
       <?php if($show_this_nav): ?>
+
       <p class="pull-right">
           <?= Html::a('Agregar una designación', ['designacion/asignar', 'id' => $model->id], ['class' => 'btn btn-success']) ?>
       </p>
+<br>
+<br>
       <?php endif; ?>
   </div>
 </div>

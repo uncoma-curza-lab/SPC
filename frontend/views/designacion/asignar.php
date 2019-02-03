@@ -15,10 +15,14 @@ $this->params['breadcrumbs'][] = $model->getPrograma()->one()->getAsignatura()->
 /* @var $model backend\models\Designacion */
 /* @var $form yii\widgets\ActiveForm */
 ?>
-
+<?= Yii::$app->session->getFlash('success'); ?>
 <div class="designacion-form">
     <h1><?= Html::encode($this->title) ?></h1>
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(['enableAjaxValidation'      => false,
+    'enableClientValidation'    => false,
+    'validateOnChange'          => true,
+    'validateOnSubmit'          => false,
+    'validateOnBlur'            => false,]); ?>
     <?= $form->field($model, 'cargo_id')->widget(Select2::classname(),[
         'data' => ArrayHelper::map(Cargo::find()->all(),'id','nomenclatura'),
         'language' => 'es',
@@ -40,6 +44,7 @@ $this->params['breadcrumbs'][] = $model->getPrograma()->one()->getAsignatura()->
 
     <div class="form-group">
         <?= Html::submitButton('Confirmar', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Confirmar y asignar otro cargo', ['class' => 'btn btn-info', 'name'=>'submit','value' => 'seguir']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

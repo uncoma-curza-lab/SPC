@@ -115,18 +115,31 @@ class DesignacionController extends Controller
       if($esDirector){
         $model->programa_id = $id;
 
-
         if ($model->load(Yii::$app->request->post())) {
+            // Obtiene el cargo de profesor adjunto para verificar que ya no exista
             $cargoProfAdj = Cargo::find()->where(['=','carga_programa',1])->one();
+            // verifica si existe el profesor adjunto
             if ($cargoProfAdj->id == $model->cargo_id && PermisosHelpers::existeProfAdjunto($id)){
-              throw new NotFoundHttpException('Ya existe un Profesor Adjunto');
+              Yii::$app->session->setFlash('warning','Ya existe un Profesor Adjunto');
+              return $this->redirect(['asignar', 'id' => $id]);
+              // verifica que el usuario al que se le designa el cargo ya no posea uno sobre el programa
+            } else if (Designacion::find()->where(['=','user_id',$model->user_id])->andWhere(['=','programa_id',$model->programa_id])->one()){
+              Yii::$app->session->setFlash('warning','Esta persona ya tiene un cargo asignado en el programa');
+              return $this->redirect(['asignar', 'id' => $id]);
             }
+            // si todo es correcto guarda la designacion
             if ($model->save()){
               Yii::$app->session->setFlash('success','Se asignó el cargo exitosamente');
-              $this->redirect(['programa/index', 'id' => $id]);
+              if(Yii::$app->request->post('submit') == 'seguir'){
+                // si se invocó del botón "seguir"
+                return $this->redirect(['asignar', 'id' => $id]);
+              }else {
+                // si se invocó del botón success normal
+                return $this->redirect(['programa/index', 'id' => $id]);
+              }
             } else {
               Yii::$app->session->setFlash('warning','Hubo un problema al asignar el cargo');
-              $this->redirect(['asignar', 'id' => $id]);
+              return $this->redirect(['asignar', 'id' => $id]);
             }
         }
 
