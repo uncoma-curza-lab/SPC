@@ -180,18 +180,18 @@ class DesignacionController extends Controller
     public function actionDelete($id)
     {
         $model = $this->findModel($id);
-        $programa = $model->getPrograma()->one()->getStatus()->one();
+        $estadoPrograma = $model->getPrograma()->one()->getStatus()->one();
 
 
-        if(PermisosHelpers::requerirDirector($model->programa_id) && $programa->descripcion == "Borrador"){
+        if(PermisosHelpers::requerirDirector($model->programa_id) && $estadoPrograma->descripcion == "Borrador"){
           $model->delete();
           Yii::$app->session->setFlash('success','Se borró exitosamente');
         } else {
           Yii::$app->session->setFlash('danger','No puede borrar este cargo');
         }
+        return $this->redirect(['programa/ver','id' => $model->programa_id]);
 
-
-        return $this->redirect(['programa/index']);
+        //return $this->redirect(['programa/index']);
     }
 
     /**

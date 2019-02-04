@@ -7,17 +7,16 @@ use yii\widgets\DetailView;
 /* @var $model backend\models\Observacion */
 
 $this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Observacions', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
+$this->params['breadcrumbs'][] = ['label' => $model->getPrograma()->one()->getAsignatura()->one()->nomenclatura, 'url' => ['programa/ver', 'id' => $model->programa_id]];
+$this->params['breadcrumbs'][] = "Revisión de observación";
 ?>
 <div class="observacion-view">
+    <?= $model->texto ?>
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
+    <!--<p>
+        <? Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary disabled']) ?>
+        <? Html::a('Delete', ['delete', 'id' => $model->id], [
+            'class' => 'btn btn-danger disabled',
             'data' => [
                 'confirm' => 'Are you sure you want to delete this item?',
                 'method' => 'post',
@@ -25,13 +24,13 @@ $this->params['breadcrumbs'][] = $this->title;
         ]) ?>
     </p>
 
-    <?= DetailView::widget([
+    <? DetailView::widget([
         'model' => $model,
         'attributes' => [
             'id',
             'texto:ntext',
             'programa_id',
         ],
-    ]) ?>
+    ]) ?>-->
 
 </div>

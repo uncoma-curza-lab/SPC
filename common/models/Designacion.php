@@ -34,6 +34,7 @@ class Designacion extends \yii\db\ActiveRecord
     {
         return [
             [['cargo_id', 'user_id', 'programa_id'], 'integer'],
+            [['cargo_id','user_id'], 'required'],
             [['cargo_id'], 'exist', 'skipOnError' => true, 'targetClass' => Cargo::className(), 'targetAttribute' => ['cargo_id' => 'id']],
             [['programa_id'], 'exist', 'skipOnError' => true, 'targetClass' => Programa::className(), 'targetAttribute' => ['programa_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],

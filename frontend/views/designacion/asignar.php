@@ -15,16 +15,18 @@ $this->params['breadcrumbs'][] = $model->getPrograma()->one()->getAsignatura()->
 /* @var $model backend\models\Designacion */
 /* @var $form yii\widgets\ActiveForm */
 ?>
-<?= Yii::$app->session->getFlash('success'); ?>
 <div class="designacion-form">
     <h1><?= Html::encode($this->title) ?></h1>
-    <?php $form = ActiveForm::begin(['enableAjaxValidation'      => false,
-    'enableClientValidation'    => false,
-    'validateOnChange'          => true,
-    'validateOnSubmit'          => false,
-    'validateOnBlur'            => false,]); ?>
+    <?php $form = ActiveForm::begin([
+        'enableAjaxValidation'      => false,
+        'enableClientValidation'    => false,
+        'validateOnChange'          => true,
+        'validateOnSubmit'          => false,
+        'validateOnBlur'            => false,
+    ]);  ?>
     <?= $form->field($model, 'cargo_id')->widget(Select2::classname(),[
         'data' => ArrayHelper::map(Cargo::find()->all(),'id','nomenclatura'),
+        'attribute' => 'cargo_id',
         'language' => 'es',
         'options' => ['placeholder' => 'Seleccione una asignatura'],
         'pluginOptions' => [

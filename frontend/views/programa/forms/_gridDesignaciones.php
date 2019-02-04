@@ -35,12 +35,30 @@ $show_this_nav = (Status::findOne($model->status_id)->descripcion == "Borrador")
                     return isset($cargo) ? $cargo->nomenclatura : "N/N";
                 }
               ],
-              'user_id',
+              [
+                'attribute' => 'user_id',
+                'value' => function($model){
+                  $usuario = $model->getUser()->one();
+                  return isset($usuario) ? $usuario->username : "N/N";
+                }
+              ],
               [
                 'class' => 'yii\grid\ActionColumn',
                 'controller' => 'designacion',
-                'template' => $show_this_nav? '{view} {delete}':'{view}',
-
+                'template' => $show_this_nav? ' {delete}':'',
+                'buttons' => [
+                    'delete' => function($url,$model){
+                      return Html::a(
+                        '<span style="padding:5px; font-size:20px;" class="glyphicon glyphicon-trash"></span>',
+                        $url,
+                        [
+                            'title' => Yii::t('yii', 'Eliminar'),
+                            'data-confirm' => Yii::t('yii', '¿Quiere eliminar la designación?'),
+                            'data-method' => 'post',
+                        ]
+                      );
+                    }
+                ]
               ],
           ],
       ]); ?>

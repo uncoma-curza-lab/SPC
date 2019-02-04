@@ -156,7 +156,7 @@ class ProgramaController extends Controller
         $programa->scenario = 'carrerap';
         $userId = \Yii::$app->user->identity->id;
         $estadoActual = Status::findOne($programa->status_id);
-        if((PermisosHelpers::requerirProfesorAdjunto($id) && $estadoActual->descripcion == "Profesor") && $programa->getPorcentajeCarga() < 40){
+        if((PermisosHelpers::requerirProfesorAdjunto($id) && $estadoActual->descripcion == "Profesor") && $programa->calcularPorcentajeCarga() < 40){
               Yii::$app->session->setFlash('danger','Debe completar el programa un 30%');
               return $this->redirect(['cargar','id' => $programa->id]);
         } else if((PermisosHelpers::requerirProfesorAdjunto($id) && $estadoActual->descripcion == "Profesor")||
