@@ -13,8 +13,6 @@ Una vez  configurada la base de datos realizar:
 -------------------
 
 ```
-$ php yii migrate --migrationNamespaces=Da\\User\\Migration
-$ php yii migrate
-
+Hi test branch
 
 ```
