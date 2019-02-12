@@ -214,6 +214,7 @@ class Programa extends \yii\db\ActiveRecord
         return $this->hasMany(Unidad::className(), ['programa_id' => 'id']);
     }
 
+
     public function getNomenclatura()
     {
       return $this->getAsignatura()->one()->getNomenclatura();

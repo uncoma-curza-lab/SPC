@@ -19,6 +19,8 @@ use common\models\PermisosHelpers;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use Mpdf;
+
 
 /**
  * ProgramaController implements the CRUD actions for Programa model.
@@ -43,7 +45,7 @@ class ProgramaController extends Controller
                  ],*/
                  'rules' => [
                      [
-                         'actions' => ['index', 'view','editar'],
+                         'actions' => ['index', 'view','editar','export-pdf'],
                          'allow' => true,
                          'roles' => ['@'],
                          'matchCallback' => function ($rule, $action) {
@@ -751,5 +753,21 @@ class ProgramaController extends Controller
         }
       }
       return false;
+    }
+
+    /*
+    * Comienzan las funciones para crear y exportar un PDF
+    */
+    public function actionExportPdf($id){
+      $model = $this->findModel($id);
+      $mpdf = new Mpdf\Mpdf(['tempDir' => __DIR__ . '/tmp']);
+      $mpdf->WriteHTML($this->renderPartial('portada',['model'=>$model]));
+      $mpdf->addPage();
+      $mpdf->WriteHTML($this->renderPartial('paginas',['model'=>$model]));
+      //$mpdf->WriteHTML('<h1>Hello World!</h1>');
+      //$mpdf->Output($model->asignatura.".pdf", 'D');
+      $mpdf->Output();
+
+      //return $this->renderPartial('mpdf');
     }
 }

@@ -96,11 +96,11 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
               //'template' => $show_this_nav? '{view} {update} {delete} {pdf} {status}':'{view} {status} {pdf}',
               'template' => $show_this_nav? '{editar} {asignar} {aprobar} {rechazar} {delete} {pdf} {ver} {cargar}':'{subir} {status} {pdf}',
               'buttons' => [
-                /*'pdf' => function ($url,$model) {
+                'pdf' => function ($url,$model) {
                     return Html::a(
-                        '<span style="padding:5px; font-size:20px;" class="glyphicon glyphicon-download"></span>',
+                        '<span style="padding:5px; font-size:20px;" class="glyphicon glyphicon-print"></span>',
                         ['export-pdf','id'=> $model->id],['target' => '_blank']);
-                },*/
+                },
                 'aprobar' => function ($url,$model){
                     if ((Status::findOne($model->status_id)->descripcion == "Borrador"
                         && PermisosHelpers::requerirDirector($model->id) && PermisosHelpers::existeProfAdjunto($model->id))
