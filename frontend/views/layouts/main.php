@@ -49,7 +49,23 @@ AppAsset::register($this);
         $menuItems[] = ['label' => 'Acceder', 'url' => ['/site/login']];
     } else {
         $menuItems[] = [
-          'label' => 'Programa', 'url' => ['/programa/index'],'options'=> ['id'=>'programaLink'],
+          'label' => "Programas",
+          'items' =>[
+            [
+                'label' => 'Programa',
+                'url' => ['/programa/index'],
+                'options'=> ['id'=>'programaLink'],
+            ],
+            [
+              'label' => 'Mis Programa',
+              'url' => ['/mi-programa/index'],
+            ],
+            [
+              'label' => 'Todos',
+              'url' => ['/generales/index'],
+            ]
+
+          ]
         ];
         $menuItems[] = [
           'label' => Yii::$app->user->identity->username,

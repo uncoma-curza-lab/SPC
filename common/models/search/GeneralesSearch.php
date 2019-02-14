@@ -8,9 +8,6 @@ use yii\data\ActiveDataProvider;
 use common\models\Programa;
 use frontend\models\Perfil;
 use common\models\PermisosHelpers;
-use common\models\Departamento;
-use common\models\User;
-use common\models\Cargo;
 
 /**
  * ProgramaSearch represents the model behind the search form of `common\models\Programa`.
@@ -53,8 +50,7 @@ class GeneralesSearch extends Programa
      */
     public function search($params)
     {
-        $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
-        $userId = \Yii::$app->user->identity->id;
+
         $query = Programa::find();
 
         // add conditions that should always apply here
@@ -71,10 +67,6 @@ class GeneralesSearch extends Programa
             return $dataProvider;
         }
 
-        //$query->joinWith('user');
-        /*$query->andFilterWhere(
-            ['LIKE','user.username',$this->getAttribute('user.username')]
-        );*/
 
         // grid filtering conditions
         $query->andFilterWhere([
@@ -88,46 +80,9 @@ class GeneralesSearch extends Programa
             'created_by' => $this->created_by,
             'updated_by' => $this->updated_by,
         ]);
-      /*  $query->joinWith(['status']);
-        if(!$esAdmin){
-
-          if (PermisosHelpers::requerirRol('Departamento')){
-            $depto = Departamento::find()->where(['=','director',$userId])->one();
-
-            //$perfil = \Yii::$app->user->identity->perfil;
-            if (isset($depto)){
-              //if($perfil->departamento_id != 2) {
-              $query->joinWith(['asignatura']);
-              $query->andFilterWhere(['=','asignatura.departamento_id', $depto->id])->all();
-              //  }
-            } else {
-                $query->joinWith(['asignatura']);
-                $query->andFilterWhere(['=','asignatura.departamento_id',-1 ])->all();
-            }
-          } else if (PermisosHelpers::requerirRol('Profesor')) {
-            $query->joinWith(['designaciones']);
-            $cargo = Cargo::find()->where(['=','carga_programa',1])->one();
-            $query->andFilterWhere(['=','designacion.cargo_id',$cargo->id])->andFilterWhere(['=','designacion.user_id',$userId]);
-
-          }else if (PermisosHelpers::requerirRol('Adm_academica')){
-            //$query->joinWith(['status']);
-            $query->andFilterWhere(['like','status.descripcion', 'Administración Académica'])->orFilterWhere(['like','status.descripcion', 'Secretaría Académica']);
-            $query->orFilterWhere(['like','status.descripcion', 'Biblioteca']);
-
-          } else if (PermisosHelpers::requerirRol('Sec_academica')){
-            //$query->joinWith(['status']);
-            $query->andFilterWhere(['like','status.descripcion', 'Administración Académica'])->orFilterWhere(['like','status.descripcion', 'Secretaría Académica']);
-            $query->orFilterWhere(['like','status.descripcion', 'Biblioteca']);
-
-          } else {
-            //$query->joinWith(['status']);
-            $query->andFilterWhere(['like','status.descripcion', 'Biblioteca']);
-          }
-
-        }*/
 
         $query->andFilterWhere(['like', 'fundament', $this->fundament])
-        //->andFilterWhere(['like', 'asignatura', $this->asignatura])
+          //->andFilterWhere(['like', 'asignatura', $this->asignatura])
             ->andFilterWhere(['like', 'objetivo_plan', $this->objetivo_plan])
             ->andFilterWhere(['like', 'contenido_plan', $this->contenido_plan])
             ->andFilterWhere(['like', 'propuesta_met', $this->propuesta_met])

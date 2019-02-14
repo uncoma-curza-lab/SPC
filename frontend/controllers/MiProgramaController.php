@@ -148,8 +148,31 @@ class MiProgramaController extends Controller
         $programa = $this->findModel($id);
         $programa->scenario = 'carrerap';
         $userId = \Yii::$app->user->identity->id;
-        $estadoActual = Status::findOne($programa->status_id);
-        if((PermisosHelpers::requerirProfesorAdjunto($id) && $estadoActual->descripcion == "Profesor") && $programa->calcularPorcentajeCarga() < 100){
+        if($programa->created_by == $userId){
+          if($programa->calcularPorcentajeCarga() < 40){
+            Yii::$app->session->setFlash('danger','Debe completar el programa un 40%');
+            return $this->redirect(['cargar', 'id' => $id]);
+          }
+          $estadoActual = Status::findOne($programa->status_id);
+          $estadoSiguiente = Status::find()->where(['>','value',$estadoActual->value])->orderBy('value')->one();
+          if ($estadoSiguiente->descripcion == "Profesor"){
+            $estadoActual = $estadoSiguiente;
+            $estadoSiguiente = Status::find()->where(['>','value',$estadoActual->value])->orderBy('value')->one();
+          }
+          $programa->status_id = $estadoSiguiente->id;
+          if( $programa->save()){
+            Yii::$app->session->setFlash('success','Se confirmó el programa exitosamente');
+            return $this->redirect(['index']);
+          } else {
+          //  Yii::$app->session->setFlash('danger','Observación no agregada');
+            throw new NotFoundHttpException("Ocurrió un error");
+          }
+        } else {
+          throw new NotFoundHttpException("Ocurrió un error");
+          return $this->redirect(['index']);
+
+        }
+        /*if((PermisosHelpers::requerirProfesorAdjunto($id) && $estadoActual->descripcion == "Profesor") && $programa->calcularPorcentajeCarga() < 100){
               Yii::$app->session->setFlash('danger','Debe completar el programa un 100%');
               return $this->redirect(['cargar','id' => $programa->id]);
         } else if((PermisosHelpers::requerirProfesorAdjunto($id) && $estadoActual->descripcion == "Profesor")||
@@ -168,7 +191,7 @@ class MiProgramaController extends Controller
           //  Yii::$app->session->setFlash('danger','Observación no agregada');
             throw new NotFoundHttpException("Ocurrió un error");
           }
-        }
+        }*/
     }
     public function actionRechazar($id){
         $programa = $this->findModel($id);

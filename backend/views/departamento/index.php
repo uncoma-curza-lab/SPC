@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
-
+use common\models\Cargo;
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\DepartamentoSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -28,7 +28,17 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'nom',
             'slug',
-            'director',
+            [
+              'attribute'=> 'director',
+              'value' => function($model){
+                $cargoDirector = Cargo::find()->where(['=','nomenclatura','Director'])->one()->id;
+                $designacion = $model->getDesignaciones()->where(['=','cargo_id',$cargoDirector])->one();
+                if (!$designacion)
+                  return "N/N";
+                $perfil = $designacion->getPerfil()->one();
+                return isset($perfil) ? $perfil->nombre ." ". $perfil->apellido  : "N/N";
+              }
+            ],
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

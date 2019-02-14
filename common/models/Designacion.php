@@ -3,14 +3,14 @@
 namespace common\models;
 
 use Yii;
-use common\models\User;
+use frontend\models\Perfil;
 
 /**
  * This is the model class for table "designacion".
  *
  * @property int $id
  * @property int $cargo_id
- * @property int $user_id
+ * @property int $perfil_id
  * @property int $programa_id
  *
  * @property Cargo $cargo
@@ -33,11 +33,12 @@ class Designacion extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['cargo_id', 'user_id', 'programa_id'], 'integer'],
-            [['cargo_id','user_id'], 'required'],
+            [['cargo_id', 'perfil_id', 'departamento_id'], 'integer'],
+            [['cargo_id','perfil_id'], 'required'],
             [['cargo_id'], 'exist', 'skipOnError' => true, 'targetClass' => Cargo::className(), 'targetAttribute' => ['cargo_id' => 'id']],
             [['programa_id'], 'exist', 'skipOnError' => true, 'targetClass' => Programa::className(), 'targetAttribute' => ['programa_id' => 'id']],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
+            [['departamento_id'], 'exist', 'skipOnError' => true, 'targetClass' => Departamento::className(), 'targetAttribute' => ['departamento_id' => 'id']],
+            [['perfil_id'], 'exist', 'skipOnError' => true, 'targetClass' => Perfil::className(), 'targetAttribute' => ['perfil_id' => 'id']],
         ];
     }
 
@@ -49,8 +50,9 @@ class Designacion extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'cargo_id' => 'Cargo',
-            'user_id' => 'Usuario',
+            'perfil_id' => 'Usuario',
             'programa_id' => 'Programa',
+            'departamento_id' => 'Departamento'
         ];
     }
 
@@ -73,8 +75,17 @@ class Designacion extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getUser()
+    public function getDepartamento()
     {
-        return $this->hasOne(User::className(), ['id' => 'user_id']);
+        return $this->hasOne(Departamento::className(), ['id' => 'departamento_id']);
+    }
+
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPerfil()
+    {
+        return $this->hasOne(Perfil::className(), ['id' => 'perfil_id']);
     }
 }

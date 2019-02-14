@@ -16,12 +16,7 @@ class m180908_125934_designacion extends Migration
       if ( $this->db->driverName=='mysql' ) {
         $options = 'CHARACTER SET utf8 COLLATE utf8_spanish_ci ENGINE=innodb';
       }
-      $this->createTable('{{%designacion}}',[
-          'id'      =>  $this->primaryKey(),
-          'cargo_id' => $this->integer(),
-          'user_id' => $this->integer(),
-          'programa_id' => $this->integer()
-      ], $options);
+
       $this->addForeignKey(
         'cargodesignacion',
         'designacion',
@@ -34,8 +29,8 @@ class m180908_125934_designacion extends Migration
       $this->addForeignKey(
         'userdesignacion',
         'designacion',
-        'user_id',
-        'user',
+        'perfil_id',
+        'perfil',
         'id',
         'no action',
         'no action'
@@ -49,6 +44,15 @@ class m180908_125934_designacion extends Migration
         'no action',
         'no action'
       );
+      $this->addForeignKey(
+        'deptodesignacion',
+        'designacion',
+        'departamento_id',
+        'departamento',
+        'id',
+        'no action',
+        'no action'
+      );
     }
 
     /**
@@ -57,9 +61,9 @@ class m180908_125934_designacion extends Migration
     public function safeDown()
     {
         $this->dropForeignKey('programadesignacion','{{%programa}}');
-        $this->dropForeignKey('userdesignacion','{{%user}}');
+        $this->dropForeignKey('deptodesignacion','{{%departamento}}');
+        $this->dropForeignKey('userdesignacion','{{%perfil}}');
         $this->dropForeignKey('cargodesignacion','{{%cargo}}');
-        $this->dropTable('{{%designacion}}');
     }
 
     /*

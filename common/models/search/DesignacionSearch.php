@@ -18,7 +18,7 @@ class DesignacionSearch extends Designacion
     public function rules()
     {
         return [
-            [['id', 'cargo_id', 'user_id', 'programa_id'], 'integer'],
+            [['id', 'cargo_id', 'perfil_id', 'programa_id','departamento_id'], 'integer'],
         ];
     }
 
@@ -60,8 +60,9 @@ class DesignacionSearch extends Designacion
         $query->andFilterWhere([
             'id' => $this->id,
             'cargo_id' => $this->cargo_id,
-            'user_id' => $this->user_id,
+            'perfil_id' => $this->perfil_id,
             'programa_id' => $this->programa_id,
+            'departamento_id' => $this->departamento_id,
         ]);
 
         return $dataProvider;

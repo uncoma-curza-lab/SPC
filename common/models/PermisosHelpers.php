@@ -6,6 +6,8 @@ use yii\web\Controller;
 use yii\helpers\Url;
 use common\models\Cargo;
 use common\models\Programa;
+use common\models\Designacion;
+use common\models\Perfil;
 class PermisosHelpers
 {
     /**
@@ -33,8 +35,8 @@ class PermisosHelpers
           $cargoProfAdj = Cargo::find()->where(['=','carga_programa',1])->one();
           $designaciones = $programa->getDesignaciones();
           $profesor = $designaciones->where(['=','cargo_id',$cargoProfAdj->id])->one();
-          $userId = \Yii::$app->user->identity->id;
-          if (isset($profesor) && $userId == $profesor->user_id) {
+          $perfil = \Yii::$app->user->identity->perfil;
+          if (isset($profesor) && isset($perfil) &&  $perfil->id == $profesor->perfil_id) {
             return true;
           } else {
             return false;
@@ -48,13 +50,26 @@ class PermisosHelpers
     */
     public static function requerirDirector($programaID){
       $programa = Programa::findOne($programaID);
-      $userId = \Yii::$app->user->identity->id;
-      $departamento = $programa->getDepartamento()->one();
-      if (PermisosHelpers::requerirRol("Departamento") && isset($departamento) && $departamento->director == $userId){
-        return true;
-      } else {
+      $departamento = $programa->getAsignatura()->one()->getDepartamento()->one();
+      $cargo = Cargo::find()->where(['=','nomenclatura','Director'])->one();
+      $perfil = \Yii::$app->user->identity->perfil;
+
+
+      if($perfil)
+        $designacion = Designacion::find()->where(['=','perfil_id',$perfil->id])->where(['=','cargo_id',$cargo->id])->one();
+      else {
         return false;
       }
+      //antes buscaba por dpto de programa
+      //$departamento = $programa->getDepartamento()->one();
+      if($designacion && $departamento){
+        if (PermisosHelpers::requerirRol("Departamento")  && $designacion->departamento_id == $departamento->id) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+      return false;
     }
 
     public static function requerirUpgradeA($tipo_usuario_nombre)

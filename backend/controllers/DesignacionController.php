@@ -3,10 +3,10 @@
 namespace backend\controllers;
 
 use Yii;
-use backend\models\Designacion;
-use backend\models\Cargo;
+use common\models\Designacion;
+use common\models\Cargo;
 use common\models\PermisosHelpers;
-use backend\models\DesignacionSearch;
+use common\models\search\DesignacionSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

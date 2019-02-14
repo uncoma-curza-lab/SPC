@@ -36,10 +36,10 @@ $show_this_nav = (Status::findOne($model->status_id)->descripcion == "Borrador")
                 }
               ],
               [
-                'attribute' => 'user_id',
+                'attribute' => 'perfil_id',
                 'value' => function($model){
-                  $usuario = $model->getUser()->one();
-                  return isset($usuario) ? $usuario->username : "N/N";
+                  $usuario = $model->getPerfil()->one();
+                  return isset($usuario) ? $usuario->nombre : "N/N";
                 }
               ],
               [

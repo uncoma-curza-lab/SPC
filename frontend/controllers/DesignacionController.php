@@ -123,7 +123,7 @@ class DesignacionController extends Controller
               Yii::$app->session->setFlash('warning','Ya existe un Profesor Adjunto');
               return $this->redirect(['asignar', 'id' => $id]);
               // verifica que el usuario al que se le designa el cargo ya no posea uno sobre el programa
-            } else if (Designacion::find()->where(['=','user_id',$model->user_id])->andWhere(['=','programa_id',$model->programa_id])->one()){
+            } else if (Designacion::find()->where(['=','perfil_id',$model->perfil_id])->andWhere(['=','programa_id',$model->programa_id])->one()){
               Yii::$app->session->setFlash('warning','Esta persona ya tiene un cargo asignado en el programa');
               return $this->redirect(['asignar', 'id' => $id]);
             }
@@ -135,7 +135,7 @@ class DesignacionController extends Controller
                 return $this->redirect(['asignar', 'id' => $id]);
               }else {
                 // si se invocó del botón success normal
-                return $this->redirect(['programa/index', 'id' => $id]);
+                return $this->redirect(['generales/ver', 'id' => $id]);
               }
             } else {
               Yii::$app->session->setFlash('warning','Hubo un problema al asignar el cargo');
@@ -149,6 +149,32 @@ class DesignacionController extends Controller
       }
       throw new ForbiddenHttpException('Usted no tiene permisos para esto');
     }
+
+    public function actionAprobar($id){
+        $programa = $this->findModel($id);
+        $programa->scenario = 'carrerap';
+        $userId = \Yii::$app->user->identity->id;
+        if($programa->created_by == $userId){
+          $estadoActual = Status::findOne($programa->status_id);
+          $estadoSiguiente = Status::find()->where(['>','value',$estadoActual->value])->orderBy('value')->one();
+          if ($estadoSiguiente->descripcion == "Profesor"){
+            $estadoActual = $estadoSiguiente;
+            $estadoSiguiente = Status::find()->where(['>','value',$estadoActual->value])->orderBy('value')->one();
+          }
+          $programa->status_id = $estadoSiguiente->id;
+          if( $programa->save()){
+            Yii::$app->session->setFlash('success','Se confirmó el programa exitosamente');
+            return $this->redirect(['index']);
+          } else {
+          //  Yii::$app->session->setFlash('danger','Observación no agregada');
+            throw new NotFoundHttpException("Ocurrió un error");
+          }
+        } else {
+          throw new NotFoundHttpException("Ocurrió un error");
+          return $this->redirect(['index']);
+
+        }
+      }
 
     /**
      * Updates an existing Designacion model.
@@ -183,13 +209,13 @@ class DesignacionController extends Controller
         $estadoPrograma = $model->getPrograma()->one()->getStatus()->one();
 
 
-        if(PermisosHelpers::requerirDirector($model->programa_id) && $estadoPrograma->descripcion == "Borrador"){
+        if(PermisosHelpers::requerirDirector($model->programa_id) && $estadoPrograma->descripcion == "Departamento"){
           $model->delete();
           Yii::$app->session->setFlash('success','Se borró exitosamente');
         } else {
           Yii::$app->session->setFlash('danger','No puede borrar este cargo');
         }
-        return $this->redirect(['programa/ver','id' => $model->programa_id]);
+        return $this->redirect(['generales/ver','id' => $model->programa_id]);
 
         //return $this->redirect(['programa/index']);
     }

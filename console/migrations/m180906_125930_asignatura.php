@@ -53,8 +53,10 @@ class m180906_125930_asignatura extends Migration
           'carga_horaria_cuatr' => -1,
           'cuatrimestre' => 1,
           'curso' => 1,
+          'departamento_id' => 7,
           'nomenclatura' => 'Introducción a las Ciencias Aplicadas',
-          'plan_id' => 14,
+          'plan_id' => 14,           'departamento_id' => 7,
+
       ]);
       $this->insert('{{%asignatura}}', [
           'id' => 2,
@@ -63,7 +65,8 @@ class m180906_125930_asignatura extends Migration
           'cuatrimestre' => 1,
           'curso' => 1,
           'nomenclatura' => 'Introducción al Cuidado de la Salud',
-          'plan_id' => 14,
+          'plan_id' => 14,           'departamento_id' => 7,
+
       ]);
       $this->insert('{{%asignatura}}', [
           'id' => 3,
@@ -72,7 +75,8 @@ class m180906_125930_asignatura extends Migration
           'cuatrimestre' => 0, //anual
           'curso' => 1,
           'nomenclatura' => 'Morfofisiología Aplicada',
-          'plan_id' => 14,
+          'plan_id' => 14,           'departamento_id' => 7,
+
       ]);
       $this->insert('{{%asignatura}}', [
           'id' => 4,
@@ -81,7 +85,8 @@ class m180906_125930_asignatura extends Migration
           'cuatrimestre' => 1,
           'curso' => 1,
           'nomenclatura' => 'Psicología General y Evolutiva',
-          'plan_id' => 14,
+          'plan_id' => 14,           'departamento_id' => 7,
+
       ]);
       $this->insert('{{%asignatura}}', [
           'id' => 5,
@@ -90,7 +95,8 @@ class m180906_125930_asignatura extends Migration
           'cuatrimestre' => 1,
           'curso' => 1,
           'nomenclatura' => 'Aspectos Antropológicos del Cuidado',
-          'plan_id' => 14,
+          'plan_id' => 14,           'departamento_id' => 7,
+
       ]);
       $this->insert('{{%asignatura}}', [
           'id' => 6,
@@ -99,7 +105,8 @@ class m180906_125930_asignatura extends Migration
           'cuatrimestre' => 2,
           'curso' => 1,
           'nomenclatura' => 'Fundamentos de Enfermería',
-          'plan_id' => 14,
+          'plan_id' => 14,           'departamento_id' => 7,
+
       ]);
       $this->insert('{{%asignatura}}', [
           'id' => 7,
@@ -108,7 +115,8 @@ class m180906_125930_asignatura extends Migration
           'cuatrimestre' => 2,
           'curso' => 1,
           'nomenclatura' => 'Física y Química Biológica Aplicada',
-          'plan_id' => 14,
+          'plan_id' => 14,           'departamento_id' => 7,
+
       ]);
       $this->insert('{{%asignatura}}', [
           'id' => 8,
@@ -117,7 +125,8 @@ class m180906_125930_asignatura extends Migration
           'cuatrimestre' => 2,
           'curso' => 1,
           'nomenclatura' => 'Microbiología y Parasitología',
-          'plan_id' => 14,
+          'plan_id' => 14,           'departamento_id' => 7,
+
       ]);
       /* Segund año Lic enf*/
       $this->insert('{{%asignatura}}', [
@@ -127,7 +136,8 @@ class m180906_125930_asignatura extends Migration
           'cuatrimestre' => 0,
           'curso' => 2,
           'nomenclatura' => 'Cuidados Enfermeros de Salud Psicosocial',
-          'plan_id' => 14,
+          'plan_id' => 14,           'departamento_id' => 7,
+
       ]);
       $this->insert('{{%asignatura}}', [
           'id' => 10,
@@ -136,7 +146,8 @@ class m180906_125930_asignatura extends Migration
           'cuatrimestre' => 1,
           'curso' => 2,
           'nomenclatura' => 'Farmacología I',
-          'plan_id' => 14,
+          'plan_id' => 14,           'departamento_id' => 7,
+
       ]);
       $this->insert('{{%asignatura}}', [
           'id' => 11,
@@ -145,7 +156,8 @@ class m180906_125930_asignatura extends Migration
           'cuatrimestre' => 1,
           'curso' => 2,
           'nomenclatura' => 'Nutrición y Dietoterapia',
-          'plan_id' => 14,
+          'plan_id' => 14,           'departamento_id' => 7,
+
       ]);
       $this->insert('{{%asignatura}}', [
           'id' => 12,
@@ -154,7 +166,8 @@ class m180906_125930_asignatura extends Migration
           'cuatrimestre' => 0, // anual
           'curso' => 2,
           'nomenclatura' => 'Cuidados del Adulto y del Anciano',
-          'plan_id' => 14,
+          'plan_id' => 14,           'departamento_id' => 7,
+
       ]);
       /*2do cuatrimestre Lic. Enf.*/
       $this->insert('{{%asignatura}}', [
@@ -164,7 +177,8 @@ class m180906_125930_asignatura extends Migration
           'cuatrimestre' => 2,
           'curso' => 2,
           'nomenclatura' => 'Aspectos Bioéticos y Legales del Cuidado Enfermero',
-          'plan_id' => 14,
+          'plan_id' => 14,           'departamento_id' => 7,
+
       ]);
       $this->insert('{{%asignatura}}', [
           'id' => 14,
@@ -173,7 +187,8 @@ class m180906_125930_asignatura extends Migration
           'cuatrimestre' => 2,
           'curso' => 2,
           'nomenclatura' => 'Psicología Social y de las Org.',
-          'plan_id' => 14,
+          'plan_id' => 14,           'departamento_id' => 7,
+
       ]);
       $this->insert('{{%asignatura}}', [
           'id' => 15,
@@ -182,7 +197,8 @@ class m180906_125930_asignatura extends Migration
           'cuatrimestre' => 2,
           'curso' => 2,
           'nomenclatura' => 'Farmacología II',
-          'plan_id' => 14,
+          'plan_id' => 14,           'departamento_id' => 7,
+
       ]);
       /* Tercer año Lic. Enf */
       $this->insert('{{%asignatura}}', [
@@ -192,7 +208,8 @@ class m180906_125930_asignatura extends Migration
           'cuatrimestre' => 1,
           'curso' => 3,
           'nomenclatura' => 'Cuidados de la Salud de la Mujer',
-          'plan_id' => 14,
+          'plan_id' => 14,           'departamento_id' => 7,
+
       ]);
       $this->insert('{{%asignatura}}', [
           'id' => 17,
@@ -201,7 +218,8 @@ class m180906_125930_asignatura extends Migration
           'cuatrimestre' => 1,
           'curso' => 3,
           'nomenclatura' => 'Bioestadística y Epidemiología Aplicada',
-          'plan_id' => 14,
+          'plan_id' => 14,           'departamento_id' => 7,
+
       ]);
       $this->insert('{{%asignatura}}', [
           'id' => 18,
@@ -210,7 +228,8 @@ class m180906_125930_asignatura extends Migration
           'cuatrimestre' => 1,
           'curso' => 3,
           'nomenclatura' => 'Aspectos Sociológicos del Cuidado',
-          'plan_id' => 14,
+          'plan_id' => 14,           'departamento_id' => 7,
+
       ]);
       $this->insert('{{%asignatura}}', [
           'id' => 19,
@@ -219,7 +238,8 @@ class m180906_125930_asignatura extends Migration
           'cuatrimestre' => 0,
           'curso' => 3,
           'nomenclatura' => 'Inglés',
-          'plan_id' => 14,
+          'plan_id' => 14,           'departamento_id' => 7,
+
       ]);
       /* Segundo Cuatrimestre Lic.Enf año 3 */
       $this->insert('{{%asignatura}}', [
@@ -229,7 +249,8 @@ class m180906_125930_asignatura extends Migration
           'cuatrimestre' => 2,
           'curso' => 3,
           'nomenclatura' => 'Cuidados para la Salud Comunitaria I',
-          'plan_id' => 14,
+          'plan_id' => 14,           'departamento_id' => 7,
+
       ]);
       $this->insert('{{%asignatura}}', [
           'id' => 21,
@@ -238,7 +259,8 @@ class m180906_125930_asignatura extends Migration
           'cuatrimestre' => 2,
           'curso' => 3,
           'nomenclatura' => 'Cuidados de la Salud de Niños y Adolescentes',
-          'plan_id' => 14,
+          'plan_id' => 14,           'departamento_id' => 7,
+
       ]);
       $this->insert('{{%asignatura}}', [
           'id' => 22,
@@ -247,7 +269,8 @@ class m180906_125930_asignatura extends Migration
           'cuatrimestre' => 2,
           'curso' => 3,
           'nomenclatura' => 'Fundamentos de Investigación en Enfermería',
-          'plan_id' => 14,
+          'plan_id' => 14,           'departamento_id' => 7,
+
       ]);
       $this->insert('{{%asignatura}}', [
           'id' => 23,
@@ -256,7 +279,8 @@ class m180906_125930_asignatura extends Migration
           'cuatrimestre' => 2,
           'curso' => 3,
           'nomenclatura' => 'Práctica Integradora de Cuidados Enfermeros I',
-          'plan_id' => 14,
+          'plan_id' => 14,           'departamento_id' => 7,
+
       ]);
       /* cuarto año Lic. enf */
       $this->insert('{{%asignatura}}', [
@@ -266,7 +290,8 @@ class m180906_125930_asignatura extends Migration
           'cuatrimestre' => 1,
           'curso' => 4,
           'nomenclatura' => 'Seminario: La Disciplina Enfermera',
-          'plan_id' => 14,
+          'plan_id' => 14,           'departamento_id' => 7,
+
       ]);
       $this->insert('{{%asignatura}}', [
           'id' => 25,
@@ -275,7 +300,8 @@ class m180906_125930_asignatura extends Migration
           'cuatrimestre' => 0,
           'curso' => 4,
           'nomenclatura' => 'Metodología de la Investigación en el Cuidado Enfermero',
-          'plan_id' => 14,
+          'plan_id' => 14,           'departamento_id' => 7,
+
       ]);
       $this->insert('{{%asignatura}}', [
           'id' => 26,
@@ -284,7 +310,8 @@ class m180906_125930_asignatura extends Migration
           'cuatrimestre' => 0,
           'curso' => 4,
           'nomenclatura' => 'Cuidados a Personas en Alto Riesgo de Salud',
-          'plan_id' => 14,
+          'plan_id' => 14,           'departamento_id' => 7,
+
       ]);
       $this->insert('{{%asignatura}}', [
           'id' => 27,
@@ -293,7 +320,8 @@ class m180906_125930_asignatura extends Migration
           'cuatrimestre' => 1,
           'curso' => 4,
           'nomenclatura' => 'Bioestadística Aplicada',
-          'plan_id' => 14,
+          'plan_id' => 14,           'departamento_id' => 7,
+
       ]);
       /* Lic. Enf. Cuato Año 2do cuat */
       $this->insert('{{%asignatura}}', [
@@ -303,7 +331,8 @@ class m180906_125930_asignatura extends Migration
           'cuatrimestre' => 2,
           'curso' => 4,
           'nomenclatura' => 'Formación en Enfermería',
-          'plan_id' => 14,
+          'plan_id' => 14,           'departamento_id' => 7,
+
       ]);
       $this->insert('{{%asignatura}}', [
           'id' => 29,
@@ -312,7 +341,8 @@ class m180906_125930_asignatura extends Migration
           'cuatrimestre' => 2,
           'curso' => 4,
           'nomenclatura' => 'Seminario',
-          'plan_id' => 14,
+          'plan_id' => 14,           'departamento_id' => 7,
+
       ]);
       /*Quinto año Lic. Enf */
       $this->insert('{{%asignatura}}', [
@@ -322,7 +352,8 @@ class m180906_125930_asignatura extends Migration
           'cuatrimestre' => 0,
           'curso' => 5,
           'nomenclatura' => 'Administracion en Enfermería',
-          'plan_id' => 14,
+          'plan_id' => 14,           'departamento_id' => 7,
+
       ]);
       $this->insert('{{%asignatura}}', [
           'id' => 31,
@@ -331,7 +362,8 @@ class m180906_125930_asignatura extends Migration
           'cuatrimestre' => 1,
           'curso' => 5,
           'nomenclatura' => 'Cuidados para la Salud Comunitaria II',
-          'plan_id' => 14,
+          'plan_id' => 14,           'departamento_id' => 7,
+
       ]);
       $this->insert('{{%asignatura}}', [
           'id' => 32,
@@ -340,7 +372,8 @@ class m180906_125930_asignatura extends Migration
           'cuatrimestre' => 1,
           'curso' => 5,
           'nomenclatura' => 'Práctica Integradora de Cuidados Enfermeros II',
-          'plan_id' => 14,
+          'plan_id' => 14,           'departamento_id' => 7,
+
       ]);
       $this->insert('{{%asignatura}}', [
           'id' => 33,
@@ -349,7 +382,8 @@ class m180906_125930_asignatura extends Migration
           'cuatrimestre' => 1,
           'curso' => 5,
           'nomenclatura' => 'Tesis',
-          'plan_id' => 14,
+          'plan_id' => 14,           'departamento_id' => 7,
+
       ]);
 
       /* Tec Administracion de Sistemas y Soft Libre */

@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use common\models\Cargo;
-use common\models\User;
+use frontend\models\Perfil;
 use kartik\select2\Select2;
 use yii\helpers\ArrayHelper;
 
@@ -34,8 +34,10 @@ $this->params['breadcrumbs'][] = $model->getPrograma()->one()->getAsignatura()->
         ],
       ]) ?>
 
-      <?= $form->field($model, 'user_id')->widget(Select2::classname(),[
-          'data' => ArrayHelper::map(User::find()->all(),'id','username'),
+      <?= $form->field($model, 'perfil_id')->widget(Select2::classname(),[
+          'data' => ArrayHelper::map(Perfil::find()->all(),'id',function($model,$e){
+              return isset($model) ? ($model->nombre . " " . $model->apellido) : "N/N/";
+          }),
           'language' => 'es',
           'options' => ['placeholder' => 'Seleccione una asignatura'],
           'pluginOptions' => [

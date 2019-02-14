@@ -53,7 +53,7 @@ class m130524_201442_init extends Migration
         // perfil
         $this->createTable('{{%perfil}}', [
             'id' => Schema::TYPE_PK,
-            'user_id' => Schema::TYPE_INTEGER . "(11) NOT NULL",
+            'user_id' => Schema::TYPE_INTEGER . "(11)",
             'nombre' => Schema::TYPE_TEXT . " NULL",
             'apellido' => Schema::TYPE_TEXT . " NULL",
             'fecha_nacimiento' => Schema::TYPE_DATE . " NULL",

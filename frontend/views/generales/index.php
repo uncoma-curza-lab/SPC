@@ -30,13 +30,7 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-            [
-              'attribute' =>'departamento_id',
-              'value' => function($model){
-                $depto = $model->getDepartamento()->one();
-                return isset($depto) ? $depto->nom : "Sin asignar";
-              }
-            ],
+
             [
               'attribute' => 'asignatura_id',
               'value' => function($model){
@@ -45,6 +39,12 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
               }
             ],
             'year',
+            [
+              'attribute' => 'completado',
+              'value' => function($model){
+                return $model->calcularPorcentajeCarga()."%";
+              }
+            ],
           /*  [
               'attribute' => 'cuatrimestre',
               'format' => 'text',
@@ -101,9 +101,11 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
                 },
                 'aprobar' => function ($url,$model){
                     if ((Status::findOne($model->status_id)->descripcion == "Borrador"
-                        && PermisosHelpers::requerirDirector($model->id) && PermisosHelpers::existeProfAdjunto($model->id))
-                        || (Status::findOne($model->status_id)->descripcion == "Departamento"
-                          && PermisosHelpers::requerirRol('Departamento') && PermisosHelpers::requerirDirector($model->id))
+                        && PermisosHelpers::requerirDirector($model->id)
+                        && PermisosHelpers::existeProfAdjunto($model->id))
+                      || (Status::findOne($model->status_id)->descripcion == "Departamento"
+                          && PermisosHelpers::requerirRol('Departamento')
+                          && PermisosHelpers::requerirDirector($model->id))
                       || (Status::findOne($model->status_id)->descripcion == "Profesor"
                         && PermisosHelpers::requerirRol('Profesor') && PermisosHelpers::requerirProfesorAdjunto($model->id))
                       || (Status::findOne($model->status_id)->descripcion == "Administración Académica"
@@ -208,5 +210,6 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
               ]
             ],
         ],
-    ]); ?>
+    ]);
+    ?>
 </div>

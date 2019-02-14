@@ -3,7 +3,7 @@
 namespace common\models;
 
 use Yii;
-use common\models\User;
+use frontend\models\Perfil;
 
 /**
  * This is the model class for table "departamento".
@@ -34,9 +34,7 @@ class Departamento extends \yii\db\ActiveRecord
     {
         return [
             [['nom', 'slug'], 'required'],
-            [['director'], 'integer'],
             [['nom', 'slug'], 'string', 'max' => 255],
-            [['director'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['director' => 'id']],
         ];
     }
 
@@ -49,7 +47,6 @@ class Departamento extends \yii\db\ActiveRecord
             'id' => 'ID',
             'nom' => 'Nom',
             'slug' => 'Slug',
-            'director' => 'Director',
         ];
     }
 
@@ -71,9 +68,9 @@ class Departamento extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getDirector()
+    public function getDesignaciones()
     {
-        return $this->hasOne(User::className(), ['id' => 'director']);
+        return $this->hasMany(Designacion::className(), ['departamento_id' => 'id']);
     }
 
     /**

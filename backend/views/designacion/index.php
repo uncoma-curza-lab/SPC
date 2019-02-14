@@ -26,8 +26,20 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'id',
-            'cargo_id',
-            'user_id',
+            [
+              'attribute'=> 'cargo_id',
+              'value' => function($model){
+                $cargo = $model->getCargo()->one();
+                return isset($cargo) ? $cargo->nomenclatura : "N/N/";
+              }
+            ],
+            [
+              'attribute'=> 'perfil_id',
+              'value' => function($model){
+                $perfil = $model->getPerfil()->one();
+                return isset($perfil) ? $perfil->nombre . " " . $perfil->apellido : "N/N/";
+              }
+            ],
             'programa_id',
 
             ['class' => 'yii\grid\ActionColumn'],

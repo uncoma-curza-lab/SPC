@@ -70,7 +70,7 @@ class ObservacionController extends Controller
         if ($model->load(Yii::$app->request->post())) {
           if($model->save()){
             Yii::$app->session->setFlash('success','Observación agregada exitosamente');
-            return $this->redirect(['programa/ver', 'id' => $model->programa_id]);
+            return $this->redirect(['generales/ver', 'id' => $model->programa_id]);
           } else {
             Yii::$app->session->setFlash('danger','Observación no agregada');
           }
