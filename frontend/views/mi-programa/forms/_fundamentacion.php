@@ -1,6 +1,6 @@
 
 <?php
-  use froala\froalaeditor\FroalaEditorWidget;
+  use dosamigos\tinymce\TinyMce;
   use yii\helpers\Html;
   use yii\widgets\ActiveForm;
   use yii\helpers\Url;
@@ -20,6 +20,11 @@
   $this->params['items'][] = ['label' => '10. Actividad extracurricular', 'url' => Url::to(['actividad-extracurricular', 'id' => $model->id]), 'options'=> $mensaje];
   $this->params['breadcrumbs'][] = 'Fundamentacion';
   $porcentaje = $model->calcularPorcentajeCarga();
+
+  $js = "$(document).ready(function(){
+    $('[data-toggle=\"popover\"]').popover();
+  });";
+  $this->registerJs($js);
 ?>
 
 <div class="row">
@@ -34,6 +39,7 @@
     </div>
   </div>
 </div>
+<a href="#" id="tourf" data-toggle="popover" title="Hola!" data-content="Ingrese aquí la fundamentación de su programa. Cada vez que haga click en 'Seguir' o 'Guardar y salir' usted conservará los cambios realizados."><span class="glyphicon glyphicon-question-sign"></span> Ayuda</a>
 
 <?php $form = ActiveForm::begin([
   'enableAjaxValidation'      => false,
@@ -43,22 +49,19 @@
   'validateOnBlur'            => false,
 ]); ?>
 <h3>1. Fundamentación</h3>
-
-<?= $form->field($model, 'fundament')->widget(FroalaEditorWidget::classname(),[
-            'model' => $model,
-            'attribute' => 'fundament',
-            'name' => 'Fundamentación',
-
-            'options' => [
-                'id'=>'fundament'
-            ],
-            'clientOptions' => [
-              'placeholderText' => 'Ubicación de la asignatura dentro del Plan de estudios. Correlativas anteriores y posteriores. Sentido de la asignatura. Propósitos y estructura del programa.',
-              'height' => 300,
-              'language' => 'es',
-              'theme' => 'gray',
-              'toolbarButtons' => ['print','table','quote','line_breaker','entities','code_beautifier','bold', 'italic', 'underline', '|', 'paragraphFormat', 'fontSize','color','|','fullscreen','|','align'],
-            ],
+<?= $form->field($model, 'fundament')->widget(TinyMce::className(), [
+    'options' => ['rows' => 6],
+    'language' => 'es',
+    'clientOptions' => [
+        'plugins' => [
+            "advlist autolink lists link charmap
+            "//print
+            ."preview anchor",
+            "searchreplace visualblocks code fullscreen",
+            "insertdatetime  table contextmenu paste"
+        ],
+        'toolbar' => "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link "
+    ]
 ])->label('') ?>
 <br>
 

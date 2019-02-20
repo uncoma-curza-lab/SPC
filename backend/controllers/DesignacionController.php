@@ -4,6 +4,8 @@ namespace backend\controllers;
 
 use Yii;
 use common\models\Designacion;
+use common\models\Departamento;
+
 use common\models\Cargo;
 use common\models\PermisosHelpers;
 use common\models\search\DesignacionSearch;
@@ -66,18 +68,39 @@ class DesignacionController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
-    {
-        $model = new Designacion();
+     public function actionCreate()
+     {
+         $model = new Designacion();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        }
+         if ($model->load(Yii::$app->request->post()) ) {
+           $transaction = Yii::$app->db->beginTransaction();
+           try {
+             if($model->save(false)){
+               if ($model->departamento_id != null) {
+                 $depto = Departamento::findOne($model->departamento_id);
+                 $depto->director = $model->id;
+                 if ($depto->save(false)){
+                   Yii::$app->session->setFlash('success','Designación agregada correctamente');
 
-        return $this->render('create', [
-            'model' => $model,
-        ]);
-    }
+                   $transaction->commit();
+                   return $this->redirect(['view', 'id' => $model->id]);
+                 }
+               }
+             }
+             Yii::$app->session->setFlash('warning','Hubo un problema al agregar la designación');
+
+             $transaction->rollBack();
+             return $this->redirect(['index']);
+           }catch (\Exception $e) {
+               $transaction->rollBack();
+               throw $e;
+           }
+         }
+
+         return $this->render('create', [
+             'model' => $model,
+         ]);
+     }
 
     public function actionAsignar($id)
     {

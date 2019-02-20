@@ -11,6 +11,8 @@ use common\models\PermisosHelpers;
 use common\models\Departamento;
 use common\models\User;
 use common\models\Cargo;
+use common\models\Designacion;
+
 
 /**
  * ProgramaSearch represents the model behind the search form of `common\models\Programa`.
@@ -55,6 +57,8 @@ class ProgramaSearch extends Programa
     {
         $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
         $userId = \Yii::$app->user->identity->id;
+        $perfil = \Yii::$app->user->identity->perfil;
+
         $query = Programa::find();
 
         // add conditions that should always apply here
@@ -92,7 +96,11 @@ class ProgramaSearch extends Programa
         if(!$esAdmin){
 
           if (PermisosHelpers::requerirRol('Departamento')){
-            $depto = Departamento::find()->where(['=','director',$userId])->one();
+            //$depto = Departamento::find()->where(['=','director',$userId])->one();
+            $cargoDirector = Cargo::find()->where(['=','nomenclatura','Director'])->one();
+            $designacion = Designacion::find()->where(['=','perfil_id',$perfil->id])->andWhere(['=','cargo_id',$cargoDirector->id])->one();
+
+            $depto = Departamento::findOne($designacion->id);
 
             //$perfil = \Yii::$app->user->identity->perfil;
             if (isset($depto)){

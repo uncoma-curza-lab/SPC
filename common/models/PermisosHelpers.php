@@ -6,6 +6,7 @@ use yii\web\Controller;
 use yii\helpers\Url;
 use common\models\Cargo;
 use common\models\Programa;
+use common\models\Departamento;
 use common\models\Designacion;
 use common\models\Perfil;
 class PermisosHelpers
@@ -45,31 +46,44 @@ class PermisosHelpers
       return false;
     }
     /**
-    * Verifica si el usuario logueado es director del departamento
-    * y si posee rol Departamento
+    * Verifica si el usuario logueado es director del departamento que
+    * obtiene el programa
     */
     public static function requerirDirector($programaID){
       $programa = Programa::findOne($programaID);
-      $departamento = $programa->getAsignatura()->one()->getDepartamento()->one();
+      if (!PermisosHelpers::requerirRol("Departamento") && !$programa)
+        return false;
+      //si el programa tiene el departamento
+      $departamento = $programa->getDepartamento()->one();
+
+      //$departamento = $programa->getAsignatura()->one()->getDepartamento()->one();
       $cargo = Cargo::find()->where(['=','nomenclatura','Director'])->one();
       $perfil = \Yii::$app->user->identity->perfil;
 
 
       if($perfil)
-        $designacion = Designacion::find()->where(['=','perfil_id',$perfil->id])->where(['=','cargo_id',$cargo->id])->one();
+        $designacion = Designacion::find()->where(['=','cargo_id',$cargo->id])->andWhere(['=','perfil_id',$perfil->id])->one();
+        // si el programa no tiene el dpto busco al que corresponda la designacion
       else {
         return false;
       }
       //antes buscaba por dpto de programa
       //$departamento = $programa->getDepartamento()->one();
       if($designacion && $departamento){
-        if (PermisosHelpers::requerirRol("Departamento")  && $designacion->departamento_id == $departamento->id) {
+        if ($designacion->departamento_id == $departamento->id) {
           return true;
         } else {
           return false;
         }
       }
       return false;
+    }
+    public static function requerirSerDueno($programaID){
+      $userID = \Yii::$app->user->identity->id;
+      $programa = Programa::findOne($programaID);
+      if($programa){
+        return $programa->created_by == $userID ? true : false;
+      }
     }
 
     public static function requerirUpgradeA($tipo_usuario_nombre)

@@ -34,6 +34,7 @@ class Departamento extends \yii\db\ActiveRecord
     {
         return [
             [['nom', 'slug'], 'required'],
+            [['director'], 'integer'],
             [['nom', 'slug'], 'string', 'max' => 255],
         ];
     }
@@ -46,6 +47,7 @@ class Departamento extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'nom' => 'Nom',
+            'director' => 'Director',
             'slug' => 'Slug',
         ];
     }
@@ -71,6 +73,10 @@ class Departamento extends \yii\db\ActiveRecord
     public function getDesignaciones()
     {
         return $this->hasMany(Designacion::className(), ['departamento_id' => 'id']);
+    }
+
+    public function getDirector(){
+        return $this->hasOne(Designacion::className(),['id' => 'departamento_id']);
     }
 
     /**

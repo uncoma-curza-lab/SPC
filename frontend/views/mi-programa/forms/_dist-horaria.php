@@ -1,5 +1,5 @@
 <?php
-use froala\froalaeditor\FroalaEditorWidget;
+use dosamigos\tinymce\TinyMce;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\Url;
@@ -44,21 +44,19 @@ $porcentaje = $model->calcularPorcentajeCarga();
 
 <h3>8. Distribución horaria</h3>
 
-<?= $form->field($model, 'distr_horaria')->widget(FroalaEditorWidget::classname(),[
-            'model' => $model,
-            'attribute' => 'distr_horaria',
-            'name' => 'distr_horaria',
-            'options' => [
-                'id'=>'distr_horaria'
-            ],
-            'clientOptions' => [
-              'placeholderText' => 'Según horas semanales establecidas por plan de estudio.',
-              'height' => 100,
-              'language' => 'es',
-              'height' => 100,
-              'theme' => 'gray',
-              'toolbarButtons' => ['bold', 'italic', 'underline', '|', 'paragraphFormat', 'fontSize','color','|','undo','redo','align'],
-            ],
+<?= $form->field($model, 'distr_horaria')->widget(TinyMce::className(), [
+    'options' => ['rows' => 6],
+    'language' => 'es',
+    'clientOptions' => [
+        'plugins' => [
+            "advlist autolink lists link charmap
+            "//print
+            ."preview anchor",
+            "searchreplace visualblocks code fullscreen",
+            "insertdatetime  table contextmenu paste"
+        ],
+        'toolbar' => "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link "
+    ]
 ])->label('') ?>
 <br>
 

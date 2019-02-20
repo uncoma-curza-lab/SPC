@@ -14,7 +14,7 @@ use common\models\Status;
 
 
 
-$this->title = 'Programas';
+$this->title = 'Mis programas';
 $this->params['breadcrumbs'][] = $this->title;
 $show_this_nav = PermisosHelpers::requerirMinimoRol('Profesor');
 $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
@@ -31,7 +31,7 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-            
+
             [
               'attribute' => 'asignatura_id',
               'value' => function($model){
@@ -97,18 +97,20 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
               'buttons' => [
                 'pdf' => function ($url,$model) {
                     return Html::a(
-                        '<span style="padding:5px; font-size:20px;" class="glyphicon glyphicon-print"></span>',
-                        ['export-pdf','id'=> $model->id],['target' => '_blank']);
+                        '<span style="padding:5px; font-size:20px;color:gray" class="glyphicon glyphicon-print"></span>',
+                        ['export-pdf','id'=> $model->id],[
+                            'title' => Yii::t('yii', 'Exportar PDF'),
+                            'target' => '_blank'
+                        ]);
                 },
                 'aprobar' => function ($url,$model){
                     if ((Status::findOne($model->status_id)->descripcion == "Borrador"
                         //&& PermisosHelpers::requerirDirector($model->id)
                         //&& PermisosHelpers::existeProfAdjunto($model->id))
-                        && PermisosHelpers::requerirMinimoRol("Profesor"))
+                        && PermisosHelpers::requerirMinimoRol("Profesor")
+                        && PermisosHelpers::requerirSerDueno($model->id))
                       || (Status::findOne($model->status_id)->descripcion == "Departamento"
                           && PermisosHelpers::requerirRol('Departamento') && PermisosHelpers::requerirDirector($model->id))
-                      || (Status::findOne($model->status_id)->descripcion == "Profesor"
-                        && PermisosHelpers::requerirRol('Profesor') && PermisosHelpers::requerirProfesorAdjunto($model->id))
                       || (Status::findOne($model->status_id)->descripcion == "Administración Académica"
                         && PermisosHelpers::requerirRol('Adm_academica'))
                       || (Status::findOne($model->status_id)->descripcion == "Secretaría Académica"
@@ -116,7 +118,7 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
                       || PermisosHelpers::requerirMinimoRol('Admin'))
                     {
                         return Html::a(
-                          '<span style="padding:5px; font-size:20px;" class="glyphicon glyphicon-ok"></span>',
+                          '<span style="padding:5px; font-size:20px;color:#5cb85c" class="glyphicon glyphicon-ok"></span>',
                           ['aprobar','id' => $model->id],
                           [
                               'title' => Yii::t('yii', 'Aprobar'),
@@ -126,7 +128,8 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
                 },
                 'rechazar' => function ($url,$model){
                     if ((Status::findOne($model->status_id)->descripcion == "Profesor"
-                      && PermisosHelpers::requerirRol('Profesor') && PermisosHelpers::requerirProfesorAdjunto($model->id))
+                        && PermisosHelpers::requerirRol('Profesor')
+                        && PermisosHelpers::requerirProfesorAdjunto($model->id))
                       || (Status::findOne($model->status_id)->descripcion == "Departamento"
                         && PermisosHelpers::requerirRol('Departamento') && PermisosHelpers::requerirDirector($model->id))
                       || (Status::findOne($model->status_id)->descripcion == "Administración Académica"
@@ -136,7 +139,7 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
                       || PermisosHelpers::requerirMinimoRol('Admin'))
                     {
                         return Html::a(
-                          '<span style="padding:5px; font-size:20px;" class="glyphicon glyphicon-remove"></span>',
+                          '<span style="padding:5px; font-size:20px;color:#d9534f" class="glyphicon glyphicon-remove"></span>',
                           ['rechazar','id' => $model->id],
                           [
                               'title' => Yii::t('yii', 'Rechazar'),
@@ -146,9 +149,9 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
                 },
                 'asignar' => function ($url,$model) {
 
-                  if ((Status::findOne($model->status_id)->descripcion == "Borrador"
-                    && PermisosHelpers::requerirRol('Departamento')
-                     && PermisosHelpers::requerirDirector($model->id))
+                  if ((Status::findOne($model->status_id)->descripcion == "Departamento"
+                      && PermisosHelpers::requerirRol('Departamento')
+                      && PermisosHelpers::requerirDirector($model->id))
                     || PermisosHelpers::requerirMinimoRol('Admin'))
                   {
                     return Html::a(
@@ -162,10 +165,11 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
                 },
                 'cargar' => function ($url,$model) {
                   if (Status::findOne($model->status_id)->descripcion == "Borrador"
-                    && PermisosHelpers::requerirMinimoRol('Profesor'))
+                      && PermisosHelpers::requerirMinimoRol('Profesor')
+                      && PermisosHelpers::requerirSerDueno($model->id))
                   {
                     return Html::a(
-                      '<span style="padding:5px; font-size:20px;" class="glyphicon glyphicon-pencil"></span>',
+                      '<span style="padding:5px; font-size:20px; color:orange" class="glyphicon glyphicon-pencil "></span>',
                       ['cargar','id' => $model->id]
                     );
                   }
@@ -184,7 +188,7 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
                 },
                 'ver' => function ($url,$model) {
                     return Html::a(
-                        '<span style="padding:5px; font-size:20px;" class="glyphicon glyphicon-info-sign"></span>',
+                        '<span style="padding:5px; font-size:20px; color:	#0CB7F2" class="glyphicon glyphicon-info-sign"></span>',
                         //$url);
                         ['ver','id' => $model->id],
                         [
@@ -203,7 +207,9 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
 
                 'delete' => function ($url,$model) {
                     $userid  = Yii::$app->user->identity->id;
-                    if ((Status::findOne($model->status_id)->descripcion == "Borrador" && $model->created_by == $userid) || PermisosHelpers::requerirMinimoRol('Admin'))
+                    if ((Status::findOne($model->status_id)->descripcion == "Borrador"
+                          && PermisosHelpers::requerirSerDueno($model->id))
+                        || PermisosHelpers::requerirMinimoRol('Admin'))
                     {
                       return Html::a(
                         '<span style="padding:5px; font-size:20px;" class="glyphicon glyphicon-trash"></span>',
@@ -221,4 +227,13 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
             ],
         ],
     ]); ?>
+</div>
+<hr>
+<div class="row">
+  <span class="label label-primary "><span class="glyphicon glyphicon-hand-up"></span> Asignarme el programa</span>
+  <span class="label label-danger "><span class="glyphicon glyphicon-remove"></span> Rechazar programa</span>
+  <span class="label label-success "><span class="glyphicon glyphicon-ok"></span> Enviar programa</span>
+  <span class="label label-info"><span class="glyphicon glyphicon-info-sign"></span> Más información</span>
+  <span class="label label-warning"><span class="glyphicon glyphicon-pencil"></span> Editar programa</span>
+  <span class="label label-default"><span class="glyphicon glyphicon-print"></span> Exportar PDF</span>
 </div>

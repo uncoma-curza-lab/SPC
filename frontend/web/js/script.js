@@ -10,8 +10,6 @@ function getUrlVars() {
 }
 
 
-$(function() {
-  Id = 0
 
   // define tour
   var tour = new Tour({
@@ -24,74 +22,60 @@ $(function() {
         element: "#programaLink",
         title: "Bienvenido!",
         smartPlacement: true,
-        content: "Mediante este Tour interactivo podrás aprender a cargar un programa. Haz click en \"siguiente\" para comenzar.",
+        content: "Este es un tour interactivo, puede consultarlo cuando sea necesario. Para cargar su primer programa haga click aquí y luego \"Mis programas\"",
         backdrop: true,
       },
       {
-        path: "?r=programa/index",
+        path: "?r=mi-programa/index",
         element: "#agregar",
         title: "Agregar un programa",
         smartPlacement: true,
+        backdrop: true,
+
       //  backdrop: true,
-        content: "Vamos a crear un nuevo programa para luego designar el cargo al profesor correspondiente.",
+        content: "Con este botón puede cargar un nuevo programa.",
       },
       {
-        path: '?r=programa/anadir',
+        path: '?r=mi-programa/anadir',
         element: "#programa-year",
         title: "Selección de año",
         placement: "bottom",
+        backdrop: true,
+
       //  backdrop: true,
         content: "Ingresaremos el año al que pertenece el programa.",
       },
       {
-        path: '?r=programa/anadir',
+        path: '?r=mi-programa/anadir',
         element: "#select2-programa-asignatura_id-container",
         title: "Selección de asignatura",
         placement: "bottom",
+        backdrop: true,
+
       //  backdrop: true,
         content: "Seleccionamos la asignatura a la que este programa corresponde.",
 
       },
       {
-        path: '?r=programa/anadir',
+        path: '?r=mi-programa/anadir',
         element: "#anadir-confirmar",
         title: "Confirmación",
         placement: "right",
+        backdrop: true,
+
         //backdrop: true,
-        content: "Confirme la creación del programa",
-        onNext:function(){
+        content: "Confirme la creación del programa, luego podrá cargar cada sección. ¡Mucha suerte!",
+      //  onNext:function(){
           //console.log("mira esto")
           //console.log(getUrlVars())
-          console.log("salida onnext"+getUrlVars())
 
-          document.getElementById('anadir-confirmar').click();
-        },
-        onShow: function(){
+//          document.getElementById('anadir-confirmar').click();
+        //},
+  /*      onShow: function(){
           console.log("salida onshow pp"+getUrlVars())
           Id = getUrlVars()
-        },
+        },*/
 
-
-      },
-      {
-        path: '?r=designacion/asignar&id='+Id,
-        element: "#select2-designacion-cargo_id-container",
-        title: "Selección de cargo",
-        placement: "bottom",
-        content: "Seleccione el cargo a designar.",
-        backdrop:true,
-        onShow: function(){
-          console.log("salida design"+getUrlVars())
-          var Id = getUrlVars()
-        },
-      },
-      {
-        path: '?r=designacion/asignar&id='+Id,
-        element: "#select2-designacion-user_id-container",
-        title: "Selección de usuario",
-        smartPlacement: true,
-        content: "Seleccione al usuario correspondiente al cargo",
-        backdrop: true,
 
       },
 
@@ -103,10 +87,6 @@ $(function() {
 
   // start tour
   $('#tour').click(function() {
-    console.log("Empece")
-
-
+    //console.log("Empece")
     tour.restart();
   });
-
-});

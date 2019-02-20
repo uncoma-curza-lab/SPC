@@ -12,7 +12,7 @@ use yii\data\ActiveDataProvider;
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\UnidadSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
-$show_this_nav = (Status::findOne($model->status_id)->descripcion == "Borrador") &&
+$show_this_nav = (Status::findOne($model->status_id)->descripcion == "Departamento") &&
                   (PermisosHelpers::requerirDirector($model->id));
 ?>
 <div class="col align-self-center">
@@ -36,9 +36,9 @@ $show_this_nav = (Status::findOne($model->status_id)->descripcion == "Borrador")
                 }
               ],
               [
-                'attribute' => 'user_id',
+                'attribute' => 'perfil_id',
                 'value' => function($model){
-                  $usuario = $model->getUser()->one();
+                  $usuario = $model->getPerfil()->one();
                   return isset($usuario) ? $usuario->username : "N/N";
                 }
               ],

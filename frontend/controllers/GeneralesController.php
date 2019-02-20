@@ -4,12 +4,15 @@ namespace frontend\controllers;
 
 use Yii;
 use common\models\Programa;
+use common\models\Cargo;
+use common\models\Designacion;
 use common\models\search\GeneralesSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use common\models\PermisosHelpers;
 use common\models\Status;
+use Mpdf;
 
 /**
  * GenerosController implements the CRUD actions for Generos model.
@@ -68,6 +71,10 @@ class GeneralesController extends Controller
         ]);
     }
 
+    public function actionDeptos(){
+      return $this->render('deptos/portal');
+    }
+
     public function actionEditar($id)
     {
         if(PermisosHelpers::requerirDirector($id)){
@@ -106,33 +113,79 @@ class GeneralesController extends Controller
           $model->load(Yii::$app->request->post()) && $model->save()) {
           return $this->redirect(['observacion/create', 'id'=>$model->id]);
       }
-
       return $this->render('info',['model' => $model]);
+    }
 
+
+    public function actionPedir($id){
+      $model = $this->findModel($id);
+      $model->scenario = 'pedir';
+      $estadoActual = $model->getstatus()->one();
+      if(!$estadoActual){
+        Yii::$app->session->setFlash('danger','Programa sin estado');
+        return $this->redirect(['index']);
+      }
+
+      if(!isset($model->departamento_id) && $estadoActual->descripcion == "Profesor"){
+        $perfil = \Yii::$app->user->identity->perfil;
+        // si es director tiene una designación con ese cargo
+        $cargoDirector = Cargo::find()->where(['=','nomenclatura','Director'])->one();
+        $designacion = Designacion::find()->where(['=','perfil_id',$perfil->id])->andWhere(['=','cargo_id',$cargoDirector->id])->one();
+        if($designacion){
+          $model->departamento_id = $designacion->departamento_id;
+          $estadoSiguiente = Status::find()->where(['>','value',$estadoActual->value])->orderBy('value')->one();
+          $model->status_id = $estadoSiguiente->id;
+        } else {
+          Yii::$app->session->setFlash('danger','No tiene un cargo directivo');
+          return $this->redirect(['index']);
+        }
+        if ($model->save()){
+          return $this->redirect(['programa/departamento']);
+        } else {
+
+        }
+      } else {
+        Yii::$app->session->setFlash('danger','Hubo un problema al pedir el programa');
+        return $this->redirect(['index']);
+      }
     }
     public function actionAprobar($id){
         $programa = $this->findModel($id);
         $programa->scenario = 'carrerap';
         $userId = \Yii::$app->user->identity->id;
         $estadoActual = Status::findOne($programa->status_id);
-        if((PermisosHelpers::requerirProfesorAdjunto($id) && $estadoActual->descripcion == "Profesor") && $programa->calcularPorcentajeCarga() < 40){
-              Yii::$app->session->setFlash('danger','Debe completar el programa un 30%');
-              return $this->redirect(['cargar','id' => $programa->id]);
-        } else if((PermisosHelpers::requerirProfesorAdjunto($id) && $estadoActual->descripcion == "Profesor")||
-          (PermisosHelpers::requerirDirector($id) && ($estadoActual->descripcion == "Departamento" || $estadoActual->descripcion == "Borrador")) ||
+
+        if ($estadoActual->descripcion == "Borrador"){
+          if($programa->calcularPorcentajeCarga() < 40) {
+            Yii::$app->session->setFlash('danger','Debe completar el programa un 40%');
+            return $this->redirect(['cargar','id' => $programa->id]);
+          } else if ($programa->created_by == $userId){
+            if ($programa->subirEstado() && $programa->save()) {
+              Yii::$app->session->setFlash('success','Se confirmó el programa exitosamente');
+            } else {
+              Yii::$app->session->setFlash('danger','Hubo un problema al confirmar el programa');
+            }
+            return $this->redirect(['index']);
+          }
+        }
+       if (PermisosHelpers::requerirRol("Departamento")
+        && $estadoActual->descripcion == "Profesor"
+        && $programa->created_by != $userId ){
+          Yii::$app->session->setFlash('danger','Debe pedir el programa antes de seguir');
+          return $this->redirect(['index']);
+       }
+       if( (PermisosHelpers::requerirDirector($id) && ($estadoActual->descripcion == "Departamento")) ||
           (PermisosHelpers::requerirRol("Adm_academica") && $estadoActual->descripcion == "Administración Académica") ||
           (PermisosHelpers::requerirRol("Sec_academica") && $estadoActual->descripcion == "Secretaría Académica")
         ){
-          //$programa->status_id = Status::findOne(['descripcion','=','Departamento'])->id;
-
-          $estadoSiguiente = Status::find()->where(['>','value',$estadoActual->value])->orderBy('value')->one();
-          $programa->status_id = $estadoSiguiente->id;
-          if( $programa->save()){
+          if($programa->subirEstado() && $programa->save()){
             Yii::$app->session->setFlash('success','Se confirmó el programa exitosamente');
             return $this->redirect(['index']);
           } else {
-          //  Yii::$app->session->setFlash('danger','Observación no agregada');
-            throw new NotFoundHttpException("Ocurrió un error");
+            Yii::$app->session->setFlash('danger','Hubo un problema al intentar aprobar el programa');
+            return $this->redirect(['index']);
+
+//            throw new NotFoundHttpException("Ocurrió un error");
           }
         }
     }
@@ -142,25 +195,32 @@ class GeneralesController extends Controller
         $programa->scenario = 'carrerap';
         $userId = \Yii::$app->user->identity->id;
         $estadoActual = Status::findOne($programa->status_id);
-        if((PermisosHelpers::requerirProfesorAdjunto($id) && $estadoActual->descripcion == "Profesor") ||
-          (PermisosHelpers::requerirDirector($id) && $estadoActual->descripcion == "Departamento") ||
-          (PermisosHelpers::requerirRol("Adm_academica") && $estadoActual->descripcion == "Administración Académica") ||
+
+        if ($estadoActual->descripcion == "Borrador" || $estadoActual->descripcion == "Profesor"){
+          Yii::$app->session->setFlash('danger','Hubo un problema al intentar rechazar el programa');
+          return $this->redirect(['index']);
+        }
+        if(PermisosHelpers::requerirDirector($id) && $estadoActual->descripcion == "Departamento"){
+            if ($programa->setEstado("Borrador") && $programa->save()){
+              Yii::$app->session->setFlash('warning','Se rechazó el programa correctamente');
+              return $this->redirect(['index']);
+            } else {
+              Yii::$app->session->setFlash('danger','Hubo un problema al rechazar el programa');
+              return $this->redirect(['index']);
+            }
+        }
+
+        if((PermisosHelpers::requerirRol("Adm_academica") && $estadoActual->descripcion == "Administración Académica") ||
           (PermisosHelpers::requerirRol("Sec_academica") && $estadoActual->descripcion == "Secretaría Académica")
         ){
           //$programa->status_id = Status::findOne(['descripcion','=','Departamento'])->id;
 
-          $estadoSiguiente = Status::find()->where(['<','value',$estadoActual->value])->orderBy('value DESC')->one();
-          if($estadoSiguiente->descripcion == "Profesor"){
-            $estadoActual = $estadoSiguiente;
-            $estadoSiguiente = Status::find()->where(['<','value',$estadoActual->value])->orderBy('value DESC')->one();
-          }
-          $programa->status_id = $estadoSiguiente->id;
-          if( $programa->save()){
+          if($programa->bajarEstado() &&  $programa->save()){
             Yii::$app->session->setFlash('warning','Se rechazó el programa correctamente');
-
             return $this->redirect(['index']);
           } else {
-            throw new NotFoundHttpException("Ocurrió un error");
+            Yii::$app->session->setFlash('danger','Hubo un problema al rechazar el programa');
+            return $this->redirect(['index']);
           }
         }
     }
@@ -235,15 +295,6 @@ class GeneralesController extends Controller
     * Comienzan las funciones para crear y exportar un PDF
     */
     public function actionExportPdf($id){
-      $model = $this->findModel($id);
-      $mpdf = new Mpdf\Mpdf(['tempDir' => __DIR__ . '/tmp']);
-      $mpdf->WriteHTML($this->renderPartial('portada',['model'=>$model]));
-      $mpdf->addPage();
-      $mpdf->WriteHTML($this->renderPartial('paginas',['model'=>$model]));
-      //$mpdf->WriteHTML('<h1>Hello World!</h1>');
-      //$mpdf->Output($model->asignatura.".pdf", 'D');
-      $mpdf->Output();
-
-      //return $this->renderPartial('mpdf');
+      return $this->redirect(['programa/export-pdf', 'id' => $id]);
     }
 }

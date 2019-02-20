@@ -35,7 +35,7 @@ $items = [
 ];
 ?>
 <div class="site-index">
-  <!--<a href="#" id="tour" class="btn btn-dark">Tour</a>-->
+  <a href="#" id="tour" class="btn btn-success pull-right">Comenzar Tour basico</a>
 
     <div class="jumbotron">
         <img src="curza_logo.png" width=15% alt="">
@@ -43,6 +43,7 @@ $items = [
         <h2>Universidad Nacional del Comahue</h2>
         <p class="lead">Gestor de programas basado en YiiFramework.</p>
     </div>
+
     <div class="body-content">
         <div class="row">
           <div class="col-md-8">

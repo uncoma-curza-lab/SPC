@@ -50,12 +50,9 @@ AppAsset::register($this);
     } else {
         $menuItems[] = [
           'label' => "Programas",
+          'options'=> ['id'=>'programaLink'],
+
           'items' =>[
-            [
-                'label' => 'Programa',
-                'url' => ['/programa/index'],
-                'options'=> ['id'=>'programaLink'],
-            ],
             [
               'label' => 'Mis Programa',
               'url' => ['/mi-programa/index'],
@@ -63,6 +60,11 @@ AppAsset::register($this);
             [
               'label' => 'Todos',
               'url' => ['/generales/index'],
+            ],
+            [
+              'label' => 'En departamento',
+              'url' => ['/programa/departamento'],
+              'visible' => PermisosHelpers::requerirRol("Departamento")
             ]
 
           ]

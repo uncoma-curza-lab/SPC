@@ -2,10 +2,15 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-
+use kartik\select2\Select2;
+use yii\helpers\ArrayHelper;
 /* @var $this yii\web\View */
 /* @var $model backend\models\ProgramaSearch */
 /* @var $form yii\widgets\ActiveForm */
+use common\models\Asignatura;
+use common\models\Departamento;
+use common\models\Status;
+
 ?>
 
 <div class="programa-search">
@@ -15,13 +20,46 @@ use yii\widgets\ActiveForm;
         'method' => 'get',
     ]); ?>
 
-    <?= $form->field($model, 'id') ?>
 
-    <?= $form->field($model, 'departamento_id') ?>
+    <?= $form->field($model, 'departamento_id')->widget(Select2::classname(),[
+        'data' => ArrayHelper::map(Departamento::find()->all(),
+                    'id',
+                    'nom' ),
+        'language' => 'es',
+        'options' => ['placeholder' => 'Seleccione una asignatura'],
+        'pluginOptions' => [
+          'allowClear' => true,
+        ],
+      ]) ?>
 
-    <?= $form->field($model, 'status_id') ?>
+      <?= $form->field($model, 'status_id')->widget(Select2::classname(),[
+          'data' => ArrayHelper::map(Status::find()->all(),
+                      'id',
+                      'descripcion' ),
+          'language' => 'es',
+          'options' => ['placeholder' => 'Seleccione un estado'],
+          'pluginOptions' => [
+            'allowClear' => true,
+          ],
+        ]) ?>
+    <?= $form->field($model, 'asignatura_id')->widget(Select2::classname(),[
+        'data' => ArrayHelper::map(Asignatura::find()->all(),
+                    'id',
+                    'nomenclatura',
+                    function($model,$e){
+                      $dep = $model->getDepartamento()->one();
+                      return isset($dep) ? $dep->nom : "N";
+                    }
+                  ),
+        //'data' =>ArrayHelper::map(((new StatusSearch())->search(['model' => 'backend\models\Status'])),'id','descripcion'),
+        //'data' => (new StatusSearch())->search(['model' => 'backend\models\Status'])->id,
 
-    <?= $form->field($model, 'asignatura_id') ?>
+        'language' => 'es',
+        'options' => ['placeholder' => 'Seleccione una asignatura'],
+        'pluginOptions' => [
+          'allowClear' => true,
+        ],
+      ]) ?>
 
 
     <?php // echo $form->field($model, 'year') ?>

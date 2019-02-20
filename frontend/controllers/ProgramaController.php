@@ -6,6 +6,7 @@ use Yii;
 use yii\data\ActiveDataProvider;
 /* Searchs */
 use common\models\search\ProgramaSearch;
+use common\models\search\ProgramaDepartamentoSearch;
 use common\models\search\AsignaturaSearch;
 use common\models\search\DesignacionSearch;
 /* Modelos */
@@ -57,7 +58,7 @@ class ProgramaController extends Controller
                      [
                           'actions' => [
                             'create','update','delete','anadir', 'ver',
-                            'aprobar', 'rechazar'
+                            'aprobar', 'rechazar', 'departamento'
                           ],
                           'allow' => true,
                           'roles' => ['@'],
@@ -103,6 +104,20 @@ class ProgramaController extends Controller
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+    /**
+     * Lists all Programa models.
+     * @return mixed
+     */
+    public function actionDepartamento()
+    {
+        $searchModel = new ProgramaDepartamentoSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('departamento', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
@@ -158,24 +173,38 @@ class ProgramaController extends Controller
         $programa->scenario = 'carrerap';
         $userId = \Yii::$app->user->identity->id;
         $estadoActual = Status::findOne($programa->status_id);
-        if((PermisosHelpers::requerirProfesorAdjunto($id) && $estadoActual->descripcion == "Profesor") && $programa->calcularPorcentajeCarga() < 40){
-              Yii::$app->session->setFlash('danger','Debe completar el programa un 30%');
-              return $this->redirect(['cargar','id' => $programa->id]);
-        } else if((PermisosHelpers::requerirProfesorAdjunto($id) && $estadoActual->descripcion == "Profesor")||
-          (PermisosHelpers::requerirDirector($id) && ($estadoActual->descripcion == "Departamento" || $estadoActual->descripcion == "Borrador")) ||
+
+        if ($estadoActual->descripcion == "Borrador"){
+          if($programa->calcularPorcentajeCarga() < 40) {
+            Yii::$app->session->setFlash('danger','Debe completar el programa un 40%');
+            return $this->redirect(['cargar','id' => $programa->id]);
+          } else if ($programa->created_by == $userId){
+            if ($programa->subirEstado() && $programa->save()) {
+              Yii::$app->session->setFlash('success','Se confirmó el programa exitosamente');
+            } else {
+              Yii::$app->session->setFlash('danger','Hubo un problema al confirmar el programa');
+            }
+            return $this->redirect(['index']);
+          }
+        }
+       if (PermisosHelpers::requerirRol("Departamento")
+        && $estadoActual->descripcion == "Profesor"
+        && $programa->created_by != $userId ){
+          Yii::$app->session->setFlash('danger','Debe pedir el programa antes de seguir');
+          return $this->redirect(['index']);
+       }
+       if( (PermisosHelpers::requerirDirector($id) && ($estadoActual->descripcion == "Departamento")) ||
           (PermisosHelpers::requerirRol("Adm_academica") && $estadoActual->descripcion == "Administración Académica") ||
           (PermisosHelpers::requerirRol("Sec_academica") && $estadoActual->descripcion == "Secretaría Académica")
         ){
-          //$programa->status_id = Status::findOne(['descripcion','=','Departamento'])->id;
-
-          $estadoSiguiente = Status::find()->where(['>','value',$estadoActual->value])->orderBy('value')->one();
-          $programa->status_id = $estadoSiguiente->id;
-          if( $programa->save()){
+          if($programa->subirEstado() && $programa->save()){
             Yii::$app->session->setFlash('success','Se confirmó el programa exitosamente');
             return $this->redirect(['index']);
           } else {
-          //  Yii::$app->session->setFlash('danger','Observación no agregada');
-            throw new NotFoundHttpException("Ocurrió un error");
+            Yii::$app->session->setFlash('danger','Hubo un problema al intentar aprobar el programa');
+            return $this->redirect(['index']);
+
+//            throw new NotFoundHttpException("Ocurrió un error");
           }
         }
     }
@@ -184,24 +213,36 @@ class ProgramaController extends Controller
         $programa->scenario = 'carrerap';
         $userId = \Yii::$app->user->identity->id;
         $estadoActual = Status::findOne($programa->status_id);
-        if((PermisosHelpers::requerirProfesorAdjunto($id) && $estadoActual->descripcion == "Profesor") ||
-          (PermisosHelpers::requerirDirector($id) && $estadoActual->descripcion == "Departamento") ||
-          (PermisosHelpers::requerirRol("Adm_academica") && $estadoActual->descripcion == "Administración Académica") ||
+
+        if ($estadoActual->descripcion == "Borrador" || $estadoActual->descripcion == "Profesor"){
+          Yii::$app->session->setFlash('danger','Hubo un problema al intentar rechazar el programa');
+          return $this->redirect(['index']);
+        }
+        if(PermisosHelpers::requerirDirector($id) && $estadoActual->descripcion == "Departamento"){
+            if ($programa->setEstado("Borrador") && $programa->save()){
+              Yii::$app->session->setFlash('warning','Se rechazó el programa correctamente');
+              return $this->redirect(['departamento']);
+            } else {
+              Yii::$app->session->setFlash('danger','Hubo un problema al rechazar el programa');
+              return $this->redirect(['index']);
+            }
+        }
+
+        if((PermisosHelpers::requerirRol("Adm_academica") && $estadoActual->descripcion == "Administración Académica") ||
           (PermisosHelpers::requerirRol("Sec_academica") && $estadoActual->descripcion == "Secretaría Académica")
         ){
           //$programa->status_id = Status::findOne(['descripcion','=','Departamento'])->id;
 
-          $estadoSiguiente = Status::find()->where(['<','value',$estadoActual->value])->orderBy('value DESC')->one();
-          $programa->status_id = $estadoSiguiente->id;
-          if( $programa->save()){
+          if($programa->bajarEstado() &&  $programa->save()){
             Yii::$app->session->setFlash('warning','Se rechazó el programa correctamente');
-
             return $this->redirect(['index']);
           } else {
-            throw new NotFoundHttpException("Ocurrió un error");
+            Yii::$app->session->setFlash('danger','Hubo un problema al rechazar el programa');
+            return $this->redirect(['index']);
           }
         }
     }
+
 
     /**
      * Creates a new Programa model.

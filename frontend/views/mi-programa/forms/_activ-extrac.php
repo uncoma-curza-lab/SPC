@@ -1,7 +1,7 @@
 <?php
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use froala\froalaeditor\FroalaEditorWidget;
+use dosamigos\tinymce\TinyMce;
 use yii\helpers\Url;
 $mensaje = [ 'onclick'=>"return confirm('No se guardarán los cambios de esta pestaña, ¿desea salir?')"];
 $this->params['items'][] = ['label' => '1. Fundamentación','url' => Url::to(['cargar', 'id' => $model->id]), 'options'=>[ 'onclick'=>"return confirm('No se guardarán los cambios de esta pestaña, ¿desea salir?')"]];
@@ -41,21 +41,19 @@ $porcentaje = $model->calcularPorcentajeCarga();
    </div>
  </div>
 <h3>10. Planificación de actividades Extracurriculares</h3>
-<?= $form->field($model, 'actv_extracur')->widget(FroalaEditorWidget::classname(),[
-            'model' => $model,
-            'attribute' => 'actv_extracur',
-            'name' => 'actv_extracur',
-            'options' => [
-                'id'=>'actv_extracur'
-            ],
-            'clientOptions' => [
-              'placeholderText' => 'Se prevé la participación de la cátedra en la organización de las Jornadas ..... Asimismo las actividades de extensión de cátedra',
-              'height' => 100,
-              'language' => 'es',
-              'height' => 100,
-              'theme' => 'gray',
-              'toolbarButtons' => ['bold', 'italic', 'underline', '|', 'paragraphFormat', 'fontSize','color','|','undo','redo','align'],
-            ],
+<?= $form->field($model, 'actv_extracur')->widget(TinyMce::className(), [
+    'options' => ['rows' => 6],
+    'language' => 'es',
+    'clientOptions' => [
+        'plugins' => [
+            "advlist autolink lists link charmap
+            "//print
+            ."preview anchor",
+            "searchreplace visualblocks code fullscreen",
+            "insertdatetime  table contextmenu paste"
+        ],
+        'toolbar' => "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link "
+    ]
 ])->label('') ?>
 <br>
 <div class="form-group">

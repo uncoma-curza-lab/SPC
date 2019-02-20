@@ -146,6 +146,7 @@ class Programa extends \yii\db\ActiveRecord
       $scenarios['dist-horaria'] = ['distr_horaria'];
       $scenarios['crono-tent'] = ['crono_tentativo'];
       $scenarios['actv-extra'] = ['actv_extracur'];
+      $scenarios['pedir'] = ['departamento_id'];
       return array_merge(parent::scenarios(), $scenarios);
       //return $scenarios;
     }
@@ -291,6 +292,41 @@ class Programa extends \yii\db\ActiveRecord
         $porcentaje += 10;
       }
       return $porcentaje;
+    }
+    public function subirEstado():bool{
+      $estadoActual = Status::findOne($this->status_id);
+      if($estadoActual){
+        $estadoSiguiente = Status::find()->where(['>','value',$estadoActual->value])->orderBy('value')->one();
+        if ($estadoSiguiente) {
+            $this->status_id = $estadoSiguiente->id;
+            return true;
+        }
+      }
+      return false;
+    }
+    public function bajarEstado():bool{
+      $estadoActual = Status::findOne($this->status_id);
+      if($estadoActual){
+        $estadoAnterior = Status::find()->where(['<','value',$estadoActual->value])->orderBy('value DESC')->one();
+        if ($estadoAnterior) {
+            $this->status_id = $estadoAnterior->id;
+            return true;
+        }
+      }
+      return false;
+    }
+    public function setEstado($estado):bool {
+      if (!isset($estado))
+        return false;
+      if ($estado == "Borrador"){
+        $this->departamento_id = null;
+      }
+      $estadoModel = Status::find()->where(['=', 'descripcion',$estado])->one();
+      if ($estadoModel) {
+        $this->status_id = $estadoModel->id;
+        return true;
+      }
+      return false;
     }
 
 }
