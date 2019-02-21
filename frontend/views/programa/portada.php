@@ -30,7 +30,7 @@ $designaciones = $model->getDesignaciones()->all();
     <!--Departamento de <? //Html::encode(Departamento::find($model->departamento_id)->one()->nom); ?> <br>-->
     <p><b>PROGRAMA DE LA ASIGNATURA:</b> <?= Html::encode($asignatura->nomenclatura) ?> </p>
     <p><b>CARRERA: </b><?= Html::encode($asignatura->getPlan()->one()->getCarrera()->one()->nom)?> </p>
-    <p><b>CURSO: </b><?= Html::encode($model->curso) ?></p>
+    <p><b>CURSO: </b><?= Html::encode($model->printCurso()); ?></p>
     <p><b>AÑO: </b><?= Html::encode($model->year) ?> </p>
     <p>
       <b>CUATRIMESTRE:</b>

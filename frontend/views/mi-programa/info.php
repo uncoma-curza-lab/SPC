@@ -50,16 +50,7 @@ $items = [
                       || ($estado_programa->descripcion == "Secretaría Académica"
                         && PermisosHelpers::requerirRol('Sec_academica')),
     ],
-    [
-        'label' => 'Designación de Cargos',
-        'content' => $this->render('forms/_gridDesignaciones',['model' => $model,]),
-        'visible' =>  PermisosHelpers::requerirProfesorAdjunto($model->id)
-                      || PermisosHelpers::requerirDirector($model->id)
-                      || ($estado_programa->descripcion == "Administración Académica"
-                        && PermisosHelpers::requerirRol('Adm_academica'))
-                      || ($estado_programa->descripcion == "Secretaría Académica"
-                        && PermisosHelpers::requerirRol('Sec_academica')),
-    ],
+
 
 ]; ?>
 <h3>Programa de <?= Html::encode($model->getAsignatura()->one()->nomenclatura)?> <br></h3>
@@ -69,7 +60,7 @@ $items = [
     'items'=>$items,
     'position'=>TabsX::POS_ABOVE,
     //'align'=>TabsX::ALIGN_CENTER,
-    'height' => TabsX::SIZE_MEDIUM,
+    'height' => TabsX::SIZE_LARGE,
     'bordered'=>true,
     'encodeLabels'=>false,
 

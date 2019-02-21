@@ -69,7 +69,7 @@ $items = [
     'items'=>$items,
     'position'=>TabsX::POS_ABOVE,
     //'align'=>TabsX::ALIGN_CENTER,
-    'height' => TabsX::SIZE_MEDIUM,
+    'height' => TabsX::SIZE_LARGE,
     'bordered'=>true,
     'encodeLabels'=>false,
 

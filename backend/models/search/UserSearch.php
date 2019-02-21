@@ -23,7 +23,7 @@ class UserSearch extends User
      * @var mixed
      */
 
- 
+
     public $rolNombre;
     public $tipoUsuarioNombre;
     public $tipo_usuario_nombre;
@@ -78,7 +78,6 @@ class UserSearch extends User
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
-
         /**
          * Setup your sorting attributes
          * Note: This is setup before the $this->load($params)
@@ -156,8 +155,6 @@ class UserSearch extends User
         $this->addSearchParameter($query, 'tipo_usuario_id');
         $this->addSearchParameter($query, 'created_at');
         $this->addSearchParameter($query, 'updated_at');
-
-
 // filter by role
 
         $query->joinWith(['rol' => function ($q) {

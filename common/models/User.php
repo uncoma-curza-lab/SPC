@@ -295,7 +295,9 @@ class User extends ActiveRecord implements IdentityInterface
         $dropciones = Estado::find()->asArray()->all();
         return ArrayHelper::map($dropciones, 'id', 'estado_nombre');
     }
-
+    public function getUsername(){
+      return $this->username;
+    }
 
     /**
      * get lista de tipos de usuario

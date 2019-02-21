@@ -41,7 +41,7 @@ $items = [
     ],
     [
         'label'=>'<i class="fas fa-home"></i> Observaciones',
-        'content'=>// if (PermisosHelpers::requerirMinimoRol('Departamento'))
+        'content'=>
                   $this->render('forms/_gridObservaciones',['model' => $model]),
         'visible' =>  PermisosHelpers::requerirProfesorAdjunto($model->id)
                       || PermisosHelpers::requerirDirector($model->id)
@@ -69,7 +69,7 @@ $items = [
     'items'=>$items,
     'position'=>TabsX::POS_ABOVE,
     //'align'=>TabsX::ALIGN_CENTER,
-    'height' => TabsX::SIZE_MEDIUM,
+    'height' => TabsX::SIZE_LARGE,
     'bordered'=>true,
     'encodeLabels'=>false,
 
@@ -80,11 +80,3 @@ $items = [
 
     ],
 ]); ?>
-
-
-  <div class="col-xs-6">
-    <!-- <?php if ( PermisosHelpers::requerirMinimoRol('Departamento') ) : ?>
-      <h3>Observaciones</h3>
-        <?= $this->render('forms/_gridObservaciones',['model' => $model]) ?>
-    <?php endif; ?> -->
-  </div>

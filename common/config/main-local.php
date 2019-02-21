@@ -1,11 +1,12 @@
 <?php
+
 return [
     'components' => [
         'db' => [
             'class' => 'yii\db\Connection',
-            'dsn' => getenv('CONNECT_DB' , 'mysql:host=localhost;dbname=midb'),
-            'username' => getenv('DB_USER','usuario'),
-            'password' => getenv('DB_PASSWORD','clave'),
+            'dsn' => getenv('CONNECT_DB')? getenv('CONNECT_DB') : 'mysql:host=localhost;dbname=aulasyprogramas',
+            'username' => getenv('DB_USER') ? getenv('DB_USER') : 'curza',
+            'password' => getenv('DB_PASSWORD') ? getenv('DB_PASSWORD') : 'curza' ,
             'charset' => 'utf8',
         ],
         'mailer' => [

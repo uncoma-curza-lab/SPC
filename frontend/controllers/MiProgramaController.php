@@ -63,7 +63,8 @@ class MiProgramaController extends Controller
                             'objetivo-plan', 'contenido-analitico',
                             'contenido-plan', 'eval-acred', 'propuesta-metodologica',
                             'parcial-rec-promo', 'dist-horaria', 'crono-tentativo',
-                            'actividad-extracurricular', 'cargar'
+                            'actividad-extracurricular', 'cargar',
+                            'bibliografia','objetivo-programa'
                           ],
                           'allow' => true,
                           'roles' => ['@'],
@@ -335,7 +336,7 @@ class MiProgramaController extends Controller
             if(Yii::$app->request->post('submit') == 'salir'){
               return $this->redirect(['index']);
             }
-            return $this->redirect(['contenido-plan', 'id' => $model->id]);
+            return $this->redirect(['objetivo-programa', 'id' => $model->id]);
           } else {
             // log de fallo
             $this->mensajeGuardadoFalla($model);
@@ -351,6 +352,46 @@ class MiProgramaController extends Controller
       throw new ForbiddenHttpException('No tiene permisos para actualizar este elemento');
     }
 
+    /**
+    *  Edición de campo Objetivo del programa
+    *  @param integer $id del programa
+    *  @return mixed
+    * @throws ForbiddenHttpException si no tiene permisos de modificar el programa
+    */
+    public function actionObjetivoPrograma($id){
+      $model = $this->findModel($id);
+      $model->scenario = 'objetivo-programa';
+      $estado = Status::findOne($model->status_id);
+      $validarPermisos = $this->validarPermisos($model, $estado);
+
+      if ($validarPermisos) {
+        //si es un POST cargo -> cargar datos al modelo
+        if($model->load(Yii::$app->request->post()) ){
+          // intento de guardado
+          if($model->save()){
+            // LOG de éxito
+            $this->mensajeGuardadoExito($model);
+            // mensaje a usuario
+            Yii::$app->session->setFlash('success','El objetivo del programa se guardó exitosamente');
+            // redirección dependiendo el botón
+            if(Yii::$app->request->post('submit') == 'salir'){
+              return $this->redirect(['index']);
+            }
+            return $this->redirect(['contenido-plan', 'id' => $model->id]);
+          } else {
+            // log de fallo
+            $this->mensajeGuardadoFalla($model);
+            // mensaje a usuario
+            Yii::$app->session->setFlash('danger','Hubo un problema al guardar los cambios');
+          }
+        }
+
+        return $this->render('forms/_objetivo-programa', [
+            'model' => $model,
+        ]);
+      }
+      throw new ForbiddenHttpException('No tiene permisos para actualizar este elemento');
+    }
     /**
     *  Edición de campo Contenido Plan de estudios
     *  @param integer $id del programa
@@ -412,7 +453,7 @@ class MiProgramaController extends Controller
             if(Yii::$app->request->post('submit') == 'salir'){
               return $this->redirect(['index']);
             }
-            return $this->redirect(['propuesta-metodologica', 'id' => $model->id]);
+            return $this->redirect(['bibliografia', 'id' => $model->id]);
           } else {
             // log de fallo
             $this->mensajeGuardadoFalla($model);
@@ -422,6 +463,44 @@ class MiProgramaController extends Controller
         }
 
         return $this->render('forms/_contenido-analitico', [
+            'model' => $model,
+        ]);
+      }
+      throw new ForbiddenHttpException('No tiene permisos para actualizar este elemento');
+    }
+    /**
+    *  Edición de campo Bibliografía (consulta y básica)
+    *  @param integer $id del programa
+    *  @return mixed
+    * @throws ForbiddenHttpException si no tiene permisos de modificar el programa
+    */
+    public function actionBibliografia($id){
+      $model = $this->findModel($id);
+      $model->scenario = 'bibliografia';
+      $estado = Status::findOne($model->status_id);
+      $validarPermisos = $this->validarPermisos($model, $estado);
+
+      if ($validarPermisos) {
+        if ($model->load(Yii::$app->request->post())){
+          if($model->save()){
+            // LOG de éxito
+            $this->mensajeGuardadoExito($model);
+            // mensaje a usuario
+            Yii::$app->session->setFlash('success','La bibliografía se guardó exitosamente');
+            // redirección dependiendo el botón
+            if(Yii::$app->request->post('submit') == 'salir'){
+              return $this->redirect(['index']);
+            }
+            return $this->redirect(['propuesta-metodologica', 'id' => $model->id]);
+          } else {
+            // log de fallo
+            $this->mensajeGuardadoFalla($model);
+            // mensaje a usuario
+            Yii::$app->session->setFlash('danger','Hubo un problema al guardar los cambios');
+          }
+        }
+
+        return $this->render('forms/_bibliografia', [
             'model' => $model,
         ]);
       }

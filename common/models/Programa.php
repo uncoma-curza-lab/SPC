@@ -60,9 +60,9 @@ class Programa extends \yii\db\ActiveRecord
             [['departamento_id', 'status_id', 'asignatura_id', 'year', 'created_by', 'updated_by'], 'integer'],
             [['asignatura_id','year'], 'required', 'on' => 'crear', 'message'=>"Debe completar este campo"],
             //[['fundament'], 'required', 'on' => 'fundamentacion', 'message'=>"Debe completar este campo"],
-            [['contenido_analitico','fundament', 'objetivo_plan', 'contenido_plan', 'propuesta_met', 'evycond_acreditacion', 'parcial_rec_promo', 'distr_horaria', 'crono_tentativo', 'actv_extracur'], 'required','message'=>"Debe completar este campo"],
+            [['biblio_basica','objetivo_programa','contenido_analitico','fundament', 'objetivo_plan', 'contenido_plan', 'propuesta_met', 'evycond_acreditacion', 'parcial_rec_promo', 'distr_horaria', 'crono_tentativo', 'actv_extracur'], 'required','message'=>"Debe completar este campo"],
             [['equipo_catedra'],'required','on' => 'equipo_catedra','message' => "Debe completar este campo"],
-            [['equipo_catedra','contenido_analitico','fundament', 'objetivo_plan', 'contenido_plan', 'propuesta_met', 'evycond_acreditacion', 'parcial_rec_promo', 'distr_horaria', 'crono_tentativo', 'actv_extracur'], 'string'],
+            [['biblio_basica','biblio_consulta','equipo_catedra','contenido_analitico','fundament', 'objetivo_plan', 'contenido_plan', 'propuesta_met', 'evycond_acreditacion', 'parcial_rec_promo', 'distr_horaria', 'crono_tentativo', 'actv_extracur'], 'string'],
             [['created_at', 'updated_at'], 'safe'],
             [['asignatura_id'], 'exist', 'skipOnError' => true, 'targetClass' => Asignatura::className(), 'targetAttribute' => ['asignatura_id' => 'id']],
             [['departamento_id'], 'exist', 'skipOnError' => true, 'targetClass' => Departamento::className(), 'targetAttribute' => ['departamento_id' => 'id']],
@@ -105,8 +105,11 @@ class Programa extends \yii\db\ActiveRecord
             'cuatrimestre' => 'Cuatrimestre',
             'fundament' => 'Fundament',
             'objetivo_plan' => 'Objetivo Plan',
+            'objetivo_programa' => 'Objetivo del Programa',
             'contenido_plan' => 'Contenido Plan',
             'contenido_analitico' => 'Contenido Analítico',
+            'biblio_basica' => 'Bibliografía básica',
+            'biblio_consulta' => 'Bibliografía de consulta',
             'equipo_catedra' => 'Equipo de catedra',
             'propuesta_met' => 'Propuesta Met',
             'evycond_acreditacion' => 'Evycond Acreditacion',
@@ -152,6 +155,8 @@ class Programa extends \yii\db\ActiveRecord
       $scenarios['crono-tent'] = ['crono_tentativo'];
       $scenarios['actv-extra'] = ['actv_extracur'];
       $scenarios['pedir'] = ['departamento_id'];
+      $scenarios['objetivo-programa'] = ['objetivo_programa'];
+      $scenarios['bibliografia'] = ['biblio_basica','biblio_consulta'];
       return array_merge(parent::scenarios(), $scenarios);
       //return $scenarios;
     }
@@ -335,6 +340,31 @@ class Programa extends \yii\db\ActiveRecord
         return true;
       }
       return false;
+    }
+    public function printCurso(){
+      $string = "";
+      switch ($this->curso) {
+          case 1:
+              $string = "primer";
+              break;
+          case 2:
+              $string= "segundo";
+              break;
+          case 3:
+              $string= "tercer";
+              break;
+          case 4:
+              $string= "cuarto";
+              break;
+          case 5:
+              $string= "quinto";
+              break;
+          case 6:
+              $string= "sexto";
+              break;
+      }
+      $string = $string . " año";
+      return $string;
     }
 
 }

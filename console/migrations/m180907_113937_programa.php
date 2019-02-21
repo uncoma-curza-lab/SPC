@@ -25,13 +25,15 @@ class m180907_113937_programa extends Migration
       //    'curso'       => $this->string(60)->notNull(),
           'year'        => $this->integer(4),
           'equipo_catedra' => $this->text(),
+          'biblio_basica' => $this->text(),
+          'biblio_consulta' => $this->text(),
         //  'cuatrimestre'=> $this->integer(),
           //'asist_regular'   => $this->string(60)->notNull(),
           //'ayudante_p'             => $this->string(60)->notNull(),
           //'ayudante_s'             => $this->string(60)->notNull(),
           'fundament'       => $this->text()->notNull(),
           'objetivo_plan'   => $this->text()->notNull(),
-          //'objetivo_programa' => $this->string(255)->notNull(), fk
+          'objetivo_programa' => $this->text()->notNull(),
           'contenido_plan'  => $this->text()->notNull(),
           //'observaciones'  => $this->text(),
           //'contenido_analitico' => $this->string()->notNull(), fkxunidad
