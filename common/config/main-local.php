@@ -13,11 +13,11 @@ return [
             'viewPath' => '@common/mail',
             'transport' => [
                 'class' => 'Swift_SmtpTransport',
-                'host' => self::env('SMTP_HOST'),
-                'username' => self::env('SMTP_USER'),
-                'password' => self::env('SMTP_PASSWORD'),
-                'port' => self::env('SMTP_PORT', 25),
-                'encryption' => self::env('SMTP_ENCRYPTION', null),
+                'host' => getenv('SMTP_HOST'),
+                'username' => getenv('SMTP_USER'),
+                'password' => getenv('SMTP_PASSWORD'),
+                'port' => getenv('SMTP_PORT', 25),
+                'encryption' => getenv('SMTP_ENCRYPTION', null),
             ],
         ],
 
