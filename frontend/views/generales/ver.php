@@ -51,7 +51,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'updated_by',*/
         ],
     ]) ?>
-    <?= GridView::widget([
+  <!--  <? GridView::widget([
         'dataProvider' => $dataProvDesignacion,
         'filterModel' => $searchModelDesignacion,
         'columns' => [
@@ -62,6 +62,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
             //['class' => 'yii\grid\ActionColumn'],
         ],
-    ]); ?>
+    ]); ?>-->
 
 </div>

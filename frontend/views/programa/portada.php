@@ -42,7 +42,8 @@ $designaciones = $model->getDesignaciones()->all();
       ?>
     </p>
     <p><b>EQUIPO DE CATEDRA:</b></p>
-    <ul>
+    <?= HtmlPurifier::process($model->equipo_catedra) ?>
+    <!--<ul>
 
     <?php foreach ($designaciones as $d) : ?>
         <li>
@@ -50,10 +51,10 @@ $designaciones = $model->getDesignaciones()->all();
             $perfil = $d->getPerfil()->one();
 
           ?>
-          <?=  isset($perfil) ? $perfil->nombre." ".$perfil->apellido : "N"; ?>
+          <?  isset($perfil) ? $perfil->nombre." ".$perfil->apellido : "N"; ?>
         </li>
     <?php endforeach; ?>
-    </ul>
+  </ul>-->
     <br>
 
 </body>

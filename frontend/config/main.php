@@ -26,14 +26,92 @@ return [
             'name' => 'advanced-frontend',
         ],
         'log' => [
+            'traceLevel' => YII_DEBUG ? 0 : 0,
+            'targets' => [
+                [
+                    'class' => 'yii\log\FileTarget',
+                    'categories' => ['estado-programa'],
+                    'logFile' => '@app/runtime/logs/estado-programa/registro.log',
+                    'levels' => ['info'],
+                    'prefix' => function ($message) {
+                        $user = Yii::$app->has('user', true) ? Yii::$app->get('user') : null;
+                        $userID = $user ? $user->getId(false) : '-';
+                        return "[$userID] ";
+                    },
+                    'maxFileSize' => 1024 * 2,
+                    'maxLogFiles' => 8,
+                    'logVars' => ['_SESSION'],
+                ],
+                [
+                    'class' => 'yii\log\FileTarget',
+                    'categories' => ['estado-programa'],
+                    'logFile' => '@app/runtime/logs/estado-programa/error.log',
+                    'levels' => ['error', 'warning'],
+                    'prefix' => function ($message) {
+                        $user = Yii::$app->has('user', true) ? Yii::$app->get('user') : null;
+                        $userID = $user ? $user->getId(false) : '-';
+                        return "[$userID] ";
+                    },
+                    'maxFileSize' => 1024 * 2,
+                    'maxLogFiles' => 8,
+                    'logVars' => ['_SESSION','_GET','_POST'],
+                ],
+                // LOGS Mi-Programa
+                [
+                    'class' => 'yii\log\FileTarget',
+                    'categories' => ['miprograma'],
+                    'logFile' => '@app/runtime/logs/miprograma/registro.log',
+                    'levels' => ['info'],
+                    'prefix' => function ($message) {
+                        $user = Yii::$app->has('user', true) ? Yii::$app->get('user') : null;
+                        $userID = $user ? $user->getId(false) : '-';
+                        return "[$userID] ";
+                    },
+                    'maxFileSize' => 1024 * 2,
+                    'maxLogFiles' => 8,
+                    'logVars' => ['_SESSION'],
+                ],
+                [
+                    'class' => 'yii\log\FileTarget',
+                    'categories' => ['miprograma'],
+                    'logFile' => '@app/runtime/logs/miprograma/error.log',
+                    'levels' => ['error', 'warning'],
+                    'prefix' => function ($message) {
+                        $user = Yii::$app->has('user', true) ? Yii::$app->get('user') : null;
+                        $userID = $user ? $user->getId(false) : '-';
+                        return "[$userID] ";
+                    },
+                    'maxFileSize' => 1024 * 2,
+                    'maxLogFiles' => 8,
+                    'logVars' => ['_SESSION','_GET','_POST'],
+                ],
+            ],
+        ],
+        /*'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
             'targets' => [
                 [
                     'class' => 'yii\log\FileTarget',
                     'levels' => ['error', 'warning'],
                 ],
+                [
+                    'class' => 'yii\log\FileTarget',
+                    'levels' => ['info'],
+                    'categories' => ['orders'],
+                    'logFile' => '@app/runtime/logs/Orders/requests.log',
+                    'maxFileSize' => 1024 * 2,
+                    'maxLogFiles' => 20,
+                ],
+                [
+                    'class' => 'yii\log\FileTarget',
+                    'levels' => ['info'],
+                    'categories' => ['pushNotifications'],
+                    'logFile' => '@app/runtime/logs/Orders/notification.log',
+                    'maxFileSize' => 1024 * 2,
+                    'maxLogFiles' => 50,
+                ],
             ],
-        ],
+        ],*/
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],

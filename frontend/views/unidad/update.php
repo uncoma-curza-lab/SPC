@@ -7,9 +7,9 @@ use yii\widgets\DetailView;
 /* @var $model backend\models\Unidad */
 
 $this->title = 'Unidad: ' . $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Unidads', 'url' => ['programa/contenido-analitico','id' => $model->programa_id]];
-$this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Update';
+$this->params['breadcrumbs'][] = ['label' => 'Unidades', 'url' => ['mi-programa/contenido-analitico','id' => $model->programa_id]];
+//$this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
+$this->params['breadcrumbs'][] = 'Editando unidad';
 ?>
 
 
@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = 'Update';
       </div>
       <div class="col-xs-6">
         <div class="text-right">
-          <?= Html::a('Volver a unidades', ['programa/contenido-analitico','id' => $model->programa_id],['class' => 'btn btn-warning']) ?>
+          <?= Html::a('Volver a unidades', ['mi-programa/contenido-analitico','id' => $model->programa_id],['class' => 'btn btn-warning']) ?>
         </div>
       </div>
     </div>

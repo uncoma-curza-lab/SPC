@@ -15,7 +15,27 @@
   <?= HtmlPurifier::process($model->contenido_plan) ?>
 
   <h4> 4. CONTENIDOS ANALÍTICOS </h4>
-
+  <?= HtmlPurifier::process($model->contenido_analitico) ?>
+  <!--<?php
+    $unidades = $model->getUnidades()->all();
+    $cont = 1;
+    foreach ($unidades as $key) :
+  ?>
+    <div style="margin-left:10px;">
+      <h4> Unidad <?= $cont ?> </h4>
+       <? HtmlPurifier::process($key->descripcion) ?>
+    </div>
+    <div style="line-height:18px; margin-left:20px;">
+      <?php $temas = $key->getTemas()->all(); ?>
+      <h4> Temas de la unidad:</h4>
+      <?php foreach ($temas as $tmodel) : ?>
+        <? HtmlPurifier::process($tmodel->descripcion) ?>
+      <?php endforeach; ?>
+    </div>
+  <?php
+    $cont++;
+    endforeach;
+  ?>-->
   <h4> 5. PROPUESTA METODOLÓGICA </h4>
   <?= HtmlPurifier::process($model->propuesta_met) ?>
 

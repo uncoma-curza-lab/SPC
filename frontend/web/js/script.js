@@ -16,6 +16,7 @@ function getUrlVars() {
     debug: true,
     //basePath: location.pathname.slice(0, location.pathname.lastIndexOf('/')),
     basePath: "/index.php",
+
     steps: [
       {
         path: "?r=site/index",
@@ -24,6 +25,7 @@ function getUrlVars() {
         smartPlacement: true,
         content: "Este es un tour interactivo, puede consultarlo cuando sea necesario. Para cargar su primer programa haga click aquí y luego \"Mis programas\"",
         backdrop: true,
+
       },
       {
         path: "?r=mi-programa/index",
@@ -83,10 +85,10 @@ function getUrlVars() {
   });
 
   // init tour
-  tour.init();
+  //tour.init();
 
   // start tour
-  $('#tour').click(function() {
+  /*$('#tour').click(function() {
     //console.log("Empece")
     tour.restart();
-  });
+  });*/

@@ -26,7 +26,7 @@ $items = [
       'content' => "
                     <p> Puede realizar preguntas y/o sugerencias al siguiente email:</p>
                     <p>Murphy, Néstor Julián </p>
-                    <p><b>Laboratorio de Informática (Dpto. Informática)</b></p>
+                    <p><b>Laboratorio de Informática (Dpto. de Ciencia y Tecnología)</b></p>
                     <i> jmurphy@curza.net </i>
                   ",
     ],

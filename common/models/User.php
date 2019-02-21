@@ -87,7 +87,7 @@ class User extends ActiveRecord implements IdentityInterface
             ['email', 'filter', 'filter' => 'trim'],
             ['email', 'required'],
             ['email', 'email'],
-            ['email', 'unique'],
+            //['email', 'unique'],
         ];
     }
 

@@ -1,6 +1,8 @@
 <?php
 
 use yii\helpers\Html;
+use \yii\helpers\HtmlPurifier;
+
 use yii\grid\GridView;
 use common\models\Unidad;
 use common\models\search\UnidadSearch;
@@ -32,7 +34,7 @@ use yii\data\ActiveDataProvider;
               'format' => 'html',
               'value' => function($data){
                 if(strlen($data->descripcion) > 40){
-                  return substr($data->descripcion,0,200)."...";
+                  return HtmlPurifier::process(substr($data->descripcion,0,200)."...");
                 } else {
                   return $data->descripcion;
                 }
@@ -43,7 +45,7 @@ use yii\data\ActiveDataProvider;
               'format' => 'html',
               'value' => function($data){
                 if(strlen($data->biblio_basica) > 40){
-                  return substr($data->biblio_basica,0,200)."...";
+                  return HtmlPurifier::process(substr($data->biblio_basica,0,200)."...");
                 } else {
                   return $data->biblio_basica;
                 }

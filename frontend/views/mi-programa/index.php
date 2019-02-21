@@ -149,16 +149,17 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
                 },
                 'asignar' => function ($url,$model) {
 
-                  if ((Status::findOne($model->status_id)->descripcion == "Departamento"
-                      && PermisosHelpers::requerirRol('Departamento')
-                      && PermisosHelpers::requerirDirector($model->id))
+                  if ((Status::findOne($model->status_id)->descripcion == "Borrador"
+                      //&& PermisosHelpers::requerirRol('Departamento')
+                      //&& PermisosHelpers::requerirDirector($model->id)
+                      && PermisosHelpers::requerirSerDueno($model->id))
                     || PermisosHelpers::requerirMinimoRol('Admin'))
                   {
                     return Html::a(
                       '<span style="padding:5px; font-size:20px;" class="glyphicon glyphicon-user"></span>',
-                      ['designacion/asignar','id' => $model->id],
+                      ['asignar','id' => $model->id],
                       [
-                          'title' => Yii::t('yii', 'Asignar cargo'),
+                          'title' => Yii::t('yii', 'Modificar equipo de cátedra'),
                       ]
                     );
                   }

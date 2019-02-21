@@ -24,7 +24,7 @@ if($estadoPrograma->descripcion == "Borrador"){
 } else if($estadoPrograma->descripcion == "Departamento"){
   array_push($items,[
       'label' => 'Programa',
-      'content' => $this->render('pdf',['model' => $model]),
+      'content' => $this->render('../programa/pdf',['model' => $model]),
       'contentOptions' => [
         'class' => 'in',
         'style'=> 'overflow-y: scroll, height: auto;

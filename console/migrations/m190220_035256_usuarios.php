@@ -27,7 +27,7 @@ class m190220_035256_usuarios extends Migration
               'password_hash' => $security->generatePasswordHash($data[0]),
               'password_reset_token' => null,
               'email' => 'prueba@email.com',
-              'rol_id' => 1,
+              'rol_id' => 4,
               'estado_id' => 1,
               'tipo_usuario_id' => 1,
               'created_at' => '2015-01-01 00:00:00',

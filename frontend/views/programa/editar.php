@@ -9,19 +9,7 @@ use \yii\bootstrap\Collapse;
 $this->title = 'Editar Programa';
 $items = [];
 $estadoPrograma = $model->getStatus()->one();
-if($estadoPrograma->descripcion == "Borrador"){
-  array_push($items,[
-      'label' => 'Designaciones',
-      'content' => [
-        $this->render('forms/_gridDesignaciones',['model' => $model,]),
-      ],
-
-      'contentOptions' => ['class' => 'in',],
-      /*'options' => [],
-           'footer' => 'Footer' // the footer label in list-group
-      ],*/
-  ]);
-} else if($estadoPrograma->descripcion == "Departamento"){
+if($estadoPrograma->descripcion == "Departamento"){
   array_push($items,[
       'label' => 'Programa',
       'content' => $this->render('pdf',['model' => $model]),
@@ -38,17 +26,15 @@ if($estadoPrograma->descripcion == "Borrador"){
       'contentOptions' => [],
       'content' =>   $this->render('forms/_gridObservaciones',['model' => $model]),
   ]);
-  array_push($items,[
+  /*array_push($items,[
       'label' => 'Designaciones',
       'content' => [
         $this->render('forms/_gridDesignaciones',['model' => $model,]),
       ],
 
       'contentOptions' => [],
-      /*'options' => [],
-           'footer' => 'Footer' // the footer label in list-group
-      ],*/
-  ]);
+
+  ]);*/
 }
 ?>
 

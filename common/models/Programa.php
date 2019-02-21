@@ -60,8 +60,9 @@ class Programa extends \yii\db\ActiveRecord
             [['departamento_id', 'status_id', 'asignatura_id', 'year', 'created_by', 'updated_by'], 'integer'],
             [['asignatura_id','year'], 'required', 'on' => 'crear', 'message'=>"Debe completar este campo"],
             //[['fundament'], 'required', 'on' => 'fundamentacion', 'message'=>"Debe completar este campo"],
-            [['fundament', 'objetivo_plan', 'contenido_plan', 'propuesta_met', 'evycond_acreditacion', 'parcial_rec_promo', 'distr_horaria', 'crono_tentativo', 'actv_extracur'], 'required','message'=>"Debe completar este campo"],
-            [['fundament', 'objetivo_plan', 'contenido_plan', 'propuesta_met', 'evycond_acreditacion', 'parcial_rec_promo', 'distr_horaria', 'crono_tentativo', 'actv_extracur'], 'string'],
+            [['contenido_analitico','fundament', 'objetivo_plan', 'contenido_plan', 'propuesta_met', 'evycond_acreditacion', 'parcial_rec_promo', 'distr_horaria', 'crono_tentativo', 'actv_extracur'], 'required','message'=>"Debe completar este campo"],
+            [['equipo_catedra'],'required','on' => 'equipo_catedra','message' => "Debe completar este campo"],
+            [['equipo_catedra','contenido_analitico','fundament', 'objetivo_plan', 'contenido_plan', 'propuesta_met', 'evycond_acreditacion', 'parcial_rec_promo', 'distr_horaria', 'crono_tentativo', 'actv_extracur'], 'string'],
             [['created_at', 'updated_at'], 'safe'],
             [['asignatura_id'], 'exist', 'skipOnError' => true, 'targetClass' => Asignatura::className(), 'targetAttribute' => ['asignatura_id' => 'id']],
             [['departamento_id'], 'exist', 'skipOnError' => true, 'targetClass' => Departamento::className(), 'targetAttribute' => ['departamento_id' => 'id']],
@@ -105,6 +106,8 @@ class Programa extends \yii\db\ActiveRecord
             'fundament' => 'Fundament',
             'objetivo_plan' => 'Objetivo Plan',
             'contenido_plan' => 'Contenido Plan',
+            'contenido_analitico' => 'Contenido Analítico',
+            'equipo_catedra' => 'Equipo de catedra',
             'propuesta_met' => 'Propuesta Met',
             'evycond_acreditacion' => 'Evycond Acreditacion',
             'parcial_rec_promo' => 'Parcial Rec Promo',
@@ -124,10 +127,12 @@ class Programa extends \yii\db\ActiveRecord
       $scenarios['crear'] = [
       //  'curso',
         'asignatura_id',
-
       //  'cuatrimestre',
+        'equipo_catedra',
         'year',
       ];
+      $scenarios['equipo_catedra'] = ['equipo_catedra'];
+      $scenarios['contenido_analitico'] = ['contenido_analitico'];
       $scenarios['enviarProfesor'] = ['status_id'];
       $scenarios['update'] = [
         'curso',
@@ -233,6 +238,9 @@ class Programa extends \yii\db\ActiveRecord
     public function getContenidoPlan(){
       return $this->contenido_plan;
     }
+    public function getContenidoAnalitico(){
+      return $this->contenido_analitico;
+    }
     public function countContenidoAnalitico(){
       $unidades = $this->getUnidades()->count();
       return $unidades;
@@ -270,7 +278,7 @@ class Programa extends \yii\db\ActiveRecord
       if(strlen($this->getContenidoPlan()) > 10){
         $porcentaje = $porcentaje+10;
       }
-      if($this->countContenidoAnalitico() > 0){
+      if(strlen($this->getContenidoAnalitico()) > 10){
         $porcentaje = $porcentaje+10;
       }
       if(strlen($this->getPropuestaMetodologica()) > 10){

@@ -189,8 +189,10 @@ class UnidadController extends Controller
       //if (PermisosHelpers::requerirRol('Profesor') &&
       //  ($estado->descripcion == "Profesor") && ($model->created_by == $userId)) {
       if (PermisosHelpers::requerirRol('Profesor')
-        && ($estado->descripcion == "Profesor")
-        && PermisosHelpers::requerirProfesorAdjunto($model->programa_id)) {
+        && ($estado->descripcion == "Borrador")
+        && (PermisosHelpers::requerirSerDueno($programa->id))
+      //  && PermisosHelpers::requerirProfesorAdjunto($model->programa_id)
+      ) {
           return true;
       } /*else if (PermisosHelpers::requerirDirector($model->programa_id)
         && ($estado->descripcion == "Departamento")) {

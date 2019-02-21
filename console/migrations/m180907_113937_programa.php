@@ -24,6 +24,7 @@ class m180907_113937_programa extends Migration
           //'carrera'     => $this->integer(),
       //    'curso'       => $this->string(60)->notNull(),
           'year'        => $this->integer(4),
+          'equipo_catedra' => $this->text(),
         //  'cuatrimestre'=> $this->integer(),
           //'asist_regular'   => $this->string(60)->notNull(),
           //'ayudante_p'             => $this->string(60)->notNull(),
@@ -34,6 +35,7 @@ class m180907_113937_programa extends Migration
           'contenido_plan'  => $this->text()->notNull(),
           //'observaciones'  => $this->text(),
           //'contenido_analitico' => $this->string()->notNull(), fkxunidad
+          'contenido_analitico' => $this->text(),
           //bibliografía basica fkxunidad
           'propuesta_met'   => $this->text()->notNull(),
           'evycond_acreditacion' => $this->text()->notNull(),

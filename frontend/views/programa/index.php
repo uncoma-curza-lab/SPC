@@ -135,7 +135,7 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
                       || PermisosHelpers::requerirMinimoRol('Admin'))
                     {
                         return Html::a(
-                          '<span style="padding:5px; font-size:20px;" class="glyphicon glyphicon-remove"></span>',
+                          '<span style="padding:5px; font-size:20px;color:#d9534f" class="glyphicon glyphicon-remove"></span>',
                           ['rechazar','id' => $model->id],
                           [
                               'title' => Yii::t('yii', 'Rechazar'),
@@ -221,4 +221,12 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
             ],
         ],
     ]); ?>
+</div>
+<div class="row">
+  <span class="label label-primary "><span class="glyphicon glyphicon-hand-up"></span> Asignarme el programa</span>
+  <span class="label label-danger "><span class="glyphicon glyphicon-remove"></span> Rechazar programa</span>
+  <span class="label label-success "><span class="glyphicon glyphicon-ok"></span> Enviar programa</span>
+  <span class="label label-info"><span class="glyphicon glyphicon-info-sign"></span> Más información</span>
+  <span class="label label-warning"><span class="glyphicon glyphicon-pencil"></span> Editar programa</span>
+  <span class="label label-default"><span class="glyphicon glyphicon-print"></span> Exportar PDF</span>
 </div>

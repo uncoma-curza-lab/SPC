@@ -131,7 +131,7 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
             [
               'class' => 'yii\grid\ActionColumn',
               //'template' => $show_this_nav? '{view} {update} {delete} {pdf} {status}':'{view} {status} {pdf}',
-              'template' => $show_this_nav? '{pedir} {editar} {asignar} {aprobar} {rechazar} {delete} {pdf} {ver} {cargar}':'{subir} {status} {pdf}',
+              'template' => $show_this_nav? '{pedir} {pdf} {ver}':' {pdf}',
               'buttons' => [
                 'pdf' => function ($url,$model) {
                     return Html::a(

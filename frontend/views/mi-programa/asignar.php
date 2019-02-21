@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use dosamigos\tinymce\TinyMce;
 
 
 use yii\widgets\ActiveForm;
@@ -19,9 +20,15 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <div class="designacion-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin([
+      'enableAjaxValidation'      => false,
+      'enableClientValidation'    => false,
+      'validateOnChange'          => true,
+      'validateOnSubmit'          => false,
+      'validateOnBlur'            => false,
+    ]); ?>
 
-    <?= $form->field($designacion, 'cargo_id')->widget(Select2::classname(),[
+    <!--<? $form->field($designacion, 'cargo_id')->widget(Select2::classname(),[
         'data' => ArrayHelper::map(Cargo::find()->all(),'id','nomenclatura'),
         //'data' =>ArrayHelper::map(((new StatusSearch())->search(['model' => 'backend\models\Status'])),'id','descripcion'),
         //'data' => (new StatusSearch())->search(['model' => 'backend\models\Status'])->id,
@@ -31,7 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
           'allowClear' => true,
         ],
       ]) ?>
-      <?= $form->field($designacion, 'user_id')->widget(Select2::classname(),[
+      <? $form->field($designacion, 'user_id')->widget(Select2::classname(),[
           'data' => ArrayHelper::map(User::find()->all(),'id','username'),
           //'data' =>ArrayHelper::map(((new StatusSearch())->search(['model' => 'backend\models\Status'])),'id','descripcion'),
           //'data' => (new StatusSearch())->search(['model' => 'backend\models\Status'])->id,
@@ -41,10 +48,24 @@ $this->params['breadcrumbs'][] = $this->title;
             'allowClear' => true,
           ],
         ]) ?>
-    <?= $form->field($designacion, 'programa_id')->textInput() ?>
+    <? $form->field($designacion, 'programa_id')->textInput() ?> -->
+    <h4>Equipo de cátedra</h4>
+    <?= $form->field($model, 'equipo_catedra')->widget(TinyMce::className(), [
+        'options' => ['rows' => 6],
+        'language' => 'es',
+        'clientOptions' => [
+            'plugins' => [
+                "advlist autolink lists link charmap
+                "//print
+                ."preview anchor",
+                "searchreplace visualblocks code fullscreen",
+                "insertdatetime  table contextmenu paste"
+            ],
+            'toolbar' => "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link "
+        ]
+    ])->label('') ?>
     <div class="form-group">
-      <?= Html::submitButton('Guardar y salir',['class' => 'btn btn-info' , 'name'=>'submit','value' => 'salir']) ?>
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

@@ -36,7 +36,7 @@ $mostrar = //(isset($estado_programa) && ($estado_programa->value > EstadoHelper
 $items = [
     [
       'label' => 'Programa',
-      'content' => $this->render('pdf',['model' => $model]),
+      'content' => $this->render('../programa/pdf',['model' => $model]),
       'active'=>true,
     ],
     [

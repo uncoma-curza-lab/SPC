@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use froala\froalaeditor\FroalaEditorWidget;
+use dosamigos\tinymce\TinyMce;
 /* @var $this yii\web\View */
 /* @var $model backend\models\Tema */
 /* @var $form yii\widgets\ActiveForm */
@@ -12,21 +12,20 @@ use froala\froalaeditor\FroalaEditorWidget;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'descripcion')->widget(FroalaEditorWidget::className(), [
-        'attribute' => 'descripcion',
-        'name' => 'descripcion',
-        'options' => [
-            'id'=>'descripcion',
-        ],
+    <?= $form->field($model, 'descripcion')->widget(TinyMce::className(), [
+        'options' => ['rows' => 6],
+        'language' => 'es',
         'clientOptions' => [
-          'height' => 100,
-          'language' => 'es',
-          'height' => 100,
-          'theme' => 'gray',
-          'toolbarButtons' => ['bold', 'italic', 'underline', '|', 'paragraphFormat', 'fontSize','color','|','undo','redo','align'],
-        ],
-
-      ]) ?>
+            'plugins' => [
+                "advlist autolink lists link charmap
+                "//print
+                ."preview anchor",
+                "searchreplace visualblocks code fullscreen",
+                "insertdatetime  table contextmenu paste"
+            ],
+            'toolbar' => "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link "
+        ]
+    ]) ?>
 
     <div class="form-group">
       <div class="row">

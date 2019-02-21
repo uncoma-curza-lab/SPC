@@ -36,7 +36,7 @@ $mostrar = //(isset($estado_programa) && ($estado_programa->value > EstadoHelper
 $items = [
     [
       'label' => 'Programa',
-      'content' => $this->render('pdf',['model' => $model]),
+      'content' => $this->render('../programa/pdf',['model' => $model]),
       'active'=>true,
     ],
     [
@@ -50,7 +50,7 @@ $items = [
                       || ($estado_programa->descripcion == "Secretaría Académica"
                         && PermisosHelpers::requerirRol('Sec_academica')),
     ],
-    [
+    /*[
         'label' => 'Designación de Cargos',
         'content' => $this->render('forms/_gridDesignaciones',['model' => $model,]),
         'visible' =>  PermisosHelpers::requerirProfesorAdjunto($model->id)
@@ -59,7 +59,7 @@ $items = [
                         && PermisosHelpers::requerirRol('Adm_academica'))
                       || ($estado_programa->descripcion == "Secretaría Académica"
                         && PermisosHelpers::requerirRol('Sec_academica')),
-    ],
+    ],*/
 
 ]; ?>
 <h3>Programa de <?= Html::encode($model->getAsignatura()->one()->nomenclatura)?> <br></h3>

@@ -5,7 +5,7 @@
   use yii\widgets\ActiveForm;
   use yii\helpers\Url;
   $this->params['breadcrumbs'][] = ['label' => 'Programas', 'url' => ['index']];
-  $this->params['breadcrumbs'][] = ['label' =>  $model->getNomenclatura(). " " . $model->getCurso(), 'url' => ['view', 'id' => $model->id]];
+  $this->params['breadcrumbs'][] = ['label' =>  $model->getNomenclatura(). " " . $model->getCurso()];
 
   $mensaje = [ 'onclick'=>"return confirm('No se guardarán los cambios de esta pestaña, ¿desea salir?')"];
   $this->params['items'][] = ['label' => '1. Fundamentación'];
@@ -60,7 +60,7 @@
             "searchreplace visualblocks code fullscreen",
             "insertdatetime  table contextmenu paste"
         ],
-        'toolbar' => "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link "
+        'toolbar' => "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link | fullscreen "
     ]
 ])->label('') ?>
 <br>

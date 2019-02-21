@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use froala\froalaeditor\FroalaEditorWidget;
+use dosamigos\tinymce\TinyMce;
 
 /* @var $this yii\web\View */
 /* @var $model backend\models\Observacion */
@@ -12,22 +12,20 @@ use froala\froalaeditor\FroalaEditorWidget;
 <div class="observacion-form">
 
     <?php $form = ActiveForm::begin(); ?>
-      <?= FroalaEditorWidget::widget([
-                  'model' => $model,
-                  'attribute' => 'texto',
-                  'name' => 'texto',
-                  'options' => [
-                      'id'=>'texto'
-                  ],
-                  'clientOptions' => [
-                    'placeholderText' => 'Ingrese las observaciones para que el profesor pueda corregir el programa',
-                    'height' => 100,
-                    'language' => 'es',
-                    'height' => 100,
-                    'theme' => 'gray',
-                    'toolbarButtons' => ['bold', 'italic', 'underline', '|', 'paragraphFormat', 'fontSize','color','|','undo','redo','align'],
-                  ],
-      ]) ?>
+    <?= $form->field($model, 'texto')->widget(TinyMce::className(), [
+        'options' => ['rows' => 6],
+        'language' => 'es',
+        'clientOptions' => [
+            'plugins' => [
+                "advlist autolink lists link charmap
+                "//print
+                ."preview anchor",
+                "searchreplace visualblocks code fullscreen",
+                "insertdatetime  table contextmenu paste"
+            ],
+            'toolbar' => "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link | fullscreen "
+        ]
+    ])->label('') ?>
 
 
       <br>

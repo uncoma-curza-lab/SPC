@@ -24,7 +24,7 @@ if($estadoPrograma->descripcion == "Borrador"){
 } else if($estadoPrograma->descripcion == "Departamento"){
   array_push($items,[
       'label' => 'Programa',
-      'content' => $this->render('pdf',['model' => $model]),
+      'content' => $this->render('../programa/pdf',['model' => $model]),
       'contentOptions' => [
         'class' => 'in',
         'style'=> 'overflow-y: scroll, height: auto;
@@ -38,7 +38,7 @@ if($estadoPrograma->descripcion == "Borrador"){
       'contentOptions' => [],
       'content' =>   $this->render('forms/_gridObservaciones',['model' => $model]),
   ]);
-  array_push($items,[
+  /*array_push($items,[
       'label' => 'Designaciones',
       'content' => [
         $this->render('forms/_gridDesignaciones',['model' => $model,]),
@@ -47,8 +47,8 @@ if($estadoPrograma->descripcion == "Borrador"){
       'contentOptions' => [],
       /*'options' => [],
            'footer' => 'Footer' // the footer label in list-group
-      ],*/
-  ]);
+      ],
+  ]);*/
 }
 ?>
 

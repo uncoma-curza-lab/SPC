@@ -6,7 +6,7 @@ use Yii;
 use yii\data\ActiveDataProvider;
 /* Searchs */
 use common\models\search\ProgramaSearch;
-use common\models\search\ProgramaDepartamentoSearch;
+use common\models\search\ProgramaEvaluacionSearch;
 use common\models\search\AsignaturaSearch;
 use common\models\search\DesignacionSearch;
 /* Modelos */
@@ -58,7 +58,7 @@ class ProgramaController extends Controller
                      [
                           'actions' => [
                             'create','update','delete','anadir', 'ver',
-                            'aprobar', 'rechazar', 'departamento'
+                            'aprobar', 'rechazar', 'evaluacion'
                           ],
                           'allow' => true,
                           'roles' => ['@'],
@@ -112,12 +112,12 @@ class ProgramaController extends Controller
      * Lists all Programa models.
      * @return mixed
      */
-    public function actionDepartamento()
+    public function actionEvaluacion()
     {
-        $searchModel = new ProgramaDepartamentoSearch();
+        $searchModel = new ProgramaEvaluacionSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        return $this->render('departamento', [
+        return $this->render('evaluacion', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
@@ -173,36 +173,43 @@ class ProgramaController extends Controller
         $programa->scenario = 'carrerap';
         $userId = \Yii::$app->user->identity->id;
         $estadoActual = Status::findOne($programa->status_id);
-
+        $porcentajeCarga = 40;
         if ($estadoActual->descripcion == "Borrador"){
-          if($programa->calcularPorcentajeCarga() < 40) {
+          if($programa->calcularPorcentajeCarga() < $porcentajeCarga) {
+            Yii::error("Error al enviar programa con ID: ".$id.", menos del ".$porcentajeCarga." cargado",'estado-programa');
+
             Yii::$app->session->setFlash('danger','Debe completar el programa un 40%');
             return $this->redirect(['cargar','id' => $programa->id]);
           } else if ($programa->created_by == $userId){
             if ($programa->subirEstado() && $programa->save()) {
+              Yii::info("Subió el estado del programa. BORRADOR->".$programa->getStatus()->one()->descripcion,'estado-programa');
               Yii::$app->session->setFlash('success','Se confirmó el programa exitosamente');
             } else {
               Yii::$app->session->setFlash('danger','Hubo un problema al confirmar el programa');
             }
-            return $this->redirect(['index']);
+            return $this->redirect(['departamento']);
+          } else {
+            Yii::warning("Intentó editar un programa ajeno. ID:".$id,'estado-programa');
           }
         }
        if (PermisosHelpers::requerirRol("Departamento")
         && $estadoActual->descripcion == "Profesor"
         && $programa->created_by != $userId ){
           Yii::$app->session->setFlash('danger','Debe pedir el programa antes de seguir');
-          return $this->redirect(['index']);
+          return $this->redirect(['departamento']);
        }
        if( (PermisosHelpers::requerirDirector($id) && ($estadoActual->descripcion == "Departamento")) ||
           (PermisosHelpers::requerirRol("Adm_academica") && $estadoActual->descripcion == "Administración Académica") ||
           (PermisosHelpers::requerirRol("Sec_academica") && $estadoActual->descripcion == "Secretaría Académica")
         ){
           if($programa->subirEstado() && $programa->save()){
+            Yii::info("Subió el estado del programa:".$id." Estaba en estado: ".$estadoActual->descripcion,'estado-programa');
             Yii::$app->session->setFlash('success','Se confirmó el programa exitosamente');
-            return $this->redirect(['index']);
+            return $this->redirect(['departamento']);
           } else {
+            Yii::error("No pudo subir de estado programa:".$id,'estado-programa');
             Yii::$app->session->setFlash('danger','Hubo un problema al intentar aprobar el programa');
-            return $this->redirect(['index']);
+            return $this->redirect(['departamento']);
 
 //            throw new NotFoundHttpException("Ocurrió un error");
           }
@@ -215,16 +222,20 @@ class ProgramaController extends Controller
         $estadoActual = Status::findOne($programa->status_id);
 
         if ($estadoActual->descripcion == "Borrador" || $estadoActual->descripcion == "Profesor"){
+          Yii::error("No pudo rechazar el programa ID:".$id." con estado:".$estadoActual->descripcion,'estado-programa');
+
           Yii::$app->session->setFlash('danger','Hubo un problema al intentar rechazar el programa');
-          return $this->redirect(['index']);
+          return $this->redirect(['departamento']);
         }
         if(PermisosHelpers::requerirDirector($id) && $estadoActual->descripcion == "Departamento"){
             if ($programa->setEstado("Borrador") && $programa->save()){
+              Yii::info("Cambió el estado de Departamento -> Borrador ID:".$id,'estado-programa');
+
               Yii::$app->session->setFlash('warning','Se rechazó el programa correctamente');
               return $this->redirect(['departamento']);
             } else {
               Yii::$app->session->setFlash('danger','Hubo un problema al rechazar el programa');
-              return $this->redirect(['index']);
+              return $this->redirect(['departamento']);
             }
         }
 
@@ -234,11 +245,15 @@ class ProgramaController extends Controller
           //$programa->status_id = Status::findOne(['descripcion','=','Departamento'])->id;
 
           if($programa->bajarEstado() &&  $programa->save()){
+            Yii::info("Rechazó el programa".$id." con estado actual".$estadoActual->descripcion,'estado-programa');
+
             Yii::$app->session->setFlash('warning','Se rechazó el programa correctamente');
-            return $this->redirect(['index']);
+            return $this->redirect(['departamento']);
           } else {
+            Yii::error("No pudo rechazar el programa ".$id." con estado actual".$estadoActual->descripcion,'estado-programa');
+
             Yii::$app->session->setFlash('danger','Hubo un problema al rechazar el programa');
-            return $this->redirect(['index']);
+            return $this->redirect(['departamento']);
           }
         }
     }
@@ -281,446 +296,6 @@ class ProgramaController extends Controller
         }
     }
 
-    public function actionCargar($id)
-      {
-          $model = $this->findModel($id);
-          $model->scenario = 'fundamentacion';
-        $estado = Status::findOne($model->status_id);
-        $validarPermisos = $this->validarPermisos($model, $estado);
-
-        if ($validarPermisos) {
-          if(Yii::$app->request->post('submit') == 'salir' &&
-            $model->load(Yii::$app->request->post())) {
-              if($model->save()){
-                Yii::$app->session->setFlash('success','El programa se guardó exitosamente');
-                return $this->redirect(['index']);
-              } else {
-                Yii::$app->session->setFlash('danger','Hubo un problema al intentar guardar el programa');
-              }
-          } else if ($model->load(Yii::$app->request->post())) {
-              if($model->save()){
-                Yii::$app->session->setFlash('success','Se guardó fundamentación exitosamente');
-                return $this->redirect(['objetivo-plan', 'id' => $model->id]);
-              } else {
-                Yii::$app->session->setFlash('danger','Hubo un problema al intentar guardar el programa');
-              }
-          }
-          return $this->render('forms/_fundamentacion',['model'=>$model]);
-        }
-        throw new NotFoundHttpException('No tiene permisos para actualizar este elemento');
-    }
-
-    /**
-    *  Controla la vista _objetivo-plan
-    *  $_POST Guarda el modelo y redirecciona a la siguiente vista
-    *  @param integer $id del programa
-    *  @return mixed
-    */
-    public function actionObjetivoPlan($id){
-      $model = $this->findModel($id);
-      $model->scenario = 'obj-plan';
-      $estado = Status::findOne($model->status_id);
-      $validarPermisos = $this->validarPermisos($model, $estado);
-
-      if ($validarPermisos) {
-        if(Yii::$app->request->post('submit') == 'salir' &&
-          $model->load(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->session->setFlash('success','El programa se guardó exitosamente');
-            return $this->redirect(['index']);
-        } else if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->session->setFlash('success','Objetivos según el plan de estudio se guardó exitosamente');
-            return $this->redirect(['contenido-plan', 'id' => $model->id]);
-        }
-
-        return $this->render('forms/_objetivo-plan', [
-            'model' => $model,
-        ]);
-      }
-      throw new NotFoundHttpException('No tiene permisos para actualizar este elemento');
-    }
-
-    /**
-    *  Controla la vista _contenido-plan
-    *  $_POST Guarda el modelo y redirecciona a la siguiente vista
-    *  @param integer $id del programa
-    *  @return mixed
-    */
-    public function actionContenidoPlan($id){
-      $model = $this->findModel($id);
-      $model->scenario = 'cont-plan';
-      $estado = Status::findOne($model->status_id);
-      $validarPermisos = $this->validarPermisos($model, $estado);
-
-      if ($validarPermisos) {
-        if(Yii::$app->request->post('submit') == 'salir' &&
-          $model->load(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->session->setFlash('success','El programa se guardó exitosamente');
-            return $this->redirect(['index']);
-        } else if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->session->setFlash('success','El contenido según el plan de estudio se guardó exitosamente');
-            return $this->redirect(['contenido-analitico', 'id' => $model->id]);
-        }
-
-        return $this->render('forms/_contenido-plan', [
-            'model' => $model,
-        ]);
-      }
-      throw new NotFoundHttpException('No tiene permisos para actualizar este elemento');
-    }
-    /**
-    *  Controla la vista _contenido-analitico
-    *  $_POST Guarda el modelo y redirecciona a la siguiente vista
-    *  @param integer $id del programa
-    *  @return mixed
-    */
-    public function actionContenidoAnalitico($id){
-      $model = $this->findModel($id);
-      $model->scenario = 'cont-analitico';
-      $estado = Status::findOne($model->status_id);
-      $validarPermisos = $this->validarPermisos($model, $estado);
-
-      if ($validarPermisos) {
-        if(Yii::$app->request->post('submit') == 'salir' &&
-          $model->load(Yii::$app->request->post())) {
-            if($model->save()){
-              Yii::$app->session->setFlash('success','El programa se guardó exitosamente');
-              return $this->redirect(['index']);
-            } else {
-              Yii::$app->session->setFlash('danger','Hubo un problema al guardar');
-            }
-        } else if ($model->load(Yii::$app->request->post())) {
-            if($model->save()){
-              Yii::$app->session->setFlash('success','El contenido analítico se guardó exitosamente');
-              return $this->redirect(['propuesta-metodologica', 'id' => $model->id]);
-            } else {
-              Yii::$app->session->setFlash('danger','Hubo un problema al guardar');
-            }
-        }
-
-        return $this->render('forms/_contenido-analitico', [
-            'model' => $model,
-        ]);
-      }
-      throw new NotFoundHttpException('No tiene permisos para actualizar este elemento');
-    }
-    /**
-    *  Controla la vista _propuesta-metodologica
-    *  $_POST Guarda el modelo y redirecciona a la siguiente vista
-    *  @param integer $id del programa
-    *  @return mixed
-    */
-    public function actionPropuestaMetodologica($id){
-      $model = $this->findModel($id);
-      $model->scenario = 'prop-met';
-      $estado = Status::findOne($model->status_id);
-      $validarPermisos = $this->validarPermisos($model, $estado);
-
-      if ($validarPermisos) {
-        if(Yii::$app->request->post('submit') == 'salir' &&
-          $model->load(Yii::$app->request->post())) {
-            if($model->save()){
-              Yii::$app->session->setFlash('success','El programa se guardó exitosamente');
-              return $this->redirect(['index']);
-            } else {
-              Yii::$app->session->setFlash('danger','hubo problemas al guardar la propuesta metodológica');
-            }
-        } else if ($model->load(Yii::$app->request->post())) {
-            if ($model->save()) {
-              Yii::$app->session->setFlash('success','La propuesta metodológica se guardó exitosamente');
-              return $this->redirect(['eval-acred', 'id' => $model->id]);
-            } else {
-              Yii::$app->session->setFlash('danger','hubo problemas al guardar la propuesta metodológica');
-            }
-
-        }
-
-        return $this->render('forms/_propuesta-metodologica', [
-            'model' => $model,
-        ]);
-      }
-      throw new NotFoundHttpException('No tiene permisos para actualizar este elemento');
-    }
-    /**
-    *  Controla la vista _eval-acred
-    *  $_POST Guarda el modelo y redirecciona a la siguiente vista
-    *  @param integer $id del programa
-    *  @return mixed
-    */
-    public function actionEvalAcred($id){
-      $model = $this->findModel($id);
-      $model->scenario = 'eval-acred';
-      $estado = Status::findOne($model->status_id);
-      $validarPermisos = $this->validarPermisos($model, $estado);
-
-      if ($validarPermisos) {
-        if(Yii::$app->request->post('submit') == 'salir' &&
-          $model->load(Yii::$app->request->post())) {
-            if ($model->save()) {
-              Yii::$app->session->setFlash('success','El programa se guardó con éxito');
-              return $this->redirect(['index']);
-            } else {
-              Yii::$app->session->setFlash('danger','hubo problemas al guardar Evaluación y condiciones de acreditación');
-            }
-        } else if ($model->load(Yii::$app->request->post()) ) {
-            if ($model->save()) {
-              Yii::$app->session->setFlash('success','Evaluación y condiciones de acreditación se guardó con éxito');
-              return $this->redirect(['parcial-rec-promo', 'id' => $model->id]);
-            } else {
-              Yii::$app->session->setFlash('danger','Hubo problemas al guardar Evaluación y condiciones de acreditación');
-            }
-        }
-
-        return $this->render('forms/_eval-acred', [
-            'model' => $model,
-        ]);
-      }
-      throw new NotFoundHttpException('No tiene permisos para actualizar este elemento');
-    }
-    /**
-    *  Controla la vista _parc-rec-promo
-    *  $_POST Guarda el modelo y redirecciona a la siguiente vista
-    *  @param integer $id del programa
-    *  @return mixed
-    */
-    public function actionParcialRecPromo($id){
-      $model = $this->findModel($id);
-      $model->scenario = 'parc-rec-promo';
-      $estado = Status::findOne($model->status_id);
-      $validarPermisos = $this->validarPermisos($model, $estado);
-
-      if ($validarPermisos) {
-        if(Yii::$app->request->post('submit') == 'salir' &&
-          $model->load(Yii::$app->request->post())) {
-            if ($model->save()) {
-              Yii::$app->session->setFlash('success','El programa se guardó con éxito');
-              return $this->redirect(['index']);
-            } else {
-              Yii::$app->session->setFlash('danger','Hubo problemas al guardar la sección de parciales, recuperatorios y coloquios');
-            }
-        } else if ($model->load(Yii::$app->request->post())) {
-            if ($model->save()) {
-              Yii::$app->session->setFlash('success','La sección de parciales, recuperatorios y coloquios se guardó con éxito');
-              return $this->redirect(['dist-horaria', 'id' => $model->id]);
-            } else {
-              Yii::$app->session->setFlash('danger','Hubo problemas al guardar la sección de parciales, recuperatorios y coloquios');
-            }
-        }
-
-        return $this->render('forms/_parc-rec-promo', [
-            'model' => $model,
-        ]);
-      }
-      throw new NotFoundHttpException('No tiene permisos para actualizar este elemento');
-    }
-    /**
-    *  Controla la vista _dist-horaria
-    *  $_POST Guarda el modelo y redirecciona a la siguiente vista
-    *  @param integer $id del programa
-    *  @return mixed
-    */
-    public function actionDistHoraria($id){
-      $model = $this->findModel($id);
-      $model->scenario = 'dist-horaria';
-      $estado = Status::findOne($model->status_id);
-      $validarPermisos = $this->validarPermisos($model, $estado);
-
-      if ($validarPermisos) {
-        if(Yii::$app->request->post('submit') == 'salir' &&
-          $model->load(Yii::$app->request->post())) {
-            if ($model->save()) {
-              Yii::$app->session->setFlash('success','El programa se guardó con éxito');
-              return $this->redirect(['index']);
-            } else {
-              Yii::$app->session->setFlash('danger','Hubo problemas al guardar la sección de Distribución horaria');
-            }
-        } else if ($model->load(Yii::$app->request->post())) {
-            if ($model->save()) {
-              Yii::$app->session->setFlash('success','La sección de Distribución horaria se guardó con éxito');
-              return $this->redirect(['crono-tentativo', 'id' => $model->id]);
-            } else {
-              Yii::$app->session->setFlash('danger','Hubo problemas al guardar la sección de Distribución horaria');
-            }
-        }
-
-        return $this->render('forms/_dist-horaria', [
-            'model' => $model,
-        ]);
-      }
-      throw new NotFoundHttpException('No tiene permisos para actualizar este elemento');
-    }
-    /**
-    *  Controla la vista _crono-tentativo
-    *  $_POST Guarda el modelo y redirecciona a la siguiente vista
-    *  @param integer $id del programa
-    *  @return mixed
-    */
-    public function actionCronoTentativo($id){
-      $model = $this->findModel($id);
-      $model->scenario = 'crono-tent';
-      $estado = Status::findOne($model->status_id);
-      $validarPermisos = $this->validarPermisos($model, $estado);
-
-      if ($validarPermisos) {
-        if(Yii::$app->request->post('submit') == 'salir' &&
-          $model->load(Yii::$app->request->post())) {
-            if ($model->save()) {
-              Yii::$app->session->setFlash('success','El programa se guardó con éxito');
-              return $this->redirect(['index']);
-            } else {
-              Yii::$app->session->setFlash('danger','Hubo problemas al guardar la sección de cronograma tentativo');
-            }
-        } else if ($model->load(Yii::$app->request->post())) {
-            if ($model->save()) {
-              Yii::$app->session->setFlash('success','La sección de cronograma tentativo se guardó con éxito');
-              return $this->redirect(['actividad-extracurricular', 'id' => $model->id]);
-            } else {
-              Yii::$app->session->setFlash('danger','Hubo problemas al guardar la sección de cronograma tentativo');
-            }
-        }
-
-        return $this->render('forms/_crono-tentativo', [
-            'model' => $model,
-        ]);
-      }
-      throw new NotFoundHttpException('No tiene permisos para actualizar este elemento');
-    }
-    /**
-    *  Controla la vista _activ-extrac
-    *  $_POST Guarda el modelo y redirecciona a la siguiente vista
-    *  @param integer $id del programa
-    *  @return mixed
-    */
-    public function actionActividadExtracurricular($id){
-      $model = $this->findModel($id);
-      $model->scenario = 'actv-extra';
-      $estado = Status::findOne($model->status_id);
-      $validarPermisos = $this->validarPermisos($model, $estado);
-
-      if ($validarPermisos) {
-        if(Yii::$app->request->post('submit') == 'salir' &&
-          $model->load(Yii::$app->request->post())) {
-            if ($model->save()) {
-              Yii::$app->session->setFlash('success','El programa se guardó con éxito');
-              return $this->redirect(['index']);
-            } else {
-              Yii::$app->session->setFlash('danger','Hubo problemas al guardar la sección de actividades extracurriculares');
-            }
-        } else if ($model->load(Yii::$app->request->post())) {
-            if ($model->save()) {
-              Yii::$app->session->setFlash('success','El programa se guardó con éxito');
-              return $this->redirect(['index']);
-            } else {
-              Yii::$app->session->setFlash('danger','Hubo problemas al guardar la sección de actividades extracurriculares');
-            }
-        }
-
-        return $this->render('forms/_activ-extrac', [
-            'model' => $model,
-        ]);
-      }
-      throw new NotFoundHttpException('No tiene permisos para actualizar este elemento');
-
-    }
-
-    public function actionAnadir()
-    {
-        $model = new Programa();
-        $model->scenario = 'crear';
-        //$model->year =Yii::$app->formatter->asDatetime(date('Y-m-d'), "php:d-m-Y H:i:s");
-        $model->status_id = Status::find()->where(['=','descripcion','Borrador'])->one()->id;
-        //obtener el id del director
-        $userId = \Yii::$app->user->identity->id;
-        if (PermisosHelpers::requerirRol('Departamento')){
-          $depto = Departamento::find()->where(['=','director',$userId])->one();
-          if (isset($depto)){
-            $model->departamento_id = $depto->id;
-            if ($model->load(Yii::$app->request->post())) {
-              $yaExiste = Programa::find()->where(['=','asignatura_id',$model->asignatura_id]);
-              $yaExiste = $yaExiste->where(['=','year', $model->year])->one();
-              if($yaExiste)
-                Yii::$app->session->setFlash('danger','El programa ya existe. Verifique la información');
-              else if($model->save()){
-                Yii::$app->session->setFlash('warning','El programa se creó correctamente. <br>Asigne un profesor adjunto al programa para enviar');
-                return $this->redirect(['designacion/asignar', 'id' => $model->id]);
-              }
-            } else {
-                $model->year= date('Y');
-            }
-
-
-            return $this->render('anadir', [
-                'model' => $model,
-                'deptoId' => $depto->id,
-            ]);
-          } else {
-            Yii::$app->session->setFlash('info','Lo lamentamos, usted aún no posee permisos para agregar programas');
-            return $this->redirect(['index']);
-          }
-
-        }
-
-    }
-
-
-  /*  public function actionEnviarProfesor($id)
-    {
-      $model = $this->findModel($id);
-      $model->scenario = 'enviarProfesor';
-      $nuevo_status = Status::find()->where(['=','descripcion','Profesor'])->one();
-      $model->status_id = $nuevo_status->id;
-      if ($model->save()) {
-        //enviar al profesor en estado
-        return $this->redirect(['index']);
-      }
-    }
-
-    public function actionAsignar($id) {
-      if(Yii::$app->request->post('submit') == 'designacion' &&
-        $model->load(Yii::$app->request->post()) && $model->save()) {
-          return $this->redirect(['anadir']);
-      } else {
-        $asignaturaId = $id;
-        $asignatura = Asignatura::findOne($asignaturaId);
-        if(isset($asignatura))
-        {
-          $model = new Programa();
-          $model->scenario = 'crear';
-          // se crea en estado borrador
-          $model->status_id = Status::find()->where(['=','descripcion','Borrador'])->one()->id;
-          $model->asignatura_id = $asignaturaId;
-          $designacion = new Designacion();
-
-          if ($model->save()){
-            $designacion->programa_id = $model->id;
-            return $this->render('asignar', [
-                'model' => $model,
-                'designacion' => $designacion,
-            ]);
-          }
-        }
-      }
-
-    }*/
-
-    /**
-     * Updates an existing Programa model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionUpdate($id)
-    {
-        $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        }
-
-        return $this->render('update', [
-            'model' => $model,
-        ]);
-    }
     public function actionEditar($id)
     {
         if(PermisosHelpers::requerirDirector($id)){
@@ -751,10 +326,7 @@ class ProgramaController extends Controller
     public function actionDelete($id)
     {
         $model = $this->findModel($id);
-        $designaciones = $model->getDesignaciones()->all();
-        foreach ($designaciones as $key) {
-          $key->delete();
-        }
+
         $model->delete();
 
         return $this->redirect(['index']);
@@ -805,10 +377,6 @@ class ProgramaController extends Controller
       $mpdf->WriteHTML($this->renderPartial('portada',['model'=>$model]));
       $mpdf->addPage();
       $mpdf->WriteHTML($this->renderPartial('paginas',['model'=>$model]));
-      //$mpdf->WriteHTML('<h1>Hello World!</h1>');
-      //$mpdf->Output($model->asignatura.".pdf", 'D');
       $mpdf->Output();
-
-      //return $this->renderPartial('mpdf');
     }
 }

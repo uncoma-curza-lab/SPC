@@ -42,6 +42,6 @@ use common\models\search\TemaSearch;
     ]); ?>
     <?php Pjax::end(); ?>
     <p>
-        <?= Html::a('Crear tema', ['tema/create', 'id' => $model->id], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Agregar tema', ['tema/create', 'id' => $model->id], ['class' => 'btn btn-success']) ?>
     </p>
 </div>

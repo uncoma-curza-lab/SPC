@@ -1,8 +1,7 @@
 <?php
-use unclead\multipleinput\MultipleInput;
-use unclead\multipleinput\MultipleInputColumn;
-use froala\froalaeditor\FroalaEditorWidget;
 use yii\jui\DatePicker;
+use dosamigos\tinymce\TinyMce;
+use yii\widgets\ActiveForm;
 use yii\helpers\Html;
 use yii\helpers\Url;
 $mensaje = [ 'onclick'=>"return confirm('No se guardarán los cambios de esta pestaña, ¿desea salir?')"];
@@ -36,8 +35,29 @@ $porcentaje = $model->calcularPorcentajeCarga();
 </div>
 
 <h3>4. Contenidos analíticos</h3>
-  <?= $this->render('_gridUnidades',['model' => $model]) ?>
+  <!--<? $this->render('_gridUnidades',['model' => $model]) ?>-->
+  <?php $form = ActiveForm::begin([
+    'enableAjaxValidation'      => false,
+    'enableClientValidation'    => false,
+    'validateOnChange'          => true,
+    'validateOnSubmit'          => false,
+    'validateOnBlur'            => false,
+  ]); ?>
 
+  <?= $form->field($model, 'contenido_analitico')->widget(TinyMce::className(), [
+      'options' => ['rows' => 6],
+      'language' => 'es',
+      'clientOptions' => [
+          'plugins' => [
+              "advlist autolink lists link charmap
+              "//print
+              ."preview anchor",
+              "searchreplace visualblocks code fullscreen",
+              "insertdatetime  table contextmenu paste"
+          ],
+          'toolbar' => "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link | fullscreen "
+      ]
+  ])->label('') ?>
 <br>
    <div class="row">
      <div class="col-xs-6 text-left">
@@ -45,6 +65,7 @@ $porcentaje = $model->calcularPorcentajeCarga();
        <?= Html::submitButton('Guardar y salir',['class' => 'btn btn-info' , 'name'=>'submit','value' => 'salir']) ?>
      </div>
      <div class="col-xs-6 text-right">
-       <?= Html::a('Seguir', ['propuesta-metodologica' , 'id' => $model->id], ['class' => 'btn btn-success']) ?>
+       <?= Html::submitButton('Seguir', ['class' => 'btn btn-success']) ?>
      </div>
    </div>
+   <?php ActiveForm::end(); ?>

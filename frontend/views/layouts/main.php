@@ -54,7 +54,7 @@ AppAsset::register($this);
 
           'items' =>[
             [
-              'label' => 'Mis Programa',
+              'label' => 'Mis Programas',
               'url' => ['/mi-programa/index'],
             ],
             [
@@ -62,9 +62,11 @@ AppAsset::register($this);
               'url' => ['/generales/index'],
             ],
             [
-              'label' => 'En departamento',
-              'url' => ['/programa/departamento'],
-              'visible' => PermisosHelpers::requerirRol("Departamento")
+              'label' => 'En evaluación',
+              'url' => ['/programa/evaluacion'],
+              'visible' => PermisosHelpers::requerirRol("Departamento") ||
+                           PermisosHelpers::requerirRol("Sec_academica") ||
+                           PermisosHelpers::requerirRol("Adm_academica")
             ]
 
           ]
@@ -133,7 +135,7 @@ AppAsset::register($this);
     <div class="container">
         <p class="pull-left">&copy; <?= Html::encode(Yii::$app->name) ?> <?= date('Y') ?></p>
 
-        <p class="pull-right">Desarrollado por: <i>Departamento de Informática</i><? Yii::powered() ?></p>
+        <p class="pull-right">Desarrollado por: <i>Departamento de Ciencia y Tecnología</i><? Yii::powered() ?></p>
     </div>
 </footer>
 <?php $this->endBody() ?>

@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use froala\froalaeditor\FroalaEditorWidget;
+use dosamigos\tinymce\TinyMce;
 use yii\jui\DatePicker;
 /* @var $this yii\web\View */
 /* @var $model backend\models\Unidad */
@@ -15,57 +15,53 @@ use yii\jui\DatePicker;
 
 
 
-    <?= $form->field($model, 'descripcion')->widget(FroalaEditorWidget::className(), [
-        'attribute' => 'descripcion',
-        'name' => 'descripcion',
-        'options' => [
-            'id'=>'descripcion',
-        ],
+    <?= $form->field($model, 'descripcion')->widget(TinyMce::className(), [
+        'options' => ['rows' => 6],
+        'language' => 'es',
         'clientOptions' => [
-          'placeholderText' => "Añadir una descripción breve de la unidad",
-          'height' => 100,
-          'language' => 'es',
-          'height' => 100,
-          'theme' => 'gray',
-          'toolbarButtons' => ['bold', 'italic', 'underline', '|', 'paragraphFormat', 'fontSize','color','|','undo','redo','align'],
-        ],
-
-      ]) ?>
+            'plugins' => [
+                "advlist autolink lists link charmap
+                "//print
+                ."preview anchor",
+                "searchreplace visualblocks code fullscreen",
+                "insertdatetime  table contextmenu paste"
+            ],
+            'toolbar' => "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link "
+        ]
+    ]) ?>
 
     <div class="row">
       <div class="col-xs-6">
-        <?= $form->field($model, 'biblio_basica')->widget(FroalaEditorWidget::className(), [
-            'attribute' => 'biblio_basica',
-            'name' => 'biblio_basica',
-            'options' => [
-                'id'=>'biblio_basica',
-            ],
+        <?= $form->field($model, 'biblio_basica')->widget(TinyMce::className(), [
+            'options' => ['rows' => 6],
+            'language' => 'es',
             'clientOptions' => [
-              'placeholderText' => "Añadir la bibliografía básica u obligatoria de esta unidad",
-              'height' => 100,
-              'language' => 'es',
-              'height' => 100,
-              'theme' => 'gray',
-              'toolbarButtons' => ['bold', 'italic', 'underline', '|', 'paragraphFormat', 'fontSize','color','|','undo','redo','align'],
-            ],
-          ]) ?>
+                'plugins' => [
+                    "advlist autolink lists link charmap
+                    "//print
+                    ."preview anchor",
+                    "searchreplace visualblocks code fullscreen",
+                    "insertdatetime  table contextmenu paste"
+                ],
+                'toolbar' => "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link "
+            ]
+        ]) ?>
       </div>
       <div class="col-xs-6">
-        <?= $form->field($model, 'biblio_consulta')->widget(FroalaEditorWidget::className(), [
-            'attribute' => 'biblio_consulta',
-            'name' => 'biblio_consulta',
-            'options' => [
-                'id'=>'biblio_consulta',
-            ],
+        <?= $form->field($model, 'biblio_consulta')->widget(TinyMce::className(), [
+            'options' => ['rows' => 6],
+            'language' => 'es',
             'clientOptions' => [
-              'placeholderText' => "Añadir la bibliografía de consulta u opcional de esta unidad",
-              'height' => 100,
-              'language' => 'es',
-              'height' => 100,
-              'theme' => 'gray',
-              'toolbarButtons' => ['bold', 'italic', 'underline', '|', 'paragraphFormat', 'fontSize','color','|','undo','redo','align'],
-            ],
-          ]) ?>
+                'plugins' => [
+                    "advlist autolink lists link charmap
+                    "//print
+                    ."preview anchor",
+                    "searchreplace visualblocks code fullscreen",
+                    "insertdatetime  table contextmenu paste"
+                ],
+                'toolbar' => "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link "
+            ]
+        ]) ?>
       </div>
     </div>
   <!--  <div class="row">

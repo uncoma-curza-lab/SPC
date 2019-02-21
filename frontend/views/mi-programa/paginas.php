@@ -16,6 +16,7 @@
 
   <h4> 4. CONTENIDOS ANALÍTICOS </h4>
 
+
   <h4> 5. PROPUESTA METODOLÓGICA </h4>
   <?= HtmlPurifier::process($model->propuesta_met) ?>
 

@@ -122,6 +122,8 @@ class GeneralesController extends Controller
       $model->scenario = 'pedir';
       $estadoActual = $model->getstatus()->one();
       if(!$estadoActual){
+        Yii::error("Hubo problemas con el estado del programa ID:".$id,'estado-programa');
+
         Yii::$app->session->setFlash('danger','Programa sin estado');
         return $this->redirect(['index']);
       }
@@ -140,90 +142,20 @@ class GeneralesController extends Controller
           return $this->redirect(['index']);
         }
         if ($model->save()){
-          return $this->redirect(['programa/departamento']);
+          Yii::info("Pidió el programa:".$id." con dpto: ".$model->departamento_id,'estado-programa');
+
+          return $this->redirect(['programa/evaluacion']);
         } else {
 
         }
       } else {
+        Yii::error("El programa".$id." tenía departamento o no está en estado Profesor",'estado-programa');
+
         Yii::$app->session->setFlash('danger','Hubo un problema al pedir el programa');
         return $this->redirect(['index']);
       }
     }
-    public function actionAprobar($id){
-        $programa = $this->findModel($id);
-        $programa->scenario = 'carrerap';
-        $userId = \Yii::$app->user->identity->id;
-        $estadoActual = Status::findOne($programa->status_id);
 
-        if ($estadoActual->descripcion == "Borrador"){
-          if($programa->calcularPorcentajeCarga() < 40) {
-            Yii::$app->session->setFlash('danger','Debe completar el programa un 40%');
-            return $this->redirect(['cargar','id' => $programa->id]);
-          } else if ($programa->created_by == $userId){
-            if ($programa->subirEstado() && $programa->save()) {
-              Yii::$app->session->setFlash('success','Se confirmó el programa exitosamente');
-            } else {
-              Yii::$app->session->setFlash('danger','Hubo un problema al confirmar el programa');
-            }
-            return $this->redirect(['index']);
-          }
-        }
-       if (PermisosHelpers::requerirRol("Departamento")
-        && $estadoActual->descripcion == "Profesor"
-        && $programa->created_by != $userId ){
-          Yii::$app->session->setFlash('danger','Debe pedir el programa antes de seguir');
-          return $this->redirect(['index']);
-       }
-       if( (PermisosHelpers::requerirDirector($id) && ($estadoActual->descripcion == "Departamento")) ||
-          (PermisosHelpers::requerirRol("Adm_academica") && $estadoActual->descripcion == "Administración Académica") ||
-          (PermisosHelpers::requerirRol("Sec_academica") && $estadoActual->descripcion == "Secretaría Académica")
-        ){
-          if($programa->subirEstado() && $programa->save()){
-            Yii::$app->session->setFlash('success','Se confirmó el programa exitosamente');
-            return $this->redirect(['index']);
-          } else {
-            Yii::$app->session->setFlash('danger','Hubo un problema al intentar aprobar el programa');
-            return $this->redirect(['index']);
-
-//            throw new NotFoundHttpException("Ocurrió un error");
-          }
-        }
-    }
-
-    public function actionRechazar($id){
-        $programa = $this->findModel($id);
-        $programa->scenario = 'carrerap';
-        $userId = \Yii::$app->user->identity->id;
-        $estadoActual = Status::findOne($programa->status_id);
-
-        if ($estadoActual->descripcion == "Borrador" || $estadoActual->descripcion == "Profesor"){
-          Yii::$app->session->setFlash('danger','Hubo un problema al intentar rechazar el programa');
-          return $this->redirect(['index']);
-        }
-        if(PermisosHelpers::requerirDirector($id) && $estadoActual->descripcion == "Departamento"){
-            if ($programa->setEstado("Borrador") && $programa->save()){
-              Yii::$app->session->setFlash('warning','Se rechazó el programa correctamente');
-              return $this->redirect(['index']);
-            } else {
-              Yii::$app->session->setFlash('danger','Hubo un problema al rechazar el programa');
-              return $this->redirect(['index']);
-            }
-        }
-
-        if((PermisosHelpers::requerirRol("Adm_academica") && $estadoActual->descripcion == "Administración Académica") ||
-          (PermisosHelpers::requerirRol("Sec_academica") && $estadoActual->descripcion == "Secretaría Académica")
-        ){
-          //$programa->status_id = Status::findOne(['descripcion','=','Departamento'])->id;
-
-          if($programa->bajarEstado() &&  $programa->save()){
-            Yii::$app->session->setFlash('warning','Se rechazó el programa correctamente');
-            return $this->redirect(['index']);
-          } else {
-            Yii::$app->session->setFlash('danger','Hubo un problema al rechazar el programa');
-            return $this->redirect(['index']);
-          }
-        }
-    }
 
     /**
      * Creates a new Generos model.
