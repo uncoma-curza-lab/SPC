@@ -5,21 +5,22 @@
   $asignatura = $model->getAsignatura()->one();
 
 ?>
-<head>
-  <meta charset="utf-8">
+
   <title>Programa de <?= Html::encode($asignatura->nomenclatura) ?></title>
   <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
-
   <style type="text/css">
     body{
       font-family: 'Roboto', sans-serif;
+      font-size: 16px;
+    }
+    h1,h2,h3,h4 {
+      font-weight: bold;
     }
     .titulo{
       text-align: center;
     }
   </style>
-</head>
-<body>
+
     <div class="titulo">
       <img src="curza_logo.png" width="20%" alt="">
       <p></p>
@@ -75,7 +76,9 @@
 
     <h4> 5. BIBLIOGRAFÍA BÁSICA Y DE CONSULTA </h4>
     <div style="margin-left:20px;">
+      <h4> <span style="font-weight:normal">BIBLIOGRAFÍA BÁSICA</span></h4>
       <?= HtmlPurifier::process($model->biblio_basica) ?>
+      <h4><span style="font-weight:normal">BIBLIOGRAFÍA DE CONSULTA</span></h4>
       <?= HtmlPurifier::process($model->biblio_consulta) ?>
     </div>
 
@@ -119,7 +122,3 @@
     <div class="" style="text-align:right">
       Lugar y fecha de entrega
     </div>
-
-
-</body>
-</html>

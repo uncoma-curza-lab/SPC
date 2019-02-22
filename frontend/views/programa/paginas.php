@@ -32,9 +32,9 @@
 
 <h4> 5. BIBLIOGRAFÍA BÁSICA Y DE CONSULTA </h4>
 <div style="margin-left:20px;">
-  <h5>Bibliografía Básica</h5>
+  <h4> <span style="font-weight:normal">BIBLIOGRAFÍA BÁSICA</span></h4>
   <?= HtmlPurifier::process($model->biblio_basica) ?>
-  <h5>Bibliografía de consulta</h5>
+  <h4><span style="font-weight:normal">BIBLIOGRAFÍA DE CONSULTA</span></h4>
   <?= HtmlPurifier::process($model->biblio_consulta) ?>
 </div>
 
@@ -76,5 +76,5 @@
   </div>
   <br><br>
   <div class="" style="text-align:right">
-    Lugar y fecha de entrega
+      Lugar y fecha de entrega
   </div>

@@ -42,7 +42,7 @@ $porcentaje = $model->calcularPorcentajeCarga();
    'validateOnBlur'            => false,
  ]); ?>
 
-<h3>3. Contenido según Plan de Estudio</h3>
+<h3>3. Contenidos según Plan de Estudio</h3>
 
 <?= $form->field($model, 'contenido_plan')->widget(TinyMce::className(), [
     'options' => ['rows' => 16],

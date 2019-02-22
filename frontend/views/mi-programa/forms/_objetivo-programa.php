@@ -34,7 +34,7 @@ $porcentaje = $model->calcularPorcentajeCarga();
   </div>
 </div>
 
-<h3>2.1 Objetivo del programa</h3>
+<h3>2.1 Objetivos del programa</h3>
   <?php $form = ActiveForm::begin([
     'enableAjaxValidation'      => false,
     'enableClientValidation'    => false,

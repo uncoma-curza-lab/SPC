@@ -36,7 +36,7 @@ $porcentaje = $model->calcularPorcentajeCarga();
 'validateOnBlur'            => false,
 ]); ?>
 
-<h3>2. Objetivo según Plan de estudio</h3>
+<h3>2. Objetivos según Plan de estudio</h3>
 
 <?= $form->field($model, 'objetivo_plan')->widget(TinyMce::className(), [
   'options' => ['rows' => 16],

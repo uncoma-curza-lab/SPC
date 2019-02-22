@@ -373,7 +373,14 @@ class ProgramaController extends Controller
     */
     public function actionExportPdf($id){
       $model = $this->findModel($id);
-      $mpdf = new Mpdf\Mpdf(['tempDir' => __DIR__ . '/tmp']);
+      $mpdf = new Mpdf\Mpdf(['utf-8','A4','tempDir' => __DIR__ . '/tmp']);
+      //$header = 'Document header';
+      //$html   = 'Your document content goes here';
+      $footer =  'Página {PAGENO} de {nb}';
+
+      //$mpdf = new Mpdf('utf-8', 'A4', 0, '', 12, 12, 25, 15, 12, 12);
+      //$mpdf->SetHTMLHeader($header);
+      $mpdf->SetHTMLFooter($footer);
       $mpdf->WriteHTML($this->renderPartial('portada',['model'=>$model]));
       $mpdf->addPage();
       $mpdf->WriteHTML($this->renderPartial('paginas',['model'=>$model]));
