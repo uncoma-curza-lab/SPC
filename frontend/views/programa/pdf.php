@@ -63,7 +63,7 @@
     </div>
 
 
-    <h4> 3. CONTENIDO SEGÚN PLAN DE ESTUDIOS </h4>
+    <h4> 3. CONTENIDOS SEGÚN PLAN DE ESTUDIOS </h4>
     <div style="margin-left:20px;">
       <?= HtmlPurifier::process($model->contenido_plan) ?>
     </div>

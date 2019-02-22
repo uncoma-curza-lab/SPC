@@ -40,7 +40,7 @@
     <h4> 2. OBJETIVOS SEGÚN PLAN DE ESTUDIOS </h4>
     <?= HtmlPurifier::process($model->objetivo_plan) ?>
 
-    <h4> 3. CONTENIDO SEGÚN PLAN DE ESTUDIOS </h4>
+    <h4> 3. CONTENIDOS SEGÚN PLAN DE ESTUDIOS </h4>
     <?= HtmlPurifier::process($model->contenido_plan) ?>
 
     <h4> 4. CONTENIDOS ANALÍTICOS </h4>

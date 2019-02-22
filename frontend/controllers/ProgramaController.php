@@ -187,7 +187,7 @@ class ProgramaController extends Controller
             } else {
               Yii::$app->session->setFlash('danger','Hubo un problema al confirmar el programa');
             }
-            return $this->redirect(['departamento']);
+            return $this->redirect(['evaluacion']);
           } else {
             Yii::warning("Intentó editar un programa ajeno. ID:".$id,'estado-programa');
           }
@@ -196,7 +196,7 @@ class ProgramaController extends Controller
         && $estadoActual->descripcion == "Profesor"
         && $programa->created_by != $userId ){
           Yii::$app->session->setFlash('danger','Debe pedir el programa antes de seguir');
-          return $this->redirect(['departamento']);
+          return $this->redirect(['evaluacion']);
        }
        if( (PermisosHelpers::requerirDirector($id) && ($estadoActual->descripcion == "Departamento")) ||
           (PermisosHelpers::requerirRol("Adm_academica") && $estadoActual->descripcion == "Administración Académica") ||
@@ -205,11 +205,11 @@ class ProgramaController extends Controller
           if($programa->subirEstado() && $programa->save()){
             Yii::info("Subió el estado del programa:".$id." Estaba en estado: ".$estadoActual->descripcion,'estado-programa');
             Yii::$app->session->setFlash('success','Se confirmó el programa exitosamente');
-            return $this->redirect(['departamento']);
+            return $this->redirect(['evaluacion']);
           } else {
             Yii::error("No pudo subir de estado programa:".$id,'estado-programa');
             Yii::$app->session->setFlash('danger','Hubo un problema al intentar aprobar el programa');
-            return $this->redirect(['departamento']);
+            return $this->redirect(['evaluacion']);
 
 //            throw new NotFoundHttpException("Ocurrió un error");
           }
@@ -225,17 +225,17 @@ class ProgramaController extends Controller
           Yii::error("No pudo rechazar el programa ID:".$id." con estado:".$estadoActual->descripcion,'estado-programa');
 
           Yii::$app->session->setFlash('danger','Hubo un problema al intentar rechazar el programa');
-          return $this->redirect(['departamento']);
+          return $this->redirect(['evaluacion']);
         }
         if(PermisosHelpers::requerirDirector($id) && $estadoActual->descripcion == "Departamento"){
             if ($programa->setEstado("Borrador") && $programa->save()){
               Yii::info("Cambió el estado de Departamento -> Borrador ID:".$id,'estado-programa');
 
               Yii::$app->session->setFlash('warning','Se rechazó el programa correctamente');
-              return $this->redirect(['departamento']);
+              return $this->redirect(['evaluacion']);
             } else {
               Yii::$app->session->setFlash('danger','Hubo un problema al rechazar el programa');
-              return $this->redirect(['departamento']);
+              return $this->redirect(['evaluacion']);
             }
         }
 
@@ -248,12 +248,12 @@ class ProgramaController extends Controller
             Yii::info("Rechazó el programa".$id." con estado actual".$estadoActual->descripcion,'estado-programa');
 
             Yii::$app->session->setFlash('warning','Se rechazó el programa correctamente');
-            return $this->redirect(['departamento']);
+            return $this->redirect(['evaluacion']);
           } else {
             Yii::error("No pudo rechazar el programa ".$id." con estado actual".$estadoActual->descripcion,'estado-programa');
 
             Yii::$app->session->setFlash('danger','Hubo un problema al rechazar el programa');
-            return $this->redirect(['departamento']);
+            return $this->redirect(['evaluacion']);
           }
         }
     }
