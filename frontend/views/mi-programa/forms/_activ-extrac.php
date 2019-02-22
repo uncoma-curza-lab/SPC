@@ -15,7 +15,7 @@ $this->params['items'][] = ['label' => '7. Evaluación y cond. de acreditación'
 $this->params['items'][] = ['label' => '8. Parciales, recuperatorios y promociones', 'url' => Url::to(['parcial-rec-promo', 'id' => $model->id]), 'options'=> $mensaje];
 $this->params['items'][] = ['label' => '9. Distribución horaria', 'url' => Url::to(['dist-horaria', 'id' => $model->id]), 'options'=> $mensaje];
 $this->params['items'][] = ['label' => '10. Cronograma tentativo', 'url' => Url::to(['crono-tentativo', 'id' => $model->id]), 'options'=> $mensaje];
-$this->params['items'][] = ['label' => '11. Actividad extracurricular', 'url' => Url::to(['actividad-extracurricular', 'id' => $model->id]), 'options'=> $mensaje];
+$this->params['items'][] = ['label' => '11. Actividad extracurricular'];
 $this->params['breadcrumbs'][] = ['label' => '...'];
 $this->params['breadcrumbs'][] = ['label' => "Distribución Horaria", 'url' => ['dist-horaria', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = ['label' => "Cronograma tentativo", 'url' => ['crono-tentativo', 'id' => $model->id]];
@@ -44,7 +44,7 @@ $porcentaje = $model->calcularPorcentajeCarga();
  </div>
 <h3>11. Planificación de actividades Extracurriculares</h3>
 <?= $form->field($model, 'actv_extracur')->widget(TinyMce::className(), [
-    'options' => ['rows' => 6],
+    'options' => ['rows' => 16],
     'language' => 'es',
     'clientOptions' => [
         'plugins' => [

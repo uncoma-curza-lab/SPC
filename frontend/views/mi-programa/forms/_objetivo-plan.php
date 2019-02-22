@@ -39,8 +39,8 @@ $porcentaje = $model->calcularPorcentajeCarga();
 <h3>2. Objetivo según Plan de estudio</h3>
 
 <?= $form->field($model, 'objetivo_plan')->widget(TinyMce::className(), [
-    'options' => ['rows' => 6],
-    'language' => 'es',
+  'options' => ['rows' => 16],
+  'language' => 'es',
     'clientOptions' => [
         'plugins' => [
             "advlist autolink lists link charmap
@@ -49,6 +49,7 @@ $porcentaje = $model->calcularPorcentajeCarga();
             "searchreplace visualblocks code fullscreen",
             "insertdatetime  table contextmenu paste"
         ],
+        'branding' => false,
         'toolbar' => "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link | fullscreen "
     ]
 ])->label('') ?>

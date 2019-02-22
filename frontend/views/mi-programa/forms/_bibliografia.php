@@ -46,7 +46,7 @@ $porcentaje = $model->calcularPorcentajeCarga();
   ]); ?>
   <h4>Bibliografía Básica</h4>
   <?= $form->field($model, 'biblio_basica')->widget(TinyMce::className(), [
-      'options' => ['rows' => 6],
+      'options' => ['rows' => 12],
       'language' => 'es',
       'clientOptions' => [
           'plugins' => [
@@ -56,13 +56,14 @@ $porcentaje = $model->calcularPorcentajeCarga();
               "searchreplace visualblocks code fullscreen",
               "insertdatetime  table contextmenu paste"
           ],
+          'branding' => false,
           'toolbar' => "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link | fullscreen "
       ]
   ])->label('') ?>
   <hr>
   <h4>Bibliografía de consulta</h4>
   <?= $form->field($model, 'biblio_consulta')->widget(TinyMce::className(), [
-      'options' => ['rows' => 6],
+      'options' => ['rows' => 12],
       'language' => 'es',
       'clientOptions' => [
           'plugins' => [
@@ -72,6 +73,7 @@ $porcentaje = $model->calcularPorcentajeCarga();
               "searchreplace visualblocks code fullscreen",
               "insertdatetime  table contextmenu paste"
           ],
+          'branding' => false,
           'toolbar' => "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link | fullscreen "
       ]
   ])->label('') ?>

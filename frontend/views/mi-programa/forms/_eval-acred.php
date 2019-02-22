@@ -11,7 +11,7 @@ $this->params['items'][] = ['label' => '3. Contenido según plan de estudio', 'u
 $this->params['items'][] = ['label' => '4. Contenidos analíticos', 'url' => Url::to(['contenido-analitico', 'id' => $model->id]), 'options'=> $mensaje];
 $this->params['items'][] = ['label' => '5. Bibliografía', 'url' => Url::to(['bibliografia', 'id' => $model->id]), 'options'=> $mensaje];
 $this->params['items'][] = ['label' => '6. Propuesta Metodológica', 'url' => Url::to(['propuesta-metodologica', 'id' => $model->id]), 'options'=> $mensaje];
-$this->params['items'][] = ['label' => '7. Evaluación y cond. de acreditación', 'url' => Url::to(['eval-acred', 'id' => $model->id]), 'options'=> $mensaje];
+$this->params['items'][] = ['label' => '7. Evaluación y cond. de acreditación'];
 $this->params['items'][] = ['label' => '8. Parciales, recuperatorios y promociones', 'url' => Url::to(['parcial-rec-promo', 'id' => $model->id]), 'options'=> $mensaje];
 $this->params['items'][] = ['label' => '9. Distribución horaria', 'url' => Url::to(['dist-horaria', 'id' => $model->id]), 'options'=> $mensaje];
 $this->params['items'][] = ['label' => '10. Cronograma tentativo', 'url' => Url::to(['crono-tentativo', 'id' => $model->id]), 'options'=> $mensaje];
@@ -44,9 +44,11 @@ $porcentaje = $model->calcularPorcentajeCarga();
 <h3>7. Evaluación y condiciones de acreditación</h3>
 
 <?= $form->field($model, 'evycond_acreditacion')->widget(TinyMce::className(), [
-    'options' => ['rows' => 6],
+    'options' => ['rows' => 16 ],
     'language' => 'es',
     'clientOptions' => [
+        'placeholder' => 'qasdasdasdwe',
+
         'plugins' => [
             "advlist autolink lists link charmap
             "//print
@@ -54,7 +56,14 @@ $porcentaje = $model->calcularPorcentajeCarga();
             "searchreplace visualblocks code fullscreen",
             "insertdatetime  table contextmenu paste"
         ],
-        'toolbar' => "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link | fullscreen "
+        'toolbar' => "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link | fullscreen ",
+        'branding' => false,
+        'protect' => [
+            "/\<\/?(if|endif)\>/g",  // Protect <if> & </endif>
+            "/\<xsl\:[^>]+\>/g",  // Protect <xsl:...>
+            "/<\?php.*?\?>/g"  // Protect php code
+        ],
+
     ]
 ])->label('') ?>
 <br>

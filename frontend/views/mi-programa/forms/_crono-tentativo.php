@@ -19,7 +19,7 @@ $this->params['items'][] = ['label' => '6. Propuesta Metodológica', 'url' => Ur
 $this->params['items'][] = ['label' => '7. Evaluación y cond. de acreditación', 'url' => Url::to(['eval-acred', 'id' => $model->id]), 'options'=> $mensaje];
 $this->params['items'][] = ['label' => '8. Parciales, recuperatorios y promociones', 'url' => Url::to(['parcial-rec-promo', 'id' => $model->id]), 'options'=> $mensaje];
 $this->params['items'][] = ['label' => '9. Distribución horaria', 'url' => Url::to(['dist-horaria', 'id' => $model->id]), 'options'=> $mensaje];
-$this->params['items'][] = ['label' => '10. Cronograma tentativo', 'url' => Url::to(['crono-tentativo', 'id' => $model->id]), 'options'=> $mensaje];
+$this->params['items'][] = ['label' => '10. Cronograma tentativo'];
 $this->params['items'][] = ['label' => '11. Actividad extracurricular', 'url' => Url::to(['actividad-extracurricular', 'id' => $model->id]), 'options'=> $mensaje];
 $this->params['breadcrumbs'][] = ['label' => '...'];
 $this->params['breadcrumbs'][] = ['label' => "Parciales, recuperatorios y coloquios", 'url' => ['parc-rec-promo', 'id' => $model->id]];
@@ -51,7 +51,7 @@ $porcentaje = $model->calcularPorcentajeCarga();
 <h3>10. Cronograma Tentativo</h3>
 
 <?= $form->field($model, 'crono_tentativo')->widget(TinyMce::className(), [
-    'options' => ['rows' => 6],
+    'options' => ['rows' => 16],
     'language' => 'es',
     'clientOptions' => [
         'plugins' => [
@@ -61,6 +61,7 @@ $porcentaje = $model->calcularPorcentajeCarga();
             "searchreplace visualblocks code fullscreen",
             "insertdatetime  table contextmenu paste"
         ],
+        'branding' => false,
         'toolbar' => "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link | fullscreen "
     ]
 ])->label('')  ?>

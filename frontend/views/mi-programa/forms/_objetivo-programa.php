@@ -44,7 +44,8 @@ $porcentaje = $model->calcularPorcentajeCarga();
   ]); ?>
 
     <?= $form->field($model, 'objetivo_programa')->widget(TinyMce::className(), [
-        'options' => ['rows' => 6],
+      'options' => ['rows' => 16],
+      'language' => 'es',
         'language' => 'es',
         'clientOptions' => [
             'plugins' => [
@@ -54,6 +55,7 @@ $porcentaje = $model->calcularPorcentajeCarga();
                 "searchreplace visualblocks code fullscreen",
                 "insertdatetime  table contextmenu paste"
             ],
+            'branding' => false,
             'toolbar' => "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link | fullscreen "
         ]
     ])->label('') ?>

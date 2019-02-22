@@ -271,40 +271,62 @@ class Programa extends \yii\db\ActiveRecord
     public function getYear(){
       return $this->year;
     }
-
+    public function getEquipoCatedra(){
+      return $this->equipo_catedra;
+    }
     public function calcularPorcentajeCarga(){
+      $valorPunto = 100/13;
+
       $porcentaje = 0;
       if(strlen($this->getFundamentacion()) > 10){
-        $porcentaje = $porcentaje+10;
+        $porcentaje = $porcentaje+$valorPunto;
       }
       if(strlen($this->getObjetivoPlan()) > 10){
-        $porcentaje = $porcentaje+10;
+        $porcentaje = $porcentaje+$valorPunto;
       }
       if(strlen($this->getContenidoPlan()) > 10){
-        $porcentaje = $porcentaje+10;
+        $porcentaje = $porcentaje+$valorPunto;
       }
       if(strlen($this->getContenidoAnalitico()) > 10){
-        $porcentaje = $porcentaje+10;
+        $porcentaje = $porcentaje+$valorPunto;
       }
       if(strlen($this->getPropuestaMetodologica()) > 10){
-        $porcentaje = $porcentaje+10;
+        $porcentaje = $porcentaje+$valorPunto;
       }
       if(strlen($this->getEyCAcreditacion()) > 10){
-        $porcentaje = $porcentaje+10;
+        $porcentaje = $porcentaje+$valorPunto;
       }
       if(strlen($this->getParcRecyPromo()) > 10){
-        $porcentaje = $porcentaje+10;
+        $porcentaje = $porcentaje+$valorPunto;
       }
       if(strlen($this->getDistHoraria()) > 10){
-        $porcentaje = $porcentaje+10;
+        $porcentaje = $porcentaje+$valorPunto;
       }
       if(strlen($this->getCronoTent()) > 10){
-        $porcentaje += 10;
+        $porcentaje += $valorPunto;
       }
       if(strlen($this->getActividadExtrac()) > 10){
-        $porcentaje += 10;
+        $porcentaje += $valorPunto;
       }
-      return $porcentaje;
+      if(strlen($this->getObjetivoPrograma()) > 10){
+        $porcentaje += $valorPunto;
+      }
+      if(strlen($this->getBibliografiaBasica()) > 10){
+        $porcentaje += $valorPunto;
+      }
+      if(strlen($this->getEquipoCatedra()) > 10){
+        $porcentaje += $valorPunto;
+      }
+      return round($porcentaje);
+    }
+    public function getObjetivoPrograma(){
+      return $this->objetivo_programa;
+    }
+    public function getBibliografiaBasica(){
+      return $this->biblio_basica;
+    }
+    public function getBibliografiaConsulta(){
+      return $this->biblio_consulta;
     }
     public function subirEstado():bool{
       $estadoActual = Status::findOne($this->status_id);

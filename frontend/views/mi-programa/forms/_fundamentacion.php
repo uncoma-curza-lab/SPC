@@ -52,7 +52,7 @@
 ]); ?>
 <h3>1. Fundamentación</h3>
 <?= $form->field($model, 'fundament')->widget(TinyMce::className(), [
-    'options' => ['rows' => 6],
+    'options' => ['rows' => 16],
     'language' => 'es',
     'clientOptions' => [
         'plugins' => [
@@ -62,6 +62,7 @@
             "searchreplace visualblocks code fullscreen",
             "insertdatetime  table contextmenu paste"
         ],
+        'branding' => false,
         'toolbar' => "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link | fullscreen "
     ]
 ])->label('') ?>

@@ -669,7 +669,38 @@ class MiProgramaController extends Controller
       $model->scenario = 'crono-tent';
       $estado = Status::findOne($model->status_id);
       $validarPermisos = $this->validarPermisos($model, $estado);
-
+      if ($model->crono_tentativo == null ){
+        $model->crono_tentativo = '
+        <table style="border-collapse: collapse; height: 110px; border-color: black; border-style: solid; float: left;" border="1">
+          <tbody>
+          <tr style="height: 22px;">
+          <th style="width: 400.2px; height: 22px;" colspan="5">Cuatrimestre</th>
+          </tr>
+          <tr style="height: 44px;">
+          <th style="width: 106px; height: 44px;">Tiempo <br />/ Unidades</th>
+          <th style="width: 68px; height: 44px;">Marzo</th>
+          <th style="width: 53px; height: 44px;">Abril</th>
+          <th style="width: 61px; height: 44px;">Mayo</th>
+          <th style="width: 57px; height: 44px;">Junio</th>
+          </tr>
+          <tr style="height: 22px;">
+          <td style="width: 106px; height: 22px;">Unidad 1</td>
+          <td style="width: 68px; height: 22px;">X</td>
+          <td style="width: 53px; height: 22px;">&nbsp;</td>
+          <td style="width: 61px; height: 22px;">&nbsp;</td>
+          <td style="width: 57px; height: 22px;">&nbsp;</td>
+          </tr>
+          <tr style="height: 22px;">
+          <td style="width: 106px; height: 22px;">Unidad 2</td>
+          <td style="width: 68px; height: 22px;">&nbsp;</td>
+          <td style="width: 53px; height: 22px;">&nbsp;</td>
+          <td style="width: 61px; height: 22px;">&nbsp;</td>
+          <td style="width: 57px; height: 22px;">&nbsp;</td>
+          </tr>
+          </tbody>
+          </table>
+        ';
+      }
       if ($validarPermisos) {
         if ($model->load(Yii::$app->request->post())){
           if($model->save()){
