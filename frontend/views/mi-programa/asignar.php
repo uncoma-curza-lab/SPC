@@ -49,9 +49,9 @@ $this->params['breadcrumbs'][] = $this->title;
           ],
         ]) ?>
     <? $form->field($designacion, 'programa_id')->textInput() ?> -->
-    <h4>Equipo de cátedra</h4>
+    <h3>Equipo de cátedra</h3>
     <?= $form->field($model, 'equipo_catedra')->widget(TinyMce::className(), [
-        'options' => ['rows' => 6],
+        'options' => ['rows' => 12],
         'language' => 'es',
         'clientOptions' => [
             'plugins' => [
@@ -61,11 +61,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 "searchreplace visualblocks code fullscreen",
                 "insertdatetime  table contextmenu paste"
             ],
-            'toolbar' => "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link "
+            'toolbar' => "fullscreen | undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link| table "
         ]
     ])->label('') ?>
     <div class="form-group">
-        <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Guardar', ['class' => 'btn btn-success pull-right']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
