@@ -5,6 +5,11 @@
   $asignatura = $model->getAsignatura()->one();
 
 ?>
+<style media="screen">
+    table, table td{
+      border-collapse: collapse;
+    }
+</style>
 <h4> 1. FUNDAMENTACIÓN </h4>
 <div style="margin-left:20px;">
   <?= HtmlPurifier::process($model->fundament) ?>

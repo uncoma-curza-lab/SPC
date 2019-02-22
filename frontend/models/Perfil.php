@@ -64,7 +64,7 @@ class Perfil extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'genero_id'], 'required'],
+            [['user_id'], 'required'],
             [['user_id', 'genero_id'], 'integer'],
             [['nombre', 'apellido'], 'string'],
             //[['localidad', 'telefono','cargo','imagen'], 'string','max'=>255],
@@ -250,7 +250,9 @@ class Perfil extends \yii\db\ActiveRecord
             return false;
         }
     }
-
+    public function printNombre(){
+      return $this->apellido." ".$this->nombre;
+    }
 /*    public static function listaCargos(){
         return ArrayHelper::getColumn(Perfil::find()->select(['cargo'])->distinct()->all(),'cargo');
     }    */

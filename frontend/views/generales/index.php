@@ -73,7 +73,7 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
               }
             ],*/
             [
-              'attribute' => 'departamento_id',
+              'attribute' => 'departamento',
               'value' => function($model){
                 //$dpto = $model->getAsignatura()->one()->getDepartamento()->one();
                 $dpto = $model->getDepartamento()->one();

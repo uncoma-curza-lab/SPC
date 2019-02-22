@@ -30,6 +30,7 @@ class UserSearch extends User
     public $tipo_usuario_id;
     public $estadoNombre;
     public $perfilId;
+    public $perfil;
 
 
     /**
@@ -43,7 +44,7 @@ class UserSearch extends User
 
             [['id', 'rol_id', 'estado_id', 'tipo_usuario_id'], 'integer'],
             [['username', 'email', 'created_at', 'updated_at', 'rolNombre',
-                'estadoNombre','tipoUsuarioNombre', 'perfilId',
+                'estadoNombre','tipoUsuarioNombre', 'perfilId', 'perfil',
                 'tipo_usuario_nombre'], 'safe'],
         ];
     }
@@ -104,6 +105,10 @@ class UserSearch extends User
                     'desc' => ['perfil.id' => SORT_DESC],
                     'label' => 'Perfil'
                 ],
+                'perfil' => [
+                    'asc' => ['perfil.nombre' => SORT_ASC],
+                    'label' => 'Perfil'
+                ],
 
 
                 'rolNombre' => [
@@ -146,7 +151,6 @@ class UserSearch extends User
 
             return $dataProvider;
         }
-
         $this->addSearchParameter($query, 'id');
         $this->addSearchParameter($query, 'username', true);
         $this->addSearchParameter($query, 'email', true);
@@ -180,6 +184,12 @@ class UserSearch extends User
             }])
 
             // filter by perfil
+            ->joinWith(['perfil' => function ($q) {
+
+                $q->andFilterWhere(['like', 'perfil.nombre', $this->perfil])
+                ->orFilterWhere(['like', 'perfil.apellido', $this->perfil]);
+
+            }])
 
             ->joinWith(['perfil' => function ($q) {
 

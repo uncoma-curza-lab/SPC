@@ -47,17 +47,25 @@ AppAsset::register($this);
             //$menuItems[] = ['label' => 'Informes', 'url' => ['/informes/index']];
           //];
         if(PermisosHelpers::requerirMinimoRol('Admin')){
-          $menuItems[]=['label' => 'Controles', 'items' => [
-          ['label' => 'Carreras', 'url' => ['/carrera/index']],
-          ['label' => 'Departamentos', 'url' => ['/departamento/index']],
-          ['label' => 'Planes', 'url' => ['/plan/index']],
-          ['label' => 'Asignaturas', 'url' => ['/asignatura/index']],
-          ['label' => 'Personas', 'url' => ['/persona/index']],
-          ['label' => 'Roles', 'url' => ['/rol/index']],
-          ['label' => 'Estados', 'url' => ['/status/index']],
-          ['label' => 'Usuarios', 'url' => ['/user/index']],
-          ['label' => 'Perfiles', 'url' => ['perfil/index']],
-        ]];
+          $menuItems[]=[
+            'label' => 'Controles', 'items' => [
+              ['label' => 'Carreras', 'url' => ['/carrera/index']],
+              ['label' => 'Departamentos', 'url' => ['/departamento/index']],
+              ['label' => 'Planes', 'url' => ['/plan/index']],
+              ['label' => 'Asignaturas', 'url' => ['/asignatura/index']],
+              //['label' => 'Personas', 'url' => ['/persona/index']],
+              ['label' => 'Estados', 'url' => ['/status/index']],
+            ],
+
+          ];
+          $menuItems[] = [
+            'label' => 'Sobre Usuarios', 'items' => [
+              ['label' => 'Roles', 'url' => ['/rol/index']],
+              ['label' => 'Usuarios', 'url' => ['/user/index']],
+              ['label' => 'Perfiles', 'url' => ['perfil/index']],
+              ['label' => 'Designaciones', 'url' => ['designacion/index']],
+            ]
+          ];
         }
         $menuItems[] = ['label' => 'Salir (' . Yii::$app->user->identity->username . ')',
               'url' => ['/site/logout'],
