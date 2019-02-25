@@ -17,13 +17,13 @@ class GeneralesSearch extends Programa
 {
     public $asignatura;
     public $departamento;
-
+    public $creador;
     public function attributes(){
-        return array_merge(parent::attributes(),['user.username']);
+        return array_merge(parent::attributes(),['user.username','user.perfil.nombre']);
     }
 
     public function attributeLabels(){
-        return array_merge(parent::attributeLabels(),['user.username'=>'nombre de usuario']);
+        return array_merge(parent::attributeLabels(),['user.username'=>'nombre de usuario','user.perfil.nombre'=>'nombre de usuario']);
     }
     /**
      * {@inheritdoc}
@@ -31,8 +31,11 @@ class GeneralesSearch extends Programa
     public function rules()
     {
         return [
-            [['id','departamento_id', 'status_id', 'year', 'created_by', 'updated_by'], 'integer'],
-            [['departamento','asignatura', 'fundament', 'objetivo_plan', 'contenido_plan', 'propuesta_met', 'evycond_acreditacion', 'parcial_rec_promo', 'distr_horaria', 'crono_tentativo', 'actv_extracur', 'created_at', 'updated_at'], 'safe'],
+            [['id','departamento_id', 'status_id', 'year', 'created_by','updated_by'], 'integer'],
+            [['user.perfil.nombre','creador','departamento','asignatura', 'fundament', 'objetivo_plan',
+            'contenido_plan', 'propuesta_met', 'evycond_acreditacion',
+            'parcial_rec_promo', 'distr_horaria', 'crono_tentativo', 'actv_extracur',
+             'created_at', 'updated_at'], 'safe'],
         ];
     }
 
@@ -62,7 +65,7 @@ class GeneralesSearch extends Programa
         // add conditions that should always apply here
         $query->joinWith(['asignatura']);
         $query->joinWith(['departamento']);
-
+        $query->joinWith(['creador']);
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
@@ -83,7 +86,6 @@ class GeneralesSearch extends Programa
             'year' => $this->year,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'created_by' => $this->created_by,
             'updated_by' => $this->updated_by,
         ]);
 
@@ -98,6 +100,7 @@ class GeneralesSearch extends Programa
             ->andFilterWhere(['like', 'parcial_rec_promo', $this->parcial_rec_promo])
             ->andFilterWhere(['like', 'distr_horaria', $this->distr_horaria])
             ->andFilterWhere(['like', 'crono_tentativo', $this->crono_tentativo])
+            ->andFilterWhere(['like', '{{%perfil}}.nombre', $this->{"user.perfil.nombre"}])
             ->andFilterWhere(['like', 'actv_extracur', $this->actv_extracur]);
 
         return $dataProvider;

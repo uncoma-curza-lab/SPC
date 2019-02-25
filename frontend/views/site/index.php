@@ -41,7 +41,7 @@ $items = [
         <img src="curza_logo.png" width=15% alt="">
         <h2 style="font-weight:bold">Centro Universitario Regional Zona Atlántica</h2>
         <h2>Universidad Nacional del Comahue</h2>
-        <p class="lead">Gestor de programas basado en YiiFramework.</p>
+        <p class="lead">Gestor de programas</p>
     </div>
 
     <div class="body-content">

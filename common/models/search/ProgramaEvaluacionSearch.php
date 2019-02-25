@@ -22,6 +22,7 @@ use common\models\Status;
 class ProgramaEvaluacionSearch extends Programa
 {
     public $departamento;
+    public $asignatura;
     public function attributes(){
         return array_merge(parent::attributes(),['user.username']);
     }
@@ -36,7 +37,7 @@ class ProgramaEvaluacionSearch extends Programa
     {
         return [
             [['id', 'departamento_id', 'status_id', 'asignatura_id', 'year', 'created_by', 'updated_by'], 'integer'],
-            [[ 'fundament', 'objetivo_plan', 'contenido_plan', 'propuesta_met', 'evycond_acreditacion', 'parcial_rec_promo', 'distr_horaria', 'crono_tentativo', 'actv_extracur', 'created_at', 'updated_at'], 'safe'],
+            [[ 'asignatura','departamento','fundament', 'objetivo_plan', 'contenido_plan', 'propuesta_met', 'evycond_acreditacion', 'parcial_rec_promo', 'distr_horaria', 'crono_tentativo', 'actv_extracur', 'created_at', 'updated_at'], 'safe'],
         ];
     }
 
@@ -84,7 +85,8 @@ class ProgramaEvaluacionSearch extends Programa
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
-
+        $query->joinWith(['asignatura']);
+        $query->joinWith(['departamento']);
         $this->load($params);
 
         if (!$this->validate()) {
@@ -114,6 +116,8 @@ class ProgramaEvaluacionSearch extends Programa
 
         $query->andFilterWhere(['like', 'fundament', $this->fundament])
         //->andFilterWhere(['like', 'asignatura', $this->asignatura])
+        ->andFilterWhere(['like', '{{%asignatura}}.nomenclatura', $this->asignatura])
+        ->andFilterWhere(['like', '{{%departamento}}.nom', $this->departamento])
             ->andFilterWhere(['like', 'objetivo_plan', $this->objetivo_plan])
             ->andFilterWhere(['like', 'contenido_plan', $this->contenido_plan])
             ->andFilterWhere(['like', 'propuesta_met', $this->propuesta_met])

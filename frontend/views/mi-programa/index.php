@@ -229,12 +229,14 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
         ],
     ]); ?>
 </div>
-<hr>
+
 <div class="row">
-  <span class="label label-primary "><span class="glyphicon glyphicon-hand-up"></span> Asignarme el programa</span>
-  <span class="label label-danger "><span class="glyphicon glyphicon-remove"></span> Rechazar programa</span>
-  <span class="label label-success "><span class="glyphicon glyphicon-ok"></span> Enviar programa</span>
-  <span class="label label-info"><span class="glyphicon glyphicon-info-sign"></span> Más información</span>
-  <span class="label label-warning"><span class="glyphicon glyphicon-pencil"></span> Editar programa</span>
-  <span class="label label-default"><span class="glyphicon glyphicon-print"></span> Exportar PDF</span>
+  <div class="col-lg-6 col-lg-offset-3">
+    <span class="label label-primary "><span class="glyphicon glyphicon-user"></span>Equipo de cátedra</span>
+    <span class="label label-success "><span class="glyphicon glyphicon-ok"></span> Enviar</span>
+    <span class="label label-info"><span class="glyphicon glyphicon-info-sign"></span> Más información</span>
+    <span class="label label-danger "><span class="glyphicon glyphicon-trash"></span> Eliminar</span>
+    <span class="label label-default"><span class="glyphicon glyphicon-print"></span> Exportar PDF</span>
+    <span class="label label-warning"><span class="glyphicon glyphicon-pencil"></span> Editar</span>
+  </div>
 </div>

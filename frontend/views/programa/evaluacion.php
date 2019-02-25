@@ -30,14 +30,14 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
             [
-              'attribute' =>'departamento_id',
+              'attribute' =>'departamento',
               'value' => function($model) {
                 $depto = $model->getDepartamento()->one();
                 return isset($depto) ? $depto->nom : "NN";
               }
             ],
             [
-              'attribute' => 'asignatura_id',
+              'attribute' => 'asignatura',
               'value' => function($model){
                 $asignatura = $model->getAsignatura()->one();
                 return isset($asignatura) ? $asignatura->nomenclatura : "NN";
@@ -66,6 +66,7 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
             ],
             [
                 'label' => 'Creado Por',
+                'attribute' => 'created_by',
                 'visible' => $esAdmin,
                 'value' => function($model){
                   return RegistrosHelpers::getUserName($model->created_by);
@@ -226,8 +227,10 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
 </div>
 <hr>
 <div class="row">
-  <span class="label label-danger "><span class="glyphicon glyphicon-remove"></span> Rechazar programa</span>
-  <span class="label label-success "><span class="glyphicon glyphicon-ok"></span> Enviar programa</span>
-  <span class="label label-info"><span class="glyphicon glyphicon-info-sign"></span> Más información</span>
-  <span class="label label-default"><span class="glyphicon glyphicon-print"></span> Exportar PDF</span>
+  <div class="col-lg-6 col-lg-offset-3">
+    <span class="label label-success "><span class="glyphicon glyphicon-ok"></span> Enviar programa</span>
+    <span class="label label-danger "><span class="glyphicon glyphicon-remove"></span> Rechazar programa</span>
+    <span class="label label-info"><span class="glyphicon glyphicon-info-sign"></span> Más información</span>
+    <span class="label label-default"><span class="glyphicon glyphicon-print"></span> Exportar PDF</span>
+  </div>
 </div>

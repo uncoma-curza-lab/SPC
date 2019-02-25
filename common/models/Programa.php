@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use frontend\models\Perfil;
 //behaviors library
 use yii\db\Expression;
 use yii\behaviors\BlameableBehavior;
@@ -225,6 +226,13 @@ class Programa extends \yii\db\ActiveRecord
         return $this->hasMany(Unidad::className(), ['programa_id' => 'id']);
     }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCreador()
+    {
+        return $this->hasOne(Perfil::className(), ['user_id' => 'created_by']);
+    }
 
     public function getNomenclatura()
     {

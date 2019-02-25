@@ -18,6 +18,7 @@ class m180906_125930_asignatura extends Migration
       }
       $this->createTable('{{%asignatura}}',[
         'id'      =>  $this->primaryKey(),
+        'orden' => $this->integer(),
         'nomenclatura'   =>  $this->string()->notNull(),
         'curso'   =>  $this->integer()->notNull(),
         'cuatrimestre'   =>  $this->integer()->notNull(),

@@ -90,6 +90,7 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
             ],
             [
                 'label' => 'Creado Por',
+                'attribute' => 'user.perfil.nombre',
                 'contentOptions' => ['style' => 'width:2%;  max-width:1%;  white-space:nowrap; overflow: hidden; text-overflow: ellipsis;'],
                 //'visible' => $esAdmin,
                 'value' => function($model){
@@ -281,9 +282,9 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
 </div>
 <hr>
 <div class="row">
-  <span class="label label-primary "><span class="glyphicon glyphicon-hand-up"></span> Asignarme el programa</span>
-  <span class="label label-danger "><span class="glyphicon glyphicon-remove"></span> Rechazar programa</span>
-  <span class="label label-success "><span class="glyphicon glyphicon-ok"></span> Enviar programa</span>
-  <span class="label label-info"><span class="glyphicon glyphicon-info-sign"></span> Más información</span>
-  <span class="label label-default"><span class="glyphicon glyphicon-print"></span> Exportar PDF</span>
+  <div class="col-lg-6 col-lg-offset-4">
+    <span class="label label-primary "><span class="glyphicon glyphicon-hand-up"></span> Asignarme el programa</span>
+    <span class="label label-info"><span class="glyphicon glyphicon-info-sign"></span> Más información</span>
+    <span class="label label-default"><span class="glyphicon glyphicon-print"></span> Exportar PDF</span>
+  </div>
 </div>

@@ -61,14 +61,15 @@ $porcentaje = $model->calcularPorcentajeCarga();
           'toolbar' => "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link | fullscreen "
       ]
   ])->label('') ?>
-<br>
+   <br>
    <div class="row">
      <div class="col-xs-6 text-left">
-       <?= Html::a('Atrás', ['contenido-plan', 'id' => $model->id],['onclick'=>"return confirm('No se guardarán los cambios de esta sección, ¿desea salir?')",'class' => 'btn btn-warning']) ?>
+       <?= Html::a('Salir sin guardar', ['index'],['onclick'=>"return confirm('No se guardarán los cambios de esta sección, ¿desea salir?')",'class' => 'btn btn-danger']); ?>
        <?= Html::submitButton('Guardar y salir',['class' => 'btn btn-info' , 'name'=>'submit','value' => 'salir']) ?>
      </div>
      <div class="col-xs-6 text-right">
-       <?= Html::submitButton('Seguir', ['class' => 'btn btn-success']) ?>
+       <?= Html::a('Atrás', ['contenido-plan', 'id' => $model->id],['onclick'=>"return confirm('No se guardarán los cambios de esta sección, ¿desea salir?')",'class' => 'btn btn-warning']) ?>
+       <?= Html::submitButton('Siguiente', ['class' => 'btn btn-success']); ?>
      </div>
    </div>
    <?php ActiveForm::end(); ?>
