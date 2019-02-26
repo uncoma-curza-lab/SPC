@@ -29,7 +29,9 @@ use frontend\models\Perfil;
         ],
       ]) ?>
       <?= $form->field($model, 'perfil_id')->widget(Select2::classname(),[
-          'data' => ArrayHelper::map(Perfil::find()->all(),'id','nombre','apellido'),
+          'data' => ArrayHelper::map(Perfil::find()->all(),'id',function($model){
+              return $model->apellido." ".$model->nombre;
+          }),
           //'data' =>ArrayHelper::map(((new StatusSearch())->search(['model' => 'backend\models\Status'])),'id','descripcion'),
           //'data' => (new StatusSearch())->search(['model' => 'backend\models\Status'])->id,
 
