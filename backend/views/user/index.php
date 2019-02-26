@@ -53,7 +53,8 @@ $this->params['breadcrumbs'][] = $this->title;
             [
               'attribute' => 'perfil',
               'value' => function($model){
-                return $model->getPerfil()->one()->printNombre();
+                $perfil = $model->getPerfil()->one();
+                return $perfil ? $perfil->printNombre() : null;
               }
             ],
             'created_at',

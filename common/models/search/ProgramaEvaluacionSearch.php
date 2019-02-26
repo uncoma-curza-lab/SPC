@@ -65,10 +65,12 @@ class ProgramaEvaluacionSearch extends Programa
         $perfil = \Yii::$app->user->identity->perfil;
         // si es director tiene una designación con ese cargo
         $cargoDirector = Cargo::find()->where(['=','nomenclatura','Director'])->one();
-        $designacion = Designacion::find()->where(['=','perfil_id',$perfil->id])->andWhere(['=','cargo_id',$cargoDirector->id])->one();
-        $depto = null;
-        if($designacion) {
-          $depto = $designacion->departamento_id;
+        if ($perfil){
+          $designacion = Designacion::find()->where(['=','perfil_id',$perfil->id])->andWhere(['=','cargo_id',$cargoDirector->id])->one();
+          $depto = null;
+          if($designacion) {
+            $depto = $designacion->departamento_id;
+          }
         }
 
 
