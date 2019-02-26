@@ -80,40 +80,25 @@ $this->createTable('{{%asignatura}}',[
       $carreras = json_decode(utf8_encode($jsoncarr));
 
       $aCarr = [];
+      echo "DEPARTAMENTO: ". $key->title->rendered."<br>";
       foreach ($carreras as $carrera) {
           $planes = "http://web.curza.uncoma.edu.ar/cms/wp-json/wp/v2/plan/?carrera=".$carrera->id."&ordeby=curza_plugin_academico_materia_orden&order=asc";
           $jsonplans = file_get_contents($planes);
           $planes = json_decode(utf8_encode($jsonplans));
 
-          $aPlans = [];
+          echo "Carrera: ". $carrera->title->rendered."<br>";
           foreach ($planes as $plan) {
             $materias = "http://web.curza.uncoma.edu.ar/cms/wp-json/wp/v2/materia/?plan=".$plan->id."&ordeby=curza_plugin_academico_materia_orden&order=asc";
             $jsonmaterias = file_get_contents($materias);
             $materias = json_decode(utf8_encode($jsonmaterias));
 
-            $aMat = [];
+            echo "Plan: ". $plan->title->rendered."<br>";
             foreach ($materias as $materia) {
         //      echo $carrera->title->rendered." ".$materia->title->rendered."<br>";
-                $aMat[] = [
-                    'nom' => $key->title->rendered,
-                ];
+              echo "Materia: ". $materia->title->rendered."<br>";
             }
-            $plan[]=[
-                'materias' => $aMat,
-                'nombre' => $key->title->rendered,
-            ];
-
           }
-          $aCarr[] = [
-            'nom' => $key->title->rendered,
-            'planes' => $plan
-          ];
       }
-      $aDeptos[] = [
-        'nom' => $key->title->rendered,
-        'carreras' => $aCarr
-      ];
-      //var_dump();
       //  $plan =$key->_links->{"wp:term"}[0]->href;
       //    procesar($plan);
   /*    $asignatura = [];
@@ -126,4 +111,5 @@ $this->createTable('{{%asignatura}}',[
       ];*/
 
     }
+
 ?>
