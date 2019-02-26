@@ -22,9 +22,16 @@
 <?= $form->field($model, 'asignatura_id')->widget(Select2::classname(),[
     'data' => ArrayHelper::map(Asignatura::find()->all(),
                 'id',
-                'nomenclatura',
                 function($model,$e){
-                  $dep = $model->getDepartamento()->one();
+                  $plan = $model->getPlan()->one();
+                  $carrera = $plan->getCarrera()->one();
+                  $dep = $carrera->getDepartamento()->one();
+                  return isset($dep) ? $model->nomenclatura." (".$plan->planordenanza.")" : "N";
+                },
+                function($model,$e){
+                  $plan = $model->getPlan()->one();
+                  $carrera = $plan->getCarrera()->one();
+                  $dep = $carrera->getDepartamento()->one();
                   return isset($dep) ? $dep->nom : "N";
                 }
               ),
