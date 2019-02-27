@@ -43,6 +43,7 @@ class m190220_035256_usuarios extends Migration
         }
       }
       fclose ($fp);
+      
 
     }
 
