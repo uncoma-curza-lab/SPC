@@ -17,7 +17,6 @@ class GeneralesSearch extends Programa
 {
     public $asignatura;
     public $departamento;
-    public $creador;
     public function attributes(){
         return array_merge(parent::attributes(),['user.username','user.perfil.nombre']);
     }
@@ -32,7 +31,7 @@ class GeneralesSearch extends Programa
     {
         return [
             [['id','departamento_id', 'status_id', 'year', 'created_by','updated_by'], 'integer'],
-            [['user.perfil.nombre','creador','departamento','asignatura', 'fundament', 'objetivo_plan',
+            [['user.perfil.nombre','departamento','asignatura', 'fundament', 'objetivo_plan',
             'contenido_plan', 'propuesta_met', 'evycond_acreditacion',
             'parcial_rec_promo', 'distr_horaria', 'crono_tentativo', 'actv_extracur',
              'created_at', 'updated_at'], 'safe'],
@@ -60,12 +59,18 @@ class GeneralesSearch extends Programa
 
         $query = Programa::find();
         $estadoBorrador = Status::find()->where(['=','descripcion','Borrador'])->one();
+        $estadoBiblioteca = Status::find()->where(['=','descripcion','Biblioteca'])->one();
         $query->where(['!=','status_id',$estadoBorrador->id]);
+        $userId = \Yii::$app->user->identity->id;
 
+        if (PermisosHelpers::requerirRol('Profesor')){
+          $query->where(['=','created_by', $userId]);
+          $query->orFilterWhere(['=','status_id',$estadoBiblioteca->id]);
+        }
         // add conditions that should always apply here
         $query->joinWith(['asignatura']);
         $query->joinWith(['departamento']);
-        $query->joinWith(['creador']);
+        //$query->joinWith(['creador']);
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
