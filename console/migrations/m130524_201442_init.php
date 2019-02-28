@@ -134,7 +134,7 @@ class m130524_201442_init extends Migration
         // user
         $this->createTable('{{%user}}', [
             'id' => Schema::TYPE_PK,
-            'username' => Schema::TYPE_STRING . "(255) NOT NULL UNIQUE",
+            'username' => Schema::TYPE_STRING . "(255) NOT NULL ",
             'auth_key' => Schema::TYPE_STRING . "(32) NOT NULL",
             'password_hash' => Schema::TYPE_STRING . "(255) NOT NULL",
             'password_reset_token' => Schema::TYPE_STRING . "(255) NULL",
