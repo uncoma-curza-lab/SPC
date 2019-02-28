@@ -63,10 +63,7 @@ class m190220_035256_usuarios extends Migration
           'nombre' => "Admin",
           'apellido' => "Sys",
       ]);
-      $this->update('{{%user}}', [
-          'username' => '22979018',
-          'rol_id' => 7,
-      ]);
+    
 
 
     }
