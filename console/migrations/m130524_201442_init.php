@@ -65,35 +65,6 @@ class m130524_201442_init extends Migration
             'updated_by' => Schema::TYPE_INTEGER . "(11) NOT NULL",
         ], $this->tableOptions);
 
-            $this->insert('{{%perfil}}', [
-                'id' => 1,
-                'user_id' => '4',
-                'nombre' => 'profesor',
-                'apellido' => 'profesor',
-                'genero_id' => 1,
-            ]);
-            $this->insert('{{%perfil}}', [
-                'id' => 2,
-                'user_id' => '5',
-                'nombre' => 'departamento',
-                'apellido' => 'departamento',
-                'genero_id' => 1,
-            ]);
-            $this->insert('{{%perfil}}', [
-                'id' => 3,
-                'user_id' => '10',
-                'nombre' => 'departamento2',
-                'apellido' => 'departamento2',
-                'genero_id' => 1,
-            ]);
-            $this->insert('{{%perfil}}', [
-                'id' => 4,
-                'user_id' => '9',
-                'nombre' => 'profesor2',
-                'apellido' => 'profesor2',
-                'genero_id' => 2,
-            ]);
-
         // rol
         $this->createTable('{{%rol}}', [
             'id' => Schema::TYPE_PK,
@@ -163,7 +134,7 @@ class m130524_201442_init extends Migration
         // user
         $this->createTable('{{%user}}', [
             'id' => Schema::TYPE_PK,
-            'username' => Schema::TYPE_STRING . "(255) NOT NULL",
+            'username' => Schema::TYPE_STRING . "(255) NOT NULL UNIQUE",
             'auth_key' => Schema::TYPE_STRING . "(32) NOT NULL",
             'password_hash' => Schema::TYPE_STRING . "(255) NOT NULL",
             'password_reset_token' => Schema::TYPE_STRING . "(255) NULL",
@@ -175,112 +146,6 @@ class m130524_201442_init extends Migration
             'updated_at' => Schema::TYPE_DATETIME . " NOT NULL",
         ], $this->tableOptions);
 
-            $this->insert('{{%user}}', [
-                'id' => 1,
-                'username' => 'admin',
-                'auth_key' => '12pemSeqcG-ov-bgrrsQli74vxmmzPOC',
-                'password_hash' => '$2y$13$G1T2QXJ5sBrsvKb3p61vFek301wWxh/EFIfqCdJXPLnavzyBh4lC2', // admin
-                'password_reset_token' => null,
-                'email' => 'admin@email.com',
-                'rol_id' => 2,
-                'estado_id' => 1,
-                'tipo_usuario_id' => 1,
-                'created_at' => '2015-01-01 00:00:00',
-                'updated_at' => '2015-01-01 00:00:00',
-            ]);
-            $this->insert('{{%user}}', [
-                'id' => 2,
-                'username' => 'usuario',
-                'auth_key' => 'ZF88G45g6AamJlaVKb-aj4A8YEvmQjxz',
-                'password_hash' => '$2y$13$dsEiz9MkhNOz6dQaJgQb.uc40wrL9uBcuB2O90.R7U3jXlcz9hUR2', // usuario
-                'password_reset_token' => null,
-                'email' => 'usuario@email.com',
-                'rol_id' => 1,
-                'estado_id' => 1,
-                'tipo_usuario_id' => 1,
-                'created_at' => '2015-01-01 00:00:00',
-                'updated_at' => '2015-01-01 00:00:00',
-            ]);
-            $this->insert('{{%user}}', [
-                'id' => 3,
-                'username' => 'superusuario',
-                'auth_key' => 'Om3xl7PrKHacvNFLyeiDsCxo3TUhU_n0',
-                'password_hash' => '$2y$13$i4wfK06f3H4nWGxTtR0Y0.wbNBEJtpgW6.1zwtwU3mjd6socf9/Hu', //superusuario
-                'password_reset_token' => null,
-                'email' => 'superusuario@email.com',
-                'rol_id' => 3,
-                'estado_id' => 1,
-                'tipo_usuario_id' => 1,
-                'created_at' => '2015-01-01 00:00:00',
-                'updated_at' => '2015-01-01 00:00:00',
-            ]);
-            $this->insert('{{%user}}', [
-                'id' => 4,
-                'username' => 'profesor',
-                'auth_key' => 'bQYCliZJp_Pxx81t56_tMZ5ojXA84g5p',
-                'password_hash' => '$2y$13$5Zcu8bOU3g38XxSQduUKNe2sbBf1Cssd7rZ8qJgL/Xzif6bWjllKm', //profesor
-                'password_reset_token' => null,
-                'email' => 'profesor@email.com',
-                'rol_id' => 4,
-                'estado_id' => 1,
-                'tipo_usuario_id' => 1,
-                'created_at' => '2015-01-01 00:00:00',
-                'updated_at' => '2015-01-01 00:00:00',
-            ]);
-
-            $this->insert('{{%user}}', [
-                'id' => 5,
-                'username' => 'departamento',
-                'auth_key' => 's9Bwu2WIpDuTf1-MwNg1idNdpXpd9Q3J',
-                'password_hash' => '$2y$13$qXmkrgjd99oVALp.i7Ake.XOpldPn0vtyHtcwWEZkJYBm9EJ1zFG2', //departamento
-                'password_reset_token' => null,
-                'email' => 'departamento@email.com',
-                'rol_id' => 5,
-                'estado_id' => 1,
-                'tipo_usuario_id' => 1,
-                'created_at' => '2015-01-01 00:00:00',
-                'updated_at' => '2015-01-01 00:00:00',
-            ]);
-            $this->insert('{{%user}}', [
-                'id' => 10,
-                'username' => 'departamento2',
-                'auth_key' => 's9Bwu2WIpDuTf1-MwNg1idNdpXpd9Q3J',
-                'password_hash' => '$2y$13$qXmkrgjd99oVALp.i7Ake.XOpldPn0vtyHtcwWEZkJYBm9EJ1zFG2', //departamento
-                'password_reset_token' => null,
-                'email' => 'departamento2@email.com',
-                'rol_id' => 5,
-                'estado_id' => 1,
-                'tipo_usuario_id' => 1,
-                'created_at' => '2015-01-01 00:00:00',
-                'updated_at' => '2015-01-01 00:00:00',
-            ]);
-            $this->insert('{{%user}}', [
-                'id' => 8,
-                'username' => 'biblioteca',
-                'auth_key' => 'kNM5QVjArxGKylCrvUKgyzRNnPaoCCCA',
-                'password_hash' => '$2y$13$peVfPVGTk/mOPGFmOqnl1uSogjeWvvwbCUuie87k1vscqty.dS6uS', //biblioteca
-                'password_reset_token' => null,
-                'email' => 'biblioteca@email.com',
-                'rol_id' => 8,
-                'estado_id' => 1,
-                'tipo_usuario_id' => 1,
-                'created_at' => '2015-01-01 00:00:00',
-                'updated_at' => '2015-01-01 00:00:00',
-            ]);
-            $this->insert('{{%user}}', [
-                'id' => 9,
-                'username' => 'profesor2',
-                //profesor pass
-                'auth_key' => 'bQYCliZJp_Pxx81t56_tMZ5ojXA84g5p',
-                'password_hash' => '$2y$13$5Zcu8bOU3g38XxSQduUKNe2sbBf1Cssd7rZ8qJgL/Xzif6bWjllKm', //profesor
-                'password_reset_token' => null,
-                'email' => 'profesor@email.com',
-                'rol_id' => 4,
-                'estado_id' => 1,
-                'tipo_usuario_id' => 1,
-                'created_at' => '2015-01-01 00:00:00',
-                'updated_at' => '2015-01-01 00:00:00',
-            ]);
 
 
         // fk: perfil

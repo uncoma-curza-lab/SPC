@@ -33,6 +33,9 @@ $estado_programa = Status::findOne(['=','id',$model->status_id]);
         'dataProvider' => new ActiveDataProvider([
           'query' => $model->getObservaciones()
         ]),
+        'summary' => "Mostrando {begin} de {totalCount} observaciones",
+        'emptyText' => 'No hay resultados',
+
         //'filterModel' => new ObservacionSearch(),
         'columns' => [
         //    ['class' => 'yii\grid\SerialColumn'],

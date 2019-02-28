@@ -64,4 +64,8 @@ class Plan extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Carrera::className(), ['id' => 'carrera_id']);
     }
+
+    public function getOrdenanza(){
+      return $this->planordenanza;
+    }
 }

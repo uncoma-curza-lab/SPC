@@ -48,7 +48,7 @@ class m180906_125930_asignatura extends Migration
       /*
       * Psicopedagogía
       */
-      $this->insert('{{%asignatura}}', [
+      /*$this->insert('{{%asignatura}}', [
           'id' => 1,
           'carga_horaria_sem' => -1,
           'carga_horaria_cuatr' => -1,
@@ -128,9 +128,9 @@ class m180906_125930_asignatura extends Migration
           'nomenclatura' => 'Microbiología y Parasitología',
           'plan_id' => 14,           'departamento_id' => 7,
 
-      ]);
+      ]);*/
       /* Segund año Lic enf*/
-      $this->insert('{{%asignatura}}', [
+    /*  $this->insert('{{%asignatura}}', [
           'id' => 9,
           'carga_horaria_sem' => -1,
           'carga_horaria_cuatr' => -1,
@@ -169,9 +169,9 @@ class m180906_125930_asignatura extends Migration
           'nomenclatura' => 'Cuidados del Adulto y del Anciano',
           'plan_id' => 14,           'departamento_id' => 7,
 
-      ]);
+      ]);*/
       /*2do cuatrimestre Lic. Enf.*/
-      $this->insert('{{%asignatura}}', [
+      /*$this->insert('{{%asignatura}}', [
           'id' => 13,
           'carga_horaria_sem' => -1,
           'carga_horaria_cuatr' => -1,
@@ -200,9 +200,9 @@ class m180906_125930_asignatura extends Migration
           'nomenclatura' => 'Farmacología II',
           'plan_id' => 14,           'departamento_id' => 7,
 
-      ]);
+      ]);*/
       /* Tercer año Lic. Enf */
-      $this->insert('{{%asignatura}}', [
+      /*$this->insert('{{%asignatura}}', [
           'id' => 16,
           'carga_horaria_sem' => -1,
           'carga_horaria_cuatr' => -1,
@@ -241,9 +241,9 @@ class m180906_125930_asignatura extends Migration
           'nomenclatura' => 'Inglés',
           'plan_id' => 14,           'departamento_id' => 7,
 
-      ]);
+      ]);*/
       /* Segundo Cuatrimestre Lic.Enf año 3 */
-      $this->insert('{{%asignatura}}', [
+      /*$this->insert('{{%asignatura}}', [
           'id' => 20,
           'carga_horaria_sem' => -1,
           'carga_horaria_cuatr' => -1,
@@ -282,9 +282,9 @@ class m180906_125930_asignatura extends Migration
           'nomenclatura' => 'Práctica Integradora de Cuidados Enfermeros I',
           'plan_id' => 14,           'departamento_id' => 7,
 
-      ]);
+      ]);*/
       /* cuarto año Lic. enf */
-      $this->insert('{{%asignatura}}', [
+      /*$this->insert('{{%asignatura}}', [
           'id' => 24,
           'carga_horaria_sem' => -1,
           'carga_horaria_cuatr' => -1,
@@ -323,9 +323,9 @@ class m180906_125930_asignatura extends Migration
           'nomenclatura' => 'Bioestadística Aplicada',
           'plan_id' => 14,           'departamento_id' => 7,
 
-      ]);
+      ]);*/
       /* Lic. Enf. Cuato Año 2do cuat */
-      $this->insert('{{%asignatura}}', [
+      /*$this->insert('{{%asignatura}}', [
           'id' => 28,
           'carga_horaria_sem' => -1,
           'carga_horaria_cuatr' => -1,
@@ -344,9 +344,9 @@ class m180906_125930_asignatura extends Migration
           'nomenclatura' => 'Seminario',
           'plan_id' => 14,           'departamento_id' => 7,
 
-      ]);
+      ]);*/
       /*Quinto año Lic. Enf */
-      $this->insert('{{%asignatura}}', [
+      /*$this->insert('{{%asignatura}}', [
           'id' => 30,
           'carga_horaria_sem' => -1,
           'carga_horaria_cuatr' => -1,
@@ -385,11 +385,11 @@ class m180906_125930_asignatura extends Migration
           'nomenclatura' => 'Tesis',
           'plan_id' => 14,           'departamento_id' => 7,
 
-      ]);
+      ]);*/
 
       /* Tec Administracion de Sistemas y Soft Libre */
       /* Primer Año */
-      $this->insert('{{%asignatura}}', [
+      /*$this->insert('{{%asignatura}}', [
           'id' => 34,
           'carga_horaria_sem' => 8,
           'carga_horaria_cuatr' => 128,
@@ -418,9 +418,9 @@ class m180906_125930_asignatura extends Migration
           'nomenclatura' => 'Inglés Técnico',
           'plan_id' => 1,
           'departamento_id' => 1,
-      ]);
+      ]);*/
       /* Tec. Admin Sist. y Soft. 1° año 2do cuat */
-      $this->insert('{{%asignatura}}', [
+      /*$this->insert('{{%asignatura}}', [
           'id' => 37,
           'carga_horaria_sem' => 8,
           'carga_horaria_cuatr' => 128,
@@ -449,9 +449,9 @@ class m180906_125930_asignatura extends Migration
           'nomenclatura' => 'Redes de datos',
           'plan_id' => 1,
           'departamento_id' => 1,
-      ]);
+      ]);*/
       /* Tec. Admin. Soft. Segundo Año*/
-      $this->insert('{{%asignatura}}', [
+      /*$this->insert('{{%asignatura}}', [
           'id' => 40,
           'carga_horaria_sem' => 4,
           'carga_horaria_cuatr' => 64,
@@ -480,9 +480,9 @@ class m180906_125930_asignatura extends Migration
           'nomenclatura' => 'Administración de Sistemas',
           'plan_id' => 1,
           'departamento_id' => 1,
-      ]);
+      ]);*/
       /* Año 2: 2° Cuatrimestre TUASSYL */
-      $this->insert('{{%asignatura}}', [
+      /*$this->insert('{{%asignatura}}', [
           'id' => 43,
           'carga_horaria_sem' => 8,
           'carga_horaria_cuatr' => 128,
@@ -511,9 +511,9 @@ class m180906_125930_asignatura extends Migration
           'nomenclatura' => 'Automatización y Scripting',
           'plan_id' => 1,
           'departamento_id' => 1,
-      ]);
+      ]);*/
       /*TUASYL 3er año 1° cuatrimestre*/
-      $this->insert('{{%asignatura}}', [
+      /*$this->insert('{{%asignatura}}', [
           'id' => 46,
           'carga_horaria_sem' => 8,
           'carga_horaria_cuatr' => 128,
@@ -542,7 +542,7 @@ class m180906_125930_asignatura extends Migration
           'nomenclatura' => 'Electiva',
           'plan_id' => 1,
           'departamento_id' => 1,
-      ]);
+      ]);*/
     }
 
     /**

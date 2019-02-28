@@ -6,6 +6,7 @@ use common\models\search\ObservacionSearch;
 use common\models\Status;
 use yii\data\ActiveDataProvider;
 use common\models\PermisosHelpers;
+use common\models\User;
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\search\ObservacionSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -30,6 +31,8 @@ $estado_programa = Status::findOne(['=','id',$model->status_id]);
     </p>
 
     <?= GridView::widget([
+        'summary' => "Mostrando {begin} de {totalCount} observaciones",
+        'emptyText' => 'No hay resultados',
         'dataProvider' => new ActiveDataProvider([
           'query' => $model->getObservaciones()
         ]),
@@ -47,6 +50,22 @@ $estado_programa = Status::findOne(['=','id',$model->status_id]);
                   return $data->texto;
                 }
               }
+            ],
+            [
+                'label' => 'Creado Por',
+                'attribute' => 'user.perfil.nombre',
+                'contentOptions' => ['style' => 'width:2%;  max-width:1%;  white-space:nowrap; overflow: hidden; text-overflow: ellipsis;'],
+                //'visible' => $esAdmin,
+                'value' => function($model){
+                  $usuario = User::findOne($model->created_by);
+                  if($usuario){
+                    $perfil = $usuario->getPerfil()->one();
+                  } else {
+                    return "N/N";
+                  }
+                  return $perfil->nombre . " ". $perfil->apellido;
+                  //return RegistrosHelpers::getUserName($model->created_by);
+                }
             ],
             [
               'class' => 'yii\grid\ActionColumn',

@@ -30,7 +30,7 @@ class m180906_125929_plan extends Migration
         'no action',
         'no action'
       );
-      $this->insert('{{%plan}}', [
+      /*$this->insert('{{%plan}}', [
           'id' => 1,
           'planordenanza' => 'Ord. 895/12',
           'carrera_id' => '1',
@@ -99,7 +99,7 @@ class m180906_125929_plan extends Migration
           'id' => 14,
           'planordenanza' => 'Ord. 1031/12',
           'carrera_id' => '14',
-      ]);
+      ]);*/
     }
 
     /**

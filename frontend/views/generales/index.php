@@ -43,6 +43,8 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
+        'summary' => "Mostrando {begin} de {totalCount} programas",
+        'emptyText' => 'No hay programas aún',
         'filterModel' => $searchModel,
           'options'=>[
             'style' => ' table-layout: fixed; '

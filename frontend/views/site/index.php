@@ -17,7 +17,6 @@ $items = [
                         <li type='disc'>Disponer de un historial de los mismos.</li>
                       </ul>
                       <br>
-                      <i> versión: 1.0.0 </i>
                     ",
       'active'=>true,
     ],
@@ -67,10 +66,9 @@ $items = [
             <h3 style="font-weight:">Colaboradores</h3>
             <ul style="list-style-type: none">
               <li><i class="glyphicon glyphicon-star"></i> Leandro M. Boisselier</li>
-              <li><i class="glyphicon glyphicon-star"></i> Pablo F. Boisselier</li>
-              <li><i class="glyphicon glyphicon-star"></i> Borjas Vega Rivera</li>
               <li><i class="glyphicon glyphicon-star"></i> Carolina Juárez</li>
               <li><i class="glyphicon glyphicon-star"></i> Cecilia E. Camera</li>
+              <li><i class="glyphicon glyphicon-star"></i> Néstor Julián Murphy</li>
               <li><i class="glyphicon glyphicon-star"></i> Juan Carlos Brocca</li>
               <li><i class="glyphicon glyphicon-star"></i> Diego Martinez Díaz</li>
             </ul>

@@ -9,7 +9,7 @@
   <title>Programa de <?= Html::encode($asignatura->nomenclatura) ?></title>
   <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
   <style type="text/css">
-    body{
+    .contenedor{
       font-family: 'Roboto', sans-serif;
       font-size: 16px;
     }
@@ -20,6 +20,8 @@
       text-align: center;
     }
   </style>
+
+<div class="contenedor">
 
     <div class="titulo">
       <img src="curza_logo.png" width="20%" alt="">
@@ -33,6 +35,9 @@
     <p><b>CARRERA: </b><?= Html::encode($asignatura->getPlan()->one()->getCarrera()->one()->nom)?> </p>
     <p><b>CURSO: </b>
       <?= Html::encode($model->printCurso()); ?>
+    </p>
+    <p><b>ORDENANZA: </b>
+      <?= Html::encode($model->getOrdenanza()); ?>
     </p>
     <p><b>AÑO: </b><?= Html::encode($model->year) ?> </p>
     <p>
@@ -141,3 +146,4 @@
     <div class="" style="text-align:right">
       Lugar y fecha de entrega
     </div>
+</div>

@@ -12,6 +12,9 @@ class m190220_035256_usuarios extends Migration
      */
     public function safeUp()
     {
+      $this->alterColumn('{{%perfil}}','genero_id',$this->integer());
+      $this->update('{{%perfil}}',['genero_id' => null],'genero_id');
+
       $fp = fopen ("usuarios.csv","r");
       $security = Yii::$app->getSecurity();
       $existen = [];
@@ -37,13 +40,34 @@ class m190220_035256_usuarios extends Migration
               'user_id' => Yii::$app->db->getLastInsertID(),
               'nombre' => $data[2],
               'apellido' => $data[1],
-              'genero_id' => 1
           ]);
           $existen[$data[0]] = 1;
         }
       }
       fclose ($fp);
-      
+      $this->insert('{{%user}}', [
+          'username' => 'admin',
+          'auth_key' => 'Om3xl7PrKHacvNFLyeiDsCxo3TUhU_n0',
+          'password_hash' => Yii::$app->getSecurity()->generatePasswordHash("CurzaNabuco::"), //superusuario
+          'password_reset_token' => null,
+          'email' => 'superusuario@email.com',
+          'rol_id' => 3,
+          'estado_id' => 1,
+          'tipo_usuario_id' => 1,
+          'created_at' => '2015-01-01 00:00:00',
+          'updated_at' => '2015-01-01 00:00:00',
+      ]);
+      $this->insert('{{%perfil}}', [
+          // id superusuario
+          'user_id' => Yii::$app->db->getLastInsertID(),
+          'nombre' => "Admin",
+          'apellido' => "Sys",
+      ]);
+      $this->update('{{%user}}', [
+          'username' => '22979018',
+          'rol_id' => 7,
+      ]);
+
 
     }
 

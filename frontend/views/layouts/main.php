@@ -133,8 +133,8 @@ AppAsset::register($this);
 
 <footer class="footer">
     <div class="container">
-        <p class="pull-left">&copy; <?= Html::encode(Yii::$app->name) ?> <?= date('Y') ?></p>
-
+        <!--<p class="pull-left">&copy; <?= Html::encode(Yii::$app->name) ?> <?= date('Y') ?></p>-->
+        <p class="pull-left"> <?= Html::encode(Yii::$app->name) ?> <?= date('Y') ?>
         <p class="pull-right">Desarrollado por: <i>Departamento de Ciencia y Tecnología</i><? Yii::powered() ?></p>
     </div>
 </footer>

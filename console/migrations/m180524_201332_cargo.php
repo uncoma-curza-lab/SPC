@@ -23,7 +23,7 @@ class m180524_201332_cargo extends Migration
       ], $options);
       $this->insert('{{%cargo}}', [
           'id' => 1,
-          'nomenclatura' => 'Profesor Adjunto Regular',
+          'nomenclatura' => 'Profesor a cargo',
           'carga_programa' => true,
       ]);
       $this->insert('{{%cargo}}', [

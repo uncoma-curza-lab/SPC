@@ -242,6 +242,9 @@ class Programa extends \yii\db\ActiveRecord
     {
       return $this->getAsignatura()->one()->getCurso();
     }
+    public function getOrdenanza(){
+      return $this->getAsignatura()->one()->getPlan()->one()->getOrdenanza();
+    }
     public function getFundamentacion(){
       return $this->fundament;
     }

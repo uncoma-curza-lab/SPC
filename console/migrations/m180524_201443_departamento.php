@@ -38,7 +38,7 @@ class m180524_201443_departamento extends Migration
         'no action',
         'no action'
       );
-      $this->insert('{{%departamento}}', [
+      /*$this->insert('{{%departamento}}', [
           'id' => 1,
           'nom' => 'Ciencia y Tecnología',
           'slug' => 'cyt',
@@ -73,7 +73,7 @@ class m180524_201443_departamento extends Migration
           'nom' => 'Coordinación de Licenciatura en Enfermeria',
           'slug' => 'cle',
       ]);
-
+      */
     }
 
     /**

@@ -43,18 +43,18 @@ $items = [
         'label'=>'<i class="fas fa-home"></i> Observaciones',
         'content'=>// if (PermisosHelpers::requerirMinimoRol('Departamento'))
                   $this->render('forms/_gridObservaciones',['model' => $model]),
-        'visible' =>  PermisosHelpers::requerirProfesorAdjunto($model->id)
+        /*'visible' =>  PermisosHelpers::requerirProfesorAdjunto($model->id)
                       || PermisosHelpers::requerirDirector($model->id)
                       || ($estado_programa->descripcion == "Administración Académica"
                         && PermisosHelpers::requerirRol('Adm_academica'))
                       || ($estado_programa->descripcion == "Secretaría Académica"
-                        && PermisosHelpers::requerirRol('Sec_academica')),
+                        && PermisosHelpers::requerirRol('Sec_academica')),*/
     ],
 
 
 ]; ?>
 <h3>Programa de <?= Html::encode($model->getAsignatura()->one()->nomenclatura)?> <br></h3>
-<h4> Está siendo evaluado por: <?= Html::encode(Status::findOne($model->status_id)->descripcion)?></h4>
+<h4> Su estado es: <?= Html::encode(Status::findOne($model->status_id)->descripcion)?></h4>
 
 <?=  TabsX::widget([
     'items'=>$items,

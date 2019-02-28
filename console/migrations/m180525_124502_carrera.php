@@ -32,7 +32,7 @@ class m180525_124502_carrera extends Migration
         'no action',
         'no action'
       );
-      $this->insert('{{%carrera}}', [
+      /*$this->insert('{{%carrera}}', [
           'id' => 1,
           'nom' => 'Tec. Universitaria en Administración de Sistemas y Software Libre',
           //'codigo' => 123,
@@ -115,7 +115,7 @@ class m180525_124502_carrera extends Migration
           'nom' => 'Licenciatura en Enfermería',
           //'codigo' => 45,
           'departamento_id' => '7',
-      ]);
+      ]);*/
     }
 
     /**

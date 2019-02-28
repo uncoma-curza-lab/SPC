@@ -20,6 +20,10 @@ class m181112_195754_observacion extends Migration
         'id'      =>  $this->primaryKey(),
         'texto'   =>  $this->text()->notNull(),
         'programa_id' => $this->integer(),
+        'created_at'  => $this->dateTime(),
+        'updated_at'  => $this->dateTime(),
+        'created_by'  => $this->integer(),
+        'updated_by'  => $this->integer(),
       ], $options);
       $this->addForeignKey(
         'programaobservacion',

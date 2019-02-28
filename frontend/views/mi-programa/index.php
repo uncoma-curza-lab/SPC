@@ -27,6 +27,8 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
         <?= Html::a('Añadir Programa', ['anadir'],['id'=> 'agregar','class' => 'btn btn-success']) ?>
     </p>
     <?= GridView::widget([
+        'summary' => "Mostrando {begin} de {totalCount} programas",
+        'emptyText' => 'No hay programas aún',
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
@@ -93,7 +95,7 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
             [
               'class' => 'yii\grid\ActionColumn',
               //'template' => $show_this_nav? '{view} {update} {delete} {pdf} {status}':'{view} {status} {pdf}',
-              'template' => $show_this_nav? ' {asignar} {aprobar} {rechazar} {delete} {pdf}  {cargar}':'{subir} {status} {pdf}',
+              'template' => $show_this_nav? ' {asignar} {aprobar} {rechazar} {delete} {pdf} {ver} {cargar}':'{subir} {status} {pdf}',
               'buttons' => [
                 'pdf' => function ($url,$model) {
                     return Html::a(
@@ -189,11 +191,11 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
                 },
                 'ver' => function ($url,$model) {
                     return Html::a(
-                        '<span style="padding:5px; font-size:20px; color:	#0CB7F2" class="glyphicon glyphicon-info-sign"></span>',
+                        '<span style="padding:5px; font-size:20px; color:	#0CB7F2" class="glyphicon glyphicon-comment"></span>',
                         //$url);
                         ['ver','id' => $model->id],
                         [
-                            'title' => Yii::t('yii', 'Información'),
+                            'title' => Yii::t('yii', 'Observaciones'),
                         ]);
                 },
                 'view' => function ($url,$model) {
@@ -234,7 +236,7 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
   <div class="col-lg-6 col-lg-offset-3">
     <span class="label label-primary "><span class="glyphicon glyphicon-user"></span>Equipo de cátedra</span>
     <span class="label label-success "><span class="glyphicon glyphicon-ok"></span> Enviar</span>
-    <span class="label label-info"><span class="glyphicon glyphicon-info-sign"></span> Más información</span>
+    <span class="label label-info"><span class="glyphicon glyphicon-comment"></span> Observaciones</span>
     <span class="label label-danger "><span class="glyphicon glyphicon-trash"></span> Eliminar</span>
     <span class="label label-default"><span class="glyphicon glyphicon-print"></span> Exportar PDF</span>
     <span class="label label-warning"><span class="glyphicon glyphicon-pencil"></span> Editar</span>

@@ -25,6 +25,8 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?= GridView::widget([
+        'summary' => "Mostrando {begin} de {totalCount} programas",
+        'emptyText' => 'No hay programas aún',
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
@@ -187,11 +189,11 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
                 },
                 'ver' => function ($url,$model) {
                     return Html::a(
-                      '<span style="padding:5px; font-size:20px; color:	#0CB7F2" class="glyphicon glyphicon-info-sign"></span>',
+                      '<span style="padding:5px; font-size:20px; color:	#0CB7F2" class="glyphicon glyphicon-comment"></span>',
                         //$url);
                         ['ver','id' => $model->id],
                         [
-                            'title' => Yii::t('yii', 'Información'),
+                            'title' => Yii::t('yii', 'Observaciones'),
                         ]);
                 },
                 'view' => function ($url,$model) {
@@ -230,7 +232,7 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
   <div class="col-lg-6 col-lg-offset-3">
     <span class="label label-success "><span class="glyphicon glyphicon-ok"></span> Enviar programa</span>
     <span class="label label-danger "><span class="glyphicon glyphicon-remove"></span> Rechazar programa</span>
-    <span class="label label-info"><span class="glyphicon glyphicon-info-sign"></span> Más información</span>
+    <span class="label label-info"><span class="glyphicon glyphicon-comment"></span> Más información</span>
     <span class="label label-default"><span class="glyphicon glyphicon-print"></span> Exportar PDF</span>
   </div>
 </div>
