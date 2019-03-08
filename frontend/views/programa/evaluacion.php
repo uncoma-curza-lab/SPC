@@ -68,10 +68,13 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
             ],
             [
                 'label' => 'Creado Por',
-                'attribute' => 'created_by',
-                'visible' => $esAdmin,
+                'attribute' => 'user.perfil.nombre',
+                'contentOptions' => ['style' => 'width:2%;  max-width:1%;  white-space:nowrap; overflow: hidden; text-overflow: ellipsis;'],
+                //'visible' => $esAdmin,
                 'value' => function($model){
-                  return RegistrosHelpers::getUserName($model->created_by);
+                  $perfil = $model->getCreador();
+                  return $perfil ? $perfil->printNombre() : "N/N";
+                  //return RegistrosHelpers::getUserName($model->created_by);
                 }
             ],
             //'year',

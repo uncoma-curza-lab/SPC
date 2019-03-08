@@ -86,7 +86,7 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
               'label' => 'Estado',
               'attribute' => 'status',
               'value' => function($model) {
-                return Status::findOne($model->status_id)->descripcion;
+                return Status::findOne($model->status_id)->getDescripcion();
 
               }
             ],

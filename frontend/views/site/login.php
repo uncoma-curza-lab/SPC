@@ -26,7 +26,7 @@ $this->title = 'Acceso';
                 <?= $form->field($model, 'rememberMe')->checkbox()->label('Recordarme') ?>
 
                 <div style="color:#999;margin:1em 0">
-                    Si perdió su contraseña haga <?= Html::a('click aquí', ['site/request-password-reset']) ?>.
+                    Si perdió su contraseña comunicarse con el Departamento de Ciencia y Tecnología (C.U.R.Z.A.) 
                 </div>
 
                 <div class="form-group">

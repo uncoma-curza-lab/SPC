@@ -48,7 +48,7 @@ class m190220_035256_usuarios extends Migration
       $this->insert('{{%user}}', [
           'username' => 'admin',
           'auth_key' => 'Om3xl7PrKHacvNFLyeiDsCxo3TUhU_n0',
-          'password_hash' => Yii::$app->getSecurity()->generatePasswordHash("CurzaNabuco::"), //superusuario
+          'password_hash' => Yii::$app->getSecurity()->generatePasswordHash("CurzaN::"), 
           'password_reset_token' => null,
           'email' => 'superusuario@email.com',
           'rol_id' => 3,
@@ -63,7 +63,7 @@ class m190220_035256_usuarios extends Migration
           'nombre' => "Admin",
           'apellido' => "Sys",
       ]);
-    
+
 
 
     }
