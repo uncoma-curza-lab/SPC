@@ -19,12 +19,23 @@ class RegistrosHelpers
             return $resultado['id'];
         }
     }
-    public function getUserName($id){
+    public static function getUserName($id){
       if ($user = User::findIdentity($id)){
         return $user->username;
       }
       else {
         return '';
       }
+    }
+    /**
+    * @deprecated
+    */
+    public static function getNombreApellidoUser($id){
+      if ($user = User::findIdentity($id)){
+        if($user->perfil){
+          return $user->perfil->nombre." ".$user->perfil->apellido;
+        }
+      }
+      return '';
     }
 }

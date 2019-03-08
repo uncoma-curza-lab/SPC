@@ -38,7 +38,7 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
               'attribute' => 'asignatura_id',
               'value' => function($model){
                 $asignatura = $model->getAsignatura()->one();
-                return isset($asignatura) ? $asignatura->nomenclatura : "N/N";
+                return isset($asignatura) ? $asignatura->getNomenclatura() : "N/N";
               }
             ],
             'year',
@@ -73,7 +73,9 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
                 'label' => 'Creado Por',
                 'visible' => $esAdmin,
                 'value' => function($model){
-                  return RegistrosHelpers::getUserName($model->created_by);
+                  //return RegistrosHelpers::getNombreApellidoUser();
+                  $creador = $model->getCreador();
+                  return $creador ? $creador->printNombre() : "N/U";
                 }
             ],
             //'year',

@@ -96,13 +96,8 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
                 'contentOptions' => ['style' => 'width:2%;  max-width:1%;  white-space:nowrap; overflow: hidden; text-overflow: ellipsis;'],
                 //'visible' => $esAdmin,
                 'value' => function($model){
-                  $usuario = User::findOne($model->created_by);
-                  if($usuario){
-                    $perfil = $usuario->getPerfil()->one();
-                  } else {
-                    return "N/N";
-                  }
-                  return $perfil->nombre . " ". $perfil->apellido;
+                  $perfil = $model->getCreador();
+                  return $perfil ? $perfil->printNombre() : "N/N";
                   //return RegistrosHelpers::getUserName($model->created_by);
                 }
             ],

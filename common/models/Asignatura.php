@@ -57,7 +57,7 @@ class Asignatura extends \yii\db\ActiveRecord
 		        'cuatrimestre' => 'Cuatrimestre',
 		        'carga_horaria_sem' => 'Carga Horaria Sem',
 		        'carga_horaria_cuatr' => 'Carga Horaria Cuatr',
-            'departamento_id' => 'Departamento ID',
+            'departamento_id' => 'Departamento',
         ];
     }
     /**
