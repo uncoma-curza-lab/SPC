@@ -56,7 +56,7 @@ $porcentaje = $model->calcularPorcentajeCarga();
             "searchreplace visualblocks code fullscreen",
             "insertdatetime  table contextmenu paste"
         ],
-        'toolbar' => "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link | fullscreen ",
+        'toolbar' => "table | undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link | fullscreen ",
         'branding' => false,
         'protect' => [
             "/\<\/?(if|endif)\>/g",  // Protect <if> & </endif>
