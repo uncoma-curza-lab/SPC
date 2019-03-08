@@ -33,7 +33,7 @@ class Departamento extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['nom', 'slug'], 'required'],
+            [['nom', 'slug'], 'required' , 'on' => ['create']],
             [['director'], 'integer'],
             [['nom', 'slug'], 'string', 'max' => 255],
         ];

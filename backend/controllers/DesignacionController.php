@@ -155,9 +155,11 @@ class DesignacionController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
+        $model = $this->findModel($id);
+        $depto = $model->getDepartamento()->one();
+        $depto->director = null;
+        if ($depto->save() && $model->delete())
+          return $this->redirect(['index']);
     }
 
     /**
