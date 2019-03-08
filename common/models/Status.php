@@ -53,4 +53,12 @@ class Status extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Programa::className(), ['status_id' => 'id']);
     }
+
+    public function getDescripcion(){
+      $descripcion = $this->descripcion;
+      if($descripcion == "Profesor") {
+        return "En espera";
+      }
+      return $descripcion;
+    }
 }
