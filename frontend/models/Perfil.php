@@ -92,7 +92,7 @@ class Perfil extends \yii\db\ActiveRecord
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
             'generoNombre' => Yii::t('app', 'Genero'),
-            'userLink' => Yii::t('app', 'User'),
+            'userLink' => Yii::t('app', 'Usuario'),
             'perfilIdLink' => Yii::t('app', 'Perfil'),
             'imageFile'=>'Foto',
             //'imagen'=>'Imagen',

@@ -117,6 +117,7 @@ class MiProgramaController extends Controller
 
     public function actionVer($id) {
       $model = $this->findModel($id);
+
       if(Yii::$app->request->post('submit') == 'observacion' &&
           $model->load(Yii::$app->request->post()) && $model->save()) {
           return $this->redirect(['observacion/create', 'id'=>$model->id]);
@@ -834,14 +835,41 @@ class MiProgramaController extends Controller
         /*foreach ($designaciones as $key) {
           $key->delete();
         }*/
-        if ($model->delete()){
-          Yii::$app->session->setFlash('success','El programa eliminó correctamente.');
-          Yii::info("Eliminó el programa: ".$id,'miprograma');
-        } else {
-          Yii::$app->session->setFlash('danger','El programa no se pudo eliminar.');
-          Yii::error("No se pudo eliminar el programa: ".$id,'miprograma');
-        }
+        $estado = $model->getStatus()->one()->getDescripcion();
+        $userId = \Yii::$app->user->identity->id;
 
+        $transaccion = Yii::$app->db->beginTransaction();
+        try {
+            if($estado == "Borrador" && $model->getCreatedBy() == $userId){
+              if($observaciones = $model->getObservaciones()->all()){
+                $flag = true;
+                foreach ($observaciones as $obs) {
+                  $obsId = $obs->id;
+                  if($obs->delete()) {
+                    Yii::info("Se eliminó la observación".$obsId." por la acción de borrar programa: ".$id,'- miprograma');
+                  } else {
+                    $flag = false;
+                    break;
+                    $transaccion->rollBack();
+                  }
+                }
+              }
+              if ($flag && $model->delete()){
+                $transaccion->commit();
+                Yii::$app->session->setFlash('success','El programa eliminó correctamente.');
+                Yii::info("Eliminó el programa: ".$id,'miprograma');
+              } else {
+                $transaccion->rollBack();
+                Yii::$app->session->setFlash('danger','El programa no se pudo eliminar.');
+                Yii::error("No se pudo eliminar el programa: ".$id,'miprograma');
+              }
+            } else {
+              Yii::$app->session->setFlash('danger','No puede realizar esta acción.');
+            }
+        } catch(Exception $e) {
+          $transaccion->rollBack();
+          Yii::error("No se pudo eliminar el programa: ".$id,'miprograma'. "Error de en transaction".$e);
+        }
         return $this->redirect(['index']);
     }
 

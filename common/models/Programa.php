@@ -233,6 +233,9 @@ class Programa extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Perfil::className(), ['user_id' => 'created_by'])->one();
     }
+    public function getCreatedBy(){
+      return $this->created_by;
+    }
 
     public function getNomenclatura()
     {

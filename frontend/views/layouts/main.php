@@ -73,7 +73,7 @@ AppAsset::register($this);
           ]
         ];
         $menuItems[] = [
-          'label' => Yii::$app->user->identity->username,
+          'label' => '¡Hola '. Yii::$app->user->identity->perfil->printNombre().'!',
           'items' =>[
             ['label' => 'Perfil', 'url' => ['/perfil/view']],
             [

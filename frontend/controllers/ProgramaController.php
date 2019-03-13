@@ -341,10 +341,14 @@ class ProgramaController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = Programa::findOne($id)) !== null) {
+        /*if (($model = Programa::findOne($id)) !== null) {
             return $model;
-        }
+        }*/
+        $model = Programa::find()->where('id = :id',[':id' => $id])->one();
 
+        if ( $model  ) {
+          return $model;
+        }
         throw new NotFoundHttpException('No se pudo encontrar lo que buscaba');
     }
 

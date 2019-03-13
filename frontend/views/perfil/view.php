@@ -9,13 +9,12 @@ use common\models\PermisosHelpers;
  * @var frontend\models\Perfil $model
  */
 
-$this->title = "Perfil de " . $model->user->username;
-$this->params['breadcrumbs'][] = ['label' => 'Perfiles', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = "Su perfil: ";
 
 
-$photoInfo = $model->PhotoInfo;
-$photo = Html::img($photoInfo['url'],['alt'=>$photoInfo['alt']]);
+
+//$photoInfo = $model->PhotoInfo;
+//$photo = Html::img($photoInfo['url'],['alt'=>$photoInfo['alt']]);
 
 ?>
 <div class="perfil-view">
@@ -25,7 +24,7 @@ $photo = Html::img($photoInfo['url'],['alt'=>$photoInfo['alt']]);
     <p>
 
         <figure>
-           <?= $photo ?>
+           <? // $photo ?>
         </figure>
 
         <?php
@@ -37,13 +36,13 @@ $photo = Html::img($photoInfo['url'],['alt'=>$photoInfo['alt']]);
                 ['class' => 'btn btn-primary']);
         } ?>
 
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
+        <!-- <? Html::a('Borrar', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
                 'confirm' => Yii::t('app', 'Are you sure to delete this item?'),
                 'method' => 'post',
             ],
-        ]) ?>
+        ]) ?>-->
 
         <?php
             echo Html::a('Cambiar Contraseña', ['site/change-password'],
@@ -56,16 +55,17 @@ $photo = Html::img($photoInfo['url'],['alt'=>$photoInfo['alt']]);
         'model' => $model,
         'attributes' => [
             //'id',
-            'user.username',
+            [
+              'attribute' => 'user.username',
+              'label' => 'Usuario'
+            ],
             'nombre',
             'apellido',
-            'fecha_nacimiento',
-            'genero.genero_nombre',
+        //    'fecha_nacimiento',
+        //    'genero.genero_nombre',
             //'localidad',
         //    'telefono',
             //'cargo',
-            'created_at',
-            'updated_at',
             //'user_id',
         ],
     ]) ?>
