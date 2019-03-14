@@ -69,13 +69,6 @@
   <?= HtmlPurifier::process($model->actv_extracur) ?>
 </div>
 
-  <br><br>
-  <div class="" style="text-align:center">
-    Firma del responsable <br>
-    Aclaración <br>
-    Cargo <br>
-  </div>
-  <br><br>
-  <div class="" style="text-align:right">
-      Lugar y fecha de entrega
-  </div>
+<div class="container firma" >
+    <?= HtmlPurifier::process($model->getFirma()); ?>
+</div>

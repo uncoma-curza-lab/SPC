@@ -64,7 +64,7 @@ class MiProgramaController extends Controller
                             'contenido-plan', 'eval-acred', 'propuesta-metodologica',
                             'parcial-rec-promo', 'dist-horaria', 'crono-tentativo',
                             'actividad-extracurricular', 'cargar',
-                            'bibliografia','objetivo-programa'
+                            'bibliografia','objetivo-programa','firma'
                           ],
                           'allow' => true,
                           'roles' => ['@'],
@@ -747,8 +747,10 @@ class MiProgramaController extends Controller
             Yii::$app->session->setFlash('success','La sección de Actividad Extracurricular se guardó con éxito');
             // LOG de éxito
             $this->mensajeGuardadoExito($model);
-
-            return $this->redirect(['index']);
+            if(Yii::$app->request->post('submit') == 'salir'){
+              return $this->redirect(['index']);
+            }
+            return $this->redirect(['firma', 'id' => $id]);
           } else {
             // mensaje a usuario
             Yii::$app->session->setFlash('danger','Hubo un problema al guardar los cambios');
@@ -763,6 +765,49 @@ class MiProgramaController extends Controller
       }
       throw new ForbiddenHttpException('No tiene permisos para actualizar este elemento');
 
+    }
+
+    /**
+    *  Edición de campo de actividad extracurricular
+    *  @param integer $id del programa
+    *  @return mixed
+    * @throws ForbiddenHttpException si no tiene permisos de modificar el programa
+    */
+    public function actionFirma($id){
+      $model = $this->findModel($id);
+      $model->scenario = 'firma';
+      $estado = Status::findOne($model->status_id);
+      $validarPermisos = $this->validarPermisos($model, $estado);
+      if($model->getFirma() == null){
+        $html =
+            '<div class="" style="text-align: center;">Firma del responsable <br />Aclaraci&oacute;n <br />Cargo</div>
+            <div class="" style="text-align: center;">&nbsp;</div>
+            <div class="" style="text-align: center;"><br />
+            <div class="" style="text-align: right;">Lugar y fecha de entrega</div>
+            </div>';
+        $model->setFirma($html);
+      }
+      if ($validarPermisos) {
+        if ($model->load(Yii::$app->request->post())){
+          if($model->save()){
+            // mensaje a usuario
+            Yii::$app->session->setFlash('success','La sección de firma se guardó con éxito');
+            // LOG de éxito
+            $this->mensajeGuardadoExito($model);
+
+            return $this->redirect(['index']);
+          } else {
+            // mensaje a usuario
+            Yii::$app->session->setFlash('danger','Hubo un problema al guardar los cambios');
+            // log de fallo
+            $this->mensajeGuardadoFalla($model);
+          }
+        }
+        return $this->render('forms/_firma', [
+            'model' => $model,
+        ]);
+      }
+      throw new ForbiddenHttpException('No tiene permisos para actualizar este elemento');
     }
 
     public function actionAnadir()

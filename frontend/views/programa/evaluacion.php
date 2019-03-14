@@ -124,6 +124,10 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
                           ['aprobar','id' => $model->id],
                           [
                               'title' => Yii::t('yii', 'Aprobar'),
+                              'data' => [
+                                'method' => 'post',
+                                'confirm' => Yii::t('yii', '¿Quiere confirmar el programa? '),
+                              ],
                           ]
                         );
                     }

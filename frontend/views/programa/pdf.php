@@ -19,6 +19,9 @@
     .titulo{
       text-align: center;
     }
+    .firma{
+      margin-top: 20vh;
+    }
   </style>
 
 <div class="contenedor">
@@ -136,14 +139,9 @@
       </div>
     </div>
 
-    <br><br>
-    <div class="" style="text-align:center">
-      Firma del responsable <br>
-      Aclaración <br>
-      Cargo <br>
+
+    <div class="container firma" >
+      <?= HtmlPurifier::process($model->getFirma()); ?>
     </div>
-    <br><br>
-    <div class="" style="text-align:right">
-      Lugar y fecha de entrega
-    </div>
+
 </div>

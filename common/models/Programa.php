@@ -61,9 +61,9 @@ class Programa extends \yii\db\ActiveRecord
             [['departamento_id', 'status_id', 'asignatura_id', 'year', 'created_by', 'updated_by'], 'integer'],
             [['asignatura_id','year'], 'required', 'on' => 'crear', 'message'=>"Debe completar este campo"],
             //[['fundament'], 'required', 'on' => 'fundamentacion', 'message'=>"Debe completar este campo"],
-            [['biblio_basica','objetivo_programa','contenido_analitico','fundament', 'objetivo_plan', 'contenido_plan', 'propuesta_met', 'evycond_acreditacion', 'parcial_rec_promo', 'distr_horaria', 'crono_tentativo', 'actv_extracur'], 'required','message'=>"Debe completar este campo"],
+            [['biblio_basica','firma','objetivo_programa','contenido_analitico','fundament', 'objetivo_plan', 'contenido_plan', 'propuesta_met', 'evycond_acreditacion', 'parcial_rec_promo', 'distr_horaria', 'crono_tentativo', 'actv_extracur'], 'required','message'=>"Debe completar este campo"],
             [['equipo_catedra'],'required','on' => 'equipo_catedra','message' => "Debe completar este campo"],
-            [['biblio_basica','biblio_consulta','equipo_catedra','contenido_analitico','fundament', 'objetivo_plan', 'contenido_plan', 'propuesta_met', 'evycond_acreditacion', 'parcial_rec_promo', 'distr_horaria', 'crono_tentativo', 'actv_extracur'], 'string'],
+            [['firma','biblio_basica','biblio_consulta','equipo_catedra','contenido_analitico','fundament', 'objetivo_plan', 'contenido_plan', 'propuesta_met', 'evycond_acreditacion', 'parcial_rec_promo', 'distr_horaria', 'crono_tentativo', 'actv_extracur'], 'string'],
             [['created_at', 'updated_at'], 'safe'],
             [['asignatura_id'], 'exist', 'skipOnError' => true, 'targetClass' => Asignatura::className(), 'targetAttribute' => ['asignatura_id' => 'id']],
             [['departamento_id'], 'exist', 'skipOnError' => true, 'targetClass' => Departamento::className(), 'targetAttribute' => ['departamento_id' => 'id']],
@@ -118,6 +118,7 @@ class Programa extends \yii\db\ActiveRecord
             'distr_horaria' => 'Distr Horaria',
             'crono_tentativo' => 'Crono Tentativo',
             'actv_extracur' => 'Actv Extracur',
+            'firma' => 'Firma',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
             'created_by' => 'Created By',
@@ -158,6 +159,7 @@ class Programa extends \yii\db\ActiveRecord
       $scenarios['pedir'] = ['departamento_id'];
       $scenarios['objetivo-programa'] = ['objetivo_programa'];
       $scenarios['bibliografia'] = ['biblio_basica','biblio_consulta'];
+      $scenarios['firma'] = ['firma'];
       return array_merge(parent::scenarios(), $scenarios);
       //return $scenarios;
     }
@@ -289,7 +291,7 @@ class Programa extends \yii\db\ActiveRecord
       return $this->equipo_catedra;
     }
     public function calcularPorcentajeCarga(){
-      $valorPunto = 100/13;
+      $valorPunto = 100/14;
 
       $porcentaje = 0;
       if(strlen($this->getFundamentacion()) > 10){
@@ -331,6 +333,10 @@ class Programa extends \yii\db\ActiveRecord
       if(strlen($this->getEquipoCatedra()) > 10){
         $porcentaje += $valorPunto;
       }
+      if(strlen($this->getFirma()) > 10){
+        $porcentaje+= $valorPunto;
+      }
+
       return round($porcentaje);
     }
     public function getObjetivoPrograma(){
@@ -401,6 +407,12 @@ class Programa extends \yii\db\ActiveRecord
       }
       $string = $string . " año";
       return $string;
+    }
+    public function getFirma(){
+      return $this->firma;
+    }
+    public function setFirma($string) {
+      $this->firma = $string;
     }
 
 }

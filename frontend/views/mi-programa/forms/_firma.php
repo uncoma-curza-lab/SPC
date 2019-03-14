@@ -15,8 +15,8 @@ $this->params['items'][] = ['label' => '7. Evaluación y cond. de acreditación'
 $this->params['items'][] = ['label' => '8. Parciales, recuperatorios y promociones', 'url' => Url::to(['parcial-rec-promo', 'id' => $model->id]), 'options'=> $mensaje];
 $this->params['items'][] = ['label' => '9. Distribución horaria', 'url' => Url::to(['dist-horaria', 'id' => $model->id]), 'options'=> $mensaje];
 $this->params['items'][] = ['label' => '10. Cronograma tentativo', 'url' => Url::to(['crono-tentativo', 'id' => $model->id]), 'options'=> $mensaje];
-$this->params['items'][] = ['label' => '11. Actividad extracurricular'];
-$this->params['items'][] = ['label' => 'Firma','url' => Url::to(['firma', 'id' => $model->id]), 'options'=> $mensaje];
+$this->params['items'][] = ['label' => '11. Actividad extracurricular', 'url' => Url::to(['actividad-extracurricular', 'id' => $model->id]), 'options'=> $mensaje];
+$this->params['items'][] = ['label' => 'Firma'];
 $this->params['breadcrumbs'][] = ['label' => '...'];
 $this->params['breadcrumbs'][] = ['label' => "Distribución Horaria", 'url' => ['dist-horaria', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = ['label' => "Cronograma tentativo", 'url' => ['crono-tentativo', 'id' => $model->id]];
@@ -43,8 +43,8 @@ $porcentaje = $model->calcularPorcentajeCarga();
      </div>
    </div>
  </div>
-<h3>11. Planificación de actividades Extracurriculares</h3>
-<?= $form->field($model, 'actv_extracur')->widget(TinyMce::className(), [
+<h3>12. Firma</h3>
+<?= $form->field($model, 'firma')->widget(TinyMce::className(), [
     'options' => ['rows' => 16],
     'language' => 'es',
     'clientOptions' => [
@@ -66,8 +66,8 @@ $porcentaje = $model->calcularPorcentajeCarga();
         <?= Html::submitButton('Guardar y salir',['class' => 'btn btn-info' , 'name'=>'submit','value' => 'salir']) ?>
       </div>
       <div class="col-xs-6 text-right">
-        <?= Html::a('Anterior', ['crono-tentativo', 'id' => $model->id],['onclick'=>"return confirm('No se guardarán los cambios de esta sección, ¿desea salir?')",'class' => 'btn btn-warning']) ?>
-        <?= Html::submitButton('Siguiente', ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Anterior', ['actividad-extracurricular', 'id' => $model->id],['onclick'=>"return confirm('No se guardarán los cambios de esta sección, ¿desea salir?')",'class' => 'btn btn-warning']) ?>
+        <?= Html::submitButton('Terminar', ['class' => 'btn btn-success']) ?>
       </div>
     </div>
 </div>

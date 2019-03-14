@@ -126,6 +126,10 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
                           ['aprobar','id' => $model->id],
                           [
                               'title' => Yii::t('yii', 'Aprobar'),
+                              'data' => [
+                                'method' => 'post',
+                                'confirm' => Yii::t('yii', '¿Quiere confirmar el programa? Una vez que lo confirme deberá esperar la evaluación del mismo'),
+                              ],
                           ]
                         );
                     }
@@ -147,6 +151,8 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
                           ['rechazar','id' => $model->id],
                           [
                               'title' => Yii::t('yii', 'Rechazar'),
+                              'data-confirm' => Yii::t('yii', 'Está a punto de rechazar el programa. Recuerde añadir observaciones'),
+                              'data-method' => 'post',
                           ]
                         );
                     }

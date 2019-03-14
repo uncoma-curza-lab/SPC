@@ -17,6 +17,8 @@ $this->params['items'][] = ['label' => '8. Parciales, recuperatorios y promocion
 $this->params['items'][] = ['label' => '9. Distribución horaria', 'url' => Url::to(['dist-horaria', 'id' => $model->id]), 'options'=> $mensaje];
 $this->params['items'][] = ['label' => '10. Cronograma tentativo', 'url' => Url::to(['crono-tentativo', 'id' => $model->id]), 'options'=> $mensaje];
 $this->params['items'][] = ['label' => '11. Actividad extracurricular', 'url' => Url::to(['actividad-extracurricular', 'id' => $model->id]), 'options'=> $mensaje];
+$this->params['items'][] = ['label' => 'Firma','url' => Url::to(['firma', 'id' => $model->id]), 'options'=> $mensaje];
+
 $this->params['breadcrumbs'][] = ['label' => '...'];
 $this->params['breadcrumbs'][] = ['label' => "Contenido según el plan de estudio", 'url' => ['contenido-plan', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = ['label' => "Contenido analítico", 'url' => ['contenido-analitico', 'id' => $model->id]];
