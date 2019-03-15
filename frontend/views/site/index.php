@@ -41,7 +41,7 @@ $items = [
         <h2 style="font-weight:bold">Centro Universitario Regional Zona Atlántica</h2>
         <h2>Universidad Nacional del Comahue</h2>
         <p class="lead">Gestor de programas</p>
-        <a type="button" class="btn btn-lg btn-primary" href="index.php?r=site/login" name="button">Acceder</a>
+        <a type="button" class="btn btn-lg btn-primary" href="index.php?r=mi-programa/index" name="button">Acceder</a>
 
     </div>
 
