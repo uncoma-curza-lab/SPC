@@ -886,8 +886,8 @@ class MiProgramaController extends Controller
         $transaccion = Yii::$app->db->beginTransaction();
         try {
             if($estado == "Borrador" && $model->getCreatedBy() == $userId){
+              $flag = true;
               if($observaciones = $model->getObservaciones()->all()){
-                $flag = true;
                 foreach ($observaciones as $obs) {
                   $obsId = $obs->id;
                   if($obs->delete()) {

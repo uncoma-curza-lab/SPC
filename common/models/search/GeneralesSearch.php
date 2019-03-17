@@ -17,6 +17,7 @@ class GeneralesSearch extends Programa
 {
     public $asignatura;
     public $departamento;
+    public $perfil;
     public function attributes(){
         return array_merge(parent::attributes(),['user.username','user.perfil.nombre']);
     }
@@ -31,7 +32,7 @@ class GeneralesSearch extends Programa
     {
         return [
             [['id','departamento_id', 'status_id', 'year', 'created_by','updated_by'], 'integer'],
-            [['user.perfil.nombre','departamento','asignatura', 'fundament', 'objetivo_plan',
+            [['perfil','departamento','asignatura', 'fundament', 'objetivo_plan',
             'contenido_plan', 'propuesta_met', 'evycond_acreditacion',
             'parcial_rec_promo', 'distr_horaria', 'crono_tentativo', 'actv_extracur',
              'created_at', 'updated_at'], 'safe'],
@@ -105,7 +106,7 @@ class GeneralesSearch extends Programa
             ->andFilterWhere(['like', 'parcial_rec_promo', $this->parcial_rec_promo])
             ->andFilterWhere(['like', 'distr_horaria', $this->distr_horaria])
             ->andFilterWhere(['like', 'crono_tentativo', $this->crono_tentativo])
-            ->andFilterWhere(['like', '{{%perfil}}.nombre', $this->{"user.perfil.nombre"}])
+            //->andFilterWhere(['like', '{{%perfil}}.nombre', $this->perfil])
             ->andFilterWhere(['like', 'actv_extracur', $this->actv_extracur]);
 
         return $dataProvider;

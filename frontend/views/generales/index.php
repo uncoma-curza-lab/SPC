@@ -92,7 +92,7 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
             ],
             [
                 'label' => 'Creado Por',
-                'attribute' => 'user.perfil.nombre',
+                'attribute' => 'perfil',
                 'contentOptions' => ['style' => 'width:2%;  max-width:1%;  white-space:nowrap; overflow: hidden; text-overflow: ellipsis;'],
                 //'visible' => $esAdmin,
                 'value' => function($model){
