@@ -25,13 +25,6 @@ body {
   background-color: #000;
 }
 
-.site-login{
-  background-image: url("../curza_logo.png");
-  background-size: 20%;
-  background-repeat: no-repeat;
-  background-position: left 25% bottom 50%;
-  position: fixed;
-}
 
 .wrap {
     min-height: 100%;
@@ -131,7 +124,13 @@ a.desc:after {
     padding: 15px;
     border: none;
 }
-
+.site-login{
+  background-image: url("../curza_logo.png");
+  background-size: 20%;
+  background-repeat: no-repeat;
+  background-position: left 25% bottom 50%;
+  position: fixed;
+}
 @media(max-width:767px) {
     .nav li > form > button.logout {
         display:block;
@@ -139,6 +138,14 @@ a.desc:after {
         width: 100%;
         padding: 10px 15px;
     }
+
+
+
+}
+@media(max-width:1024px){
+  .site-login{
+      background-image: url("");
+  }
 }
 
 .nav > li > form > button.logout:focus,
