@@ -10,30 +10,35 @@ use yii\bootstrap\ActiveForm;
 $this->title = 'Acceso';
 //$this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="site-login text-center">
-    <h1><?= Html::encode($this->title) ?></h1>
+  <div class="site-login container" >
 
-    <p>Complete los siguientes campos para ingresar.</p>
+    <div class="col-md-6 col-md-offset-6">
 
-    <div class="row" ">
-        <div class="col-lg-offset-4 col-lg-4 ">
-            <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
+      <div class="row" >
+          <div class="col-lg-offset-4 col-lg-6 text-center ">
 
-                <?= $form->field($model, 'username')->textInput(['autofocus' => true])->label('Usuario') ?>
+              <h1><?= Html::encode($this->title) ?></h1>
 
-                <?= $form->field($model, 'password')->passwordInput()->label('Contraseña') ?>
+              <p>Complete los siguientes campos para ingresar.</p>
 
-                <?= $form->field($model, 'rememberMe')->checkbox()->label('Recordarme') ?>
+              <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
 
-                <div style="color:#999;margin:1em 0">
-                    Si perdió su contraseña comunicarse con el Departamento de Ciencia y Tecnología (C.U.R.Z.A.) 
-                </div>
+                  <?= $form->field($model, 'username')->textInput(['autofocus' => true])->label('Usuario') ?>
 
-                <div class="form-group">
-                    <?= Html::submitButton('Ingresar', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
-                </div>
+                  <?= $form->field($model, 'password')->passwordInput()->label('Contraseña') ?>
 
-            <?php ActiveForm::end(); ?>
-        </div>
+                  <?= $form->field($model, 'rememberMe')->checkbox()->label('Recordarme') ?>
+
+                  <div style="color:#999;margin:1em 0">
+                      Si perdió su contraseña comunicarse con el Departamento de Ciencia y Tecnología (C.U.R.Z.A.)
+                  </div>
+
+                  <div class="form-group">
+                      <?= Html::submitButton('Ingresar', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
+                  </div>
+
+              <?php ActiveForm::end(); ?>
+          </div>
+      </div>
     </div>
-</div>
+  </div>

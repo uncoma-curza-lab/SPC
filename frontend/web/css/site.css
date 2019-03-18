@@ -3,11 +3,41 @@ body {
     height: 100%;
 }
 
+.navbar-inverse {
+  background-color: #00528a !important;
+}
+.navbar-inverse .navbar-brand {
+  color: #fff;
+}
+.navbar-inverse .navbar-brand:hover {
+  color: #000;
+}
+
+.navbar-inverse .navbar-nav > li > a:hover{
+  color:#000 !important;
+  background-color: #fff;
+}
+.navbar-inverse .navbar-nav > li > a{
+  color:#fff !important;
+}
+.navbar-inverse .navbar-nav > li > a:hover{
+  color:#fff !important;
+  background-color: #000;
+}
+
+.site-login{
+  background-image: url("../curza_logo.png");
+  background-size: 20%;
+  background-repeat: no-repeat;
+  background-position: left 25% bottom 50%;
+  position: fixed;
+}
+
 .wrap {
     min-height: 100%;
     height: auto;
-    margin: 0 auto -60px;
-    padding: 0 0 60px;
+    margin: 0 auto -20px;
+    padding: 0 0 20px;
 }
 
 .wrap > .container {
@@ -15,10 +45,11 @@ body {
 }
 
 .footer {
-    height: 60px;
+    height: 40px;
+    font-size: 12px;
     background-color: #f5f5f5;
     border-top: 1px solid #ddd;
-    padding-top: 20px;
+    padding-top: 10px;
 }
 
 .jumbotron {
