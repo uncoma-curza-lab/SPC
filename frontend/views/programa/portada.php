@@ -20,6 +20,7 @@ $designaciones = $model->getDesignaciones()->all();
   </style>
 </head>
 <body>
+
     <div class="titulo">
       <img src="curza_logo.png" width="20%" alt="">
       <p></p>
@@ -59,5 +60,6 @@ $designaciones = $model->getDesignaciones()->all();
     <?php endforeach; ?>
   </ul>-->
     <br>
+    <setpagefooter value="off"></setpagefooter>
 </body>
 </html>
