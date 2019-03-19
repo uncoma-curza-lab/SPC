@@ -59,6 +59,5 @@ $designaciones = $model->getDesignaciones()->all();
     <?php endforeach; ?>
   </ul>-->
     <br>
-
 </body>
 </html>

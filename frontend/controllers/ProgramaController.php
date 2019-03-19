@@ -377,7 +377,7 @@ class ProgramaController extends Controller
       $stylesheet = file_get_contents('css/estilo-pdf.css');
       //$header = 'Document header';
       //$html   = 'Your document content goes here';
-      $footer =  'Página {PAGENO} de {nb}';
+      $footer =  '<span style="font-size:12px; !important">Página {PAGENO} de {nb}</span>';
 
       //$mpdf = new Mpdf('utf-8', 'A4', 0, '', 12, 12, 25, 15, 12, 12);
       //$mpdf->SetHTMLHeader($header);
