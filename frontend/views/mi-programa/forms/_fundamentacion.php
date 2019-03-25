@@ -5,7 +5,7 @@
   use yii\widgets\ActiveForm;
   use yii\helpers\Url;
   $this->params['breadcrumbs'][] = ['label' => 'Programas', 'url' => ['index']];
-  $this->params['breadcrumbs'][] = ['label' =>  $model->getNomenclatura(). " " . $model->getCurso()];
+  $this->params['breadcrumbs'][] = ['label' =>  $model->getNomenclatura() ];
 
   $mensaje = [ 'onclick'=>"return confirm('No se guardarán los cambios de esta pestaña, ¿desea salir?')"];
   $this->params['items'][] = ['label' => '1. Fundamentación'];
@@ -26,7 +26,10 @@ $this->params['breadcrumbs'][] = 'Fundamentacion';
 
   $js = "$(document).ready(function(){
     $('[data-toggle=\"popover\"]').popover();
-  });";
+  });
+  $(function () {
+    $('[data-toggle=\"tooltip\"]').tooltip()
+  })";
   $this->registerJs($js);
 ?>
 
@@ -42,7 +45,7 @@ $this->params['breadcrumbs'][] = 'Fundamentacion';
     </div>
   </div>
 </div>
-<a href="#" id="tourf" data-toggle="popover" title="Hola!" data-content="Ingrese aquí la fundamentación de su programa. Cada vez que haga click en 'Seguir' o 'Guardar y salir' usted conservará los cambios realizados."><span class="glyphicon glyphicon-question-sign"></span> Ayuda</a>
+
 
 <?php $form = ActiveForm::begin([
   'enableAjaxValidation'      => false,
@@ -51,7 +54,10 @@ $this->params['breadcrumbs'][] = 'Fundamentacion';
   'validateOnSubmit'          => false,
   'validateOnBlur'            => false,
 ]); ?>
-<h3>1. Fundamentación</h3>
+<h3>1. Fundamentación<span  style="font-size:15px"><a href="#" data-toggle="popover" title="Fundamentación"
+    data-content="Ingrese aquí la fundamentación de su programa.">
+    <span class="glyphicon glyphicon-question-sign"></span> Ayuda</a></span></h3>
+
 <?= $form->field($model, 'fundament')->widget(TinyMce::className(), [
     'options' => ['rows' => 16],
     'language' => 'es',
@@ -72,11 +78,14 @@ $this->params['breadcrumbs'][] = 'Fundamentacion';
 <div class="form-group">
   <div class="row">
     <div class="col-xs-6 text-left">
-        <?= Html::a('Salir sin guardar', ['index'],['onclick'=>"return confirm('No se guardarán los cambios de esta sección, ¿desea salir?')",'class' => 'btn btn-danger']); ?>
-        <?= Html::submitButton('Guardar y salir',['class' => 'btn btn-info' , 'name'=>'submit','value' => 'salir']); ?>
+        <?= Html::a('Salir sin guardar', ['index'],['onclick'=>"return confirm('No se guardarán los cambios de esta sección, ¿desea salir?')",'data-toggle'=>"tooltip",
+        'title'=>"La sección actual no se guardará", 'class' => 'btn btn-danger']); ?>
+        <?= Html::submitButton('Guardar y salir',['data-toggle'=>"tooltip",
+        'title'=>"Guarda la sección actual",'class' => 'btn btn-info' , 'name'=>'submit','value' => 'salir']); ?>
     </div>
     <div class="col-xs-6 text-right">
-      <?= Html::submitButton('Seguir', ['class' => 'btn btn-success']); ?>
+      <?= Html::submitButton('Seguir', ['data-toggle'=>"tooltip",
+      'title'=>"Guarda la sección actual",'class' => 'btn btn-success']); ?>
     </div>
   </div>
 </div>

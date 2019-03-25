@@ -32,9 +32,9 @@ $items = [
 
 
 ];
+
 ?>
 <div class="site-index">
-  <!--<a href="#" id="tour" class="btn btn-success pull-right">Comenzar Tour basico</a>-->
 
     <div class="jumbotron">
         <img src="curza_logo.png" width=15% alt="">

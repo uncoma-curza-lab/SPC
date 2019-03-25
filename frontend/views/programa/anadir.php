@@ -19,7 +19,6 @@
     'data' => ArrayHelper::map(Asignatura::find()->where(['departamento_id' => $deptoId])->all(),'id','nomenclatura'),
     //'data' =>ArrayHelper::map(((new StatusSearch())->search(['model' => 'backend\models\Status'])),'id','descripcion'),
     //'data' => (new StatusSearch())->search(['model' => 'backend\models\Status'])->id,
-
     'language' => 'es',
     'options' => ['placeholder' => 'Seleccione una asignatura'],
     'pluginOptions' => [

@@ -152,11 +152,11 @@ class MiProgramaController extends Controller
         $programa->scenario = 'carrerap';
         $userId = \Yii::$app->user->identity->id;
         $estadoActual = Status::findOne($programa->status_id);
-        $porcentajeCarga = 40;
+        $porcentajeCarga = 60;
         if ($estadoActual->descripcion == "Borrador"){
           if($programa->calcularPorcentajeCarga() < $porcentajeCarga) {
             Yii::error("Error al enviar programa con ID: ".$id.", menos del ".$porcentajeCarga." cargado",'estado-programa');
-            Yii::$app->session->setFlash('danger','Debe completar el programa un 40%');
+            Yii::$app->session->setFlash('danger','Debe completar el programa un 60%');
             return $this->redirect(['cargar','id' => $programa->id]);
           } else if ($programa->created_by == $userId){
             if ($programa->subirEstado() && $programa->save()) {
@@ -185,14 +185,11 @@ class MiProgramaController extends Controller
           if($programa->subirEstado() && $programa->save()){
             Yii::info("Subió el estado del programa:".$id." Estaba en estado: ".$estadoActual->descripcion,'estado-programa');
             Yii::$app->session->setFlash('success','Se confirmó el programa exitosamente');
-            return $this->redirect(['index']);
           } else {
             Yii::error("No pudo subir de estado ",'estado-programa');
             Yii::$app->session->setFlash('danger','Hubo un problema al intentar aprobar el programa');
-            return $this->redirect(['index']);
-
-//            throw new NotFoundHttpException("Ocurrió un error");
           }
+          return $this->redirect(['index']);
         }
     }
 
@@ -221,8 +218,6 @@ class MiProgramaController extends Controller
         if((PermisosHelpers::requerirRol("Adm_academica") && $estadoActual->descripcion == "Administración Académica") ||
           (PermisosHelpers::requerirRol("Sec_academica") && $estadoActual->descripcion == "Secretaría Académica")
         ){
-          //$programa->status_id = Status::findOne(['descripcion','=','Departamento'])->id;
-
           if($programa->bajarEstado() &&  $programa->save()){
             Yii::info("Rechazó el programa".$id." con estado actual".$estadoActual->descripcion,'estado-programa');
             Yii::$app->session->setFlash('warning','Se rechazó el programa correctamente');
@@ -947,7 +942,7 @@ class MiProgramaController extends Controller
           ($estado->descripcion == "Borrador")) {
               return true;
         }*/
-        if(PermisosHelpers::requerirMinimoRol('Profesor')){
+        if((PermisosHelpers::requerirMinimoRol('Profesor') && $userId == $model->created_by) || PermisosHelpers::requerirMinimoRol('Admin') ){
           return true;
         }
       }

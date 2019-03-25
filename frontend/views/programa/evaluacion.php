@@ -96,7 +96,7 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
             [
               'class' => 'yii\grid\ActionColumn',
               //'template' => $show_this_nav? '{view} {update} {delete} {pdf} {status}':'{view} {status} {pdf}',
-              'template' => $show_this_nav? ' {aprobar} {rechazar} {pdf} {ver} ':' {pdf}',
+              'template' => $show_this_nav? '{editar} {aprobar} {rechazar} {pdf} {ver} ':' {pdf}',
               'buttons' => [
                 'pdf' => function ($url,$model) {
                     return Html::a(
@@ -183,14 +183,15 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
                   }
                 },
                 'editar' => function ($url,$model) {
-                  if ((Status::findOne($model->status_id)->descripcion == "Borrador"
+                  if (/*(Status::findOne($model->status_id)->descripcion == "Borrador"
                       && PermisosHelpers::requerirDirector($model->id) && PermisosHelpers::existeProfAdjunto($model->id))
                       || (Status::findOne($model->status_id)->descripcion == "Departamento"
-                        && PermisosHelpers::requerirRol('Departamento') && PermisosHelpers::requerirDirector($model->id)))
+                        && PermisosHelpers::requerirRol('Departamento') && PermisosHelpers::requerirDirector($model->id))
+                      ||*/ (PermisosHelpers::requerirMinimoRol('Admin')))
                   {
                     return Html::a(
                       '<span style="padding:5px; font-size:20px;" class="glyphicon glyphicon-pencil"></span>',
-                      ['editar','id' => $model->id]
+                      ['mi-programa/cargar','id' => $model->id]
                     );
                   }
                 },
