@@ -240,7 +240,8 @@ class ProgramaController extends Controller
         }
 
         if((PermisosHelpers::requerirRol("Adm_academica") && $estadoActual->descripcion == "Administración Académica") ||
-          (PermisosHelpers::requerirRol("Sec_academica") && $estadoActual->descripcion == "Secretaría Académica")
+          (PermisosHelpers::requerirRol("Sec_academica") && $estadoActual->descripcion == "Secretaría Académica") ||
+          (PermisosHelpers::requerirMinimoRol("Admin"))
         ){
           //$programa->status_id = Status::findOne(['descripcion','=','Departamento'])->id;
 
@@ -385,7 +386,7 @@ class ProgramaController extends Controller
       $mpdf->addPage();
       $footer =  '<span style="font-size:12px; !important"> Página {PAGENO} de {nb}</span>';
       $mpdf->SetHTMLFooter($footer);
-      
+
       $mpdf->WriteHTML($this->renderPartial('paginas',['model'=>$model]));
       $mpdf->Output();
     }
