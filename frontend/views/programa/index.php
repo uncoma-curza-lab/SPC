@@ -21,7 +21,7 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
 ?>
 <div class="programa-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1><?=  Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
     <?php if (PermisosHelpers::requerirRol('Departamento')) : ?>
     <p id="">

@@ -165,6 +165,7 @@ class Programa extends \yii\db\ActiveRecord
     }
 
     /**
+     * Obtiene las carreras relacionadas con un programa
      * @return \yii\db\ActiveQuery
      */
     public function getCarreraprogramas()
@@ -173,6 +174,8 @@ class Programa extends \yii\db\ActiveRecord
     }
 
     /**
+     * Obtiene las designaciones de un programa
+     * @deprecated version 1
      * @return \yii\db\ActiveQuery
      */
     public function getDesignaciones()
@@ -181,6 +184,8 @@ class Programa extends \yii\db\ActiveRecord
     }
 
     /**
+     * Objetivos de un programa
+     * @deprecated version 1
      * @return \yii\db\ActiveQuery
      */
     public function getObjetivos()
@@ -189,6 +194,7 @@ class Programa extends \yii\db\ActiveRecord
     }
 
     /**
+     * Obtener observaciones de un programa
      * @return \yii\db\ActiveQuery
      */
     public function getObservaciones()
@@ -197,6 +203,7 @@ class Programa extends \yii\db\ActiveRecord
     }
 
     /**
+     * Obtiene las asignaturas de un programa
      * @return \yii\db\ActiveQuery
      */
     public function getAsignatura()
@@ -205,6 +212,8 @@ class Programa extends \yii\db\ActiveRecord
     }
 
     /**
+     * Obtiene los departamentos de un programa
+     * @deprecated version 1
      * @return \yii\db\ActiveQuery
      */
     public function getDepartamento()

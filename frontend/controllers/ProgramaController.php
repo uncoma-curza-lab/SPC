@@ -342,9 +342,11 @@ class ProgramaController extends Controller
      */
     protected function findModel($id)
     {
-        $model = Programa::find()->where('id = :id',[':id' => $id])->one();
-        if ($model) {
-          return $model;
+        if(is_numeric($id)) {
+            $model = Programa::find()->where('id = :id',[':id' => $id])->one();
+            if ($model) {
+              return $model;
+            }
         }
         throw new NotFoundHttpException('No se pudo encontrar lo que buscaba');
     }

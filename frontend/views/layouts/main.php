@@ -72,10 +72,15 @@ AppAsset::register($this);
 
           ]
         ];
+        $nombre="";
+        if(Yii::$app->user->identity->perfil){
+            $nombre=Yii::$app->user->identity->perfil->printNombre();
+        }
         $menuItems[] = [
-          'label' => '¡Hola '. Yii::$app->user->identity->perfil->printNombre().'!',
+          'label' => '¡Hola '. $nombre .'!',
           'items' =>[
             ['label' => 'Perfil', 'url' => ['/perfil/view']],
+            ['label' => 'Gestión de clave', 'url' => ['/site/change-password']],
             [
                'label' => 'Salir (' . Yii::$app->user->identity->username . ')',
                'url' => ['/site/logout'],

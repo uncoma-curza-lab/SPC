@@ -26,7 +26,7 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout', 'signup'],
+                'only' => ['logout', 'signup','change-password'],
                 'rules' => [
                     [
                         'actions' => ['signup'],
@@ -34,7 +34,7 @@ class SiteController extends Controller
                         'roles' => ['?'],
                     ],
                     [
-                        'actions' => ['logout'],
+                        'actions' => ['logout','change-password'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -210,6 +210,30 @@ class SiteController extends Controller
         }
 
         return $this->render('resetPassword', [
+            'model' => $model,
+        ]);
+    }
+     /**
+     * Change User password.
+     *
+     * @return mixed
+     * @throws BadRequestHttpException
+     */
+    public function actionChangePassword()
+    {
+        $id = \Yii::$app->user->id;
+     
+        try {
+            $model = new \frontend\models\ChangePasswordForm($id);
+        } catch (InvalidParamException $e) {
+            throw new \yii\web\BadRequestHttpException($e->getMessage());
+        }
+     
+        if ($model->load(\Yii::$app->request->post()) && $model->validate() && $model->changePassword()) {
+            \Yii::$app->session->setFlash('success', '¡La contraseña ha sido cambiada!');
+        }
+     
+        return $this->render('changePassword', [
             'model' => $model,
         ]);
     }
