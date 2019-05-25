@@ -18,11 +18,10 @@ use yii\widgets\ActiveForm;
      
     <?= $form->field($model, 'rol_id')->dropDownList($model->rolLista, [ 'prompt' => 'Por Favor Elija Uno' ]);?>
             
-    <?= $form->field($model, 'tipo_usuario_id')->dropDownList($model->tipoUsuarioLista, [ 'prompt' => 'Por Favor Elija Uno' ]);?>
      
-    <?= $form->field($model, 'username')->textInput(['maxlength' => 255]) ?>
+    <?= $form->field($model, 'username')->textInput(['maxlength' => 255])->label('DNI') ?>
 
-    <?= $form->field($model, 'nuevopassword')->passwordInput(['maxlength' => 255]) ?>
+    <?= $form->field($model, 'nuevopassword')->passwordInput(['maxlength' => 255])->label('Contraseña') ?>
      
     <?= $form->field($model, 'email')->textInput(['maxlength' => 255]) ?>
  

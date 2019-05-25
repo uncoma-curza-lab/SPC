@@ -17,7 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create Carrera', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Nueva carrera', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
@@ -26,10 +26,15 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
             'nom',
+            [ 
+                'attribute' => 'departamento_id',
+                'value' => function ($model){
+                    $depto = $model->getDepartamento()->one();
+                    return $depto ? $depto->getNomenclatura() : "Sin departamento";
+                }
+            ],
             'codigo',
-            'departamento_id',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

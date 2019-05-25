@@ -17,7 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create Plan', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Nuevo plan', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
@@ -26,9 +26,16 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
             'planordenanza',
-            'carrera_id',
+            [
+                'attribute' => 'carrera_id',
+                'value' => function($model){
+                    $carrera = $model->getCarrera()->one();
+                    
+                    return $carrera ? $carrera->getNomenclatura() : "Sin carrera";
+                    
+                }
+            ],
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

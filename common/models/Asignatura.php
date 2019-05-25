@@ -54,9 +54,9 @@ class Asignatura extends \yii\db\ActiveRecord
             'nomenclatura' => 'Nomenclatura',
             'plan_id' => 'Plan ID',
             'curso' => 'Curso',
-		        'cuatrimestre' => 'Cuatrimestre',
-		        'carga_horaria_sem' => 'Carga Horaria Sem',
-		        'carga_horaria_cuatr' => 'Carga Horaria Cuatr',
+            'cuatrimestre' => 'Cuatrimestre',
+            'carga_horaria_sem' => 'Carga Horaria Sem',
+            'carga_horaria_cuatr' => 'Carga Horaria Cuatr',
             'departamento_id' => 'Departamento',
         ];
     }
@@ -89,6 +89,52 @@ class Asignatura extends \yii\db\ActiveRecord
     }
     public function getCurso()
     {
-      return $this->curso;
+        switch ($this->curso) {
+            case 0:
+                return "N/N";
+                break;
+            case 1:
+                return "Primer año";
+                break;
+            case 2:
+                return "Segundo año";
+                break;
+            case 3:
+                return "Tercero año";
+                break;
+            case 4:
+                return "Cuarto año";
+                break;
+            case 5:
+                return "Quinto año";
+                break;
+            case 6:
+                return "Sexto año";
+                break;
+            default:
+                return "N/N" ;
+        }
     }
+    public function getCuatrimestre(){
+        switch ($this->cuatrimestre) {
+            case 0:
+                return "N/N";
+                break;
+            case 1:
+                return "Primer cuatrimestre";
+                break;
+            case 2:
+                return "Segundo cuatrimestre";
+                break;
+            default:
+                return "N/N" ;
+        }
+    }
+    public function getCargaHorariaSem(){
+        return $this->carga_horaria_sem;
+    }
+    public function getCargaHorariaCuatr(){
+        return $this->carga_horaria_cuatr;
+    }
+    
 }

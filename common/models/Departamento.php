@@ -86,4 +86,8 @@ class Departamento extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Programa::className(), ['departamento_id' => 'id']);
     }
+    
+    public function getNomenclatura(){
+        return $this->nom;
+    }
 }

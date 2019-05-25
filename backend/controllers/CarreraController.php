@@ -3,8 +3,8 @@
 namespace backend\controllers;
 
 use Yii;
-use backend\models\Carrera;
-use backend\models\CarreraSearch;
+use common\models\Carrera;
+use common\models\search\CarreraSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

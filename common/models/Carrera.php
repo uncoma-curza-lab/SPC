@@ -64,4 +64,8 @@ class Carrera extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Departamento::className(), ['id' => 'departamento_id']);
     }
+    
+    public function getNomenclatura(){
+        return $this->nom;
+    }
 }

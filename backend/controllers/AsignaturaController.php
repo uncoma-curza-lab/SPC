@@ -3,8 +3,8 @@
 namespace backend\controllers;
 
 use Yii;
-use backend\models\Asignatura;
-use backend\models\AsignaturaSearch;
+use common\models\Asignatura;
+use common\models\search\AsignaturaSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
