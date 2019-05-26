@@ -396,26 +396,26 @@ class Programa extends \yii\db\ActiveRecord
       $string = "";
       switch ($this->curso) {
           case 1:
-              $string = "primer";
+              $string = "Primer año";
               break;
           case 2:
-              $string= "segundo";
+              $string= "Segundo año";
               break;
           case 3:
-              $string= "tercer";
+              $string= "Tercer año";
               break;
           case 4:
-              $string= "cuarto";
+              $string= "Cuarto año";
               break;
           case 5:
-              $string= "quinto";
+              $string= "Quinto año";
               break;
           case 6:
-              $string= "sexto";
+              $string= "Sexto año";
               break;
       }
-      $string = $string . " año";
-      return $string;
+  
+      return $string.$this->curso;
     }
     public function getFirma(){
       return $this->firma;

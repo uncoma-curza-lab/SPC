@@ -37,7 +37,7 @@
     <p><b>PROGRAMA DE LA ASIGNATURA:</b> <?= Html::encode($asignatura->nomenclatura) ?> </p>
     <p><b>CARRERA: </b><?= Html::encode($asignatura->getPlan()->one()->getCarrera()->one()->nom)?> </p>
     <p><b>CURSO: </b>
-      <?= Html::encode($model->printCurso()); ?>
+      <?= $model->printCurso(); ?>
     </p>
     <p><b>ORDENANZA: </b>
       <?= Html::encode($model->getOrdenanza()); ?>
