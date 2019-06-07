@@ -21,20 +21,20 @@ use common\models\Status;
     ]); ?>
 
 
-    <?= $form->field($model, 'departamento_id')->widget(Select2::classname(),[
+    <?= $form->field($model, 'departamento')->widget(Select2::classname(),[
         'data' => ArrayHelper::map(Departamento::find()->all(),
-                    'id',
+                   'nom',
                     'nom' ),
         'language' => 'es',
-        'options' => ['placeholder' => 'Seleccione una asignatura'],
+        'options' => ['placeholder' => 'Seleccione un departamento...'],
         'pluginOptions' => [
           'allowClear' => true,
         ],
       ]) ?>
 
-      <?= $form->field($model, 'status_id')->widget(Select2::classname(),[
+      <?= $form->field($model, 'status')->widget(Select2::classname(),[
           'data' => ArrayHelper::map(Status::find()->all(),
-                      'id',
+                     'descripcion',
                       'descripcion' ),
           'language' => 'es',
           'options' => ['placeholder' => 'Seleccione un estado'],
@@ -42,9 +42,9 @@ use common\models\Status;
             'allowClear' => true,
           ],
         ]) ?>
-    <?= $form->field($model, 'asignatura_id')->widget(Select2::classname(),[
+    <?= $form->field($model, 'asignatura')->widget(Select2::classname(),[
         'data' => ArrayHelper::map(Asignatura::find()->all(),
-                    'id',
+                    'nomenclatura',
                     'nomenclatura',
                     function($model,$e){
                       $dep = $model->getDepartamento()->one();
@@ -62,7 +62,7 @@ use common\models\Status;
       ]) ?>
 
 
-    <?php // echo $form->field($model, 'year') ?>
+    <?php  echo $form->field($model, 'year') ?>
 
     <?php // echo $form->field($model, 'cuatrimestre') ?>
 
@@ -93,8 +93,8 @@ use common\models\Status;
     <?php // echo $form->field($model, 'updated_by') ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton('Reset', ['class' => 'btn btn-default']) ?>
+        <?= Html::submitButton('Buscar', ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Limpiar', ['index'],['class' => 'btn btn-default']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

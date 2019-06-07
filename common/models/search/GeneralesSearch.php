@@ -18,6 +18,7 @@ class GeneralesSearch extends Programa
     public $asignatura;
     public $departamento;
     public $perfil;
+    public $status;
     public function attributes(){
         return array_merge(parent::attributes(),['user.username','user.perfil.nombre']);
     }
@@ -32,7 +33,7 @@ class GeneralesSearch extends Programa
     {
         return [
             [['id','departamento_id', 'status_id', 'year', 'created_by','updated_by'], 'integer'],
-            [['perfil','departamento','asignatura', 'fundament', 'objetivo_plan',
+            [['perfil','departamento','asignatura','status', 'fundament', 'objetivo_plan',
             'contenido_plan', 'propuesta_met', 'evycond_acreditacion',
             'parcial_rec_promo', 'distr_horaria', 'crono_tentativo', 'actv_extracur',
              'created_at', 'updated_at'], 'safe'],
@@ -71,6 +72,7 @@ class GeneralesSearch extends Programa
         // add conditions that should always apply here
         $query->joinWith(['asignatura']);
         $query->joinWith(['departamento']);
+        $query->joinWith(['status']);
         //$query->joinWith(['creador']);
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -88,7 +90,6 @@ class GeneralesSearch extends Programa
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'status_id' => $this->status_id,
             'year' => $this->year,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
@@ -99,6 +100,7 @@ class GeneralesSearch extends Programa
             //->andFilterWhere(['like','departamento_id', $this->getAsignatura()->one()->getDepartamento()->one()->nom])
             ->andFilterWhere(['like', '{{%asignatura}}.nomenclatura', $this->asignatura])
             ->andFilterWhere(['like', '{{%departamento}}.nom', $this->departamento])
+            ->andFilterWhere(['like', '{{%status}}.descripcion', $this->status])
             ->andFilterWhere(['like', 'objetivo_plan', $this->objetivo_plan])
             ->andFilterWhere(['like', 'contenido_plan', $this->contenido_plan])
             ->andFilterWhere(['like', 'propuesta_met', $this->propuesta_met])

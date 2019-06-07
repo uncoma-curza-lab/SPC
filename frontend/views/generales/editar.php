@@ -8,6 +8,7 @@ use \yii\bootstrap\Collapse;
 
 $this->title = 'Editar Programa';
 $items = [];
+
 $estadoPrograma = $model->getStatus()->one();
 if($estadoPrograma->descripcion == "Borrador"){
   array_push($items,[

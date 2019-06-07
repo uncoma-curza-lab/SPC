@@ -26,7 +26,7 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <?php    Collapse::widget([
+    <?=    Collapse::widget([
 
              'items' => [
              // equivalent to the above
