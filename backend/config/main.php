@@ -1,4 +1,6 @@
 <?php
+use \yii\web\UrlRule;
+
 $params = array_merge(
     require __DIR__ . '/../../common/config/params.php',
     require __DIR__ . '/../../common/config/params-local.php',
@@ -23,6 +25,9 @@ return [
         ],
         'request' => [
             'csrfParam' => '_csrf-backend',
+            'parsers' => [
+                'application/json' => 'yii\web\JsonParser',
+            ]
         ],
 
         'session' => [
@@ -41,14 +46,33 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        /*
-        'urlManager' => [
+        
+        /*'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
+            'enableStrictParsing' => true,
+            
             'rules' => [
+                '/' => 'site/index',
+                '<controller:(carrera|departamento)>/<id:\d+>/<action:(view|create|update|delete)>' => '<controller>/<action>',
+                '<controller:(carrera|departamento|asignatura|status|plan|rol|user|perfil|designacion)>/<action:(index)>' => '<controller>/<action>', 
+                //'carrera' => 'carrera/index',
+                //'departamento' => 'departamento/index',
+                //'carrera/<id:\d+>' => 'carrera/view',
+                'api' => 'api',
+                'inicio' => 'site/index',
+                'login' => 'site/login',
+                //[
+                //    'class' => 'yii\rest\UrlRule',
+                //    'controller' => 'site',
+                //    'patterns' => [
+                //        'GET index' => 'index'
+                //    ]
+                //],
+                ['class' => 'yii\rest\UrlRule', 'controller' => 'usuario/index'],
             ],
-        ],
-        */
+        ],*/
+        
     ],
     'params' => $params,
 ];

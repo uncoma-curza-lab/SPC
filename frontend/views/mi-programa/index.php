@@ -122,10 +122,10 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
                       || PermisosHelpers::requerirMinimoRol('Admin'))
                     {
                         return Html::a(
-                          '<span style="padding:5px; font-size:20px;color:#5cb85c" class="glyphicon glyphicon-ok"></span>',
+                          '<span style="padding:5px; font-size:20px;color:#5cb85c" class="glyphicon glyphicon-send"></span>',
                           ['aprobar','id' => $model->id],
                           [
-                              'title' => Yii::t('yii', 'Aprobar'),
+                              'title' => Yii::t('yii', 'Enviar a evaluación'),
                               'data' => [
                                 'method' => 'post',
                                 'confirm' => Yii::t('yii', '¿Quiere confirmar el programa? Una vez que lo confirme deberá esperar la evaluación del mismo'),
