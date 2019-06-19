@@ -1,7 +1,8 @@
 <?php
 
 namespace api\modules\v1\models;
-
+use yii\web\Link;
+use yii\web\Linkable;
 use Yii;
 use yii\helpers\Url;
 
@@ -15,7 +16,7 @@ use yii\helpers\Url;
  * @property Asignatura[] $asignaturas
  * @property Carrera $carrera
  */
-class Plan extends \yii\db\ActiveRecord
+class Plan extends \yii\db\ActiveRecord implements Linkable
 {
     private $version = "v1";
     /**
@@ -43,13 +44,21 @@ class Plan extends \yii\db\ActiveRecord
         return [
             'id',
             'ord' => 'planordenanza',
-            'carrera' => function(){
+            /*'carrera' => function(){
                 return $this->carrera_id ? 
                     Url::base(true)."/".$this->version."/carrera/".$this->carrera_id
                     :
                     null;
-            }
+            }*/
         ];
+    }
+    public function getLinks(){
+        return [
+            Link::REL_SELF => Url::to(['planes/'.$this->id], true),
+            //'edit' => Url::to(['user/view', 'id' => $this->id], true),
+            'asignaturas' => Url::to(['asign/plan','id' => $this->id], true),
+            //'index' => Url::to(['dpto'], true),
+        ];    
     }
     /**
      * {@inheritdoc}

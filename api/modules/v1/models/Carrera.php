@@ -1,6 +1,8 @@
 <?php
 
 namespace api\modules\v1\models;
+use yii\web\Linkable;
+use yii\web\Link;
 
 use Yii;
 use yii\helpers\Url;
@@ -14,7 +16,7 @@ use yii\helpers\Url;
  *
  * @property Departamento $departamento
  */
-class Carrera extends \yii\db\ActiveRecord
+class Carrera extends \yii\db\ActiveRecord implements Linkable
 {
     private $version = "v1";
     /**
@@ -42,12 +44,12 @@ class Carrera extends \yii\db\ActiveRecord
         return [
             'id',
             'nombre' => 'nom',
-            'departamento' => function(){
+            /*'departamento' => function(){
                 return $this->departamento_id ? 
                     Url::base(true)."/".$this->version."/dpto/".$this->departamento_id
                     :
                     null;
-            }
+            }*/
         ];
     }
     /**
@@ -58,10 +60,17 @@ class Carrera extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'nom' => 'Nom',
-            'departamento_id' => 'Departamento ID',
+            //'departamento_id' => 'Departamento ID',
         ];
     }
-
+    public function getLinks(){
+        return [
+            Link::REL_SELF => Url::to(['carreras/'.$this->id], true),
+            //'edit' => Url::to(['user/view', 'id' => $this->id], true),
+            'planes' => Url::to(['planes/carrera','id' => $this->id], true),
+            //'index' => Url::to(['dpto'], true),
+        ];    
+    }
     /**
      * @return \yii\db\ActiveQuery
      */

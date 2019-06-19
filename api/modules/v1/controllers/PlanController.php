@@ -34,14 +34,29 @@ class PlanController extends ActiveController
                 //'create' => ['POST'],
                 //'update' => ['PUT','PATCH','POST'],
                 //'delete' => ['GET'],
-                'index' => ['GET']
+                'index' => ['GET'],
+                'carreras' => ['GET']
             ]
         ];
         return $behaviors;
     }
+    public function actions(){
+        $actions = parent::actions();
+        unset($actions['index']);
+        return $actions;
+    }
     public function actionIndex(){
+        
         $activeData = new ActiveDataProvider([
+            //'query' => Plan::find()->andFilterWhere(['=','id',$_GET['dpto']]),
             'query' => Plan::find(),
+            'pagination' => false
+        ]);
+        return $activeData;
+    }
+    public function actionCarreras(){
+        $activeData = new ActiveDataProvider([
+            'query' => Plan::find()->andFilterWhere(['=','carrera_id',$_GET['id']]),
             'pagination' => false
         ]);
         return $activeData;

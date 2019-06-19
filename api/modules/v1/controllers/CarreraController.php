@@ -35,6 +35,7 @@ class CarreraController extends ActiveController
                 //'create' => ['POST'],
                 //'update' => ['PUT','PATCH','POST'],
                 //'delete' => ['GET'],
+                'dptos' => ['GET'],
                 'index' => ['GET']
             ]
         ];
@@ -43,6 +44,13 @@ class CarreraController extends ActiveController
     public function actionIndex(){
         $activeData = new ActiveDataProvider([
             'query' => Carrera::find(),
+            'pagination' => false
+        ]);
+        return $activeData;
+    }
+    public function actionDptos(){
+        $activeData = new ActiveDataProvider([
+            'query' => Carrera::find()->andFilterWhere(['=','departamento_id',$_GET['id']]),
             'pagination' => false
         ]);
         return $activeData;

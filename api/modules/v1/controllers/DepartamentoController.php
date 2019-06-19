@@ -20,6 +20,7 @@ class DepartamentoController extends ActiveController
     public $serializer = [
         'class' => 'yii\rest\Serializer',
         'collectionEnvelope' => 'departamentos',
+        'expandParam' => 'carreras'
     ];
     /**
      * {@inheritdoc}
@@ -41,14 +42,34 @@ class DepartamentoController extends ActiveController
                 //'create' => ['POST'],
                 //'update' => ['PUT','PATCH','POST'],
                 //'delete' => ['GET'],
-                'index' => ['GET']
+                'index' => ['GET'],
+                'carrera' => ['GET']
             ]
         ];
         return $behaviors;
     }
+    public function actions(){
+        $actions = parent::actions();
+       
+        unset($actions['index']);
+        
+        return $actions;
+    }
     public function actionIndex(){
+        $query = Departamento::find();
+        //if ($_GET['carrera']){
+        //    query = $query->andFilterWhere('')
+        //}
         $activeData = new ActiveDataProvider([
-            'query' => Departamento::find(),
+            'query' => $query,
+            'pagination' => false
+        ]);
+        return $activeData;
+    }
+    public function actionCarrera(){
+        $query = Departamento::find()->all()->getCarreras()->all();
+        $activeData = new ActiveDataProvider([
+            'query' => $query,
             'pagination' => false
         ]);
         return $activeData;

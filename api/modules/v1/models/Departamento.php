@@ -1,9 +1,12 @@
 <?php
 
 namespace api\modules\v1\models;
-
+use yii\web\Link;
+use yii\web\Linkable;
+use yii\helpers\Url;
 use Yii;
 use common\models\User;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "departamento".
@@ -17,7 +20,7 @@ use common\models\User;
  * @property User $director0
  * @property Programa[] $programas
  */
-class Departamento extends \yii\db\ActiveRecord
+class Departamento extends \yii\db\ActiveRecord implements Linkable
 {
     /**
      * {@inheritdoc}
@@ -45,6 +48,19 @@ class Departamento extends \yii\db\ActiveRecord
             'nombre' => 'nom',
             
         ];
+    }
+    public function extraFields() {
+
+        return ['carreras' => function(){ return $this->getCarreras()->all();}];
+
+    }
+    public function getLinks(){
+        return [
+            Link::REL_SELF => Url::to(['dptos/'.$this->id], true),
+            //'edit' => Url::to(['user/view', 'id' => $this->id], true),
+            'carreras' => Url::to(['carreras/dpto','id' => $this->id], true),
+            //'index' => Url::to(['dpto'], true),
+        ];    
     }
 
     /**

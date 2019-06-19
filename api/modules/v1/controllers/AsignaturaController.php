@@ -31,7 +31,8 @@ class AsignaturaController extends ActiveController
                 //'create' => ['POST'],
                 //'update' => ['PUT','PATCH','POST'],
                 //'delete' => ['GET'],
-                'index' => ['GET']
+                'index' => ['GET'],
+                'asignaturas' => ['GET']
             ]
         ];
         /*return [
@@ -104,4 +105,11 @@ class AsignaturaController extends ActiveController
         return $model;
     }
     */
+    public function actionAsignaturas(){
+        $activeData = new ActiveDataProvider([
+            'query' => Asignatura::find()->andFilterWhere(['=','plan_id',$_GET['id']]),
+            'pagination' => false
+        ]);
+        return $activeData;
+    }
 }

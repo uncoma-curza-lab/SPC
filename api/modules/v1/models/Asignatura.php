@@ -1,7 +1,8 @@
 <?php
 
 namespace api\modules\v1\models;
-
+use yii\web\Linkable;
+use yii\web\Link;
 use Yii;
 use api\modules\v1\models\Departamento;
 use yii\helpers\Url;
@@ -22,7 +23,7 @@ use yii\helpers\Url;
  * @property Plan $plan
  * @property Programa[] $programas
  */
-class Asignatura extends \yii\db\ActiveRecord
+class Asignatura extends \yii\db\ActiveRecord implements Linkable
 {
     private $version = "v1";
     /**
@@ -54,13 +55,14 @@ class Asignatura extends \yii\db\ActiveRecord
             'año_dictado' => 'curso',
             'cuatrimestre' => 'cuatrimestre',
             'carga_sem' => 'carga_horaria_sem',
+            'plan' => 'plan_id',
             'carga_total' => 'carga_horaria_cuatr',
-            'plan' => function(){
+            /*'plan' => function(){
                 return $this->plan_id ? 
                     Url::base(true)."/".$this->version."/plan/".$this->plan_id
                     :
                     null;
-            }
+            }*/
             
         ];
     }
@@ -88,6 +90,14 @@ class Asignatura extends \yii\db\ActiveRecord
 		        'carga_horaria_cuatr' => 'Carga Horaria Cuatr',
             'departamento_id' => 'Departamento ID',
         ];
+    }
+    public function getLinks(){
+        return [
+            Link::REL_SELF => Url::to(['asign/'.$this->id], true),
+            //'edit' => Url::to(['user/view', 'id' => $this->id], true),
+            //'planes' => Url::to(['planes/carrera','id' => $this->id], true),
+            //'index' => Url::to(['dpto'], true),
+        ];    
     }
     /**
     * @return \yii\db\ActiveQuery

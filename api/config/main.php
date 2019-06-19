@@ -53,27 +53,41 @@ return [
                         '{id}' => '<id:\\w+>'
                     ],
                     'extraPatterns' => [
-                        'GET asign/<id>' => 'asignatura/buscar',
+                        //'GET asigns/<id>' => 'asignatura/buscar',
+                        'GET plan' => 'asignaturas'
                     ],
                     'except' => ['delete','create','update']
                 ],
                 [
                     'class' => 'yii\rest\UrlRule', 
                     'controller' => [
-                        'v1/dpto'=> 'v1/departamento'
+                        'v1/dptos'=> 'v1/departamento',
+                    ],
+                    'extraPatterns' => [
+                        //'GET /' => 'index',
+                        'GET carreras' => 'carrera'
+                    ]
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule', 
+                    'controller' => [
+                        'v1/carreras'=> 'v1/carrera'
+                    ],
+                    'extraPatterns' => [
+                        'GET dpto' => 'dptos'
                     ],
                 ],
                 [
                     'class' => 'yii\rest\UrlRule', 
                     'controller' => [
-                        'v1/carrera'=> 'v1/carrera'
+                        'v1/planes'=> 'v1/plan'
                     ],
-                ],
-                [
-                    'class' => 'yii\rest\UrlRule', 
-                    'controller' => [
-                        'v1/plan'=> 'v1/plan'
+                    'extraPatterns' => [
+                        'GET carrera' => 'carreras'
                     ],
+                    //'tokens' => [
+                    //    '{dpto}' => '<dpto:\\w+>'
+                    //],
                 ],
                 //'GET asign/buscar/<id:\d+>' => 'asignatura/buscar',
                 //'GET asign/index' => 'asignatura/index',
