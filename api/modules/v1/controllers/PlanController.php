@@ -27,6 +27,20 @@ class PlanController extends ActiveController
                 'application/json' => \yii\web\Response::FORMAT_JSON,
             ],
         ];
+        $behaviors['corsFilter'] = [
+          
+            'class' => \yii\filters\Cors::className(),
+            'cors' => [
+                'Origin' => ['*'],
+                // Permitir solo get
+                'Access-Control-Request-Method' => ['GET'],
+                'Access-Control-Request-Headers' => ['*'],
+                'Access-Control-Allow-Origin' => ['*'],
+                'Access-Control-Allow-Credentials' => false,
+                'Access-Control-Max-Age' => 3600,
+                'Access-Control-Expose-Headers' => [],
+            ],
+        ];
         //verbo y accion
         $behaviors['verbs'] = [
             'class' => \yii\filters\VerbFilter::className(),

@@ -33,8 +33,39 @@ class DepartamentoController extends ActiveController
             'class' => \yii\filters\ContentNegotiator::className(),
             'formats' => [
                 'application/json' => \yii\web\Response::FORMAT_JSON,
+                //'application/xml' => \yii\web\Response::FORMAT_XML,
             ],
         ];
+       
+        $behaviors['corsFilter'] = [
+          
+            'class' => \yii\filters\Cors::className(),
+            'cors' => [
+                // restringir acceso a 
+                'Origin' => ['*'],
+                // Permitir solo get
+                'Access-Control-Request-Method' => ['GET'],
+                // Permitir solo cabecera 'X-Wsse'
+                //'Access-Control-Request-Headers' => ['X-Request-With'],
+                'Access-Control-Request-Headers' => ['*'],
+                'Access-Control-Allow-Origin' => ['*'],
+                // Permitir credenciales como cookies, authorization headers, etc.
+                'Access-Control-Allow-Credentials' => false,
+                // Permitir cache de options
+                'Access-Control-Max-Age' => 3600,
+                // Permitir cabecera X-Pagination-Current-Page. Que explorador es permitido?
+                //'Access-Control-Expose-Headers' => ['X-Pagination-Current-Page'],
+                'Access-Control-Expose-Headers' => [],
+            ],
+            /*'actions' => [
+                'index' => [
+                    'Access-Control-Allow-Credentials' => true
+                ]
+            ]*/
+        ];
+        /*$behaviors['authenticator'] = [
+            'class' => \yii\filters\auth\HttpBasicAuth::class
+        ];*/
         //verbo y accion
         $behaviors['verbs'] = [
             'class' => \yii\filters\VerbFilter::className(),

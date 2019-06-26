@@ -19,6 +19,20 @@ class AsignaturaController extends ActiveController
         //$behaviors['authenticator'] = [
         //    'class' => HttpBasicAuth::className(),
         //];
+        $behaviors['corsFilter'] = [
+          
+            'class' => \yii\filters\Cors::className(),
+            'cors' => [
+                'Origin' => ['*'],
+                // Permitir solo get
+                'Access-Control-Request-Method' => ['GET'],
+                'Access-Control-Request-Headers' => ['*'],
+                'Access-Control-Allow-Origin' => ['*'],
+                'Access-Control-Allow-Credentials' => false,
+                'Access-Control-Max-Age' => 3600,
+                'Access-Control-Expose-Headers' => [],
+            ],
+        ];
         $behaviors['contentNegotiator'] = [
             'class' => \yii\filters\ContentNegotiator::className(),
             'formats' => [
