@@ -79,7 +79,7 @@ class Carrera extends \yii\db\ActiveRecord implements Linkable
                 
                 return $plan ? 
                     //Url::to(['plan/'.$model->plan_vigente_id], true)
-                    $plan->getOrdenanza()
+                    $plan
                 :
                     null;
             },
