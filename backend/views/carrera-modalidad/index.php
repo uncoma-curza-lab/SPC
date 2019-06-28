@@ -76,10 +76,14 @@ $this->params['breadcrumbs'][] = $this->title;
                       '<span style="padding:5px; font-size:15px;" class="glyphicon glyphicon-trash"></span>',
                       ['delete','carrera' => $model->carrera_id,'modalidad' => $model->modalidad_id],
                       [
-                          'title' => Yii::t('yii', 'Modificar equipo de cátedra'),
+                        'title' => 'Borrar',
+                        'data' => [
+                            'confirm' => Yii::t('app', 'borrar?'),
+                            'method' => 'post'
+                        ]
                       ]
                     );
-              },
+                  },
                 ],
             ],
         ],

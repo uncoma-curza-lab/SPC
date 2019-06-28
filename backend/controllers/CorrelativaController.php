@@ -77,10 +77,10 @@ class CorrelativaController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($asignatura_id,$correlativa_id)
+    public function actionView($asignatura,$correlativa)
     {
         return $this->render('view', [
-            'model' => $this->findModel($asignatura_id,$correlativa_id),
+            'model' => $this->findModel($asignatura,$correlativa),
         ]);
     }
 
@@ -95,7 +95,7 @@ class CorrelativaController extends Controller
         //$model->programa_id=$id;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['correlativa/update', 'id' => $model->asignatura_id]);
+            return $this->redirect(['correlativa/update', 'asignatura' => $model->asignatura_id, 'correlativa' => $model->correlativa_id]);
         }
 
         return $this->render('create', [
@@ -110,13 +110,13 @@ class CorrelativaController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($asignatura_id,$correlativa_id)
+    public function actionUpdate($asignatura,$correlativa)
     {
-        $model = $this->findModel($asignatura_id,$correlativa_id);
+        $model = $this->findModel($asignatura,$correlativa);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['correlativa/update', 
-            'asignatura_id' => $model->correlativa_id , 'correlativa_id' => $model->correlativa_id ]);
+            'asignatura' => $model->asignatura_id , 'correlativa' => $model->correlativa_id ]);
         }
 
         return $this->render('update', [
@@ -132,9 +132,9 @@ class CorrelativaController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($id)
+    public function actionDelete($asignatura,$correlativa)
     {
-        $this->findModel($id)->delete();
+        $this->findModel($asignatura,$correlativa)->delete();
 
         return $this->redirect(['index']);
     }

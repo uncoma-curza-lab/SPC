@@ -82,6 +82,10 @@ class Carrera extends \yii\db\ActiveRecord implements Linkable
                     $plan->getOrdenanza()
                 :
                     null;
+            },
+            'planes' => function($model){
+                $planes = $model->getPlanes()->all();
+                return $planes;
             }
             /*'departamento' => function(){
                 return $this->departamento_id ? 

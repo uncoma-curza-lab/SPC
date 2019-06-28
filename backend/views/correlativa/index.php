@@ -47,7 +47,44 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
 
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'controller' => 'CarreraModalidadController',
+                'template' => '{view} {update} {delete}',
+                'buttons' => [
+                    'update' => function ($url,$model) {
+                          return Html::a(
+                            '<span style="padding:5px; font-size:15px;" class="glyphicon glyphicon-pencil"></span>',
+                            ['update','asignatura' => $model->asignatura_id,'correlativa' => $model->correlativa_id],
+                            [
+                                'title' => Yii::t('yii', 'Modificar equipo de cátedra'),
+                            ]
+                          );
+                    },
+                    'view' => function ($url,$model) {
+                        return Html::a(
+                          '<span style="padding:5px; font-size:15px;" class="glyphicon glyphicon-eye-open"></span>',
+                          ['view','asignatura' => $model->asignatura_id,'correlativa' => $model->correlativa_id],
+                          [
+                              'title' => Yii::t('yii', 'Modificar equipo de cátedra'),
+                          ]
+                        );
+                    },
+                    'delete' => function ($url,$model) {
+                        return Html::a(
+                            '<span style="padding:5px; font-size:15px;" class="glyphicon glyphicon-trash"></span>',
+                            ['delete','asignatura' => $model->asignatura_id,'correlativa' => $model->correlativa_id],
+                            [
+                                'data' => [
+                                    'confirm' => Yii::t('app', 'borrar?'),
+                                    'method' => 'post'
+                                ]
+                            ]
+                        );
+                    },
+                ],
+        
+            ],
         ],
     ]); ?>
     <?php Pjax::end(); ?>
