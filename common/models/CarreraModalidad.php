@@ -14,14 +14,14 @@ use Yii;
  * @property Asignatura[] $asignaturas
  * @property Carrera $carrera
  */
-class Plan extends \yii\db\ActiveRecord
+class CarreraModalidad extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'plan';
+        return 'carreramodalidad';
     }
 
     /**
@@ -30,11 +30,10 @@ class Plan extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['planordenanza'], 'required'],
-            [['carrera_id'], 'integer'],
-            [['activo'],'boolean'],
-            [['planordenanza'], 'string', 'max' => 255],
+            [['carrera_id','modalidad_id'], 'required'],
+            [['carrera_id','modalidad_id'], 'integer'],
             [['carrera_id'], 'exist', 'skipOnError' => true, 'targetClass' => Carrera::className(), 'targetAttribute' => ['carrera_id' => 'id']],
+            [['modalidad_id'], 'exist', 'skipOnError' => true, 'targetClass' => Modalidad::className(), 'targetAttribute' => ['modalidad_id' => 'id']],
         ];
     }
 
@@ -44,22 +43,9 @@ class Plan extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'planordenanza' => 'Planordenanza',
-            'carrera_id' => 'Carrera ID',
-            'activo' => 'activo'
+            'modalidad_id' => 'Modalidad',
+            'carrera_id' => 'Carrera',
         ];
-    }
-    
-    public function getActivo(){
-        return $this->activo;
-    }
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getAsignaturas()
-    {
-        return $this->hasMany(Asignatura::className(), ['plan_id' => 'id']);
     }
 
     /**
@@ -70,7 +56,11 @@ class Plan extends \yii\db\ActiveRecord
         return $this->hasOne(Carrera::className(), ['id' => 'carrera_id']);
     }
 
-    public function getOrdenanza(){
-      return $this->planordenanza;
+      /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getModalidad()
+    {
+        return $this->hasOne(Modalidad::className(), ['id' => 'modalidad_id']);
     }
 }

@@ -35,6 +35,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
             'codigo',
+            [
+                'attribute' => 'plan_vigente_id',
+                'value' => function($model){
+                    $plan = $model->getPlanVigente()->one();
+                    return $plan ? $plan->getOrdenanza() : "N/N/";
+                }
+            ],
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

@@ -55,6 +55,9 @@ AppAsset::register($this);
               ['label' => 'Asignaturas', 'url' => ['/asignatura/index']],
               //['label' => 'Personas', 'url' => ['/persona/index']],
               ['label' => 'Estados', 'url' => ['/status/index']],
+              ['label' => 'Modalidades', 'url' => ['/modalidad/index']],
+              ['label' => 'Correlativas', 'url' => ['/correlativa/index']],
+              ['label' => 'Relación CarreraModalidad', 'url' => ['/carrera-modalidad/index']],
             ],
 
           ];

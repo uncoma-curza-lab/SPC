@@ -31,9 +31,13 @@ class Carrera extends \yii\db\ActiveRecord
     {
         return [
             [['nom'], 'required'],
-            [['departamento_id'], 'integer'],
-            [['nom'], 'string', 'max' => 255],
+            [['duracion_total_hs','departamento_id'], 'integer'],
+            [['duracion_total_anos'],'number'],
+            [['perfil','alcance','fundamentacion'],'string'],
+            [['nom','titulo'], 'string', 'max' => 255],
             [['departamento_id'], 'exist', 'skipOnError' => true, 'targetClass' => Departamento::className(), 'targetAttribute' => ['departamento_id' => 'id']],
+            [['plan_vigente_id'], 'exist', 'skipOnError' => true, 'targetClass' => Plan::className(), 'targetAttribute' => ['plan_vigente_id' => 'id']],
+
         ];
     }
 
@@ -44,7 +48,15 @@ class Carrera extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'nom' => 'Nom',
+            'titulo' => 'Titulo',
+            'alcance' => 'Alcance',
+            'duracion_total_anos' => 'Duración en años',
+            'duracion_total_hs' => 'Duración en horas',
+            'perfil' => 'Perfil',
+            'plan_vigente_id' => 'Plan vigente',
+            'alcance' => 'Alcance',
+            'fundamentacion' => 'Fundamentación',
+            'nom' => 'Nombre',
             'departamento_id' => 'Departamento ID',
         ];
     }
@@ -56,6 +68,14 @@ class Carrera extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Plan::className(), ['carrera_id' => 'id']);
     }
+    public function getCarreraModalidad()
+    {
+        return $this->hasMany(CarreraModalidad::className(), ['carrera_id' => 'id']);
+    }
+    public function getModalidades(){
+        return $this->hasMany(Modalidad::className(), ['id' => 'modalidad_id'])
+        ->viaTable('{{%carreramodalidad}}',['carrera_id'=>'id']);
+    }
 
     /**
      * @return \yii\db\ActiveQuery
@@ -64,8 +84,12 @@ class Carrera extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Departamento::className(), ['id' => 'departamento_id']);
     }
-    
+    public function getPlanVigente()
+    {
+        return $this->hasOne(Plan::className(), ['id' => 'plan_vigente_id']);
+    }
     public function getNomenclatura(){
         return $this->nom;
     }
+
 }

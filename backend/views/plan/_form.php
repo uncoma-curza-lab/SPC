@@ -26,6 +26,8 @@ use common\models\Carrera;
           'allowClear' => true,
         ],
     ]) ?>
+    <?= $form->field($model, 'activo')->checkbox(); ?>
+
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

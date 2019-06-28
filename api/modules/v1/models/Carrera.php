@@ -3,7 +3,7 @@
 namespace api\modules\v1\models;
 use yii\web\Linkable;
 use yii\web\Link;
-
+use common\models\CarreraModalidad;
 use Yii;
 use yii\helpers\Url;
 /**
@@ -34,9 +34,13 @@ class Carrera extends \yii\db\ActiveRecord implements Linkable
     {
         return [
             [['nom'], 'required'],
-            [['departamento_id'], 'integer'],
-            [['nom'], 'string', 'max' => 255],
+            [['duracion_total_hs','departamento_id'], 'integer'],
+            [['duracion_total_anos'],'number'],
+            [['perfil','alcance','fundamentacion'],'string'],
+            [['nom','titulo'], 'string', 'max' => 255],
             [['departamento_id'], 'exist', 'skipOnError' => true, 'targetClass' => Departamento::className(), 'targetAttribute' => ['departamento_id' => 'id']],
+            [['plan_vigente_id'], 'exist', 'skipOnError' => true, 'targetClass' => Plan::className(), 'targetAttribute' => ['plan_vigente_id' => 'id']],
+
         ];
     }
 
@@ -44,6 +48,41 @@ class Carrera extends \yii\db\ActiveRecord implements Linkable
         return [
             'id',
             'nombre' => 'nom',
+            'titulo' => 'titulo',
+            'alcance' => 'alcance',
+            'duracion_total_anos' => 'duracion_total_anos',
+            'duracion_total_hs' => 'duracion_total_hs',
+            'perfil' => 'perfil',
+            'modalidades' => function ($model) {
+                $modalidades = $model->getCarreraModalidad()->with(['modalidad'])->all();
+                $array = [];
+                foreach($modalidades as $modalidad){
+                    $maux = $modalidad->getModalidad()->one();
+                    if ($maux){
+                        array_push($array,[
+                            'nombre' => $maux->getNombre(),
+                            'descripcion' => $maux->getDescripcion(),
+                        ]);
+                    }
+                }
+
+                return $array ? 
+                    $array
+                    :
+                    null;
+            },
+            'plan_vigente' => function($model){
+                $plan = null;
+                if ($model->plan_vigente_id){
+                    $plan = $model->getPlanVigente()->one();
+                }
+                
+                return $plan ? 
+                    //Url::to(['plan/'.$model->plan_vigente_id], true)
+                    $plan->getOrdenanza()
+                :
+                    null;
+            }
             /*'departamento' => function(){
                 return $this->departamento_id ? 
                     Url::base(true)."/".$this->version."/dpto/".$this->departamento_id
@@ -59,15 +98,24 @@ class Carrera extends \yii\db\ActiveRecord implements Linkable
     {
         return [
             'id' => 'ID',
-            'nom' => 'Nom',
-            //'departamento_id' => 'Departamento ID',
+            'titulo' => 'Titulo',
+            'alcance' => 'Alcance',
+            'duracion_total_anos' => 'Duración en años',
+            'duracion_total_hs' => 'Duración en horas',
+            'perfil' => 'Perfil',
+            'plan_vigente_id' => 'Plan vigente',
+            'alcance' => 'Alcance',
+            'fundamentacion' => 'Fundamentación',
+            'nom' => 'Nombre',
+            'departamento_id' => 'Departamento ID',
+            'modalidad_id' => 'Modalidad'
         ];
     }
     public function getLinks(){
         return [
-            Link::REL_SELF => Url::to(['carreras/'.$this->id], true),
+            Link::REL_SELF => Url::to(['carrera/'.$this->id], true),
             //'edit' => Url::to(['user/view', 'id' => $this->id], true),
-            'planes' => Url::to(['planes/carrera','id' => $this->id], true),
+            'planes' => Url::to(['plan/carrera','id' => $this->id], true),
             //'index' => Url::to(['dpto'], true),
         ];    
     }
@@ -85,5 +133,12 @@ class Carrera extends \yii\db\ActiveRecord implements Linkable
     public function getDepartamento()
     {
         return $this->hasOne(Departamento::className(), ['id' => 'departamento_id']);
+    }
+    
+    public function getCarreraModalidad(){
+        return $this->hasMany(CarreraModalidad::className(), ['carrera_id' => 'id']);
+    }
+    public function getPlanVigente(){
+        return $this->hasOne(Plan::className(),['id' => 'plan_vigente_id']);
     }
 }

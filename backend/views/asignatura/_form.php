@@ -44,6 +44,8 @@ use common\models\Plan;
               'allowClear' => true,
             ],
         ]) ?>
+        <?= $form->field($model, 'orden')->input('number') ?>
+
          <div class="form-group">
             <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
         </div>

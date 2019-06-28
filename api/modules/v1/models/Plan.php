@@ -35,6 +35,7 @@ class Plan extends \yii\db\ActiveRecord implements Linkable
         return [
             [['planordenanza'], 'required'],
             [['carrera_id'], 'integer'],
+            [['activo'],'boolean'],
             [['planordenanza'], 'string', 'max' => 255],
             [['carrera_id'], 'exist', 'skipOnError' => true, 'targetClass' => Carrera::className(), 'targetAttribute' => ['carrera_id' => 'id']],
         ];
@@ -44,6 +45,10 @@ class Plan extends \yii\db\ActiveRecord implements Linkable
         return [
             'id',
             'ord' => 'planordenanza',
+            'activo' => function($model){
+                return $model->activo ?
+                    true : false;
+            }
             /*'carrera' => function(){
                 return $this->carrera_id ? 
                     Url::base(true)."/".$this->version."/carrera/".$this->carrera_id
@@ -54,9 +59,9 @@ class Plan extends \yii\db\ActiveRecord implements Linkable
     }
     public function getLinks(){
         return [
-            Link::REL_SELF => Url::to(['planes/'.$this->id], true),
+            Link::REL_SELF => Url::to(['plan/'.$this->id], true),
             //'edit' => Url::to(['user/view', 'id' => $this->id], true),
-            'asignaturas' => Url::to(['asign/plan','id' => $this->id], true),
+            'asignaturas' => Url::to(['asignatura/plan','id' => $this->id], true),
             //'index' => Url::to(['dpto'], true),
         ];    
     }
@@ -70,6 +75,9 @@ class Plan extends \yii\db\ActiveRecord implements Linkable
             'planordenanza' => 'Planordenanza',
             'carrera_id' => 'Carrera ID',
         ];
+    }
+    public function getOrdenanza(){
+        return $this->planordenanza;
     }
 
     /**

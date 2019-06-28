@@ -5,6 +5,7 @@ use yii\web\Linkable;
 use yii\web\Link;
 use Yii;
 use api\modules\v1\models\Departamento;
+use common\models\Correlativa;
 use yii\helpers\Url;
 
 /**
@@ -41,7 +42,7 @@ class Asignatura extends \yii\db\ActiveRecord implements Linkable
     {
         return [
             [['nomenclatura', 'curso', 'cuatrimestre'], 'required'],
-            [['curso', 'cuatrimestre', 'carga_horaria_sem', 'carga_horaria_cuatr', 'plan_id', 'departamento_id'], 'integer'],
+            [['orden','curso', 'cuatrimestre', 'carga_horaria_sem', 'carga_horaria_cuatr', 'plan_id', 'departamento_id'], 'integer'],
             [['nomenclatura'], 'string', 'max' => 255],
             [['departamento_id'], 'exist', 'skipOnError' => true, 'targetClass' => Departamento::className(), 'targetAttribute' => ['departamento_id' => 'id']],
             [['plan_id'], 'exist', 'skipOnError' => true, 'targetClass' => Plan::className(), 'targetAttribute' => ['plan_id' => 'id']],
@@ -53,10 +54,29 @@ class Asignatura extends \yii\db\ActiveRecord implements Linkable
             'id',
             'nombre' => 'nomenclatura',
             'año_dictado' => 'curso',
+            'orden' => 'orden',
             'cuatrimestre' => 'cuatrimestre',
             'carga_sem' => 'carga_horaria_sem',
             'plan' => 'plan_id',
             'carga_total' => 'carga_horaria_cuatr',
+            'correlativas' => function($model){
+                $correlativas = $model->getCorrelativas()->select('correlativa_id')->all();
+                $array = [];
+                foreach($correlativas as $correlativa){
+                    if ($correlativa->getCorrelativa()->one()){
+                        $asig = Asignatura::findOne($correlativa);
+                        
+                        array_push($array,[
+                            'orden' => $asig->getOrden(),
+                            'nomenclatura' => $asig->getNomenclatura(),
+                            'id' => $correlativa->correlativa_id
+                        ]);
+                    }
+
+                }
+
+                return $array;
+            }
             /*'plan' => function(){
                 return $this->plan_id ? 
                     Url::base(true)."/".$this->version."/plan/".$this->plan_id
@@ -93,7 +113,7 @@ class Asignatura extends \yii\db\ActiveRecord implements Linkable
     }
     public function getLinks(){
         return [
-            Link::REL_SELF => Url::to(['asign/'.$this->id], true),
+            Link::REL_SELF => Url::to(['asignatura/'.$this->id], true),
             //'edit' => Url::to(['user/view', 'id' => $this->id], true),
             //'planes' => Url::to(['planes/carrera','id' => $this->id], true),
             //'index' => Url::to(['dpto'], true),
@@ -114,6 +134,9 @@ class Asignatura extends \yii\db\ActiveRecord implements Linkable
     {
         return $this->hasOne(Plan::className(), ['id' => 'plan_id']);
     }
+    public function getOrden(){
+        return $this->orden;
+    }
 
     /**
      * @return \yii\db\ActiveQuery
@@ -129,5 +152,9 @@ class Asignatura extends \yii\db\ActiveRecord implements Linkable
     public function getCurso()
     {
       return $this->curso;
+    }
+    public function getCorrelativas()
+    {
+        return $this->hasMany(Correlativa::className(), ['asignatura_id' => 'id']);
     }
 }

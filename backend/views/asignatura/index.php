@@ -65,6 +65,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $dpto ? $dpto->getNomenclatura() : "Sin Departamento";
                 }
             ],
+            'orden',
 
 
             ['class' => 'yii\grid\ActionColumn'],

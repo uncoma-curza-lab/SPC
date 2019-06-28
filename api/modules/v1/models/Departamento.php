@@ -56,9 +56,9 @@ class Departamento extends \yii\db\ActiveRecord implements Linkable
     }
     public function getLinks(){
         return [
-            Link::REL_SELF => Url::to(['dptos/'.$this->id], true),
+            Link::REL_SELF => Url::to(['departamento/'.$this->id], true),
             //'edit' => Url::to(['user/view', 'id' => $this->id], true),
-            'carreras' => Url::to(['carreras/dpto','id' => $this->id], true),
+            'carreras' => Url::to(['carrera/departamento','id' => $this->id], true),
             //'index' => Url::to(['dpto'], true),
         ];    
     }

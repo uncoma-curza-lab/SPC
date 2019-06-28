@@ -46,7 +46,7 @@ return [
                 [
                     'class' => 'yii\rest\UrlRule', 
                     'controller' => [
-                        'v1/asign'=> 'v1/asignatura'
+                        'v1/asignatura'=> 'v1/asignatura'
                     ],
                     'pluralize' => false,
                     'tokens' => [
@@ -61,26 +61,26 @@ return [
                 [
                     'class' => 'yii\rest\UrlRule', 
                     'controller' => [
-                        'v1/dptos'=> 'v1/departamento',
+                        'v1/departamento'=> 'v1/departamento',
                     ],
                     'extraPatterns' => [
                         //'GET /' => 'index',
-                        'GET carreras' => 'carrera'
+                        'GET carrera' => 'carrera'
                     ]
                 ],
                 [
                     'class' => 'yii\rest\UrlRule', 
                     'controller' => [
-                        'v1/carreras'=> 'v1/carrera'
+                        'v1/carrera'=> 'v1/carrera'
                     ],
                     'extraPatterns' => [
-                        'GET dpto' => 'dptos'
+                        'GET departamento' => 'dptos'
                     ],
                 ],
                 [
                     'class' => 'yii\rest\UrlRule', 
                     'controller' => [
-                        'v1/planes'=> 'v1/plan'
+                        'v1/plan'=> 'v1/plan'
                     ],
                     'extraPatterns' => [
                         'GET carrera' => 'carreras'

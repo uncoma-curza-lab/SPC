@@ -2,6 +2,14 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use yii\data\ActiveDataProvider;
+
+$carreraModalidades = new ActiveDataProvider([
+    'query' => $model->getModalidades(),
+    'pagination' => [
+        'pagesize' => 20,
+    ]
+]);
 
 /* @var $this yii\web\View */
 /* @var $model backend\models\Carrera */
@@ -31,8 +39,26 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'nom',
             'codigo',
-            'departamento_id',
+            [ 
+                'attribute' => 'departamento_id',
+                'value' => function ($model){
+                    $depto = $model->getDepartamento()->one();
+                    return $depto ? $depto->getNomenclatura() : "Sin departamento";
+                }
+            ],
+            [
+                'attribute' => 'plan_vigente_id',
+                'value' => function($model){
+                    $plan = $model->getPlanVigente()->one();
+                    return $plan ? $plan->getOrdenanza() : "N/N/";
+                }
+            ],
         ],
     ]) ?>
+    <?= \yii\grid\GridView::widget([
+        'dataProvider' => $carreraModalidades,
+    ]) ?>
+
+
 
 </div>

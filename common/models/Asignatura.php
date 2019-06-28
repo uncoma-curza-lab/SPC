@@ -37,7 +37,7 @@ class Asignatura extends \yii\db\ActiveRecord
     {
         return [
             [['nomenclatura', 'curso', 'cuatrimestre'], 'required'],
-            [['curso', 'cuatrimestre', 'carga_horaria_sem', 'carga_horaria_cuatr', 'plan_id', 'departamento_id'], 'integer'],
+            [['orden','curso', 'cuatrimestre', 'carga_horaria_sem', 'carga_horaria_cuatr', 'plan_id', 'departamento_id'], 'integer'],
             [['nomenclatura'], 'string', 'max' => 255],
             [['departamento_id'], 'exist', 'skipOnError' => true, 'targetClass' => Departamento::className(), 'targetAttribute' => ['departamento_id' => 'id']],
             [['plan_id'], 'exist', 'skipOnError' => true, 'targetClass' => Plan::className(), 'targetAttribute' => ['plan_id' => 'id']],
@@ -53,6 +53,7 @@ class Asignatura extends \yii\db\ActiveRecord
             'id' => 'ID',
             'nomenclatura' => 'Nomenclatura',
             'plan_id' => 'Plan ID',
+            'orden' => 'Orden',
             'curso' => 'Curso',
             'cuatrimestre' => 'Cuatrimestre',
             'carga_horaria_sem' => 'Carga Horaria Sem',
@@ -74,6 +75,10 @@ class Asignatura extends \yii\db\ActiveRecord
     public function getPlan()
     {
         return $this->hasOne(Plan::className(), ['id' => 'plan_id']);
+    }
+
+    public function getOrden(){
+        return $this->orden;
     }
 
     /**
