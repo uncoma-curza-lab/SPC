@@ -12,7 +12,7 @@ class AsignaturaController extends ActiveController
     
     public $serializer = [
         'class' => 'yii\rest\Serializer',
-        'collectionEnvelope' => 'asignaturas',
+        //'collectionEnvelope' => 'asignaturas',
     ];
     public function behaviors() {
         $behaviors = parent::behaviors();

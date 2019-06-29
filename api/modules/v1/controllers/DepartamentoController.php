@@ -19,7 +19,7 @@ class DepartamentoController extends ActiveController
     public $modelClass = 'api\modules\v1\models\Departamento';
     public $serializer = [
         'class' => 'yii\rest\Serializer',
-        'collectionEnvelope' => 'departamentos',
+        //'collectionEnvelope' => 'departamentos',
         'expandParam' => 'carreras'
     ];
     /**
