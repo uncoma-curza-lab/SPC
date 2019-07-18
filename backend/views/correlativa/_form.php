@@ -22,7 +22,11 @@ use yii\helpers\ArrayHelper;
           $plan = $model->getPlan()->one();
           $carrera = $plan->getCarrera()->one();
           $dep = $carrera->getDepartamento()->one();
-          return isset($dep) ? $model->nomenclatura." (".$plan->planordenanza.")" : "N";
+          return isset($dep) ? $model->nomenclatura. ($model->orden ? " ( N°: ".$model->orden. ")" :" (Sin Orden)") : "N";
+        },function($model,$e){
+          $plan = $model->getPlan()->one();
+          
+          return isset($plan) ? $plan->planordenanza: null;
         }
         ),
         'language' => 'es',
@@ -36,7 +40,10 @@ use yii\helpers\ArrayHelper;
           $plan = $model->getPlan()->one();
           $carrera = $plan->getCarrera()->one();
           $dep = $carrera->getDepartamento()->one();
-          return isset($dep) ? $model->nomenclatura." (".$plan->planordenanza.")" : "N";
+          return isset($dep) ? $model->nomenclatura. ($model->orden ? " ( N°: ".$model->orden. ")" :" (Sin Orden)") : "N";
+        },function($model,$e){
+          $plan = $model->getPlan()->one();
+          return isset($plan) ? $plan->planordenanza: null;
         }),
         'language' => 'es',
         'options' => ['placeholder' => 'Seleccione una materia'],

@@ -5,10 +5,9 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model backend\models\CarreraPrograma */
 
-//$this->title = 'Update Carrera Programa: ' . $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Carrera Programas', 'url' => ['index']];
-//$this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Update';
+$this->title = 'Actualización de correlativa: ';
+$this->params['breadcrumbs'][] = ['label' => 'Correlativas', 'url' => ['index']];
+$this->params['breadcrumbs'][] = 'Actualizar correlativa de asignatura ';
 ?>
 <div class="carrera-programa-update">
 

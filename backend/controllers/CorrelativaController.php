@@ -95,7 +95,8 @@ class CorrelativaController extends Controller
         //$model->programa_id=$id;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['correlativa/update', 'asignatura' => $model->asignatura_id, 'correlativa' => $model->correlativa_id]);
+            //return $this->redirect(['correlativa/update', 'asignatura' => $model->asignatura_id, 'correlativa' => $model->correlativa_id]);
+            return $this->redirect(['correlativa/index']);
         }
 
         return $this->render('create', [

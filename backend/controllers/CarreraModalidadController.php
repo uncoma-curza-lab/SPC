@@ -93,7 +93,8 @@ class CarreraModalidadController extends Controller
         $model = new CarreraModalidad();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'carrera' => $model->carrera_id, 'modalidad' => $model->modalidad_id]);
+            //return $this->redirect(['view', 'carrera' => $model->carrera_id, 'modalidad' => $model->modalidad_id]);
+            return $this->redirect(['index']);
         }
 
         return $this->render('create', [
