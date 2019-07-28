@@ -244,6 +244,13 @@ class Programa extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Perfil::className(), ['user_id' => 'created_by'])->one();
     }
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPerfil()
+    {
+        return $this->hasOne(Perfil::className(), ['user_id' => 'created_by']);
+    }
     public function getCreatedBy(){
       return $this->created_by;
     }

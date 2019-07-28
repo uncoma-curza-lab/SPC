@@ -74,14 +74,14 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
                 }
               }
             ],*/
-            [
+            /*[
               'attribute' => 'departamento',
               'value' => function($model){
                 //$dpto = $model->getAsignatura()->one()->getDepartamento()->one();
                 $dpto = $model->getDepartamento()->one();
                 return $dpto ? $dpto->nom : "Sin asignar";
               }
-            ],
+            ],*/
             [
               'label' => 'Estado',
               'attribute' => 'status',

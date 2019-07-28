@@ -8,7 +8,7 @@ use common\models\search\PlanSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-
+use yii\base\ErrorException;
 /**
  * PlanController implements the CRUD actions for Plan model.
  */
@@ -26,7 +26,23 @@ class PlanController extends Controller
                     'delete' => ['POST'],
                 ],
             ],
+            
         ];
+    }
+    public function actions()
+    {
+        return [
+            'error' => [
+                'class' => 'yii\web\ErrorAction',
+            ]
+        ];
+    }
+    public function actionError()
+    {
+        $exception = Yii::$app->errorHandler->exception;
+        if ($exception !== null) {
+            return $this->render('error', ['exception' => $exception]);
+        }
     }
 
     /**
@@ -104,9 +120,12 @@ class PlanController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
+        //try {
+            $this->findModel($id)->delete();
+            return $this->redirect(['index']);
+        //} catch (\yii\db\IntegrityException $e) {
+        //    Yii::warning("fuck");
+        //}
     }
 
     /**
@@ -124,4 +143,5 @@ class PlanController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
 }

@@ -9,7 +9,6 @@ use common\models\Programa;
 use common\models\Status;
 use frontend\models\Perfil;
 use common\models\PermisosHelpers;
-
 /**
  * ProgramaSearch represents the model behind the search form of `common\models\Programa`.
  */
@@ -59,23 +58,33 @@ class GeneralesSearch extends Programa
     public function search($params)
     {
 
-        $query = Programa::find();
+        $query = Programa::find(); //->orderBy('nomenclatura');
         $estadoBorrador = Status::find()->where(['=','descripcion','Borrador'])->one();
         $estadoBiblioteca = Status::find()->where(['=','descripcion','Biblioteca'])->one();
-        $query->where(['!=','status_id',$estadoBorrador->id]);
-        $userId = \Yii::$app->user->identity->id;
-
+        $query->where('status_id != :stid',['stid' => $estadoBorrador->id]);
+        //$userId = \Yii::$app->user->identity->id;
         if (PermisosHelpers::requerirRol('Profesor')){
           $query->where(['=','created_by', $userId]);
-          $query->orFilterWhere(['=','status_id',$estadoBiblioteca->id]);
+          //$query->orFilterWhere(['=','status_id',$estadoBiblioteca->id]);
         }
         // add conditions that should always apply here
         $query->joinWith(['asignatura']);
         $query->joinWith(['departamento']);
         $query->joinWith(['status']);
-        //$query->joinWith(['creador']);
+        $query->joinWith(['perfil']);
+        $countQuery = clone $query;
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            //'totalCount' => 30000,
+            'pagination' => [
+          //      'totalCount'=>$countQuery->count(),
+                'pageSize' => 5
+            ],
+            'sort' => [
+                'defaultOrder' => [
+                    'id' => SORT_DESC
+                ]
+            ]
         ]);
 
         $this->load($params);
@@ -108,9 +117,8 @@ class GeneralesSearch extends Programa
             ->andFilterWhere(['like', 'parcial_rec_promo', $this->parcial_rec_promo])
             ->andFilterWhere(['like', 'distr_horaria', $this->distr_horaria])
             ->andFilterWhere(['like', 'crono_tentativo', $this->crono_tentativo])
-            //->andFilterWhere(['like', '{{%perfil}}.nombre', $this->perfil])
+            ->andFilterWhere(['like', 'concat({{%perfil}}.nombre,{{%perfil}}.apellido)', $this->perfil])
             ->andFilterWhere(['like', 'actv_extracur', $this->actv_extracur]);
-
         return $dataProvider;
     }
 }
