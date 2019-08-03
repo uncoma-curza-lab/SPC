@@ -35,7 +35,9 @@ use common\models\Plan;
     </div>
     <div class="col-md-3">
         <?= $form->field($model, 'plan_id')->widget(Select2::classname(),[
-            'data' => ArrayHelper::map(Plan::find()->all(),'id','ordenanza'),
+            'data' => ArrayHelper::map(Plan::find()->all(),'id',function($model){
+                return $model->ordenanza."(".$model->id.")";
+            }),
             //'data' =>ArrayHelper::map(((new StatusSearch())->search(['model' => 'backend\models\Status'])),'id','descripcion'),
             //'data' => (new StatusSearch())->search(['model' => 'backend\models\Status'])->id,
             'language' => 'es',
