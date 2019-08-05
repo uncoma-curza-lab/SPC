@@ -36,14 +36,20 @@ class Asignatura extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['nomenclatura', 'curso', 'cuatrimestre'], 'required'],
+            [['nomenclatura', 'curso', 'cuatrimestre'], 'required', 'message' => 'Complete este campo'],
+            [['nomenclatura', 'curso', 'cuatrimestre','plan_id','orden'], 'required', 'on' => 'create', 'message' => 'Complete este campo'],
             [['orden','curso', 'cuatrimestre', 'carga_horaria_sem', 'carga_horaria_cuatr', 'plan_id', 'departamento_id'], 'integer'],
             [['nomenclatura'], 'string', 'max' => 255],
             [['departamento_id'], 'exist', 'skipOnError' => true, 'targetClass' => Departamento::className(), 'targetAttribute' => ['departamento_id' => 'id']],
             [['plan_id'], 'exist', 'skipOnError' => true, 'targetClass' => Plan::className(), 'targetAttribute' => ['plan_id' => 'id']],
         ];
     }
+    public function scenarios(){
+        $scenarios = parent::scenarios();
+        $scenarios['create'] = ['nomenclatura','curso','plan_id','cuatrimestre','orden'];
+        return $scenarios;
 
+    }
     /**
      * {@inheritdoc}
      */

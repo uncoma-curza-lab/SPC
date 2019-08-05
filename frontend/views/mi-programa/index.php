@@ -243,7 +243,7 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
 <div class="row">
   <div class="col-lg-6 col-lg-offset-3">
     <span class="label label-primary "><span class="glyphicon glyphicon-user"></span>Equipo de cátedra</span>
-    <span class="label label-success "><span class="glyphicon glyphicon-ok"></span> Enviar</span>
+    <span class="label label-success "><span class="glyphicon glyphicon-send"></span> Enviar</span>
     <span class="label label-info"><span class="glyphicon glyphicon-comment"></span> Observaciones</span>
     <span class="label label-danger "><span class="glyphicon glyphicon-trash"></span> Eliminar</span>
     <span class="label label-default"><span class="glyphicon glyphicon-print"></span> Exportar PDF</span>

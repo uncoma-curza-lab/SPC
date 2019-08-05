@@ -22,6 +22,7 @@ use Yii;
  */
 class Asignatura extends \yii\db\ActiveRecord
 {
+    const SCENARIO_CREATE = 'create';
     /**
      * {@inheritdoc}
      */
@@ -60,6 +61,7 @@ class Asignatura extends \yii\db\ActiveRecord
             'departamento_id' => 'Departamento ID',
         ];
     }
+    
     /**
     * @return \yii\db\ActiveQuery
     */
