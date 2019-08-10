@@ -62,10 +62,12 @@ class GeneralesSearch extends Programa
         $estadoBorrador = Status::find()->where(['=','descripcion','Borrador'])->one();
         $estadoBiblioteca = Status::find()->where(['=','descripcion','Biblioteca'])->one();
         $query->where('status_id != :stid',['stid' => $estadoBorrador->id]);
-        //$userId = \Yii::$app->user->identity->id;
+        $userId = \Yii::$app->user->identity->id;
         if (PermisosHelpers::requerirRol('Profesor')){
-          $query->where(['=','created_by', $userId]);
+            $query->andFilterWhere(['=','programa.created_by',$userId]);
           //$query->orFilterWhere(['=','status_id',$estadoBiblioteca->id]);
+          
+
         }
         // add conditions that should always apply here
         $query->joinWith(['asignatura']);

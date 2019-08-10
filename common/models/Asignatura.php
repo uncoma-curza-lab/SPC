@@ -46,7 +46,16 @@ class Asignatura extends \yii\db\ActiveRecord
     }
     public function scenarios(){
         $scenarios = parent::scenarios();
-        $scenarios['create'] = ['nomenclatura','curso','plan_id','cuatrimestre','orden'];
+        $scenarios['create'] = [
+            'nomenclatura',
+            'carga_horaria_sem',
+            'carga_horaria_cuatr',
+            'curso',
+            'plan_id',
+            'cuatrimestre',
+            'orden',
+            'departamento_id'
+        ];
         return $scenarios;
 
     }

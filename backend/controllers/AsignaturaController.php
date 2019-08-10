@@ -67,7 +67,8 @@ class AsignaturaController extends Controller
         $model = new Asignatura();
         $model->scenario = 'create';
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            //return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['asignatura/index']);
         }
 
         return $this->render('create', [

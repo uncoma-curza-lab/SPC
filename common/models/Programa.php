@@ -60,6 +60,7 @@ class Programa extends \yii\db\ActiveRecord
         return [
             [['departamento_id', 'status_id', 'asignatura_id', 'year', 'created_by', 'updated_by'], 'integer'],
             [['asignatura_id','year'], 'required', 'on' => 'crear', 'message'=>"Debe completar este campo"],
+            [['asignatura_id','year'], 'required', 'on' => 'copy', 'message'=>"Debe completar este campo"],
             //[['fundament'], 'required', 'on' => 'fundamentacion', 'message'=>"Debe completar este campo"],
             [['biblio_basica','firma','objetivo_programa','contenido_analitico','fundament', 'objetivo_plan', 'contenido_plan', 'propuesta_met', 'evycond_acreditacion', 'parcial_rec_promo', 'distr_horaria', 'crono_tentativo', 'actv_extracur'], 'required','message'=>"Debe completar este campo"],
             [['equipo_catedra'],'required','on' => 'equipo_catedra','message' => "Debe completar este campo"],
@@ -136,6 +137,10 @@ class Programa extends \yii\db\ActiveRecord
         'equipo_catedra',
         'year',
       ];
+      $scenarios['copy'] = [
+          'asignatura_id',
+          'year',
+        ];
       $scenarios['equipo_catedra'] = ['equipo_catedra'];
       $scenarios['contenido_analitico'] = ['contenido_analitico'];
       $scenarios['enviarProfesor'] = ['status_id'];
@@ -146,6 +151,7 @@ class Programa extends \yii\db\ActiveRecord
         'year',
         'asignatura'
       ];
+
       $scenarios['fundamentacion'] = ['fundament'];
       $scenarios['obj-plan'] = ['objetivo_plan'];
       $scenarios['cont-plan'] = ['contenido_plan'];
@@ -429,6 +435,10 @@ class Programa extends \yii\db\ActiveRecord
     }
     public function setFirma($string) {
       $this->firma = $string;
+    }
+
+    public function setAsignatura($asignaturaID) {
+      $this->asignatura_id = $asignaturaID;
     }
 
 }

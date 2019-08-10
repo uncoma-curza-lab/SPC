@@ -59,7 +59,7 @@ class MiProgramaController extends Controller
                           'actions' => [
                             'create','update','delete','anadir', 'ver',
                             'aprobar', 'rechazar','usuarios','lcrear',
-                            'fundamentacion','asignar',
+                            'fundamentacion','asignar', 'copy',
                             'objetivo-plan', 'contenido-analitico',
                             'contenido-plan', 'eval-acred', 'propuesta-metodologica',
                             'parcial-rec-promo', 'dist-horaria', 'crono-tentativo',
@@ -126,6 +126,7 @@ class MiProgramaController extends Controller
       return $this->render('info',['model' => $model]);
 
     }
+    
 
     /**
      * Displays a single Designacion model.
@@ -475,7 +476,9 @@ class MiProgramaController extends Controller
       $model->scenario = 'bibliografia';
       $estado = Status::findOne($model->status_id);
       $validarPermisos = $this->validarPermisos($model, $estado);
-
+      if ($model->biblio_basica == null)
+        $model->biblio_basica = "<p><strong>Bibliograf&iacute;a b&aacute;sica</strong></p> <p>&nbsp;</p><p><strong>Bibliograf&iacute;a de consulta</strong></p>";
+      
       if ($validarPermisos) {
         if ($model->load(Yii::$app->request->post())){
           if($model->save()){
@@ -761,7 +764,49 @@ class MiProgramaController extends Controller
       throw new ForbiddenHttpException('No tiene permisos para actualizar este elemento');
 
     }
+    /**
+    *  Copiar un programa
+    *  @param integer $id del programa
+    *  @return mixed
+    * @throws ForbiddenHttpException si no tiene permisos de copiar el programa
+    */
+    public function actionCopy($id){
+      $model = $this->findModel($id);
+      $model->scenario = 'copy';
+      $estado = Status::findOne($model->status_id);
+      $validarPermisos = $this->validarPermisos($model, $estado);
+      if ($validarPermisos) {
+        $modelNew = clone $model;
+        $modelNew->scenario = 'copy';
+        $modelNew->status_id = Status::find()->where(['=','descripcion','Borrador'])->one()->id;
+        $modelNew->isNewRecord = true;
+        $modelNew->id = null;
+        $modelNew->departamento_id = null;
+        $modelNew->setAsignatura('null');
+        if ($modelNew->load(Yii::$app->request->post())){
+          if($modelNew->save()){
+            // mensaje a usuario
+            Yii::$app->session->setFlash('success','Se ha generado una copia correctamente');
+            // LOG de éxito
+            $this->mensajeGuardadoExito($modelNew);
+            
+            return $this->redirect(['index']);
+          } else {
+            // mensaje a usuario
+            Yii::$app->session->setFlash('danger','Hubo un problema al guardar los cambios');
+            // log de fallo
+            $this->mensajeGuardadoFalla($modelNew);
+          }
+        }
+        
+        return $this->render('forms/_copy', [
+            'model' => $modelNew,
+            'oldModel' => $model
+        ]);
+      }
+      throw new ForbiddenHttpException('No tiene permisos realizar esta operación');
 
+    }
     /**
     *  Edición de campo de actividad extracurricular
     *  @param integer $id del programa

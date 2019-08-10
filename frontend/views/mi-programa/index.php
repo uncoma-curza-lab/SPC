@@ -65,7 +65,8 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
               'label' => 'Estado',
               'attribute' => 'status',
               'value' => function($model) {
-                return Status::findOne($model->status_id)->getDescripcion();
+                $status = Status::findOne($model->status_id);
+                return $status ?  $status->getDescripcion() :  "";
 
               }
             ],
@@ -78,7 +79,6 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
                   return $creador ? $creador->printNombre() : "N/U";
                 }
             ],
-            //'year',
             //'cuatrimestre',
             //'fundament:ntext',
             //'objetivo_plan:ntext',
@@ -97,7 +97,7 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
             [
               'class' => 'yii\grid\ActionColumn',
               //'template' => $show_this_nav? '{view} {update} {delete} {pdf} {status}':'{view} {status} {pdf}',
-              'template' => $show_this_nav? ' {asignar} {aprobar} {rechazar} {delete} {pdf} {ver} {cargar}':'{subir} {status} {pdf}',
+              'template' => $show_this_nav? ' {asignar} {aprobar} {rechazar} {delete} {pdf} {ver} {copy} {cargar}':'{subir} {status} {pdf}',
               'buttons' => [
                 'pdf' => function ($url,$model) {
                     return Html::a(
@@ -108,18 +108,19 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
                         ]);
                 },
                 'aprobar' => function ($url,$model){
-                    if ((Status::findOne($model->status_id)->descripcion == "Borrador"
+                  $status = Status::findOne($model->status_id);
+                    if ($status && (($status->descripcion == "Borrador"
                         //&& PermisosHelpers::requerirDirector($model->id)
                         //&& PermisosHelpers::existeProfAdjunto($model->id))
                         && PermisosHelpers::requerirMinimoRol("Profesor")
                         && PermisosHelpers::requerirSerDueno($model->id))
-                      || (Status::findOne($model->status_id)->descripcion == "Departamento"
+                      || ($status->descripcion == "Departamento"
                           && PermisosHelpers::requerirRol('Departamento') && PermisosHelpers::requerirDirector($model->id))
-                      || (Status::findOne($model->status_id)->descripcion == "Administración Académica"
+                      || ($status->descripcion == "Administración Académica"
                         && PermisosHelpers::requerirRol('Adm_academica'))
-                      || (Status::findOne($model->status_id)->descripcion == "Secretaría Académica"
+                      || ($status->descripcion == "Secretaría Académica"
                         && PermisosHelpers::requerirRol('Sec_academica'))
-                      || PermisosHelpers::requerirMinimoRol('Admin'))
+                      || PermisosHelpers::requerirMinimoRol('Admin')))
                     {
                         return Html::a(
                           '<span style="padding:5px; font-size:20px;color:#5cb85c" class="glyphicon glyphicon-send"></span>',
@@ -135,16 +136,17 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
                     }
                 },
                 'rechazar' => function ($url,$model){
-                    if ((Status::findOne($model->status_id)->descripcion == "Profesor"
+                    $status = Status::findOne($model->status_id);
+                    if ($status && (($status->descripcion == "Profesor"
                         && PermisosHelpers::requerirRol('Profesor')
                         && PermisosHelpers::requerirProfesorAdjunto($model->id))
-                      || (Status::findOne($model->status_id)->descripcion == "Departamento"
+                      || ($status->descripcion == "Departamento"
                         && PermisosHelpers::requerirRol('Departamento') && PermisosHelpers::requerirDirector($model->id))
-                      || (Status::findOne($model->status_id)->descripcion == "Administración Académica"
+                      || ($status->descripcion == "Administración Académica"
                         && PermisosHelpers::requerirRol('Adm_academica'))
-                      || (Status::findOne($model->status_id)->descripcion == "Secretaría Académica"
+                      || ($status->descripcion == "Secretaría Académica"
                         && PermisosHelpers::requerirRol('Sec_academica'))
-                      || PermisosHelpers::requerirMinimoRol('Admin'))
+                      || PermisosHelpers::requerirMinimoRol('Admin')))
                     {
                         return Html::a(
                           '<span style="padding:5px; font-size:20px;color:#d9534f" class="glyphicon glyphicon-remove"></span>',
@@ -158,8 +160,9 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
                     }
                 },
                 'asignar' => function ($url,$model) {
-
-                  if ((Status::findOne($model->status_id)->descripcion == "Borrador"
+                  $status = Status::findOne($model->status_id);
+                  
+                  if ( $status && ($status->descripcion == "Borrador"
                       //&& PermisosHelpers::requerirRol('Departamento')
                       //&& PermisosHelpers::requerirDirector($model->id)
                       && PermisosHelpers::requerirSerDueno($model->id))
@@ -175,9 +178,10 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
                   }
                 },
                 'cargar' => function ($url,$model) {
-                  if (Status::findOne($model->status_id)->descripcion == "Borrador"
+                  $status = Status::findOne($model->status_id);
+                  if ($status && ($status->descripcion == "Borrador"
                       && PermisosHelpers::requerirMinimoRol('Profesor')
-                      && PermisosHelpers::requerirSerDueno($model->id))
+                      && PermisosHelpers::requerirSerDueno($model->id)))
                   {
                     return Html::a(
                       '<span style="padding:5px; font-size:20px; color:orange" class="glyphicon glyphicon-pencil "></span>',
@@ -186,9 +190,10 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
                   }
                 },
                 'editar' => function ($url,$model) {
-                  if ((Status::findOne($model->status_id)->descripcion == "Borrador"
+                  $status = Status::findOne($model->status_id);
+                  if ($status && ($status->descripcion == "Borrador"
                       && PermisosHelpers::requerirDirector($model->id) && PermisosHelpers::existeProfAdjunto($model->id))
-                      || (Status::findOne($model->status_id)->descripcion == "Departamento"
+                      || ($status->descripcion == "Departamento"
                         && PermisosHelpers::requerirRol('Departamento') && PermisosHelpers::requerirDirector($model->id)))
                   {
                     return Html::a(
@@ -197,6 +202,7 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
                     );
                   }
                 },
+                
                 'ver' => function ($url,$model) {
                     return Html::a(
                         '<span style="padding:5px; font-size:20px; color:	#0CB7F2" class="glyphicon glyphicon-comment"></span>',
@@ -206,19 +212,29 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
                             'title' => Yii::t('yii', 'Observaciones'),
                         ]);
                 },
+                'copy' => function ($url,$model) {
+                  return Html::a(
+                      '<span style="padding:5px; font-size:20px; color:	#BFAB57" class="glyphicon glyphicon-duplicate"></span>',
+                      //$url);
+                      ['copy','id' => $model->id],
+                      [
+                          'title' => Yii::t('yii', 'Copiar'),
+                      ]);
+                },
                 'view' => function ($url,$model) {
                     return Html::a(
                         '<span style="padding:5px; font-size:20px;" class="glyphicon glyphicon-eye-open"></span>',
                         $url,
                         [
-                            'title' => Yii::t('yii', 'Eliminar'),
+                            'title' => Yii::t('yii', 'Ver'),
                         ]
                       );
                 },
 
                 'delete' => function ($url,$model) {
                     $userid  = Yii::$app->user->identity->id;
-                    if ((Status::findOne($model->status_id)->descripcion == "Borrador"
+                    $status = Status::findOne($model->status_id);
+                    if ($status && ($status->descripcion == "Borrador"
                           && PermisosHelpers::requerirSerDueno($model->id))
                         || PermisosHelpers::requerirMinimoRol('Admin'))
                     {
@@ -241,12 +257,14 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
 </div>
 
 <div class="row">
-  <div class="col-lg-6 col-lg-offset-3">
+  <div class="col-lg-8 col-lg-offset-3">
     <span class="label label-primary "><span class="glyphicon glyphicon-user"></span>Equipo de cátedra</span>
     <span class="label label-success "><span class="glyphicon glyphicon-send"></span> Enviar</span>
     <span class="label label-info"><span class="glyphicon glyphicon-comment"></span> Observaciones</span>
     <span class="label label-danger "><span class="glyphicon glyphicon-trash"></span> Eliminar</span>
     <span class="label label-default"><span class="glyphicon glyphicon-print"></span> Exportar PDF</span>
     <span class="label label-warning"><span class="glyphicon glyphicon-pencil"></span> Editar</span>
+    <span class="label" style="background-color: #BFAB57"><span class="glyphicon glyphicon-glyphicon glyphicon-duplicate"></span> Copiar </span>
+    
   </div>
 </div>

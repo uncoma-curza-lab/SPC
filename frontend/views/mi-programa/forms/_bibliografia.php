@@ -46,10 +46,10 @@ $porcentaje = $model->calcularPorcentajeCarga();
     'validateOnSubmit'          => false,
     'validateOnBlur'            => false,
   ]); ?>
-  <h4>Bibliografía Básica</h4>
   <?= $form->field($model, 'biblio_basica')->widget(TinyMce::className(), [
       'options' => ['rows' => 12],
       'language' => 'es',
+      'value' => 'pepe',
       'clientOptions' => [
           'plugins' => [
               "advlist autolink lists link charmap
@@ -62,23 +62,7 @@ $porcentaje = $model->calcularPorcentajeCarga();
           'toolbar' => "table | undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link | fullscreen "
       ]
   ])->label('') ?>
-  <hr>
-  <h4>Bibliografía de consulta</h4>
-  <?= $form->field($model, 'biblio_consulta')->widget(TinyMce::className(), [
-      'options' => ['rows' => 12],
-      'language' => 'es',
-      'clientOptions' => [
-          'plugins' => [
-              "advlist autolink lists link charmap
-              "//print
-              ."preview anchor",
-              "searchreplace visualblocks code fullscreen",
-              "insertdatetime  table contextmenu paste"
-          ],
-          'branding' => false,
-          'toolbar' => "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link | fullscreen "
-      ]
-  ])->label('') ?>
+
 
    <div class="row">
      <div class="col-xs-6 text-left">
