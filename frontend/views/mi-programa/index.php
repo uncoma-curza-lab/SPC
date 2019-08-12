@@ -37,8 +37,9 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
             [
               'attribute' => 'asignatura_id',
               'value' => function($model){
-                $asignatura = $model->getAsignatura()->one();
-                return isset($asignatura) ? $asignatura->getNomenclatura() : "N/N";
+                $string = $model->mostrarAsignatura();
+                
+                return $string;
               }
             ],
             'year',
@@ -108,7 +109,7 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
                         ]);
                 },
                 'aprobar' => function ($url,$model){
-                  $status = Status::findOne($model->status_id);
+                    $status = Status::findOne($model->status_id);
                     if ($status && (($status->descripcion == "Borrador"
                         //&& PermisosHelpers::requerirDirector($model->id)
                         //&& PermisosHelpers::existeProfAdjunto($model->id))
@@ -239,7 +240,7 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
                         || PermisosHelpers::requerirMinimoRol('Admin'))
                     {
                       return Html::a(
-                        '<span style="padding:5px; font-size:20px;" class="glyphicon glyphicon-trash"></span>',
+                        '<span style="padding:5px; font-size:20px; color:	#d9534f" class="glyphicon glyphicon-trash"></span>',
                         $url,
                         [
                             'title' => Yii::t('yii', 'Eliminar'),

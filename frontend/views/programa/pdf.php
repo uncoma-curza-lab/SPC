@@ -88,15 +88,21 @@
       </div>
     </div>
     <div class="container">
-      <h4> 5. BIBLIOGRAFÍA BÁSICA Y DE CONSULTA </h4>
-      <div style="margin-left:20px;">
-        <h4> <span style="font-weight:normal">BIBLIOGRAFÍA BÁSICA</span></h4>
-        <?= HtmlPurifier::process($model->biblio_basica) ?>
-        <h4><span style="font-weight:normal">BIBLIOGRAFÍA DE CONSULTA</span></h4>
-        <?= HtmlPurifier::process($model->biblio_consulta) ?>
-      </div>
-    </div>
+      <h4> 5. BIBLIOGRAFÍA </h4>
+      <?php if($model->getBibliografiaConsulta()): ?>
 
+        <div style="margin-left:20px;">
+          <h4> <span style="font-weight:normal">BIBLIOGRAFÍA BÁSICA</span></h4>
+          <?= HtmlPurifier::process($model->getBibliografiaBasica()) ?>
+          <h4><span style="font-weight:normal">BIBLIOGRAFÍA DE CONSULTA</span></h4>
+          <?= HtmlPurifier::process($model->biblio_consulta) ?>
+        </div>
+      <?php else: ?>
+        <div style="margin-left:20px;">
+          <?= HtmlPurifier::process($model->getBibliografiaBasica()) ?>
+        </div>
+      <?php endif; ?>
+    </div>
     <div class="container">
       <h4> 6. PROPUESTA METODOLÓGICA </h4>
       <div style="margin-left:20px;">

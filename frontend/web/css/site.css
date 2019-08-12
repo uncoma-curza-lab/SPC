@@ -50,6 +50,7 @@ body {
     background-color: transparent;
 }
 
+
 .jumbotron .btn {
     font-size: 21px;
     padding: 14px 24px;
@@ -155,4 +156,10 @@ a.desc:after {
 
 .nav > li > form > button.logout:focus {
     outline: none;
+}
+
+
+.tab-content {
+    max-height:300px;
+    overflow-y: auto;
 }

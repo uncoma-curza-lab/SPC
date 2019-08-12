@@ -228,6 +228,7 @@ class Programa extends \yii\db\ActiveRecord
     }
 
     /**
+     * Obtiene el estado de un programa
      * @return \yii\db\ActiveQuery
      */
     public function getStatus()
@@ -236,7 +237,9 @@ class Programa extends \yii\db\ActiveRecord
     }
 
     /**
+     * Obtiene las unidades de un programa
      * @return \yii\db\ActiveQuery
+     * @deprecated
      */
     public function getUnidades()
     {
@@ -244,27 +247,40 @@ class Programa extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * Obtiene el perfil del creador del programa
+     * @return Perfil
      */
     public function getCreador()
     {
         return $this->hasOne(Perfil::className(), ['user_id' => 'created_by'])->one();
     }
     /**
+     * Obtiene el perfil del creador del programa
      * @return \yii\db\ActiveQuery
      */
     public function getPerfil()
     {
         return $this->hasOne(Perfil::className(), ['user_id' => 'created_by']);
     }
+    /**
+     * Obtiene al creador del programa
+     * @return Integer
+     */
     public function getCreatedBy(){
       return $this->created_by;
     }
-
+    /**
+     * Obtiene la nomenclatura de la asignatura perteneciente al programa
+     * @return String
+     */
     public function getNomenclatura()
     {
       return $this->getAsignatura()->one()->getNomenclatura();
     }
+    /**
+     * Obtiene el curso del programa
+     * @return Integer
+     */
     public function getCurso()
     {
       return $this->getAsignatura()->one()->getCurso();
@@ -312,9 +328,16 @@ class Programa extends \yii\db\ActiveRecord
     public function getEquipoCatedra(){
       return $this->equipo_catedra;
     }
+    /**
+     * obtiene el porcentaje de carga según 14 incisos.
+     * si el inciso tiene más de 10 letras cuenta como completo
+     * incluye etiquetas HTML
+     * @return Integer
+     */
     public function calcularPorcentajeCarga(){
+      // valor x inciso
       $valorPunto = 100/14;
-
+    
       $porcentaje = 0;
       if(strlen($this->getFundamentacion()) > 10){
         $porcentaje = $porcentaje+$valorPunto;
@@ -358,7 +381,7 @@ class Programa extends \yii\db\ActiveRecord
       if(strlen($this->getFirma()) > 10){
         $porcentaje+= $valorPunto;
       }
-
+      //redondear porcentaje
       return round($porcentaje);
     }
     public function getObjetivoPrograma(){
@@ -370,6 +393,11 @@ class Programa extends \yii\db\ActiveRecord
     public function getBibliografiaConsulta(){
       return $this->biblio_consulta;
     }
+    /**
+     * Cambia el estado del programa al siguiente según el peso (valor) que tenga el estado actual
+     * Si pudo cambiar el estado devuelve true, en caso contrario, false.
+     * @return Boolean 
+     */
     public function subirEstado():bool{
       $estadoActual = Status::findOne($this->status_id);
       if($estadoActual){
@@ -381,6 +409,11 @@ class Programa extends \yii\db\ActiveRecord
       }
       return false;
     }
+    /**
+     * Cambia el estado del programa al anterior según el peso (valor) que tenga el estado actual
+     * Si pudo cambiar el estado devuelve true, en caso contrario, false.
+     * @return Boolean
+     */
     public function bajarEstado():bool{
       $estadoActual = Status::findOne($this->status_id);
       if($estadoActual){
@@ -392,6 +425,11 @@ class Programa extends \yii\db\ActiveRecord
       }
       return false;
     }
+    /**
+     * Cambia el estado manualmente
+     * Si pudo cambiar el estado devuelve true, en caso contrario, false.
+     * @return Boolean
+     */
     public function setEstado($estado):bool {
       if (!isset($estado))
         return false;
@@ -405,6 +443,11 @@ class Programa extends \yii\db\ActiveRecord
       }
       return false;
     }
+    /**
+     * Traducción del valor de la variable curso.
+     * Primer año : 1, Segundo año: 2, etc.
+     * @return String
+     */
     public function printCurso(){
       $string = "";
       switch ($this->curso) {
@@ -439,6 +482,17 @@ class Programa extends \yii\db\ActiveRecord
 
     public function setAsignatura($asignaturaID) {
       $this->asignatura_id = $asignaturaID;
+    }
+    /**
+     * Obtiene el nombre de la asignatura y el plan para mostrarlo al usuario
+     * @return String
+     */
+    public function mostrarAsignatura(){
+      $asignatura = $this->getAsignatura()->one();
+      $plan = $asignatura ? $asignatura->getPlan()->one() : null;
+      $string = $asignatura ? $asignatura->getNomenclatura(): 'S/asginatura';
+      $string = $plan ? $string." (".$plan->getOrdenanza().")" : $string;
+      return $string;
     }
 
 }

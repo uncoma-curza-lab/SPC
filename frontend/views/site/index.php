@@ -21,6 +21,36 @@ $items = [
       'active'=>true,
     ],
     [
+      'label' => '<i class="glyphicon glyphicon-list-alt"></i> Cambios y actualizaciones...',
+      'content' => "
+                    <p>Versión 1.1.2</p>
+                      <ul>
+                        <li type='disc'>Copiar programas propios,</li>
+                        <li type='disc'>Se agregan mensajes de ayuda,</li>
+                        <li type='disc'>Búsqueda de programas en generales,</li>
+                        <li type='disc'>Programa: Bibliografía general</li>
+                      </ul>
+                      <br>
+                    <p>Versión 1.1.1</p>
+                      <ul>
+                        <li type='disc'>Nuevo ícono de envío,</li>
+                        <li type='disc'>Agregado de planes y asignaturas,</li>
+                        <li type='disc'>Correlativas y títulos intermedios</li>
+                        <li type='disc'>API de consulta</li>
+                      </ul>
+                      <br>
+                    <p>Versión 1.1.0</p>
+                      <ul>
+                        <li type='disc'>Nueva portada,</li>
+                        <li type='disc'>Mensajes de ayuda,</li>
+                        <li type='disc'>Editar programa: Mejora en botones</li>
+                        <li type='disc'>Mejora en búsquedas y consultas a la base de datos</li>
+                      </ul>
+                      <br>
+                   
+                    ",
+    ],
+    [
       'label' => '<i class="glyphicon glyphicon-question-sign"></i> Contacto',
       'content' => "
                     <p> Puede realizar preguntas y/o sugerencias al siguiente email:</p>
@@ -55,12 +85,12 @@ $items = [
                 'height' => TabsX::SIZE_MEDIUM,
                 'bordered'=>true,
                 'encodeLabels'=>false,
-
+                //posicion
+                'sideways' => false,
                 'enableStickyTabs' => true,
                 'stickyTabsOptions' => [
                     'selectorAttribute' => 'data-target',
                     'backToTop' => true,
-
                 ],
             ]); ?>
           </div>
