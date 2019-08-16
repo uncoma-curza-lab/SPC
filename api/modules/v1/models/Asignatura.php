@@ -53,7 +53,7 @@ class Asignatura extends \yii\db\ActiveRecord implements Linkable
         return [
             'id',
             'nombre' => 'nomenclatura',
-            'año_dictado' => 'curso',
+            'ano_dictado' => 'curso',
             'orden' => 'orden',
             'cuatrimestre' => 'cuatrimestre',
             'carga_sem' => 'carga_horaria_sem',

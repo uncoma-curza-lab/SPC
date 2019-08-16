@@ -44,7 +44,7 @@ class Plan extends \yii\db\ActiveRecord implements Linkable
     public function fields(){
         return [
             'id',
-            'ord' => 'planordenanza',
+            'ordenanza' => 'planordenanza',
             'activo' => function($model){
                 return $model->activo ?
                     true : false;
@@ -71,9 +71,9 @@ class Plan extends \yii\db\ActiveRecord implements Linkable
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'planordenanza' => 'Planordenanza',
-            'carrera_id' => 'Carrera ID',
+            'id' => 'id',
+            'planordenanza' => 'ordenanza',
+            'carrera_id' => 'carrera_id',
         ];
     }
     public function getOrdenanza(){

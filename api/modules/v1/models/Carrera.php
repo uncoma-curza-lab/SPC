@@ -84,7 +84,7 @@ class Carrera extends \yii\db\ActiveRecord implements Linkable
                     null;
             },
             'planes' => function($model){
-                $planes = $model->getPlanes()->all();
+                $planes = $model->getPlanes()->where(['activo' => true])->all();
                 return $planes;
             }
             /*'departamento' => function(){
