@@ -26,9 +26,11 @@ $items = [
                     <p>Versión 1.1.2</p>
                       <ul>
                         <li type='disc'>Copiar programas propios,</li>
-                        <li type='disc'>Se agregan mensajes de ayuda,</li>
+                        <li type='disc'>Se agregan mensajes de ayuda durante la creación de los programas,</li>
                         <li type='disc'>Búsqueda de programas en generales,</li>
-                        <li type='disc'>Programa: Bibliografía general</li>
+                        <li type='disc'>Programa: Bibliografía general,</li>
+                        <li type='disc'>Modalidades de carrera,</li>
+                        <li type='disc'>Mejoras en la API</li>
                       </ul>
                       <br>
                     <p>Versión 1.1.1</p>

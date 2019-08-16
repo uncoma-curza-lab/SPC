@@ -22,6 +22,15 @@ $this->params['breadcrumbs'][] = ['label' => "Objetivo según plan de estudios",
 $this->params['breadcrumbs'][] = ['label' => "Objetivo del programa", 'url' => ['objetivo-programa', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Contenido según el plan de estudio';
 $porcentaje = $model->calcularPorcentajeCarga();
+
+
+$js = "$(document).ready(function(){
+  $('[data-toggle=\"popover\"]').popover();
+});
+$(function () {
+  $('[data-toggle=\"tooltip\"]').tooltip()
+})";
+$this->registerJs($js);
  ?>
  <div class="row">
    <div class="col-md-2 text-right">
@@ -43,7 +52,9 @@ $porcentaje = $model->calcularPorcentajeCarga();
    'validateOnBlur'            => false,
  ]); ?>
 
-<h3>3. Contenidos según Plan de Estudio</h3>
+<h3>3. Contenidos según Plan de Estudio<span  style="font-size:15px"><a href="#" data-toggle="popover" title="Contenidos según el plan de estudios"
+    data-content="Son los referidos al plan de estudios tal lo allí establecido.">
+    <span class="glyphicon glyphicon-question-sign"></span> Ayuda</a></span></h3>
 
 <?= $form->field($model, 'contenido_plan')->widget(TinyMce::className(), [
     'options' => ['rows' => 16],

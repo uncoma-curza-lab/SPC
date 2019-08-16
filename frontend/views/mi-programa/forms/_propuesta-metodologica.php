@@ -22,6 +22,13 @@ $this->params['breadcrumbs'][] = ['label' => "Contenidos analíticos", 'url' => 
 $this->params['breadcrumbs'][] = ['label' => "Bibliografía", 'url' => ['bibliografia', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Propuesta metodológica';
 $porcentaje = $model->calcularPorcentajeCarga();
+$js = "$(document).ready(function(){
+  $('[data-toggle=\"popover\"]').popover();
+});
+$(function () {
+  $('[data-toggle=\"tooltip\"]').tooltip()
+})";
+$this->registerJs($js);
 ?>
 <div class="row">
   <div class="col-md-2 text-right">
@@ -35,7 +42,10 @@ $porcentaje = $model->calcularPorcentajeCarga();
     </div>
   </div>
 </div>
-<h3>6. Propuesta Metodológica</h3>
+<h3>6. Propuesta Metodológica <span  style="font-size:15px"><a href="#" data-toggle="popover" title="Propuesta Metodológica"
+    data-content="Señalar la metodología en general y el plan de trabajos prácticos. Se recomienda establecer
+una actividad para promover la escritura académica como línea de fortalecimiento institucional de la formación de nuestros estudiantes.">
+    <span class="glyphicon glyphicon-question-sign"></span> Ayuda</a></span></h3>
 <?php $form = ActiveForm::begin([
   'enableAjaxValidation'      => false,
   'enableClientValidation'    => false,

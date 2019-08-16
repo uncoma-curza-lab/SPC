@@ -22,6 +22,13 @@ $this->params['breadcrumbs'][] = ['label' => "Evaluacion y acreditación", 'url'
 $this->params['breadcrumbs'][] = ['label' => "Parciales, recuperatorios y coloquios", 'url' => ['parc-rec-promo', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Distribución Horaria';
 $porcentaje = $model->calcularPorcentajeCarga();
+$js = "$(document).ready(function(){
+  $('[data-toggle=\"popover\"]').popover();
+});
+$(function () {
+  $('[data-toggle=\"tooltip\"]').tooltip()
+})";
+$this->registerJs($js);
  ?>
  <div class="row">
    <div class="col-md-2 text-right">
@@ -44,7 +51,9 @@ $porcentaje = $model->calcularPorcentajeCarga();
 
  ]); ?>
 
-<h3>9. Distribución horaria</h3>
+<h3>9. Distribución horaria<span  style="font-size:15px"><a href="#" data-toggle="popover" title="Distribución horaria"
+    data-content="Según horas semanales establecidas por plan de estudio.">
+    <span class="glyphicon glyphicon-question-sign"></span> Ayuda</a></span></h3>
 
 <?= $form->field($model, 'distr_horaria')->widget(TinyMce::className(), [
     'options' => ['rows' => 16],

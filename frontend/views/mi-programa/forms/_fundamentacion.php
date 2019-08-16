@@ -55,7 +55,7 @@ $this->params['breadcrumbs'][] = 'Fundamentacion';
   'validateOnBlur'            => false,
 ]); ?>
 <h3>1. Fundamentación<span  style="font-size:15px"><a href="#" data-toggle="popover" title="Fundamentación"
-    data-content="Ingrese aquí la fundamentación de su programa.">
+    data-content="Ubicación de la asignatura dentro del Plan de estudios. Correlativas anteriores y posteriores. Sentido de la asignatura. Propósitos y estructura del programa.">
     <span class="glyphicon glyphicon-question-sign"></span> Ayuda</a></span></h3>
 
 <?= $form->field($model, 'fundament')->widget(TinyMce::className(), [

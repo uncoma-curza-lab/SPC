@@ -22,6 +22,14 @@ $this->params['breadcrumbs'][] = ['label' => "Bibliografía", 'url' => ['bibliog
 $this->params['breadcrumbs'][] = ['label' => "Propuesta metodológica", 'url' => ['propuesta-metodologica', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Evaluación y condiciones de acreditación';
 $porcentaje = $model->calcularPorcentajeCarga();
+
+$js = "$(document).ready(function(){
+  $('[data-toggle=\"popover\"]').popover();
+});
+$(function () {
+  $('[data-toggle=\"tooltip\"]').tooltip()
+})";
+$this->registerJs($js);
 ?>
 <?php $form = ActiveForm::begin([
   'enableAjaxValidation'      => false,
@@ -42,7 +50,9 @@ $porcentaje = $model->calcularPorcentajeCarga();
     </div>
   </div>
 </div>
-<h3>7. Evaluación y condiciones de acreditación</h3>
+<h3>7. Evaluación y condiciones de acreditación<span  style="font-size:15px"><a href="#" data-toggle="popover" title="Evaluación y condiciones de acreditación"
+    data-content="Señalar alternativas de cursado regular, promocional, y libre y criterios de evaluación y acreditación de forma discriminada.">
+    <span class="glyphicon glyphicon-question-sign"></span> Ayuda</a></span></h3>
 
 <?= $form->field($model, 'evycond_acreditacion')->widget(TinyMce::className(), [
     'options' => ['rows' => 16 ],

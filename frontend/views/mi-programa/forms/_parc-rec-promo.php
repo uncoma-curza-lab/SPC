@@ -22,6 +22,13 @@ $this->params['breadcrumbs'][] = ['label' => "Propuesta metodológica", 'url' =>
 $this->params['breadcrumbs'][] = ['label' => "Evaluacion y acreditación", 'url' => ['eval-acred', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Parciales, recuperatorios y coloquios';
 $porcentaje = $model->calcularPorcentajeCarga();
+$js = "$(document).ready(function(){
+  $('[data-toggle=\"popover\"]').popover();
+});
+$(function () {
+  $('[data-toggle=\"tooltip\"]').tooltip()
+})";
+$this->registerJs($js);
 ?>
 <div class="row">
   <div class="col-md-2 text-right">
@@ -42,7 +49,10 @@ $porcentaje = $model->calcularPorcentajeCarga();
   'validateOnSubmit'          => false,
   'validateOnBlur'            => false,
 ]); ?>
-<h3>8. Parciales, Recuperatorios y coloquios</h3>
+<h3>8. Parciales, Recuperatorios y coloquios<span  style="font-size:15px"><a href="#" data-toggle="popover" title="Parciales, Recuperatorios y coloquios"
+    data-content="Establecer fechas para los parciales, recuperatorios y coloquios, así como las condiciones y
+unidades que corresponden.">
+    <span class="glyphicon glyphicon-question-sign"></span> Ayuda</a></span></h3>
 
 <?= $form->field($model, 'parcial_rec_promo')->widget(TinyMce::className(), [
   'options' => ['rows' => 16],

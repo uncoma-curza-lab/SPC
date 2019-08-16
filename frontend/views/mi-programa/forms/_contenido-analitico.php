@@ -23,6 +23,13 @@ $this->params['breadcrumbs'][] = ['label' => "Obj. del programa", 'url' => ['obj
 $this->params['breadcrumbs'][] = ['label' => "Contenido según plan de estudio", 'url' => ['contenido-plan', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Contenidos analíticos';
 $porcentaje = $model->calcularPorcentajeCarga();
+$js = "$(document).ready(function(){
+  $('[data-toggle=\"popover\"]').popover();
+});
+$(function () {
+  $('[data-toggle=\"tooltip\"]').tooltip()
+})";
+$this->registerJs($js);
 ?>
 <div class="row">
   <div class="col-md-2 text-right">
@@ -37,7 +44,9 @@ $porcentaje = $model->calcularPorcentajeCarga();
   </div>
 </div>
 
-<h3>4. Contenidos analíticos</h3>
+<h3>4. Contenidos analíticos<span  style="font-size:15px"><a href="#" data-toggle="popover" title="Contenidos analíticos"
+    data-content="Según organización del programa en unidades temáticas, núcleos problemáticos, etc.">
+    <span class="glyphicon glyphicon-question-sign"></span> Ayuda</a></span></h3>
   <!--<? $this->render('_gridUnidades',['model' => $model]) ?>-->
   <?php $form = ActiveForm::begin([
     'enableAjaxValidation'      => false,

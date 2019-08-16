@@ -22,6 +22,13 @@ $this->params['breadcrumbs'][] = ['label' => "Distribución Horaria", 'url' => [
 $this->params['breadcrumbs'][] = ['label' => "Cronograma tentativo", 'url' => ['crono-tentativo', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Activadades extracurriculares';
 $porcentaje = $model->calcularPorcentajeCarga();
+$js = "$(document).ready(function(){
+  $('[data-toggle=\"popover\"]').popover();
+});
+$(function () {
+  $('[data-toggle=\"tooltip\"]').tooltip()
+})";
+$this->registerJs($js);
 ?>
  <?php $form = ActiveForm::begin([
    'enableAjaxValidation'      => false,
@@ -43,7 +50,9 @@ $porcentaje = $model->calcularPorcentajeCarga();
      </div>
    </div>
  </div>
-<h3>11. Planificación de actividades Extracurriculares</h3>
+<h3>11. Planificación de actividades Extracurriculares<span  style="font-size:15px"><a href="#" data-toggle="popover" title="Planificación de actividades Extracurriculares"
+    data-content="Se prevé la participación de la cátedra en la organización de las Jornadas. Asimismo las actividades de extensión de cátedra">
+    <span class="glyphicon glyphicon-question-sign"></span> Ayuda</a></span></h3>
 <?= $form->field($model, 'actv_extracur')->widget(TinyMce::className(), [
     'options' => ['rows' => 16],
     'language' => 'es',
