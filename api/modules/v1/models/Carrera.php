@@ -86,13 +86,18 @@ class Carrera extends \yii\db\ActiveRecord implements Linkable
             'planes' => function($model){
                 $planes = $model->getPlanes()->where(['activo' => true])->all();
                 return $planes;
-            }
-            /*'departamento' => function(){
-                return $this->departamento_id ? 
+            },
+            'departamento' => function(){
+                /*return $this->departamento_id ? 
                     Url::base(true)."/".$this->version."/dpto/".$this->departamento_id
                     :
-                    null;
-            }*/
+                    null;*/
+                return $this->departamento_id ? 
+                    [
+                        'nombre' => $this->getDepartamento()->one()->getNombre(),
+                        'href' => Url::base(true)."/".$this->version."/departamento/".$this->departamento_id
+                    ]: null;
+            }
         ];
     }
     /**
