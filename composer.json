@@ -25,7 +25,8 @@
         "2amigos/yii2-usuario": "~1.0",
         "mpdf/mpdf": "dev-master",
         "yiisoft/yii2-debug": "^2.0",
-        "2amigos/yii2-tinymce-widget": "~1.1"
+        "2amigos/yii2-tinymce-widget": "~1.1",
+        "yiisoft/yii2-elasticsearch": "^2.0"
     },
     "require-dev": {
         "yiisoft/yii2-gii": "~2.0.0",

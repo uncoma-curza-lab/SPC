@@ -4,6 +4,7 @@ namespace api\modules\v1\models;
 use yii\web\Linkable;
 use yii\web\Link;
 use common\models\CarreraModalidad;
+use common\models\TituloIntermedio;
 use Yii;
 use yii\helpers\Url;
 /**
@@ -97,8 +98,16 @@ class Carrera extends \yii\db\ActiveRecord implements Linkable
                         'nombre' => $this->getDepartamento()->one()->getNombre(),
                         'href' => Url::base(true)."/".$this->version."/departamento/".$this->departamento_id
                     ]: null;
+            },
+            'es_titulo_intermedio' => function($model){
+                $modelo = $model->getTituloIntermedio()->one();
+                return $modelo ? true : false;
             }
         ];
+    }
+
+    public function departamento($id){
+        return ["nombre" => $id];
     }
     /**
      * {@inheritdoc}
@@ -149,5 +158,8 @@ class Carrera extends \yii\db\ActiveRecord implements Linkable
     }
     public function getPlanVigente(){
         return $this->hasOne(Plan::className(),['id' => 'plan_vigente_id']);
+    }
+    public function getTituloIntermedio(){
+        return $this->hasOne(TituloIntermedio::className(),['titulo_intermedio_id' => 'id']);
     }
 }

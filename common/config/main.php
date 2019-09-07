@@ -14,5 +14,15 @@ return [
             // uncomment if you want to cache RBAC items hierarchy
             // 'cache' => 'cache',
         ],
+        'elasticsearch' => [
+            'class' => 'yii\elasticsearch\Connection',
+            'autodetectCluster' => false,
+            'nodes' => [
+                [
+                    'http_address' => 'elasticsearch:9200'
+                ],
+                // configure more hosts if you have a cluster
+            ],
+        ],
     ],
 ];

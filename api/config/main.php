@@ -71,8 +71,9 @@ return [
                 [
                     'class' => 'yii\rest\UrlRule', 
                     'controller' => [
-                        'v1/carrera'=> 'v1/carrera'
+                        'v1/carrera'=> 'v1/carrera',
                     ],
+                
                     'extraPatterns' => [
                         'GET departamento' => 'dptos'
                     ],
