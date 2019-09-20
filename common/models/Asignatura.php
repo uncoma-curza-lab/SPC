@@ -39,6 +39,7 @@ class Asignatura extends \yii\db\ActiveRecord
             [['nomenclatura', 'curso', 'cuatrimestre'], 'required', 'message' => 'Complete este campo'],
             [['nomenclatura', 'curso', 'cuatrimestre','plan_id','orden'], 'required', 'on' => 'create', 'message' => 'Complete este campo'],
             [['orden','curso', 'cuatrimestre', 'carga_horaria_sem', 'carga_horaria_cuatr', 'plan_id', 'departamento_id'], 'integer'],
+            [['requisitos'],'string'],
             [['nomenclatura'], 'string', 'max' => 255],
             [['departamento_id'], 'exist', 'skipOnError' => true, 'targetClass' => Departamento::className(), 'targetAttribute' => ['departamento_id' => 'id']],
             [['plan_id'], 'exist', 'skipOnError' => true, 'targetClass' => Plan::className(), 'targetAttribute' => ['plan_id' => 'id']],
@@ -74,6 +75,7 @@ class Asignatura extends \yii\db\ActiveRecord
             'carga_horaria_sem' => 'Carga Horaria Sem',
             'carga_horaria_cuatr' => 'Carga Horaria Cuatr',
             'departamento_id' => 'Departamento',
+            'requisitos' => 'Requisitos',
         ];
     }
     /**
@@ -155,6 +157,10 @@ class Asignatura extends \yii\db\ActiveRecord
     }
     public function getCargaHorariaCuatr(){
         return $this->carga_horaria_cuatr;
+    }
+
+    public function getRequisitos(){
+        return $this->requisitos;
     }
     
 }

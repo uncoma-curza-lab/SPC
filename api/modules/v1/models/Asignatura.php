@@ -44,6 +44,7 @@ class Asignatura extends \yii\db\ActiveRecord implements Linkable
             [['nomenclatura', 'curso', 'cuatrimestre'], 'required'],
             [['orden','curso', 'cuatrimestre', 'carga_horaria_sem', 'carga_horaria_cuatr', 'plan_id', 'departamento_id'], 'integer'],
             [['nomenclatura'], 'string', 'max' => 255],
+            [['requisitos'],'string'],
             [['departamento_id'], 'exist', 'skipOnError' => true, 'targetClass' => Departamento::className(), 'targetAttribute' => ['departamento_id' => 'id']],
             [['plan_id'], 'exist', 'skipOnError' => true, 'targetClass' => Plan::className(), 'targetAttribute' => ['plan_id' => 'id']],
         ];
@@ -59,6 +60,7 @@ class Asignatura extends \yii\db\ActiveRecord implements Linkable
             'carga_sem' => 'carga_horaria_sem',
             'plan' => 'plan_id',
             'carga_total' => 'carga_horaria_cuatr',
+            'requisitos' => 'requisitos',
             'correlativas' => function($model){
                 $correlativas = $model->getCorrelativas()->select('correlativa_id')->all();
                 $array = [];
@@ -109,6 +111,7 @@ class Asignatura extends \yii\db\ActiveRecord implements Linkable
 		        'carga_horaria_sem' => 'Carga Horaria Sem',
 		        'carga_horaria_cuatr' => 'Carga Horaria Cuatr',
             'departamento_id' => 'Departamento ID',
+            'requisitos' => 'Requisitos',
         ];
     }
     public function getLinks(){

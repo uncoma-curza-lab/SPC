@@ -6,6 +6,8 @@ use kartik\select2\Select2;
 use yii\helpers\ArrayHelper;
 use common\models\Departamento;
 use common\models\Plan;
+use dosamigos\tinymce\TinyMce;
+
 /* @var $this yii\web\View */
 /* @var $model backend\models\Asignatura */
 /* @var $form yii\widgets\ActiveForm */
@@ -14,6 +16,7 @@ use common\models\Plan;
 <div class="asignatura-form">
 
     <?php $form = ActiveForm::begin(); ?>
+    
      <div class="col-md-3">
         <?= $form->field($model, 'nomenclatura')->textInput(['maxlength' => true]) ?>
         <?= $form->field($model, 'departamento_id')->widget(Select2::classname(),[
@@ -47,9 +50,30 @@ use common\models\Plan;
             ],
         ]) ?>
         <?= $form->field($model, 'orden')->input('number') ?>
-
-         <div class="form-group">
-            <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
+    </div>
+    <div class="col-md-12">
+        <div class="form-group ">
+                <?= $form->field($model, 'requisitos')->widget(TinyMce::className(), [
+                    'options' => ['rows' => 16],
+                    'language' => 'es',
+                    'clientOptions' => [
+                        'plugins' => [
+                            "advlist autolink lists link charmap
+                            "//print
+                            ."preview anchor",
+                            "searchreplace visualblocks code fullscreen",
+                            "insertdatetime  table contextmenu paste"
+                        ],
+                        'branding' => false,
+                        'toolbar' => "table | undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link | fullscreen "
+                    ]
+                ])->label('Requisitos') ?>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
+            </div>
         </div>
     </div>
    
