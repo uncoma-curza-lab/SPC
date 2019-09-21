@@ -1,4 +1,5 @@
 <?php
+use dosamigos\tinymce\TinyMce;
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
@@ -15,17 +16,19 @@ use common\models\Modalidad;
 <div class="carrera-form">
 
     <?php $form = ActiveForm::begin(); ?>
+    <div class="col-md-4">
+      <?= $form->field($model, 'nom')->textInput(['maxlength' => true])->label("Nombre") ?>
 
-    <?= $form->field($model, 'nom')->textInput(['maxlength' => true])->label("Nombre") ?>
-
-    <?= $form->field($model, 'codigo')->textInput() ?>
+      <?= $form->field($model, 'codigo')->textInput() ?>
+     
+      
+    </div>
+    <div class="col-md-4">
     <?= $form->field($model, 'duracion_total_anos')->input('float') ?>
-    <?= $form->field($model, 'duracion_total_hs')->input('integer') ?>
-    <?= $form->field($model, 'alcance')->textInput() ?>
-    <?= $form->field($model, 'fundamentacion')->textInput() ?>
-    <?= $form->field($model, 'perfil')->textInput() ?>
-
-
+      <?= $form->field($model, 'duracion_total_hs')->input('integer') ?>
+    </div>
+    <div class="col-md-4">
+    
     <?= $form->field($model, 'departamento_id')->widget(Select2::classname(),[
         'data' => ArrayHelper::map(Departamento::find()->all(),'id','nomenclatura'),
         //'data' =>ArrayHelper::map(((new StatusSearch())->search(['model' => 'backend\models\Status'])),'id','descripcion'),
@@ -50,6 +53,55 @@ use common\models\Modalidad;
             ]);
           }  
     ?>
+    </div>
+    <?= $form->field($model, 'alcance')->widget(TinyMce::className(), [
+    'options' => ['rows' => 16],
+    'language' => 'es',
+    'clientOptions' => [
+        'plugins' => [
+            "advlist autolink lists link charmap
+            "//print
+            ."preview anchor",
+            "searchreplace visualblocks code fullscreen",
+            "insertdatetime  table contextmenu paste"
+        ],
+        'branding' => false,
+        'toolbar' => "table | undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link | fullscreen "
+    ]
+])->label('Alcance') ?>
+    <?= $form->field($model, 'fundamentacion')->widget(TinyMce::className(), [
+    'options' => ['rows' => 16],
+    'language' => 'es',
+    'clientOptions' => [
+        'plugins' => [
+            "advlist autolink lists link charmap
+            "//print
+            ."preview anchor",
+            "searchreplace visualblocks code fullscreen",
+            "insertdatetime  table contextmenu paste"
+        ],
+        'branding' => false,
+        'toolbar' => "table | undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link | fullscreen "
+    ]
+])->label('Fundamentacion') ?>
+    
+  <?= $form->field($model, 'perfil')->widget(TinyMce::className(), [
+    'options' => ['rows' => 16],
+    'language' => 'es',
+    'clientOptions' => [
+        'plugins' => [
+            "advlist autolink lists link charmap
+            "//print
+            ."preview anchor",
+            "searchreplace visualblocks code fullscreen",
+            "insertdatetime  table contextmenu paste"
+        ],
+        'branding' => false,
+        'toolbar' => "table | undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link | fullscreen "
+    ]
+  ])->label('Perfil') ?>
+
+
  
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
