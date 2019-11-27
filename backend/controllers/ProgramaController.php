@@ -5,15 +5,15 @@ namespace backend\controllers;
 use Yii;
 use yii\data\ActiveDataProvider;
 use backend\models\Asignatura;
-use backend\models\Programa;
-use backend\models\ProgramaSearch;
+use common\models\Programa;
+use common\models\search\ProgramaSearch;
 use backend\models\AsignaturaSearch;
 use backend\models\Designacion;
 use backend\models\DesignacionSearch;
 
 use backend\models\Status;
 use common\models\PermisosHelpers;
-use backend\models\Departamento;
+use common\models\Departamento;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -33,6 +33,7 @@ class ProgramaController extends Controller
                  'class' => \yii\filters\AccessControl::className(),
                  'only' => [
                    'index', 'view', 'create', 'update','delete',
+                   'update-departamento'
               /*     'fundamentacion', 'objetivo-plan', 'contenido-analitico',
                    'contenido-plan', 'eval-acred', 'propuesta-metodologica',
                    'parcial-rec-promo', 'dist-horaria', 'crono-tentativo',
@@ -54,7 +55,7 @@ class ProgramaController extends Controller
                             'objetivo-plan', 'contenido-analitico',
                             'contenido-plan', 'eval-acred', 'propuesta-metodologica',
                             'parcial-rec-promo', 'dist-horaria', 'crono-tentativo',
-                            'actividad-extracurricular'
+                            'actividad-extracurricular','update-departamento'
                           ],
                           'allow' => true,
                           'roles' => ['@'],
@@ -133,7 +134,18 @@ class ProgramaController extends Controller
             'searchModelDesignacion' => $searchModelDesignacion
         ]);
     }*/
+    public function actionUpdate($id)
+    {
+        $model = $this->findModel($id);
 
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
+        }
+
+        return $this->render('asignardepto', [
+            'model' => $model,
+        ]);
+    }
     public function actionAprobar($id){
         $programa = $this->findModel($id);
         $programa->scenario = 'carrerap';
@@ -629,25 +641,6 @@ class ProgramaController extends Controller
 
     }*/
 
-    /**
-     * Updates an existing Programa model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionUpdate($id)
-    {
-        $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        }
-
-        return $this->render('update', [
-            'model' => $model,
-        ]);
-    }
 
     /**
      * Deletes an existing Programa model.
