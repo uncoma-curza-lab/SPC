@@ -12,7 +12,7 @@ use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
-
+use common\events\MailEvent;
 /**
  * Site controller
  */
@@ -73,6 +73,15 @@ class SiteController extends Controller
     public function actionIndex()
     {
         //$this->layout = "portal";
+        
+        //$event->ejecutar();
+        //$event->on(MailEvent::EVENT_SEND,'sendMessage','hola');
+        
+        //enviar un mail
+        /*
+        $event = new MailEvent();
+        $event->trigger(MailEvent::EVENT_SEND);*/
+        
         return $this->render('index');
     }
 

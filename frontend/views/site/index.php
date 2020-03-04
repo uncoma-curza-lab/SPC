@@ -58,7 +58,7 @@ $items = [
                     <p> Puede realizar preguntas y/o sugerencias al siguiente email:</p>
                     <p>Murphy, Néstor Julián </p>
                     <p><b>Laboratorio de Informática (Dpto. de Ciencia y Tecnología)</b></p>
-                    <i> jmurphy@curza.net </i>
+                    <p>Email: <b>nestor</b><i>(punto)</i><b>murphy</b><i>(arroba)</i><b>curza.uncoma.edu.ar</b> </p>
                   ",
     ],
 

@@ -44,6 +44,16 @@ use yii\db\ActiveRecord;
  */
 class Programa extends \yii\db\ActiveRecord
 {
+    const EVENT_NEW_PROGM = 'nuevo-programa';
+
+    public function sendMain($event){
+      echo 'mail sent';
+    }
+
+    public function notificacion($event){
+      echo "evento";
+    }
+
     /**
      * {@inheritdoc}
      */

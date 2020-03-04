@@ -68,7 +68,8 @@ $this->registerJs($js);
               "insertdatetime  table contextmenu paste"
           ],
           'branding' => false,
-          'toolbar' => "table | undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link | fullscreen "
+          'toolbar' => "table | undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link | fullscreen ",
+          'contextmenu' => "copy  paste | link"
       ]
   ])->label('') ?>
    <br>
