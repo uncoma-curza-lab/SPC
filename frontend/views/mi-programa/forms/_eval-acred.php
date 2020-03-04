@@ -68,7 +68,7 @@ $this->registerJs($js);
             "insertdatetime  table contextmenu paste"
         ],
         'toolbar' => "table | undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link | fullscreen ",
-        'contextmenu' => "copy  paste | link"
+        'contextmenu' => "copy  paste | link",
         'branding' => false,
         'protect' => [
             "/\<\/?(if|endif)\>/g",  // Protect <if> & </endif>

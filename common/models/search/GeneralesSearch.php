@@ -84,7 +84,7 @@ class GeneralesSearch extends Programa
             ],
             'sort' => [
                 'defaultOrder' => [
-                    'id' => SORT_DESC
+                    'year' => SORT_DESC
                 ]
             ]
         ]);
