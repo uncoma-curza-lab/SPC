@@ -31,7 +31,7 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
              'items' => [
              // equivalent to the above
              [
-             'label' => 'Buscador',
+             'label' => 'Haga click aquí para buscar',
              'content' => $this->render('_search', ['model' => $searchModel]) ,
              // open its content by default
              //'contentOptions' => ['class' => 'in']

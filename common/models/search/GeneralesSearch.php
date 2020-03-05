@@ -71,7 +71,7 @@ class GeneralesSearch extends Programa
         }
         // add conditions that should always apply here
         $query->joinWith(['asignatura']);
-        $query->joinWith(['departamento']);
+        $query->joinWith(['departamentoasignatura']);
         $query->joinWith(['status']);
         $query->joinWith(['perfil']);
         $countQuery = clone $query;

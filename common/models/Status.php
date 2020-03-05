@@ -56,9 +56,6 @@ class Status extends \yii\db\ActiveRecord
 
     public function getDescripcion(){
       $descripcion = $this->descripcion;
-      if($descripcion == "Profesor") {
-        return "En espera";
-      }
       return $descripcion;
     }
 }

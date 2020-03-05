@@ -236,6 +236,11 @@ class Programa extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Departamento::className(), ['id' => 'departamento_id']);
     }
+    public function getDepartamentoasignatura()
+    {
+      return $this->hasOne(Departamento::className(), ['id' => 'departamento_id'])
+        ->via('asignatura');
+    }
 
     /**
      * Obtiene el estado de un programa
