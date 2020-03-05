@@ -8,6 +8,7 @@ use yii\widgets\ActiveForm;
 use common\models\Departamento;
 use common\models\Plan;
 use common\models\Modalidad;
+use common\models\Nivel;
 /* @var $this yii\web\View */
 /* @var $model backend\models\Carrera */
 /* @var $form yii\widgets\ActiveForm */
@@ -35,6 +36,14 @@ use common\models\Modalidad;
         //'data' => (new StatusSearch())->search(['model' => 'backend\models\Status'])->id,
         'language' => 'es',
         'options' => ['placeholder' => 'Seleccione un departamento...'],
+        'pluginOptions' => [
+          'allowClear' => true,
+        ],
+    ]) ?>
+     <?= $form->field($model, 'nivel_id')->widget(Select2::classname(),[
+        'data' => ArrayHelper::map(Nivel::find()->all(),'id','descripcion'),
+        'language' => 'es',
+        'options' => ['placeholder' => 'Seleccione un nivel...'],
         'pluginOptions' => [
           'allowClear' => true,
         ],

@@ -37,6 +37,7 @@ class Plan extends \yii\db\ActiveRecord implements Linkable
             [['carrera_id'], 'integer'],
             [['activo'],'boolean'],
             [['planordenanza'], 'string', 'max' => 255],
+            [['archivo'], 'file', 'skipOnEmpty' => false, 'extensions' => 'pdf'],
             [['carrera_id'], 'exist', 'skipOnError' => true, 'targetClass' => Carrera::className(), 'targetAttribute' => ['carrera_id' => 'id']],
         ];
     }
@@ -48,7 +49,10 @@ class Plan extends \yii\db\ActiveRecord implements Linkable
             'activo' => function($model){
                 return $model->activo ?
                     true : false;
-            }
+            },
+            'archivo' => function($model){
+                return ($model->archivo ? '/planFiles/'.$model->archivo : '');
+            },
             /*'carrera' => function(){
                 return $this->carrera_id ? 
                     Url::base(true)."/".$this->version."/carrera/".$this->carrera_id
@@ -74,6 +78,7 @@ class Plan extends \yii\db\ActiveRecord implements Linkable
             'id' => 'id',
             'planordenanza' => 'ordenanza',
             'carrera_id' => 'carrera_id',
+            'archivo' => 'archivo',
         ];
     }
     public function getOrdenanza(){

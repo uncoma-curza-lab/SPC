@@ -49,8 +49,12 @@ class m200208_004549_archivo_plan_y_niveles extends Migration
         $this->dropColumn('{{%plan}}','archivo');
 
         $this->dropTable('{{%nivel}}');
-        echo "m200208_004549_archivo_plan_y_niveles cannot be reverted.\n";
-        return false;
+
+        $this->dropForeignKey('fk-carrera-nivel_id','{{%carrera}}');
+        $this->dropColumn('{{%carrera}}','nivel_id');
+        
+        echo "m200208_004549_archivo_plan_y_niveles can be reverted.\n";
+        return true;
     }
 
     /*

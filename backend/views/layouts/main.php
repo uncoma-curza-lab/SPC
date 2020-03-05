@@ -59,6 +59,7 @@ AppAsset::register($this);
               ['label' => 'Correlativas', 'url' => ['/correlativa/index']],
               ['label' => 'Relación CarreraModalidad', 'url' => ['/carrera-modalidad/index']],
               ['label' => 'Titulos Intermedios', 'url' => ['/titulo-intermedio/index']],
+              ['label' => 'Niveles', 'url' => ['/nivel/index']],
               ['label' => 'Programas', 'url' => ['/programa/index']],
             ],
 

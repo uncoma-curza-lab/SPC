@@ -31,11 +31,12 @@ class Carrera extends \yii\db\ActiveRecord
     {
         return [
             [['nom'], 'required'],
-            [['duracion_total_hs','departamento_id'], 'integer'],
+            [['duracion_total_hs','departamento_id','nivel_id'], 'integer'],
             [['duracion_total_anos'],'number'],
             [['perfil','alcance','fundamentacion'],'string'],
             [['nom','titulo'], 'string', 'max' => 255],
             [['departamento_id'], 'exist', 'skipOnError' => true, 'targetClass' => Departamento::className(), 'targetAttribute' => ['departamento_id' => 'id']],
+            [['nivel_id'], 'exist', 'skipOnError' => true, 'targetClass' => Nivel::className(), 'targetAttribute' => ['nivel_id' => 'id']],
             [['plan_vigente_id'], 'exist', 'skipOnError' => true, 'targetClass' => Plan::className(), 'targetAttribute' => ['plan_vigente_id' => 'id']],
 
         ];
@@ -58,6 +59,7 @@ class Carrera extends \yii\db\ActiveRecord
             'fundamentacion' => 'Fundamentación',
             'nom' => 'Nombre',
             'departamento_id' => 'Departamento ID',
+            'nivel_id' => 'Nivel ID',
         ];
     }
 
@@ -84,12 +86,21 @@ class Carrera extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Departamento::className(), ['id' => 'departamento_id']);
     }
+
+    public function getNivel()
+    {
+        return $this->hasOne(Nivel::className(), ['id' => 'nivel_id']);
+    }
+
     public function getPlanVigente()
     {
         return $this->hasOne(Plan::className(), ['id' => 'plan_vigente_id']);
     }
     public function getNomenclatura(){
         return $this->nom;
+    }
+    public function getNivelID(){
+        return $this->nivel_id;
     }
 
 }

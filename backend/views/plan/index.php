@@ -37,7 +37,22 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
 
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template' => ' {view} {update} {delete} {upload} ',
+                'buttons' => [
+                    'upload' => function($url,$model) {
+                        return Html::a(
+                            '<span style="padding:5px;" class="glyphicon glyphicon-file"></span>',
+                            ['upload','id' => $model->id],
+                            [
+                                'title' => Yii::t('yii', 'Subir archivo'),
+                            ]
+                          );
+                    }
+                ]
+
+            ],
         ],
     ]); ?>
     <?php Pjax::end(); ?>

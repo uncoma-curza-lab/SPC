@@ -9,6 +9,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\base\ErrorException;
+use yii\web\UploadedFile;
 /**
  * PlanController implements the CRUD actions for Plan model.
  */
@@ -126,6 +127,21 @@ class PlanController extends Controller
         //} catch (\yii\db\IntegrityException $e) {
         //    Yii::warning("fuck");
         //}
+    }
+
+    public function actionUpload($id)
+    {
+        $model = $this->findModel($id);
+
+        if (Yii::$app->request->post()) {
+            $model->planArchivo = UploadedFile::getInstance($model, 'planArchivo');
+            if ($model->upload() && $model->save()) {
+                return $this->redirect(['index']);
+                // el archivo se subió exitosamente
+            }
+        }
+
+        return $this->render('upload', ['model' => $model]);
     }
 
     /**

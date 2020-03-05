@@ -16,6 +16,8 @@ use Yii;
  */
 class Plan extends \yii\db\ActiveRecord
 {
+    public $planArchivo;
+
     /**
      * {@inheritdoc}
      */
@@ -34,6 +36,8 @@ class Plan extends \yii\db\ActiveRecord
             [['carrera_id'], 'integer'],
             [['activo'],'boolean'],
             [['planordenanza'], 'string', 'max' => 255],
+            [['archivo'],'string'],
+            [['planArchivo'], 'file', 'skipOnEmpty' => false, 'extensions' => 'pdf'],
             [['carrera_id'], 'exist', 'skipOnError' => true, 'targetClass' => Carrera::className(), 'targetAttribute' => ['carrera_id' => 'id']],
         ];
     }
@@ -47,8 +51,38 @@ class Plan extends \yii\db\ActiveRecord
             'id' => 'ID',
             'planordenanza' => 'Planordenanza',
             'carrera_id' => 'Carrera ID',
-            'activo' => 'activo'
+            'activo' => 'activo',
+            'archivo' => 'Path Archivo'
         ];
+    }
+
+    public function upload()
+    {
+        if ($this->validate()) {
+            //$this->archivo->saveAs('planFiles/' . $this->archivo->baseName."-" .date('y-m-d_his') . '.' . $this->archivo->extension);
+            $carreraName = $this->getCarrera();
+            $carreraName = $carreraName ? $carreraName->one() : null;
+            $carreraName = $carreraName ? $carreraName->nom : null;
+            if($carreraName){
+                $carreraName = $this->parseName($carreraName);
+                $filename=$carreraName .'_'.str_replace("/","-",$this->getOrdenanza()).'_'.date('dmyhis').".". $this->planArchivo->extension;
+                $this->archivo = $filename;
+
+                $this->planArchivo->saveAs('planFiles/'.$filename,false);
+                
+                return true;
+            } else
+                return false;
+        } else {
+            return false;
+        }
+    }
+    private function parseName($string) {
+        $string = htmlentities($string);
+        $string = str_replace(" ", "",$string);
+        $string = strtolower($string);
+        $string = preg_replace('/\&(.)[^;]*;/', '\\1', $string);
+        return $string;
     }
     
     public function getActivo(){
@@ -72,5 +106,11 @@ class Plan extends \yii\db\ActiveRecord
 
     public function getOrdenanza(){
       return $this->planordenanza;
+    }
+    public function getArchivo(){
+        return $this->archivo;
+    }
+    public function setArchivo($filePath){
+        $this->archivo = $filePath;
     }
 }

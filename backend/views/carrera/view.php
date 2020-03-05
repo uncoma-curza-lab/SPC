@@ -46,6 +46,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $depto ? $depto->getNomenclatura() : "Sin departamento";
                 }
             ],
+            [ 
+                'attribute' => 'nivel_id',
+                'value' => function ($model){
+                    $depto = $model->getNivel()->one();
+                    return $depto ? $depto->getDescripcion() : "Sin nivel";
+                }
+            ],
             [
                 'attribute' => 'plan_vigente_id',
                 'value' => function($model){

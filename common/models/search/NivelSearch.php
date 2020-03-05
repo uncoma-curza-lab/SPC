@@ -1,30 +1,30 @@
 <?php
 
-namespace backend\models;
+namespace common\models\search;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use backend\models\Plan;
+use common\models\Nivel;
 
 /**
- * PlanSearch represents the model behind the search form of `backend\models\Plan`.
+ * NivelSearch represents the model behind the search form about `common\models\Nivel`.
  */
-class PlanSearch extends Plan
+class NivelSearch extends Nivel
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['id', 'carrera_id'], 'integer'],
-            [['planordenanza','archivo'], 'safe'],
+            [['id'], 'integer'],
+            [['descripcion'], 'safe'],
         ];
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function scenarios()
     {
@@ -41,9 +41,7 @@ class PlanSearch extends Plan
      */
     public function search($params)
     {
-        $query = Plan::find();
-
-        // add conditions that should always apply here
+        $query = Nivel::find();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -57,14 +55,12 @@ class PlanSearch extends Plan
             return $dataProvider;
         }
 
-        // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'carrera_id' => $this->carrera_id,
-            'archivo' => $this->archivo,
+            'descripcion' => $this->descripcion,
         ]);
 
-        $query->andFilterWhere(['like', 'planordenanza', $this->planordenanza]);
+        $query->andFilterWhere(['like', 'descripcion', $this->descripcion]);
 
         return $dataProvider;
     }
