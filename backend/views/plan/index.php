@@ -7,7 +7,7 @@ use yii\widgets\Pjax;
 /* @var $searchModel backend\models\PlanSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Plans';
+$this->title = 'Planes';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="plan-index">
@@ -28,7 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'planordenanza',
             [
-                'attribute' => 'carrera_id',
+                'attribute' => 'carrera',
                 'value' => function($model){
                     $carrera = $model->getCarrera()->one();
                     
@@ -39,7 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template' => ' {view} {update} {delete} {upload} ',
+                'template' => ' <div style="text-align:center">{view} {update} {delete} {upload} {copy} </div>',
                 'buttons' => [
                     'upload' => function($url,$model) {
                         return Html::a(
@@ -49,10 +49,20 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'title' => Yii::t('yii', 'Subir archivo'),
                             ]
                           );
+                    },
+                    'copy' => function($url,$model) {
+                        return Html::a(
+                            '<span style="padding:5px;" class="glyphicon glyphicon-copy"></span>',
+                            ['copy','id' => $model->id],
+                            [
+                                'title' => Yii::t('yii', 'Copiar plan'),
+                            ]
+                          );
                     }
                 ]
 
             ],
+
         ],
     ]); ?>
     <?php Pjax::end(); ?>

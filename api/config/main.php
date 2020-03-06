@@ -100,6 +100,15 @@ return [
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'user'],
             ],
         ],
+        'urlManagerBackend' => [
+            'enablePrettyUrl' => true,
+            'class' => 'yii\web\UrlManager',
+            'showScriptName' => false,
+            'suffix' => '.html',
+            'hostInfo' => 'http://'.$_SERVER['HTTP_HOST'].'/backend',
+            'baseUrl' => 'http://'.$_SERVER['HTTP_HOST'].'/backend'
+
+        ]
     ],
     'params' => $params,
 ];

@@ -51,7 +51,7 @@ class Plan extends \yii\db\ActiveRecord implements Linkable
                     true : false;
             },
             'archivo' => function($model){
-                return ($model->archivo ? '/planFiles/'.$model->archivo : '');
+                return ($model->archivo ?\Yii::$app->urlManagerBackend->baseUrl.'/planFiles/'.$model->archivo  : '');
             },
             /*'carrera' => function(){
                 return $this->carrera_id ? 

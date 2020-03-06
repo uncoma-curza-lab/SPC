@@ -10,6 +10,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\base\ErrorException;
 use yii\web\UploadedFile;
+use common\models\Asignatura;
 /**
  * PlanController implements the CRUD actions for Plan model.
  */
@@ -142,6 +143,57 @@ class PlanController extends Controller
         }
 
         return $this->render('upload', ['model' => $model]);
+    }
+
+    /**
+     * Copiar un plan con todas sus asignaturas
+     * Esta funcion duplica las asignaturas 
+     * El plan a copiar es pasado por parámetro
+     * @param integer $id 
+     */
+    public function actionCopy($id){
+        $plan = $this->findModel($id);
+        $plan->planordenanza = null;
+        
+        $newPlan = new Plan();
+        $newPlan->setAttributes($plan->attributes,false);
+        $newPlan->archivo = null;
+        $newPlan->id = null;
+
+        if ($newPlan->load(Yii::$app->request->post())){
+            $connection = Yii::$app->db;
+            $transaction = $connection->beginTransaction();
+            $transactionStatus = true;
+            if ($newPlan->save(false)) 
+            {
+                $asignaturas = $plan->getAsignaturas()->all();
+                foreach ($asignaturas as $asignatura) {
+                    $newAsignatura = new Asignatura();
+                    $asignatura->id = null;
+                    $newAsignatura->setAttributes($asignatura->attributes,false);
+                    $newAsignatura->plan_id = $newPlan->id;
+                    if(! $newAsignatura->save(false) ){
+                        $transactionStatus = false;
+                    } 
+                }
+                    
+            } else {
+                $transactionStatus = false;
+            }
+            if ($transactionStatus){
+                $transaction->commit();
+                Yii::$app->session->setFlash('success','El plan ha sido copiado correctamente');
+                return $this->redirect(['view', 'id' => $newPlan->id]);
+            } else {
+                $transaction->rollBack();
+                Yii::$app->session->setFlash('warning','Hubo un problema al copiar el plan');
+                return $this->redirect(['index']);
+            }   
+        }
+
+        return $this->render('copy',['model' => $newPlan]);
+
+
     }
 
     /**

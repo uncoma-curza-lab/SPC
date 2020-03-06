@@ -12,6 +12,8 @@ use common\models\Plan;
  */
 class PlanSearch extends Plan
 {
+    public $carrera;
+
     /**
      * {@inheritdoc}
      */
@@ -19,7 +21,7 @@ class PlanSearch extends Plan
     {
         return [
             [['id', 'carrera_id'], 'integer'],
-            [['planordenanza'], 'safe'],
+            [['planordenanza','carrera'], 'safe'],
         ];
     }
 
@@ -47,7 +49,13 @@ class PlanSearch extends Plan
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort' => [
+                'defaultOrder' => [
+                    'carrera_id' => SORT_ASC
+                ]
+            ]
         ]);
+        $query->joinWith(['carrera']);
 
         $this->load($params);
 
@@ -63,7 +71,8 @@ class PlanSearch extends Plan
             'carrera_id' => $this->carrera_id,
         ]);
 
-        $query->andFilterWhere(['like', 'planordenanza', $this->planordenanza]);
+        $query->andFilterWhere(['like', 'planordenanza', $this->planordenanza])
+        ->andFilterWhere(['like','{{%carrera}}.nom',$this->carrera]);
 
         return $dataProvider;
     }

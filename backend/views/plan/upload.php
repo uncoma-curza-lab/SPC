@@ -13,12 +13,12 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="plan-form">
 
     <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
-    <?= $form->field($model, 'planArchivo')->fileInput() ?>
+        
+        <?= $form->field($model, 'planArchivo')->fileInput() ?>
 
-
-    <div class="form-group">
-        <?= Html::submitButton('Subir', ['class' => 'btn btn-success']) ?>
-    </div>
+        <div class="form-group">
+            <?= Html::submitButton('Subir', ['class' => 'btn btn-success']) ?>
+        </div>
 
     <?php ActiveForm::end(); ?>
 
