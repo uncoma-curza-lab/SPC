@@ -141,7 +141,11 @@ class PlanController extends Controller
                 // el archivo se subió exitosamente
             }
         }
-
+        if ( $model->archivo != null || $model->archivo != "") {
+            Yii::$app->session->setFlash('warning','Cuidado! ya existe un archivo cargado para este plan. Si carga un archivo será reemplazado <i class="glyphicon glyphicon-remove-sign" ></i>');
+        } else {
+            Yii::$app->session->setFlash('success','Aún no hay un archivo cargado para este plan. Continue cargando un archivo <i class="glyphicon glyphicon-ok-sign" ></i> ');
+        }
         return $this->render('upload', ['model' => $model]);
     }
 
@@ -190,7 +194,7 @@ class PlanController extends Controller
                 return $this->redirect(['index']);
             }   
         }
-
+       
         return $this->render('copy',['model' => $newPlan]);
 
 

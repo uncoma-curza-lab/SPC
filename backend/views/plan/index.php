@@ -42,8 +42,15 @@ $this->params['breadcrumbs'][] = $this->title;
                 'template' => ' <div style="text-align:center">{view} {update} {delete} {upload} {copy} </div>',
                 'buttons' => [
                     'upload' => function($url,$model) {
+                        if ($model->archivo == null || $model->archivo == "" ){
+                            $iconString = '<span style="padding:5px;" class="glyphicon glyphicon-cloud-upload"></span>';
+
+                        } else {
+                            $iconString = '<span style="padding:5px;" class="glyphicon glyphicon-open-file"></span>';
+
+                        }
                         return Html::a(
-                            '<span style="padding:5px;" class="glyphicon glyphicon-file"></span>',
+                            $iconString,
                             ['upload','id' => $model->id],
                             [
                                 'title' => Yii::t('yii', 'Subir archivo'),
