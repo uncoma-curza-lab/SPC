@@ -37,7 +37,9 @@ class Plan extends \yii\db\ActiveRecord
             [['activo'],'boolean'],
             [['planordenanza'], 'string', 'max' => 255],
             [['archivo'],'string'],
-            [['planArchivo'], 'file', 'skipOnEmpty' => false, 'extensions' => 'pdf'],
+            //puede ser vacio el archivo skipOnEmpty
+            [['planArchivo'], 'file', 'skipOnEmpty' => true, 'extensions' => 'pdf'],
+            // puede no tener carrera_id  o fallar la validación
             [['carrera_id'], 'exist', 'skipOnError' => true, 'targetClass' => Carrera::className(), 'targetAttribute' => ['carrera_id' => 'id']],
         ];
     }
@@ -87,6 +89,9 @@ class Plan extends \yii\db\ActiveRecord
     
     public function getActivo(){
         return $this->activo;
+    }
+    public function setActivo($bool){
+        $this->activo = $bool;
     }
     /**
      * @return \yii\db\ActiveQuery
