@@ -255,7 +255,7 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
                 },
                 'pedir' => function ($url,$model) {
 
-                  if (($model->getStatus()->one()->descripcion == "Profesor"
+                  if (($model->getStatus()->one()->descripcion == "En espera"
                      && PermisosHelpers::requerirRol('Departamento')
                     // && PermisosHelpers::requerirDirector($model->id)
                     && !isset($model->departamento_id))

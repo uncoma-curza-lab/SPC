@@ -128,7 +128,7 @@ class GeneralesController extends Controller
         return $this->redirect(['index']);
       }
 
-      if(!isset($model->departamento_id) && $estadoActual->descripcion == "Profesor"){
+      if(!isset($model->departamento_id) && $estadoActual->descripcion == "En espera"){
         $perfil = \Yii::$app->user->identity->perfil;
         // si es director tiene una designación con ese cargo
         $cargoDirector = Cargo::find()->where(['=','nomenclatura','Director'])->one();
