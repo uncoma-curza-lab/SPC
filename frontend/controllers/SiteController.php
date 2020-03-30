@@ -85,6 +85,17 @@ class SiteController extends Controller
         return $this->render('index');
     }
 
+
+    /**
+     * Displays homepage.
+     *
+     * @return mixed
+     */
+    public function actionAyuda()
+    {
+        return $this->render('ayuda');
+    }
+
     /**
      * Logs in a user.
      *

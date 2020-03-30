@@ -39,7 +39,10 @@ AppAsset::register($this);
         ],
     ]);
     $menuItems = [
-        ['label' => 'Inicio', 'url' => ['/site/index']],
+        [
+          'label' => 'Inicio', 'url' => ['/site/index'],
+        ],
+     
       //  ['label' => 'About', 'url' => ['/site/about']],
       //  ['label' => 'Contact', 'url' => ['/site/contact']],
     ];
@@ -98,6 +101,9 @@ AppAsset::register($this);
             . '</li>';
         */
     }
+    $menuItems[] =[
+      'label' => 'Ayuda', 'url' => ['/site/ayuda'],
+    ];
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => $menuItems,

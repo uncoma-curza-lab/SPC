@@ -22,6 +22,7 @@ use common\models\Status;
 class ProgramaEvaluacionSearch extends Programa
 {
     public $departamento;
+    public $perfil;
     public $asignatura;
     public function attributes(){
         return array_merge(parent::attributes(),['user.username']);
@@ -39,7 +40,10 @@ class ProgramaEvaluacionSearch extends Programa
             [['id', 'departamento_id', 'status_id', 'asignatura_id', 'year', 'created_by', 'updated_by'], 'integer'],
             [[ //'asignatura',
 
-            'departamento','fundament', 'objetivo_plan', 'contenido_plan', 'propuesta_met', 'evycond_acreditacion', 'parcial_rec_promo', 'distr_horaria', 'crono_tentativo', 'actv_extracur', 'created_at', 'updated_at'], 'safe'],
+            'departamento','fundament', 'objetivo_plan', 
+            'contenido_plan', 'propuesta_met', 'evycond_acreditacion', 
+            'parcial_rec_promo', 'distr_horaria', 'crono_tentativo', 
+            'actv_extracur', 'created_at', 'updated_at','perfil'], 'safe'],
         ];
     }
 
@@ -98,6 +102,8 @@ class ProgramaEvaluacionSearch extends Programa
         ]);
         //$query->joinWith(['asignatura']);
         $query->joinWith(['departamento']);
+        $query->joinWith(['perfil']);
+        
         $this->load($params);
 
         if (!$this->validate()) {
@@ -127,7 +133,7 @@ class ProgramaEvaluacionSearch extends Programa
 
         $query->andFilterWhere(['like', 'fundament', $this->fundament])
         //->andFilterWhere(['like', 'asignatura', $this->asignatura])
-        //->andFilterWhere(['like', '{{%asignatura}}.nomenclatura', $this->asignatura])
+        ->andFilterWhere(['like', '{{%asignatura}}.nomenclatura', $this->asignatura])
         ->andFilterWhere(['like', '{{%departamento}}.nom', $this->departamento])
             ->andFilterWhere(['like', 'objetivo_plan', $this->objetivo_plan])
             ->andFilterWhere(['like', 'contenido_plan', $this->contenido_plan])
@@ -136,7 +142,10 @@ class ProgramaEvaluacionSearch extends Programa
             ->andFilterWhere(['like', 'parcial_rec_promo', $this->parcial_rec_promo])
             ->andFilterWhere(['like', 'distr_horaria', $this->distr_horaria])
             ->andFilterWhere(['like', 'crono_tentativo', $this->crono_tentativo])
+            ->andFilterWhere(['like', 'concat({{%perfil}}.nombre,{{%perfil}}.apellido)', $this->perfil])
+
             ->andFilterWhere(['like', 'actv_extracur', $this->actv_extracur]);
+            
 
         return $dataProvider;
     }
