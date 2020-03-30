@@ -33,6 +33,7 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
              [
              'label' => 'Haga click aquí para buscar',
              'content' => $this->render('_search', ['model' => $searchModel]) ,
+             'options' => ['class' => 'panel panel-info'],
              // open its content by default
              //'contentOptions' => ['class' => 'in']
               ],

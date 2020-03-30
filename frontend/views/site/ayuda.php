@@ -3,6 +3,7 @@
 /* @var $this yii\web\View */
 use \yii\web\View;
 $this->title = 'Programas CURZA';
+use \yii\bootstrap\Collapse;
 
 $script ='
 var tag = document.createElement("script");
@@ -28,41 +29,35 @@ $this->registerJs($script,View::POS_END);
   </div>
 
   <h4>Haga click en los encabezados siguientes en búsqueda de su problema. Se desplegará la ayuda: </h4>
+  <?php
+  echo Collapse::widget([
+    'items' => [
+        // equivalent to the above
+        [
+            'label' => 'Acceso al sistema',
+            'content' => '<p><b>No puedo acceder al sistema, no coincide mi cuenta o contraseña.</b></p>
+            <p>Por favor, comuniquese conmigo a la siguiente casilla de correo electrónico:</p>
+            <p>nestor.murphy (arroba) curza.uncoma.edu.ar</p>',
+            'options' => ['class' => 'panel panel-info'],
+            // open its content by default
+            //'contentOptions' => ['class' => 'in']
+        ],
+        // another group item
+        [
+            'label' => 'Videotutorial para profesores',
+            'content' => '<p>Si es profesor y necesita cargar sus programas de cátedra, el siguiente videotutorial ayudará a solventar sus dudas.</p>
+            <div id="ytplayer"></div>
+            <p>Si aún viendo el video sigue teniendo preguntas, escríba al siguiente correo electrónico:</p>
+            <p>nestor.murphy (arroba) curza.uncoma.edu.ar</p>',
+            'contentOptions' => [],
+            //'footer' => 'Footer' // the footer label in list-group
+            'options' => ['class' => 'panel panel-info'],
+        ],
+        // if you want to swap out .panel-body with .list-group, you may use the following
+       
+    ]
+]);?>
 
-  <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-  <div class="panel panel-default">
-    <div class="panel-heading" role="tab" id="headingOne">
-      <h4 class="panel-title">
-        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-          Acceso al sistema
-        </a>
-      </h4>
-    </div>
-    <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
-      <div class="panel-body">
-        <p><b>No puedo acceder al sistema, no coincide mi cuenta o contraseña.</b></p>
-        <p>Por favor, comuniquese conmigo a la siguiente casilla de correo electrónico:</p>
-        <p>nestor.murphy (arroba) curza.uncoma.edu.ar</p>
-      </div>
-    </div>
-  </div>
-  <div class="panel panel-default">
-    <div class="panel-heading" role="tab" id="headingTwo">
-      <h4 class="panel-title">
-        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-          Videotutorial para profesores
-        </a>
-      </h4>
-    </div>
-    <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
-      <div class="panel-body">
-        <p>Si es profesor y necesita cargar sus programas de cátedra, el siguiente videotutorial ayudará a solventar sus dudas.</p>
-        <div id="ytplayer"></div>
-        <p>Si aún viendo el video sigue teniendo preguntas, escríba al siguiente correo electrónico:</p>
-        <p>nestor.murphy (arroba) curza.uncoma.edu.ar</p>
-      </div>
-    </div>
-  </div>
   <p></p>
   <small>Esta sección está en construcción.</small>
 
