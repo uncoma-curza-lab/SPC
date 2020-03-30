@@ -89,6 +89,12 @@ class ProgramaEvaluacionSearch extends Programa
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort' => [
+                'defaultOrder' => [
+                    'year' => SORT_DESC,
+                    'updated_at' => SORT_DESC
+                ]
+            ]
         ]);
         //$query->joinWith(['asignatura']);
         $query->joinWith(['departamento']);
