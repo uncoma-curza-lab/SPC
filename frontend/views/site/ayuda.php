@@ -18,7 +18,13 @@ function onYouTubePlayerAPIReady() {
     width: "80%",
     videoId: "nX9PFjBi18s"
   });
+  player = new YT.Player("ytplayer2", {
+    height: "360",
+    width: "80%",
+    videoId: "7DsjDnw-b7s"
+  });
 }';
+
 $this->registerJs($script,View::POS_END);
 ?>
 
@@ -53,6 +59,17 @@ $this->registerJs($script,View::POS_END);
             //'footer' => 'Footer' // the footer label in list-group
             'options' => ['class' => 'panel panel-info'],
         ],
+        [
+          'label' => 'Programa de cátedra para varias carreras',
+          'content' => '<p>A veces, los programas de cátedra son idénticos para una asignatura "X" dictada en varias carreras. 
+          Si usted está buscando cómo cargar este tipo de programa de cátedra, mire el siguiente video.</p>
+          <div id="ytplayer2"></div>
+          <p>Si aún viendo el video sigue teniendo preguntas, escríba al siguiente correo electrónico:</p>
+          <p>nestor.murphy (arroba) curza.uncoma.edu.ar</p>',
+          'contentOptions' => [],
+          //'footer' => 'Footer' // the footer label in list-group
+          'options' => ['class' => 'panel panel-info'],
+      ],
         // if you want to swap out .panel-body with .list-group, you may use the following
        
     ]
