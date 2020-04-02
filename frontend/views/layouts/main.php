@@ -11,7 +11,16 @@ use frontend\assets\AppAsset;
 use common\widgets\Alert;
 use yii\bootstrap\ButtonDropdown;
 use common\models\PermisosHelpers;
+use common\models\NotificationPanel;
 AppAsset::register($this);
+if( !Yii::$app->user->isGuest){
+  $perfil = Yii::$app->user->identity->perfil;
+  $nombre="";
+  if($perfil){
+      $nombre=Yii::$app->user->identity->perfil->printNombre();
+  }
+  $countNotif = NotificationPanel::find()->filterWhere(['=','receiver_user',Yii::$app->user->identity->id])->andFilterWhere(['=','read',null])->count();
+}
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -52,6 +61,12 @@ AppAsset::register($this);
         $menuItems[] = ['label' => 'Acceder', 'url' => ['/site/login']];
     } else {
         $menuItems[] = [
+          'label' => 'Notificaciones '. Html::tag('span',$countNotif,['class' => 'badge']),
+          'linksOptions' => ['class'=>'<a href="#">Inbox <span class="badge">42</span></a>'],
+          'url' => ['/user-notifications/index'],
+        ];
+        $menuItems[] = [
+          
           'label' => "Programas",
           'options'=> ['id'=>'programaLink'],
 
@@ -75,10 +90,7 @@ AppAsset::register($this);
 
           ]
         ];
-        $nombre="";
-        if(Yii::$app->user->identity->perfil){
-            $nombre=Yii::$app->user->identity->perfil->printNombre();
-        }
+       
         $menuItems[] = [
           'label' => '¡Hola '. $nombre .'!',
           'items' =>[
@@ -107,6 +119,7 @@ AppAsset::register($this);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => $menuItems,
+        'encodeLabels' => false,
     ]);
     NavBar::end();
     ?>

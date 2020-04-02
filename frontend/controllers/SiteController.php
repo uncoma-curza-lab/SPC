@@ -78,10 +78,7 @@ class SiteController extends Controller
         //$event->on(MailEvent::EVENT_SEND,'sendMessage','hola');
         
         //enviar un mail
-        /*
-        $event = new MailEvent();
-        $event->trigger(MailEvent::EVENT_SEND);*/
-        
+       
         return $this->render('index');
     }
 

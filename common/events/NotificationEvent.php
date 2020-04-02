@@ -5,7 +5,7 @@ use yii\base\Component;
 use yii\base\Event;
 
 
-class MailEvent extends Event 
+class NotificationEvent extends Event 
 {
     public $message;
     public function setMessage($message){
