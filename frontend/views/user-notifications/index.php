@@ -19,9 +19,6 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= \frontend\components\ShowNotifications::widget([
         'data' => $dataProvider,
         'columns' => [
-            'id',
-            'receiver_user',
-            'init_user',
             'read',
             'message'
         ]

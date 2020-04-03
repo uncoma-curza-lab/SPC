@@ -2,16 +2,17 @@
 <table class="table table-striped table-bordered table-hover ">
     <thead class="thead-light">
         <tr>
-            <?php foreach($columns as $column) {
-                echo '<th scope="col">'.$column.'</th>';
-            }   
+            <?php 
+                /*foreach($columns as $column) {
+                    echo '<th scope="col">'.$column.'</th>';
+                } */  
             ?>
             
         </tr>
     </thead>
     <tbody>
     <?php
-        foreach ($models as $model) {
+       /* foreach ($models as $model) {
             $count = 0;
             echo "<tr>";
             foreach($columns as $column){
@@ -21,12 +22,12 @@
                     echo "<td>".$model->$column."</td>";
             }
             echo "</tr>";
-        }
+        }*/
     ?>
     </tbody>
     <tfoot>
         <th>Total</th>
-        <td colspan=<?php echo sizeof($columns); ?>>33</td>
+        <td colspan=<?php //echo sizeof($columns); ?>>33</td>
     </tfoot>
     
 </table>
@@ -42,14 +43,10 @@
                 echo '<a href="#" class="list-group-item active">';    
             else
                 echo '<a href="#" class="list-group-item ">';
-            echo '<h4 class="list-group-item-heading" >';
-            foreach($columns as $column){
-                if($column == "init_user")
-                    echo "<b>".$model->$column."</b>";
-                else
-                    echo $model->$column;
-            }
-            echo '</h4>';
+            echo '<p class="list-group-item-heading" >';
+            echo $model->getMessage();
+            echo '</p>';
+            echo '<small>'.$model->getCreatedAt() .'</small>';
             $count++;
             echo "</a>";
         }

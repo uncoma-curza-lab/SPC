@@ -1,7 +1,9 @@
 <?php
 
 namespace common\models;
-
+use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveRecord;
+use yii\db\Expression ;
 use Yii;
 
 /**
@@ -11,7 +13,7 @@ use Yii;
  * @property string $rol_nombre
  * @property integer $rol_valor
  */
-abstract class Notification extends \yii\db\ActiveRecord
+abstract class Notification extends ActiveRecord
 {
     const DISCR = "Generic";
     /**
@@ -21,19 +23,36 @@ abstract class Notification extends \yii\db\ActiveRecord
     {
         return '{{%notification}}';
     }
+
+    public function behaviors()
+    {
+        return [
+            'timestamp' => [
+                'class' => 'yii\behaviors\TimestampBehavior',
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => ['created_at', 'updated_at'],
+                    ActiveRecord::EVENT_BEFORE_UPDATE => ['updated_at'],
+                ],
+                'value' => new Expression('NOW()'),
+            ],           
+        ];
+     }
+
+
     /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['message', 'notification_type_id','init_user','receiver_user','event_type_id'], 'required'],
-            [['notification_type_id','init_user','receiver_user','event_type_id'], 'integer'],
+            [['message', 'notification_type_id','user_init','user_receiver','event_type_id'], 'required'],
+            [['notification_type_id','user_init','user_receiver','event_type_id','programa_id'], 'integer'],
             [['created_at','updated_at','read'], 'date'],
-            [['init_user'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['init_user' => 'id']],
+            [['user_init'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_init' => 'id']],
+            [['programa_id'], 'exist', 'skipOnError' => true, 'targetClass' => Programa::className(), 'targetAttribute' => ['programa_id' => 'id']],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['created_by' => 'id']],
             [['updated_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['updated_by' => 'id']],
-            [['receiver_user'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['receiver_user' => 'id']],
+            [['user_receiver'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_receiver' => 'id']],
             [['event_type_id'], 'exist', 'skipOnError' => true, 'targetClass' => EventType::className(), 'targetAttribute' => ['event_type_id' => 'id']],
             [['message'], 'string'],
             [['type'],'string']
@@ -49,8 +68,8 @@ abstract class Notification extends \yii\db\ActiveRecord
             'id' => 'ID',
             'created_by' => 'Creado por',
             'updated_by' => 'Actualizado por',
-            'receiver_user' => 'Usuario receptor',
-            'init_user' => 'Usuario emisor',
+            'user_receiver' => 'Usuario receptor',
+            'user_init' => 'Usuario emisor',
             'message' => 'Mensaje',
             'updated_at' => 'Fecha de actualizacion',
             'created_at' => 'Fecha de creacion',
@@ -83,10 +102,58 @@ abstract class Notification extends \yii\db\ActiveRecord
         return $this->hasOne(EventType::className(), ['id' => 'event_type_id']);
     }
 
-
+    /**
+     * Set message
+     * @param string $message
+     */
     public function setMessage($message){
         $this->message = $message;
     }
 
+    public function getMessage(){
+        if ($eventType = $this->getEventtype()->one()) {
+            $userInit = User::findOne($this->user_init);
+            $userReceiver = User::findOne($this->user_receiver);
+            return $eventType->getMessage($userInit,$userReceiver,$this->programa_id);
+        } else {
+            return "Hubo un problema con esta notificación";
+        }
+    }
+
+    public function getCreatedAt()
+    {
+        if( $this->created_at ){
+            $fecha = \Yii::$app->formatter->asDate($this->created_at);
+            return $fecha;
+        } else {
+            return "";
+        }
+    }
+
+    /**
+     * Set id EventType
+     * @param integer $id
+     */
+    public function setEventTypeID($id){
+        $this->event_type_id = $id;
+    }
+    /**
+     * Set id User Init
+     * @param integer $id
+     */
+    public function setUserInitID($id){
+        $this->user_init = $id;
+    }
+    /**
+     * Set id User Receiver
+     * @param integer $id
+     */
+    public function setUserReceiverID($id){
+        $this->user_receiver = $id;
+    }
+
+    public function setProgramaID($id){
+        $this->programa_id = $id;
+    }
 
 }

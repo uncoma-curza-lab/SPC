@@ -37,9 +37,10 @@ class NotificationPanel extends Notification
         return [
             //[['name'], 'required'],
             [['message'] ,'string'],
-            [['receiver_user'],'required'],
-            [['init_user'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['init_user' => 'id']],
-            [['receiver_user'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['receiver_user' => 'id']],
+            [['user_receiver'],'required'],
+            [['user_init'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_init' => 'id']],
+            [['user_receiver'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_receiver' => 'id']],
+            [['programa_id'], 'exist', 'skipOnError' => true, 'targetClass' => Programa::className(), 'targetAttribute' => ['programa_id' => 'id']],
             [['read'], 'date'],
         ];
     }

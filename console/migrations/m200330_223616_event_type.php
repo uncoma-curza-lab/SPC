@@ -25,6 +25,8 @@ class m200330_223616_event_type extends Migration
         $this->createTable('{{%event_type}}',[
             'id' =>  $this->primaryKey(),
             'descripcion' =>  $this->string()->notNull(),
+            'slug' => $this->string()->notNull()->unique(),
+            'name' => $this->string()->notNull(),
             'message_template' =>  $this->string()->notNull(),
             'created_at' => $this->dateTime(),
             'updated_at'  => $this->dateTime(),

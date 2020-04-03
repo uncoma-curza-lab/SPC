@@ -18,7 +18,6 @@ class ShowNotifications extends Widget
         // you can load & return the view or you can return the output variable
         return $this->render('viewShowNotifications', [
             'models' => $this->data,
-            'columns' => $this->columns
         ]);
     }
 

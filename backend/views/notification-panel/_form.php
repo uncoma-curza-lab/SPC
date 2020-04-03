@@ -14,8 +14,8 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'message')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'receiver_user')->textInput() ?>
-    <?= $form->field($model, 'init_user')->textInput() ?>
+    <?= $form->field($model, 'user_receiver')->textInput() ?>
+    <?= $form->field($model, 'user_init')->textInput() ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Crear' : 'Actualizar', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

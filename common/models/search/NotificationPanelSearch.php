@@ -18,7 +18,7 @@ class NotificationPanelSearch extends NotificationPanel
     public function rules()
     {
         return [
-            [['id','receiver_user','init_user'], 'integer'],
+            [['id','user_receiver','user_init'], 'integer'],
             [['message'], 'string'],
         ];
     }
@@ -57,8 +57,8 @@ class NotificationPanelSearch extends NotificationPanel
 
         $query->andFilterWhere([
             'id' => $this->id,
-            'receiver_user' => $this->receiver_user,
-            'init_user' => $this->init_user
+            'user_receiver' => $this->user_receiver,
+            'user_init' => $this->user_init
         ]);
 
         $query->andFilterWhere(['like', 'message', $this->message]);

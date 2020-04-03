@@ -11,7 +11,8 @@ use yii\widgets\ActiveForm;
 <div class="rol-form">
 
     <?php $form = ActiveForm::begin(); ?>
-
+    <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
+    
     <?= $form->field($model, 'descripcion')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'message_template')->textInput() ?>

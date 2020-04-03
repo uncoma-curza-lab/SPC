@@ -18,7 +18,7 @@ class NotificationUserSearch extends NotificationPanel
     public function rules()
     {
         return [
-            [['id','receiver_user','init_user'], 'integer'],
+            [['id','user_receiver','user_init'], 'integer'],
             [['message'], 'string'],
         ];
     }
@@ -45,6 +45,11 @@ class NotificationUserSearch extends NotificationPanel
         $userId = \Yii::$app->user->identity->id;
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort' => [
+                'defaultOrder' => [
+                    'created_at' => SORT_DESC
+                ]
+            ]
         ]);
 
         $this->load($params);
@@ -54,11 +59,11 @@ class NotificationUserSearch extends NotificationPanel
             // $query->where('0=1');
             return $dataProvider;
         }
-        $query->andFilterWhere(['=','receiver_user',$userId]);
+        $query->andFilterWhere(['=','user_receiver',$userId]);
         $query->andFilterWhere([
             'id' => $this->id,
-            'receiver_user' => $this->receiver_user,
-            'init_user' => $this->init_user
+            'user_receiver' => $this->user_receiver,
+            'user_init' => $this->user_init
         ]);
 
         $query->andFilterWhere(['like', 'message', $this->message]);

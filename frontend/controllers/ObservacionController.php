@@ -4,7 +4,10 @@ namespace frontend\controllers;
 
 use Yii;
 use common\models\Observacion;
+use common\events\NotificationEvent;
+use common\models\Programa;
 use common\models\search\ObservacionSearch;
+use common\models\EventType;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -14,6 +17,12 @@ use yii\filters\VerbFilter;
  */
 class ObservacionController extends Controller
 {
+    const CREAR_OBSERVACION = "observaciones";
+    
+    public function init() {
+        parent::init();
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -71,7 +80,11 @@ class ObservacionController extends Controller
           if($model->save()){
             Yii::$app->session->setFlash('success','Observación agregada exitosamente');
             //generar notificacion
-            
+            $userInitID = \Yii::$app->user->identity->id;
+            $userReceiverID = Programa::findOne($id)->created_by;
+            $notificar = new NotificationEvent(self::CREAR_OBSERVACION,$userInitID ,$userReceiverID,$id);
+            $this->on(self::CREAR_OBSERVACION,[$notificar,'notificar']); 
+            $this->trigger(self::CREAR_OBSERVACION,$notificar);
             return $this->redirect(['generales/ver', 'id' => $model->programa_id]);
           } else {
             Yii::$app->session->setFlash('danger','Observación no agregada');
@@ -132,4 +145,6 @@ class ObservacionController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
+    
 }

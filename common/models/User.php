@@ -41,6 +41,7 @@ use common\models\ValorHelpers;
 class User extends ActiveRecord implements IdentityInterface
 {
     const ESTADO_ACTIVO = 1;
+    const ESTADO_INACTIVO = 0;
 
     public $nuevopassword;
 
@@ -373,5 +374,9 @@ class User extends ActiveRecord implements IdentityInterface
         return Html::a($this->username, $url, $opciones);
     }
 
+    public function getEmail()
+    {
+        return $this->email;
+    }
 
 }

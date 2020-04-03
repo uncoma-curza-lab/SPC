@@ -31,9 +31,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'message',
             'type',
-            'init_user',
-            'receiver_user',
-            'read'
+            'user_init',
+            'user_receiver',
+            'read',
+            'programa_id'
         ],
     ]) ?>
 

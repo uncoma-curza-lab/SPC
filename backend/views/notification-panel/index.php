@@ -25,8 +25,8 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'receiver_user',
-            'init_user',
+            'user_receiver',
+            'user_init',
             'message',
             'read',
             ['class' => 'yii\grid\ActionColumn'],
