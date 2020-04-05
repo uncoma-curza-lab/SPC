@@ -47,6 +47,9 @@ $this->title = "Su perfil: ";
         <?php
             echo Html::a('Cambiar Contraseña', ['site/change-password'],
                 ['class' => 'btn btn-primary']);
+            
+            echo Html::a('Cambiar Email', ['site/change-email'],
+                ['class' => 'btn btn-info']);
         ?>
     </p>
 

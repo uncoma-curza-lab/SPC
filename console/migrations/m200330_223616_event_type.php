@@ -52,6 +52,15 @@ class m200330_223616_event_type extends Migration
             'no action',
             'no action'
         );
+        $this->insert('{{%event_type}}', [
+            'descripcion' =>  "Observacion en programa",
+            'slug' => "crear-observacion",
+            'name' => "Creación de observacion",
+            'message_template' => 'Hubo una observación en el programa "%programa%" por parte del usuario %user_init%',
+            'created_at' => '2020-04-01 00:00:00',
+            'updated_at' => '2020-04-01 00:00:00',
+            
+        ]);
     }
 
     /**

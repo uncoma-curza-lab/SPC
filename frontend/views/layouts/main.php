@@ -38,7 +38,6 @@ if( !Yii::$app->user->isGuest){
 <body>
 <?php $this->beginBody() ?>
 
-<div class="wrap">
     <?php
     NavBar::begin([
         'brandLabel' => Yii::$app->name,
@@ -123,6 +122,7 @@ if( !Yii::$app->user->isGuest){
     ]);
     NavBar::end();
     ?>
+<div class="wrap">
 
     <div class="container">
       <div class="row">

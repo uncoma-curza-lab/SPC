@@ -43,9 +43,19 @@ class LoginForm extends Model
     {
         if (!$this->hasErrors()) {
             $user = $this->getUser();
-            if (!$user || !$user->validatePassword($this->password)) {
-                $this->addError($attribute, 'Contraseña o usuario incorrecto');
+            $message = "";
+            if (!$user){
+                $message = "Contraseña o usuario incorrecto";
+            } else {
+                if(!$user->validatePassword($this->password) ){
+                    $message = "Contraseña o usuario incorrecto";
+                } elseif ( $user->estado_id == ValorHelpers::getEstadoId('Pendiente') ){
+                    $message = "El usuario está pendiente de activación";
+                } 
             }
+
+            if ($message !== "")
+                $this->addError($attribute, $message);
         }
     }
 

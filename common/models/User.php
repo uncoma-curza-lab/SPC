@@ -40,8 +40,7 @@ use common\models\ValorHelpers;
  */
 class User extends ActiveRecord implements IdentityInterface
 {
-    const ESTADO_ACTIVO = 1;
-    const ESTADO_INACTIVO = 0;
+    const STATUS_INACTIVE = 5;
 
     public $nuevopassword;
 
@@ -117,7 +116,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function findIdentity($id)
     {
-        return static::findOne(['id' => $id, 'estado_id' => ValorHelpers::getEstadoId('Activo')]);
+        return static::find()->where(['id' => $id])->andWhere(['or',[ 'estado_id' => ValorHelpers::getEstadoId('Activo')],'estado_id' => ValorHelpers::getEstadoId('VerificarEmail')])->one();
     }
 
     /**
@@ -130,12 +129,15 @@ class User extends ActiveRecord implements IdentityInterface
 
     /**
      * Encuentra usuario por username
-     * dividida en dos líneas para evitar ajuste de línea * @param string $username
+     * @param string $username
      * @return static|null
      */
     public static function findByUsername($username)
     {
-        return static::findOne(['username' => $username, 'estado_id' => ValorHelpers::getEstadoId('Activo')]);
+        return static::findOne([
+            'username' => $username, 
+            //'estado_id' => ValorHelpers::getEstadoId('Activo')
+        ]);
     }
 
     /**
@@ -171,6 +173,19 @@ class User extends ActiveRecord implements IdentityInterface
         $timestamp = (int) end($parts);
         return $timestamp + $expire >= time();
     }
+    /**
+     * Finds user by verification email token
+     *
+     * @param string $token verify email token
+     * @return static|null
+     */
+    public static function findByVerificationToken($token) {
+        return static::findOne([
+            'verification_email_token' => $token,
+            'estado_id' => ValorHelpers::getEstadoId('Activo')
+        ]);
+    }
+
 
     /**
      * @getId
@@ -378,5 +393,17 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return $this->email;
     }
+    public function setEmail($newEmail){
+        $this->email = $newEmail;
+        $this->verification_email_token = Yii::$app->security->generateRandomString() . '_' . time();
+    }
+    /**
+     * Generates new token for email verification
+     */
+    public function generateEmailVerificationToken()
+    {
+        $this->verification_email_token = Yii::$app->security->generateRandomString() . '_' . time();
+    }
+
 
 }

@@ -17,7 +17,7 @@ use yii\filters\VerbFilter;
  */
 class ObservacionController extends Controller
 {
-    const CREAR_OBSERVACION = "observaciones";
+    const CREAR_OBSERVACION = "crear-observacion";
     
     public function init() {
         parent::init();

@@ -11,8 +11,13 @@ use common\models\LoginForm;
 use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
+use frontend\models\ResendVerificationEmailForm;
+use frontend\models\VerifyEmailForm;
+use frontend\models\ChangeEmailForm;
 use frontend\models\ContactForm;
 use common\events\MailEvent;
+use common\models\ValorHelpers;
+use common\models\User;
 /**
  * Site controller
  */
@@ -78,7 +83,18 @@ class SiteController extends Controller
         //$event->on(MailEvent::EVENT_SEND,'sendMessage','hola');
         
         //enviar un mail
-       
+        /*try {
+        \Yii::$app
+            ->mailer
+            ->compose(
+            )
+            ->setFrom(getenv("SMTP_USER"))
+            ->setTo("njmdistrisoft@gmail.com")
+            ->setSubject('Account registration at ' . Yii::$app->name)
+            ->send();
+        } catch(\Swift_TransportException $e){
+            return $this->render('index');
+        }*/
         return $this->render('index');
     }
 
@@ -106,6 +122,16 @@ class SiteController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
+            
+            if(Yii::$app->user->identity->estado_id == ValorHelpers::getEstadoId('VerificarEmail')){
+                Yii::$app->session->setFlash('info', 'Lamentamos molestarlo, para que pueda recibir notificaciones deberá indicar y verificar su casilla de correo electrónico (Email). <br> A continuación rellene el formulario, recibirá un correo a la casilla indicada para verificarlo.');
+
+                Yii::$app->user->identity->email = '';
+                /*return $this->render('changeEmail', [
+                    'model' => Yii::$app->user->identity,
+                ]);*/
+                return $this->redirect(['change-email']);
+            }
             return $this->goBack();
         } else {
             $model->password = '';
@@ -252,6 +278,63 @@ class SiteController extends Controller
      
         return $this->render('changePassword', [
             'model' => $model,
+        ]);
+    }
+    public function actionChangeEmail(){
+        $id = \Yii::$app->user->id;
+        $model = new ChangeEmailForm($id);
+        if ($model->load(\Yii::$app->request->post()) && $model->validate() && $model->changeEmail()) {
+            \Yii::$app->session->setFlash('success', '¡El Email ha sido cambiado!');
+            
+        }
+        return $this->render('changeEmail', [
+            'model' => $model,
+        ]);
+    }
+
+      /**
+     * Verify email address
+     *
+     * @param string $token
+     * @throws BadRequestHttpException
+     * @return yii\web\Response
+     */
+    public function actionVerifyEmail($token)
+    {
+        try {
+            $model = new VerifyEmailForm($token);
+        } catch (InvalidArgumentException $e) {
+            throw new BadRequestHttpException($e->getMessage());
+        }
+        if ($user = $model->verifyEmail()) {
+            if (Yii::$app->user->login($user)) {
+                Yii::$app->session->setFlash('success', 'Your email has been confirmed!');
+                return $this->goHome();
+            }
+        }
+
+        Yii::$app->session->setFlash('error', 'Sorry, we are unable to verify your account with provided token.');
+        return $this->goHome();
+    }
+  
+    /**
+     * Resend verification email
+     *
+     * @return mixed
+     */
+    public function actionResendVerificationEmail()
+    {
+        $model = new ResendVerificationEmailForm();
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            if ($model->sendEmail()) {
+                Yii::$app->session->setFlash('success', 'Check your email for further instructions.');
+                return $this->goHome();
+            }
+            Yii::$app->session->setFlash('error', 'Sorry, we are unable to resend verification email for the provided email address.');
+        }
+
+        return $this->render('resendVerificationEmail', [
+            'model' => $model
         ]);
     }
 }
