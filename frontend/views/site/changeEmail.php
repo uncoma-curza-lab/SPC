@@ -11,6 +11,7 @@ $this->title = 'Gestión de clave';
 <div class="row">
     <div class="col-md-6 col-md-offset-2 ">
         <h1>Cambiar Email</h1>
+        <p> <b>Atención</b>, si usted cambia el correo electrónico (email) deberá verificarlo. Hasta no verificarlo no podrá acceder a algunas funciones.</p>
         <?php $form = ActiveForm::begin(); ?>
                 <?= $form->field($model,'email')->textInput(); ?>
 

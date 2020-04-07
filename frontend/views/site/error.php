@@ -12,16 +12,12 @@ $this->title = $name;
 <div class="site-error">
 
     <h1><?= Html::encode($this->title) ?></h1>
-
     <div class="alert alert-danger">
-        <?= nl2br(Html::encode($message)) ?>
+        <?= nl2br(Html::encode($message)); ?>
     </div>
 
     <p>
-        The above error occurred while the Web server was processing your request.
-    </p>
-    <p>
-        Please contact us if you think this is a server error. Thank you.
+        Ha ocurrido un error durante la operación. Si usted creé que este error no debería haber sucedido, contáctese con nosotros explicando los pasos que había realizado. 
     </p>
 
 </div>

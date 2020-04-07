@@ -10,7 +10,6 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use common\models\PermisosHelpers;
 
-
 /**
  * RolController implements the CRUD actions for Rol model.
  */
@@ -22,10 +21,10 @@ class UserNotificationsController extends Controller
             
         'access' => [
                'class' => \yii\filters\AccessControl::className(),
-               'only' => ['index'],
+               'only' => ['index','ver','update','delete','view','create'],
                'rules' => [
                    [
-                       'actions' => ['index', 'create', 'view',],
+                       'actions' => ['index','ver'],
                        'allow' => true,
                        'roles' => ['@'],
                        'matchCallback' => function ($rule, $action) {
@@ -132,6 +131,28 @@ class UserNotificationsController extends Controller
         return $this->redirect(['index']);
     }
 
+    public function actionVer($id,$notif_id){
+        // id programa_id
+        //$url = Url::to(['mi-programa/ver','id' => $id]);
+        $notification = NotificationPanel::findOne($notif_id);
+        $notification->setRead();
+        $notification->save(false);
+
+        $this->redirect(['mi-programa/ver','id' => $id]);
+
+    }
+    public function actionAllRead(){
+        if(!Yii::$app->user->isGuest){
+            $userID = Yii::$app->user->id;
+            $notificaciones = NotificationPanel::find()->filterWhere(['=','type',NotificationPanel::DISCR])->andWhere(['read' => NULL])->all();
+            foreach ($notificaciones as $notificacion) {
+                $notificacion->setRead();
+                $notificacion->save(false);
+            }
+        }
+        return $this->redirect(['index']);
+    }
+
     /**
      * Finds the Rol model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
@@ -141,10 +162,12 @@ class UserNotificationsController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = NotificationPanel::findOne($id)) !== null) {
+        if (($model = UserNotificationController::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
+    
 }

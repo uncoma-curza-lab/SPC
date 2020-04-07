@@ -116,7 +116,12 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function findIdentity($id)
     {
-        return static::find()->where(['id' => $id])->andWhere(['or',[ 'estado_id' => ValorHelpers::getEstadoId('Activo')],'estado_id' => ValorHelpers::getEstadoId('VerificarEmail')])->one();
+        return static::find()
+            ->where(['id' => $id])
+            ->andWhere(['or',
+                [ 'estado_id' => ValorHelpers::getEstadoId('Activo')],
+                ['estado_id' => ValorHelpers::getEstadoId('VerificarEmail')]
+            ])->one();
     }
 
     /**
@@ -180,10 +185,13 @@ class User extends ActiveRecord implements IdentityInterface
      * @return static|null
      */
     public static function findByVerificationToken($token) {
-        return static::findOne([
+        return static::find()->where([
             'verification_email_token' => $token,
-            'estado_id' => ValorHelpers::getEstadoId('Activo')
-        ]);
+        ])->andWhere([
+            'or',
+            ['estado_id' => ValorHelpers::getEstadoId('VerificarEmail')],
+            ['estado_id' => ValorHelpers::getEstadoId('Pendiente')],
+        ])->one();
     }
 
 

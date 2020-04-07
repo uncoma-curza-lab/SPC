@@ -30,14 +30,28 @@ class VerifyEmailForm extends Model
     public function __construct($token, array $config = [])
     {
         if (empty($token) || !is_string($token)) {
-            throw new InvalidArgumentException('Verify email token cannot be blank.');
+            throw new InvalidArgumentException('Proporcione el código de verificación.');
         }
         $this->_user = User::findByVerificationToken($token);
         if (!$this->_user) {
-            throw new InvalidArgumentException('Wrong verify email token.');
+            throw new InvalidArgumentException('El código proporcionado no es correcto.');
         }
         parent::__construct($config);
     }
+    public function rules()
+    {
+        return [
+            ['email', 'trim'],
+            ['email', 'required'],
+            ['email', 'email'],
+            ['email', 'exist',
+                'targetClass' => '\common\models\User',
+                'filter' => ['estado_id' => Estado::find()->where(['or',['estado_nombre' => 'Pendiente'],['estado_nombre' => 'VerificarEmail']])->one()->id],
+                'message' => 'There is no user with this email address.'
+            ],
+        ];
+    }
+
 
     /**
      * Verify email
@@ -48,6 +62,7 @@ class VerifyEmailForm extends Model
     {
         $user = $this->_user;
         $user->estado_id = ValorHelpers::getEstadoId('Activo');
+        $user->verification_email_token = null;
         return $user->save(false) ? $user : null;
     }
 }

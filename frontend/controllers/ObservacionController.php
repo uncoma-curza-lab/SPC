@@ -11,6 +11,7 @@ use common\models\EventType;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use common\models\PermisosHelpers;
 
 /**
  * ObservacionController implements the CRUD actions for Observacion model.
@@ -29,6 +30,27 @@ class ObservacionController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => \yii\filters\AccessControl::className(),
+                /*'only' => [
+                  'index', 'view', 'create', 'update','delete',
+                
+                ],*/
+                'rules' => [
+                    [
+                         'actions' => [
+                            'index', 'view', 'create', 'update','delete',
+                         ],
+                         'allow' => true,
+                         'roles' => ['@'],
+                         'matchCallback' => function($rule,$action) {
+                           return PermisosHelpers::requerirMinimoRol('Profesor')
+                             && PermisosHelpers::requerirEstado('Activo');
+                         }
+                    ],
+
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -80,11 +102,7 @@ class ObservacionController extends Controller
           if($model->save()){
             Yii::$app->session->setFlash('success','Observación agregada exitosamente');
             //generar notificacion
-            $userInitID = \Yii::$app->user->identity->id;
-            $userReceiverID = Programa::findOne($id)->created_by;
-            $notificar = new NotificationEvent(self::CREAR_OBSERVACION,$userInitID ,$userReceiverID,$id);
-            $this->on(self::CREAR_OBSERVACION,[$notificar,'notificar']); 
-            $this->trigger(self::CREAR_OBSERVACION,$notificar);
+            Yii::$app->GenerateNotification->run(self::CREAR_OBSERVACION,$id);
             return $this->redirect(['generales/ver', 'id' => $model->programa_id]);
           } else {
             Yii::$app->session->setFlash('danger','Observación no agregada');

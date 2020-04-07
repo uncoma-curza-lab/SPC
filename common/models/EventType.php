@@ -70,6 +70,7 @@ class EventType extends \yii\db\ActiveRecord
         {
             $message .= str_replace("%user_init%",$perfilUI->printNombre(),$this->message_template);
             $message = str_replace("%programa%",'<i>'.$programa->getNomenclatura().'</i>',$message);
+            $message = str_replace("%estado_programa%",$programa->getStatus()->one()->getDescripcion(),$message);
         } else {
             $message = "Hubo un problema con esta notificación.";
         }

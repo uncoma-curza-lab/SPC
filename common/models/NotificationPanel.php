@@ -1,7 +1,7 @@
 <?php
 
 namespace common\models;
-
+use common\models\querys\NotificationQuery;
 use Yii;
 
 /**
@@ -28,7 +28,11 @@ class NotificationPanel extends Notification
         //mensaje leido? no...
         //$this->read = null;
     }
-
+    /*public function beforeSave($insert)
+    {
+        $this->type = self::DISCR;
+        return parent::beforeSave($insert);
+    }*/
     /**
      * @inheritdoc
      */
@@ -52,9 +56,23 @@ class NotificationPanel extends Notification
     public function getDateSend(){
         //enviar al panel del usuario.
     }
+    public function setRead(){
+        $this->read = new yii\db\Expression('NOW()');
+    }
+    public function getRead(){
+        return $this->read ;
+    }
 
     public function getNotificationType(){
         return $this->hasOne(NotificationType::className(), ['id' =>  self::DISCR]);
     }
-       
+    public function getProgramaID(){
+        return $this->programa_id;
+    }
+    
+    public static function find()
+    {
+        return new NotificationQuery(get_called_class(), ['type' => self::DISCR]);
+    }
+
 }

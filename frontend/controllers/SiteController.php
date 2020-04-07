@@ -60,14 +60,47 @@ class SiteController extends Controller
     public function actions()
     {
         return [
-            'error' => [
+          /*  'error' => [
                 'class' => 'yii\web\ErrorAction',
-            ],
+                //'layout' => 'main'
+                //'view' => '@app/views/site/error.php',
+            ],*/
             'captcha' => [
                 'class' => 'yii\captcha\CaptchaAction',
                 'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
             ],
         ];
+    }
+    public function actionError()
+    {
+        $exception = Yii::$app->errorHandler->exception;
+        if ($exception !== null) {
+            
+            if(ValorHelpers::estadoCoincide('VerificarEmail') && $exception instanceof yii\web\ForbiddenHttpException) {
+                Yii::$app->session->setFlash('info',
+                 '<p>Lamentamos molestarlo, </p>
+                 <p>Para que pueda recibir notificaciones deberá indicar y verificar su casilla de correo electrónico (Email).</p>
+                 <p> A continuación rellene el formulario, recibirá un correo a la casilla indicada para verificarlo.</p>');
+
+                Yii::$app->user->identity->email = '';
+                return $this->redirect(['change-email']);
+            }
+            $error = $this->formatError($exception);
+            return $this->render('error',['message' => $error]);
+        }
+    }
+    protected function formatError($exception){
+        $message=$exception->getMessage();
+        $classException = get_class($exception);
+        switch($classException){
+            case "yii\web\ForbiddenHttpException":
+                $message = "No tiene permiso para esta operación";
+                break;
+            case "yii\web\NotFoundHttpException":
+                $message = "No se pudo encontrar el sitio que buscaba";
+                break;
+        }
+        return $message;        
     }
 
     /**
@@ -124,7 +157,10 @@ class SiteController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             
             if(Yii::$app->user->identity->estado_id == ValorHelpers::getEstadoId('VerificarEmail')){
-                Yii::$app->session->setFlash('info', 'Lamentamos molestarlo, para que pueda recibir notificaciones deberá indicar y verificar su casilla de correo electrónico (Email). <br> A continuación rellene el formulario, recibirá un correo a la casilla indicada para verificarlo.');
+                Yii::$app->session->setFlash('info',
+                 '<p>Lamentamos molestarlo, </p>
+                 <p>Para que pueda recibir notificaciones deberá indicar y verificar su casilla de correo electrónico (Email).</p>
+                 <p> A continuación rellene el formulario, recibirá un correo a la casilla indicada para verificarlo.</p>');
 
                 Yii::$app->user->identity->email = '';
                 /*return $this->render('changeEmail', [
@@ -284,7 +320,7 @@ class SiteController extends Controller
         $id = \Yii::$app->user->id;
         $model = new ChangeEmailForm($id);
         if ($model->load(\Yii::$app->request->post()) && $model->validate() && $model->changeEmail()) {
-            \Yii::$app->session->setFlash('success', '¡El Email ha sido cambiado!');
+            \Yii::$app->session->setFlash('success', '<p>¡El Email ha sido cambiado! </p><p>Debe verificar el mismo para continuar</p>');
             
         }
         return $this->render('changeEmail', [
@@ -308,12 +344,12 @@ class SiteController extends Controller
         }
         if ($user = $model->verifyEmail()) {
             if (Yii::$app->user->login($user)) {
-                Yii::$app->session->setFlash('success', 'Your email has been confirmed!');
+                Yii::$app->session->setFlash('success', 'Su correo electrónico (email) ha sido verificado con éxito!');
                 return $this->goHome();
             }
         }
 
-        Yii::$app->session->setFlash('error', 'Sorry, we are unable to verify your account with provided token.');
+        Yii::$app->session->setFlash('error', 'Lo lamentamos, no se ha podido confirmar el correo electrónico. Intente nuevamente generando un nuevo enlace.');
         return $this->goHome();
     }
   
@@ -325,12 +361,18 @@ class SiteController extends Controller
     public function actionResendVerificationEmail()
     {
         $model = new ResendVerificationEmailForm();
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            if ($model->sendEmail()) {
-                Yii::$app->session->setFlash('success', 'Check your email for further instructions.');
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            Yii::$app->session->setFlash('info','Si usted ha ingresado correctamente el email, se le enviará un mensaje a su bandeja de entrada.');
+            //intentar enviar email
+            $model->sendEmail();
+            /*if ($model->sendEmail()) {
+                //Yii::$app->session->setFlash('success', 'Check your email for further instructions.');
                 return $this->goHome();
-            }
-            Yii::$app->session->setFlash('error', 'Sorry, we are unable to resend verification email for the provided email address.');
+            }*/
+            return $this->goHome();
+            //Yii::$app->session->setFlash('error', 'Sorry, we are unable to resend verification email for the provided email address.');
+            
+
         }
 
         return $this->render('resendVerificationEmail', [

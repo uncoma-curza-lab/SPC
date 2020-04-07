@@ -34,15 +34,17 @@
 
 </div>
 -->
-
+<?php
+use yii\helpers\Url;
+?>
 <div class="list-group">
     <?php
         $count = 0;
         foreach ($models as $model) {
-            if($count == 0)
-                echo '<a href="#" class="list-group-item active">';    
+            if(!$model->getRead())
+                echo '<a href="'.Url::to(['ver','id' => $model->programa_id,'notif_id' => $model->id]).'" class="list-group-item active">';    
             else
-                echo '<a href="#" class="list-group-item ">';
+                echo '<a href="'.Url::to(['ver','id' => $model->programa_id,'notif_id' => $model->id]).'" class="list-group-item ">';
             echo '<p class="list-group-item-heading" >';
             echo $model->getMessage();
             echo '</p>';

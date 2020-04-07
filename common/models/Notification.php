@@ -4,6 +4,7 @@ namespace common\models;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\db\Expression ;
+use common\models\querys\NotificationQuery;
 use Yii;
 
 /**
@@ -38,7 +39,15 @@ abstract class Notification extends ActiveRecord
         ];
      }
 
+     public $print = '';
 
+     public function afterFind()
+     {
+         parent::afterFind();
+         $this->print = $this->printr();
+ 
+         return $this;
+     }
     /**
      * @inheritdoc
      */
@@ -77,7 +86,7 @@ abstract class Notification extends ActiveRecord
             'event_type_id' => 'Tipo de evento'
         ];
     }
-    
+    public function printr(){ return ''; }
     public static function instantiate($row)
     {
         switch ($row['type']) {
@@ -154,6 +163,10 @@ abstract class Notification extends ActiveRecord
 
     public function setProgramaID($id){
         $this->programa_id = $id;
+    }
+    public static function find()
+    {
+        return new NotificationQuery(get_called_class(), ['type' => self::DISCR]);
     }
 
 }

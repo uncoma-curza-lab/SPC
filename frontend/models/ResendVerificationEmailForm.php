@@ -22,13 +22,13 @@ class ResendVerificationEmailForm extends Model
     {
         return [
             ['email', 'trim'],
-            ['email', 'required'],
-            ['email', 'email'],
-            ['email', 'exist',
+            ['email', 'required','message' => 'Debe completar el correo'],
+            ['email', 'email', 'message' => 'El formato del correo no es correcto.'],
+            /*['email', 'exist',
                 'targetClass' => '\common\models\User',
-                //'filter' => ['estado_id' => Estado::find()->where(['=','estado_nombre','Pendiente'])->one()->id],
-                'message' => 'There is no user with this email address.'
-            ],
+                'filter' => ['estado_id' => Estado::find()->where(['=','estado_nombre','VerificarEmail'])->one()->id],
+                //'message' => 'There is no user with this email address.'
+            ],*/
         ];
     }
 
@@ -39,23 +39,36 @@ class ResendVerificationEmailForm extends Model
      */
     public function sendEmail()
     {
-        $user = User::findOne([
+        $user = User::find()->where([
             'email' => $this->email,
-            //'estado_id' => Estado::find()->where(['=','estado_nombre','Pendiente'])->one()->id
-        ]);
+            
+        ])->andWhere(['or',
+        [
+            'estado_id' => Estado::find()->where(['=','estado_nombre','VerificarEmail'])->one()->id
+        ],
+        [
+            'estado_id' => Estado::find()->Where(['=','estado_nombre','Pendiente'])->one()->id
+        ]])->one();
 
         if ($user === null) {
             return false;
         }
-        return Yii::$app
-            ->mailer
-            ->compose(
-                ['html' => 'emailVerify-html', 'text' => 'emailVerify-text'],
-                ['user' => $user]
-            )
-            ->setFrom(getenv("SMTP_USER"))
-            ->setTo($this->email)
-            ->setSubject('Account registration at ' . Yii::$app->name)
-            ->send();
+
+        $user->generateEmailVerificationToken();
+        if ($user->save(false))
+        {
+            return Yii::$app
+                ->mailer
+                ->compose(
+                    ['html' => 'emailVerify-html', 'text' => 'emailVerify-text'],
+                    ['user' => $user]
+                )
+                ->setFrom(getenv("SMTP_USER"))
+                ->setTo($this->email)
+                ->setSubject('Verificación de correo electrónico ' . Yii::$app->name)
+                ->send();
+        } else {
+            return false;
+        }
     }
 }

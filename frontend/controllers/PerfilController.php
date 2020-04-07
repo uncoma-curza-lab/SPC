@@ -85,22 +85,26 @@ class PerfilController extends Controller
      */
     public function actionCreate()
     {
-          $model = new Perfil;
-          $model->user_id = \Yii::$app->user->identity->id;
-          if ($ya_existe = RegistrosHelpers::userTiene('perfil')) {
-              return $this->render('view', [
+        $model = new Perfil;
+        if (!Yii::$app->user->isGuest){
+            $model->user_id = \Yii::$app->user->identity->id;
+            if ($ya_existe = RegistrosHelpers::userTiene('perfil')) {
+                return $this->render('view', [
                     'model' => $this->findModel($ya_existe),
                 ]);
-          } elseif ($model->load(Yii::$app->request->post())){
-              $model->imageFile = UploadedFile::getInstance($model,'imageFile');
-              if($model->save()){
-                return $this->redirect(['view']);
-              }
-          } else {
-              return $this->render('create', [
+            } elseif ($model->load(Yii::$app->request->post())){
+                $model->imageFile = UploadedFile::getInstance($model,'imageFile');
+                if($model->save()){
+                    return $this->redirect(['view']);
+                }
+            } else {
+                return $this->render('create', [
                     'model' => $model,
-                     ]);
-          }
+                ]);
+            }    
+        } else {
+            return $this->goHome();
+        }
     }
 
     /**

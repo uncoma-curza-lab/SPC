@@ -7,6 +7,8 @@ class RegistrosHelpers
 {
     public static function userTiene($modelo_nombre)
     {
+      if (!Yii::$app->user->isGuest)
+      {
         $conexion = \Yii::$app->db;
         $userid = Yii::$app->user->identity->id;
         $sql = "SELECT id FROM $modelo_nombre WHERE user_id=:userid";
@@ -18,6 +20,9 @@ class RegistrosHelpers
         } else {
             return $resultado['id'];
         }
+      } else {
+        return false;
+      }
     }
     public static function getUserName($id){
       if ($user = User::findIdentity($id)){

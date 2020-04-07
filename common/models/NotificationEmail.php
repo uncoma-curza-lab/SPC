@@ -58,5 +58,25 @@ class NotificationEmail extends Notification
         $event->trigger(MailEvent::EVENT_SEND);*/
     }
     public function getDateSend(){}
- 
+    
+    public function setMessage($message){
+        $this->message = $message;
+    }
+    public function getMessage()
+    {
+        $message ="";
+        $message = "<p>Hola,</p>".
+            "<p>Ha recibido una notificación desde el sistema de programas de cátedra del C.U.R.Z.A.</p>".
+            "<p>Este mensaje ha sido autogenerado por el sistema, por favor, no responda. </p>";
+            "<p>A continuación se muestra el detalle: </p>";
+        $message .= $this->message;
+        $message .= "<p></p>";
+        $message .="<small>Si por alguna razón cree que no 
+            debería haber recibido este mensaje, ignórelo o comuníquese 
+            con el departamento de Informática del C.U.R.Z.A.</small>".
+            "<small>Podrá encontrar nuestro contacto en 
+            <a href='https://apps.curza.uncoma.edu.ar'> este enlace</a></small>".
+            "<small>Este mensaje ha sido autogenerado por el sistema, por favor, no responda. </small>";
+        return $message;
+    }
 }

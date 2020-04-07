@@ -28,7 +28,7 @@ $this->title = 'Acceso';
                   <?= $form->field($model, 'password')->passwordInput()->label('Contraseña') ?>
 
                   <?= $form->field($model, 'rememberMe')->checkbox()->label('Recordarme') ?>
-
+                  <div> ¿Está esperando el correo de verificación? Puede reenviarlo haciendo click en el siguiente enlace: <p> <?= Html::a('Reenviar correo de verificación',['site/resend-verification-email']) ?></p></div>
                   <div style="color:#999;margin:1em 0">
                       Si perdió su contraseña comunicarse con el Departamento de Ciencia y Tecnología (C.U.R.Z.A.)
                   </div>

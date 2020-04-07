@@ -19,6 +19,7 @@ class NotificationUserSearch extends NotificationPanel
     {
         return [
             [['id','user_receiver','user_init'], 'integer'],
+            [['type'],'safe'],
             [['message'], 'string'],
         ];
     }
@@ -66,7 +67,9 @@ class NotificationUserSearch extends NotificationPanel
             'user_init' => $this->user_init
         ]);
 
-        $query->andFilterWhere(['like', 'message', $this->message]);
+        $query->andFilterWhere(['like', 'message', $this->message])
+        //importante para filtrar....
+        ->andFilterWhere(['like', 'type', $this->type]);
             
 
         return $dataProvider;

@@ -8,52 +8,36 @@ use common\models\PermisosHelpers;
  * @var yii\web\View $this
  * @var frontend\models\Perfil $model
  */
-
-$this->title = "Su perfil: ";
-
-
+$this->title = "Perfil";
 
 //$photoInfo = $model->PhotoInfo;
 //$photo = Html::img($photoInfo['url'],['alt'=>$photoInfo['alt']]);
-
 ?>
 <div class="perfil-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
+    <?php
 
-        <figure>
-           <? // $photo ?>
-        </figure>
+    if (PermisosHelpers::userDebeSerPropietario('perfil', $model->id)) {
+        echo Html::a('Update', ['update', 'id' => $model->id],
+        ['class' => 'btn btn-primary']);
+    } 
+    ?>
 
-        <?php
+    <div class="col-xs-6">
+            <?=
+                Html::a('Cambiar Contraseña', ['site/change-password'],
+                    ['class' => 'btn btn-primary']);
+            ?>
+            <?php
+                echo Html::a('Cambiar Email', ['site/change-email'],
+                    ['class' => 'btn btn-info']);
+            ?>
+    </div>
+        
 
-
-        if (PermisosHelpers::userDebeSerPropietario('perfil', $model->id)) {
-
-            echo Html::a('Update', ['update', 'id' => $model->id],
-                ['class' => 'btn btn-primary']);
-        } ?>
-
-        <!-- <? Html::a('Borrar', ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => Yii::t('app', 'Are you sure to delete this item?'),
-                'method' => 'post',
-            ],
-        ]) ?>-->
-
-        <?php
-            echo Html::a('Cambiar Contraseña', ['site/change-password'],
-                ['class' => 'btn btn-primary']);
-            
-            echo Html::a('Cambiar Email', ['site/change-email'],
-                ['class' => 'btn btn-info']);
-        ?>
-    </p>
-
-
+    <div class="col-xs-6">
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
@@ -64,6 +48,24 @@ $this->title = "Su perfil: ";
             ],
             'nombre',
             'apellido',
+            [
+                'attribute' => 'user.email',
+                'label' => 'Email',
+                'value' => function($model){
+                    $user = $model->getUser()->one();
+                    $status = null;
+                    if ($user) {
+                        $status = $user->getEstado()->one();
+                    }
+                    if($status->estado_nombre == 'Activo'){
+                        return $user->email;
+                    } else { 
+                        return "Sin verificar";
+                    }
+                    
+                }
+
+            ],
         //    'fecha_nacimiento',
         //    'genero.genero_nombre',
             //'localidad',
@@ -72,5 +74,6 @@ $this->title = "Su perfil: ";
             //'user_id',
         ],
     ]) ?>
-
+    </div>
+</div>
 </div>

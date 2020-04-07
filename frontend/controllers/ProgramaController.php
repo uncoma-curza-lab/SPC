@@ -28,6 +28,8 @@ use Mpdf;
  */
 class ProgramaController extends Controller
 {
+    const RECHAZAR_PROGRAMA = 'rechazar-programa';
+    const APROBAR_PROGRAMA = 'aprobar-programa';
     /**
      * {@inheritdoc}
      */
@@ -204,7 +206,9 @@ class ProgramaController extends Controller
         ){
           if($programa->subirEstado() && $programa->save()){
             Yii::info("Subió el estado del programa:".$id." Estaba en estado: ".$estadoActual->descripcion,'estado-programa');
-            Yii::$app->session->setFlash('success','Se confirmó el programa exitosamente');
+            Yii::$app->session->setFlash('success','Se aprobó el programa exitosamente');
+            Yii::$app->GenerateNotification->run(self::APROBAR_PROGRAMA,$id);
+
             return $this->redirect(['evaluacion']);
           } else {
             Yii::error("No pudo subir de estado programa:".$id,'estado-programa');
@@ -232,6 +236,8 @@ class ProgramaController extends Controller
               Yii::info("Cambió el estado de Departamento -> Borrador ID:".$id,'estado-programa');
 
               Yii::$app->session->setFlash('warning','Se rechazó el programa correctamente');
+              Yii::$app->GenerateNotification->run(self::RECHAZAR_PROGRAMA,$id);
+
               return $this->redirect(['evaluacion']);
             } else {
               Yii::$app->session->setFlash('danger','Hubo un problema al rechazar el programa');

@@ -84,7 +84,19 @@ class MiProgramaController extends Controller
             ],
         ];
     }
+    public function actionError()
 
+    {        
+
+        if (Yii::$app->errorHandler->error['code'] == 403)
+
+            $this->redirect('url');
+
+        else
+
+            $this->render('error');
+
+    }
     /**
      * Lists all Programa models.
      * @return mixed

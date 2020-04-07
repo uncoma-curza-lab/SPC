@@ -13,6 +13,9 @@ return [
     'bootstrap' => ['log'],
     'controllerNamespace' => 'frontend\controllers',
     'components' => [
+        'GenerateNotification' => [
+            'class' => 'frontend\components\GenerateNotification'
+        ],    
         'formatter' => [
             'dateFormat' => 'dd/MM/yyyy',
             'decimalSeparator' => ',',
@@ -24,12 +27,16 @@ return [
         ],
         'user' => [
             'identityClass' => 'common\models\User',
-            'enableAutoLogin' => true,
+            'enableAutoLogin' => false,
             'identityCookie' => ['name' => '_identity-frontend', 'httpOnly' => true],
         ],
         'session' => [
             // this is the name of the session cookie used for login on the frontend
-            'name' => 'advanced-frontend',
+            //'name' => 'advanced-frontend',
+            //'class' => 'yii\web\DbSession',
+            'timeout' => 5*3600, // 5 horas
+            'class' => 'yii\web\DbSession',
+		    'sessionTable' => 'user_session',
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 0 : 0,
@@ -121,6 +128,7 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
+ 
         /*
         'urlManager' => [
             'enablePrettyUrl' => true,

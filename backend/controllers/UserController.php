@@ -9,7 +9,8 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use common\models\PermisosHelpers;
-
+use common\models\Rol;
+use backend\models\SetStateAllUsersForm;
 
 /**
  * UserController implements the CRUD actions for User model.
@@ -22,10 +23,10 @@ class UserController extends Controller
             
         'access' => [
                'class' => \yii\filters\AccessControl::className(),
-               'only' => ['index', 'view','create', 'update', 'delete'],
+               'only' => ['index', 'view','create', 'update', 'delete','general'],
                'rules' => [
                    [
-                       'actions' => ['index', 'create', 'view',],
+                       'actions' => ['index', 'create', 'view','general','update','delete','set-state-users'],
                        'allow' => true,
                        'roles' => ['@'],
                        'matchCallback' => function ($rule, $action) {
@@ -33,7 +34,7 @@ class UserController extends Controller
                         && PermisosHelpers::requerirEstado('Activo');
                        }
                    ],
-                    [
+                    /*[
                        'actions' => [ 'update', 'delete'],
                        'allow' => true,
                        'roles' => ['@'],
@@ -41,7 +42,7 @@ class UserController extends Controller
                         return PermisosHelpers::requerirMinimoRol('SuperUsuario') 
                         && PermisosHelpers::requerirEstado('Activo');
                        }
-                   ],
+                   ],*/
                         
                ],
                     
@@ -70,7 +71,26 @@ class UserController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     }
+    public function actionGeneral(){
+        return $this->render('general');
+    }
 
+
+    public function actionSetStateUsers(){
+        $estado = new SetStateAllUsersForm();
+        if ($estado->load(Yii::$app->request->post())) {
+            $superUserRol = Rol::find()->where(['rol_nombre' => "SuperUsuario"])->one();
+            $allUsers = User::find()->where(['<>','rol_id' ,$superUserRol->id])->all(); 
+            foreach ($allUsers as $user) {
+                $user->estado_id = $estado->estado;
+                $user->save(false);
+            }
+        } 
+        return $this->render('set-state-users', [
+            'model' => $estado,
+        ]);
+        
+    }
     /**
      * Displays a single User model.
      * @param integer $id

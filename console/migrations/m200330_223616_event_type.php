@@ -53,10 +53,27 @@ class m200330_223616_event_type extends Migration
             'no action'
         );
         $this->insert('{{%event_type}}', [
-            'descripcion' =>  "Observacion en programa",
+            'descripcion' =>  "Observación en programa",
             'slug' => "crear-observacion",
             'name' => "Creación de observacion",
             'message_template' => 'Hubo una observación en el programa "%programa%" por parte del usuario %user_init%',
+            'created_at' => '2020-04-01 00:00:00',
+            'updated_at' => '2020-04-01 00:00:00',
+        ]);
+        $this->insert('{{%event_type}}', [
+            'descripcion' =>  "Se rechazó un programa",
+            'slug' => "rechazar-programa",
+            'name' => "Rechazar Programa",
+            'message_template' => 'El programa de cátedra %programa% ha sido rechazado por %user_init%',
+            'created_at' => '2020-04-01 00:00:00',
+            'updated_at' => '2020-04-01 00:00:00',
+            
+        ]);
+        $this->insert('{{%event_type}}', [
+            'descripcion' =>  "Se aprobó un programa",
+            'slug' => "aprobar-programa",
+            'name' => "Aprobar Programa",
+            'message_template' => 'El programa de cátedra %programa% ha sido aprobado por %user_init%, su estado actual es: %estado_programa%',
             'created_at' => '2020-04-01 00:00:00',
             'updated_at' => '2020-04-01 00:00:00',
             

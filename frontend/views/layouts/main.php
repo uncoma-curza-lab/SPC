@@ -19,7 +19,10 @@ if( !Yii::$app->user->isGuest){
   if($perfil){
       $nombre=Yii::$app->user->identity->perfil->printNombre();
   }
-  $countNotif = NotificationPanel::find()->filterWhere(['=','user_receiver',Yii::$app->user->identity->id])->andFilterWhere(['=','read',null])->count();
+  $countNotif = NotificationPanel::find()
+    ->andFilterWhere(['=','user_receiver',Yii::$app->user->identity->id])
+    ->andWhere(['read' => NULL])->count();
+
 }
 ?>
 <?php $this->beginPage() ?>
