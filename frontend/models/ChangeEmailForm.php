@@ -94,7 +94,7 @@ class ChangeEmailForm extends \yii\db\ActiveRecord
                 )
                 ->setFrom(getenv("SMTP_USER"))
                 ->setTo($this->email)
-                ->setSubject('Account registration at ' . Yii::$app->name)
+                ->setSubject('Verificación de correo de ' . Yii::$app->name)
                 ->send();
         }
         return $setMail;

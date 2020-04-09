@@ -71,7 +71,7 @@ class SignupForm extends Model
             )
             ->setFrom(getenv("SMTP_USER"))
             ->setTo($this->email)
-            ->setSubject('Account registration at ' . Yii::$app->name)
+            ->setSubject('Verificación de correos de ' . Yii::$app->name)
             ->send();
     }
 }
