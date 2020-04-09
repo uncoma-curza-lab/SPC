@@ -934,11 +934,36 @@ class MiProgramaController extends Controller
         }*/
         $estado = $model->getStatus()->one()->getDescripcion();
         $userId = \Yii::$app->user->identity->id;
+        
 
         $transaccion = Yii::$app->db->beginTransaction();
         try {
             if($estado == "Borrador" && $model->getCreatedBy() == $userId){
               $flag = true;
+              if ($notifEmail = $model->getNotificationEmail()->all()) {
+                foreach ($notifEmail as $notificacion) {
+                  $notifID = $notificacion->id;
+                  if($notificacion->delete()){
+                    Yii::info("Se eliminó la notificacion".$notifID." por la acción de borrar programa: ".$id,'- miprograma');
+                  } else {
+                    $flag = false;
+                    break;
+                    $transaccion->rollBack();
+                  }
+                }
+              }
+              if ($notifPanel = $model->getNotificationPanel()->all()) {
+                foreach ($notifPanel as $notificacion) {
+                  $notifID = $notificacion->id;
+                  if($notificacion->delete()){
+                    Yii::info("Se eliminó la notificacion".$notifID." por la acción de borrar programa: ".$id,'- miprograma');
+                  } else {
+                    $flag = false;
+                    break;
+                    $transaccion->rollBack();
+                  }
+                }
+              }
               if($observaciones = $model->getObservaciones()->all()){
                 foreach ($observaciones as $obs) {
                   $obsId = $obs->id;
@@ -951,19 +976,7 @@ class MiProgramaController extends Controller
                   }
                 }
               }
-              if ($notificaciones = $model->getNotifications()->all()){
-                foreach ($notificaciones as $notificacion) {
-                  $notifID = $notificacion->id;
-                  if($notificacion->delete()){
-                    Yii::info("Se eliminó la notificacion".$notifID." por la acción de borrar programa: ".$id,'- miprograma');
-                  } else {
-                    $flag = false;
-                    break;
-                    $transaccion->rollBack();
-                  }
-                  
-                }
-              }
+              
               if ($flag && $model->delete()){
                 $transaccion->commit();
                 Yii::$app->session->setFlash('success','El programa eliminó correctamente.');

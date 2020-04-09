@@ -3,6 +3,8 @@
 namespace common\models;
 use common\events\MailEvent;
 use Yii;
+use common\models\querys\NotificationQuery;
+
 
 /**
  * This is the model class for table "notification_type".
@@ -78,5 +80,9 @@ class NotificationEmail extends Notification
             <a href='https://apps.curza.uncoma.edu.ar'> este enlace</a></small>".
             "<small>Este mensaje ha sido autogenerado por el sistema, por favor, no responda. </small>";
         return $message;
+    }
+    public static function find()
+    {
+        return new NotificationQuery(get_called_class(), ['type' => self::DISCR]);
     }
 }

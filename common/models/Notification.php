@@ -80,6 +80,7 @@ abstract class Notification extends ActiveRecord
             'user_receiver' => 'Usuario receptor',
             'user_init' => 'Usuario emisor',
             'message' => 'Mensaje',
+            'programa_id' => 'Programa ID',
             'updated_at' => 'Fecha de actualizacion',
             'created_at' => 'Fecha de creacion',
             'type' => 'Tipo de notificacion',
