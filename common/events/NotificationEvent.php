@@ -100,7 +100,7 @@ class NotificationEvent extends Event
             ->setFrom(getenv("SMTP_USER"))
             ->setTo($userEmail)
             ->setSubject($this->eventType->descripcion)
-            ->setTextBody($notificationEmail->getMessage())
+            ->setHtmlBody($notificationEmail->getMessage())
             ->send();
             $notificationEmail->save();
         }
