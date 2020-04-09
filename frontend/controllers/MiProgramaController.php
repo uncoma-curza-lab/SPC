@@ -951,6 +951,19 @@ class MiProgramaController extends Controller
                   }
                 }
               }
+              if ($notificaciones = $model->getNotifications()->all()){
+                foreach ($notificaciones as $notificacion) {
+                  $notifID = $notificacion->id;
+                  if($notificacion->delete()){
+                    Yii::info("Se eliminó la notificacion".$notifID." por la acción de borrar programa: ".$id,'- miprograma');
+                  } else {
+                    $flag = false;
+                    break;
+                    $transaccion->rollBack();
+                  }
+                  
+                }
+              }
               if ($flag && $model->delete()){
                 $transaccion->commit();
                 Yii::$app->session->setFlash('success','El programa eliminó correctamente.');

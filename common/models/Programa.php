@@ -217,7 +217,15 @@ class Programa extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Observacion::className(), ['programa_id' => 'id']);
     }
-
+     /**
+     * Obtener observaciones de un programa
+     * @return \yii\db\ActiveQuery
+     */
+    public function getNotifications()
+    {
+        return $this->hasMany(Notification::className(), ['programa_id' => 'id']);
+    }
+    
     /**
      * Obtiene las asignaturas de un programa
      * @return \yii\db\ActiveQuery
