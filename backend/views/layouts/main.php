@@ -62,7 +62,6 @@ AppAsset::register($this);
               ['label' => 'Niveles', 'url' => ['/nivel/index']],
               ['label' => 'Programas', 'url' => ['/programa/index']],
             ],
-
           ];
           $menuItems[] = [
             'label' => 'Sobre Usuarios', 'items' => [
@@ -70,6 +69,14 @@ AppAsset::register($this);
               ['label' => 'Usuarios', 'url' => ['/user/index']],
               ['label' => 'Perfiles', 'url' => ['perfil/index']],
               ['label' => 'Designaciones', 'url' => ['designacion/index']],
+              ['label' => 'Acciones generales' , 'url' => ['/user/general']],
+              ['label' => 'Estados' , 'url' => ['/estado']],
+            ]
+          ];
+          $menuItems[] = [
+            'label' => 'Notificaciones', 'items' => [
+              ['label' => 'Event Type', 'url' => ['event-type/index']],
+              ['label' => 'Control de notificaciones', 'url' => ['control-notification/index']],
             ]
           ];
         }

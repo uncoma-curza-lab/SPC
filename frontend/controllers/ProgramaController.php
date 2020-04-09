@@ -186,6 +186,7 @@ class ProgramaController extends Controller
             if ($programa->subirEstado() && $programa->save()) {
               Yii::info("Subió el estado del programa. BORRADOR->".$programa->getStatus()->one()->descripcion,'estado-programa');
               Yii::$app->session->setFlash('success','Se confirmó el programa exitosamente');
+              Yii::$app->GenerateNotification->suscriptores(self::APROBAR_PROGRAMA,$id);
             } else {
               Yii::$app->session->setFlash('danger','Hubo un problema al confirmar el programa');
             }
@@ -207,7 +208,9 @@ class ProgramaController extends Controller
           if($programa->subirEstado() && $programa->save()){
             Yii::info("Subió el estado del programa:".$id." Estaba en estado: ".$estadoActual->descripcion,'estado-programa');
             Yii::$app->session->setFlash('success','Se aprobó el programa exitosamente');
-            Yii::$app->GenerateNotification->run(self::APROBAR_PROGRAMA,$id);
+            
+            Yii::$app->GenerateNotification->creador(self::APROBAR_PROGRAMA,$id);
+            Yii::$app->GenerateNotification->suscriptores(self::APROBAR_PROGRAMA,$id);
 
             return $this->redirect(['evaluacion']);
           } else {
@@ -236,7 +239,8 @@ class ProgramaController extends Controller
               Yii::info("Cambió el estado de Departamento -> Borrador ID:".$id,'estado-programa');
 
               Yii::$app->session->setFlash('warning','Se rechazó el programa correctamente');
-              Yii::$app->GenerateNotification->run(self::RECHAZAR_PROGRAMA,$id);
+              Yii::$app->GenerateNotification->creador(self::RECHAZAR_PROGRAMA,$id);
+              Yii::$app->GenerateNotification->suscriptores(self::RECHAZAR_PROGRAMA,$id);
 
               return $this->redirect(['evaluacion']);
             } else {
@@ -253,7 +257,8 @@ class ProgramaController extends Controller
 
           if($programa->bajarEstado() &&  $programa->save()){
             Yii::info("Rechazó el programa".$id." con estado actual".$estadoActual->descripcion,'estado-programa');
-
+            Yii::$app->GenerateNotification->creador(self::RECHAZAR_PROGRAMA,$id);
+            Yii::$app->GenerateNotification->suscriptores(self::RECHAZAR_PROGRAMA,$id);
             Yii::$app->session->setFlash('warning','Se rechazó el programa correctamente');
             return $this->redirect(['evaluacion']);
           } else {

@@ -17,7 +17,7 @@ return [
             'class' => 'frontend\components\GenerateNotification'
         ],    
         'formatter' => [
-            'dateFormat' => 'dd/MM/yyyy',
+            'dateFormat' => 'dd/MM/yyyy H:mm:ss',
             'decimalSeparator' => ',',
             'thousandSeparator' => ' ',
             'currencyCode' => 'ARS',

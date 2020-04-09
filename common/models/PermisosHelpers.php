@@ -62,7 +62,8 @@ class PermisosHelpers
 
 
       if($perfil)
-        $designacion = Designacion::find()->where(['=','cargo_id',$cargo->id])->andWhere(['=','perfil_id',$perfil->id])->one();
+        $designacion = Designacion::find()->where(['=','cargo_id',$cargo->id])
+          ->andWhere(['=','perfil_id',$perfil->id])->one();
         // si el programa no tiene el dpto busco al que corresponda la designacion
       else {
         return false;
@@ -131,4 +132,5 @@ class PermisosHelpers
             return false;
         }
     }
+  
 }

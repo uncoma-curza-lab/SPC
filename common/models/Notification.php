@@ -120,13 +120,14 @@ abstract class Notification extends ActiveRecord
     }
 
     public function getMessage(){
-        if ($eventType = $this->getEventtype()->one()) {
+       /* if ($eventType = $this->getEventtype()->one()) {
             $userInit = User::findOne($this->user_init);
             $userReceiver = User::findOne($this->user_receiver);
             return $eventType->getMessage($userInit,$userReceiver,$this->programa_id);
         } else {
             return "Hubo un problema con esta notificación";
-        }
+        }*/
+        return $this->message;
     }
 
     public function getCreatedAt()

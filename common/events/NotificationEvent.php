@@ -3,11 +3,13 @@ namespace common\events;
 
 use yii\base\Component;
 use yii\base\Event;
-
+use Yii;
 use common\models\EventType;
 use common\models\User;
 use common\models\NotificationPanel;
 use common\models\NotificationEmail;
+use common\models\PermisosHelpers;
+use common\models\ControlNotification;
 
 class NotificationEvent extends Event 
 {
@@ -30,8 +32,14 @@ class NotificationEvent extends Event
     public function notificar()
     {
         $this->configMessage();
-        $this->notificationPanel();
-        $this->notificationEmail();
+        if(ControlNotification::getStatusNotification("NotificationPanel"))
+            $this->notificationPanel();
+        //enviar Email si está confirmado.
+        // Si el usuario quiere recibir notificaciones por mai
+        // y si estan activadas en el panel de control
+        if(ControlNotification::getStatusNotification("NotificationEmail") && 
+            PermisosHelpers::requerirEstado('Activo'))
+            $this->notificationEmail();
         //$notificationEmail = new NotificationEmail();
     }
 

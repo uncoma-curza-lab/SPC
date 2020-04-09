@@ -64,7 +64,7 @@ class m200330_223616_event_type extends Migration
             'descripcion' =>  "Se rechazó un programa",
             'slug' => "rechazar-programa",
             'name' => "Rechazar Programa",
-            'message_template' => 'El programa de cátedra %programa% ha sido rechazado por %user_init%',
+            'message_template' => 'El programa de cátedra %programa% ha sido rechazado por %user_init%, su estado actual es: %estado_programa%',
             'created_at' => '2020-04-01 00:00:00',
             'updated_at' => '2020-04-01 00:00:00',
             

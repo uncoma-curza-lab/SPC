@@ -1,57 +1,25 @@
 <?php
 
-namespace frontend\controllers;
+namespace backend\controllers;
 
 use Yii;
-use common\models\Observacion;
-use common\events\NotificationEvent;
-use common\models\Programa;
-use common\models\search\ObservacionSearch;
-use common\models\EventType;
+use common\models\ControlNotification;
+use common\models\search\ControlNotificationSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use common\models\PermisosHelpers;
-
 
 /**
- * ObservacionController implements the CRUD actions for Observacion model.
+ * CargoController implements the CRUD actions for Cargo model.
  */
-class ObservacionController extends Controller
+class ControlNotificationController extends Controller
 {
-    const CREAR_OBSERVACION = "crear-observacion";
-    
-    public function init() {
-        parent::init();
-    }
-
     /**
      * {@inheritdoc}
      */
     public function behaviors()
     {
         return [
-            'access' => [
-                'class' => \yii\filters\AccessControl::className(),
-                /*'only' => [
-                  'index', 'view', 'create', 'update','delete',
-                
-                ],*/
-                'rules' => [
-                    [
-                         'actions' => [
-                            'index', 'view', 'create', 'update','delete',
-                         ],
-                         'allow' => true,
-                         'roles' => ['@'],
-                         'matchCallback' => function($rule,$action) {
-                           return PermisosHelpers::requerirMinimoRol('Profesor')
-                             && PermisosHelpers::requerirEstado('Activo');
-                         }
-                    ],
-
-                ],
-            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -62,12 +30,12 @@ class ObservacionController extends Controller
     }
 
     /**
-     * Lists all Observacion models.
+     * Lists all ControlNotification models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new ObservacionSearch();
+        $searchModel = new ControlNotificationSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -77,7 +45,7 @@ class ObservacionController extends Controller
     }
 
     /**
-     * Displays a single Observacion model.
+     * Displays a single ControlNotification model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -90,24 +58,16 @@ class ObservacionController extends Controller
     }
 
     /**
-     * Creates a new Observacion model.
+     * Creates a new ControlNotification model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate($id)
+    public function actionCreate()
     {
-        $model = new Observacion();
-        $model->programa_id = $id;
+        $model = new ControlNotification();
 
-        if ($model->load(Yii::$app->request->post())) {
-          if($model->save()){
-            Yii::$app->session->setFlash('success','Observación agregada exitosamente');
-            //generar notificacion
-            Yii::$app->GenerateNotification->creador(self::CREAR_OBSERVACION,$id);
-            return $this->redirect(['generales/ver', 'id' => $model->programa_id]);
-          } else {
-            Yii::$app->session->setFlash('danger','Observación no agregada');
-          }
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('create', [
@@ -116,7 +76,7 @@ class ObservacionController extends Controller
     }
 
     /**
-     * Updates an existing Observacion model.
+     * Updates an existing ControlNotification model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -136,7 +96,7 @@ class ObservacionController extends Controller
     }
 
     /**
-     * Deletes an existing Observacion model.
+     * Deletes an existing ControlNotification model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -150,20 +110,18 @@ class ObservacionController extends Controller
     }
 
     /**
-     * Finds the Observacion model based on its primary key value.
+     * Finds the ControlNotification model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Observacion the loaded model
+     * @return ControlNotification the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Observacion::findOne($id)) !== null) {
+        if (($model = ControlNotification::findOne($id)) !== null) {
             return $model;
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
-
-    
 }
