@@ -1,5 +1,5 @@
 <?php
-namespace frontend\tests;
+
 
 /**
  * Inherited Methods
@@ -12,22 +12,15 @@ namespace frontend\tests;
  * @method void am($role)
  * @method void lookForwardTo($achieveValue)
  * @method void comment($description)
- * @method \Codeception\Lib\Friend haveFriend($name, $actorClass = NULL)
+ * @method void pause()
  *
  * @SuppressWarnings(PHPMD)
- */
+*/
 class FunctionalTester extends \Codeception\Actor
 {
     use _generated\FunctionalTesterActions;
 
-
-    public function seeValidationError($message)
-    {
-        $this->see($message, '.help-block');
-    }
-
-    public function dontSeeValidationError($message)
-    {
-        $this->dontSee($message, '.help-block');
-    }
+   /**
+    * Define custom actions here
+    */
 }
