@@ -150,25 +150,6 @@ class ProgramaController extends Controller
 
     }
 
-    /**
-     * Displays a single Designacion model.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-  /*  public function actionVer($id)
-    {
-        $model = $this->findModel($id);
-        $searchModelDesignacion = new DesignacionSearch();
-        $dataProvDesignacion =  new ActiveDataProvider([
-          'query' => $model->getDesignaciones()
-        ]);
-        return $this->render('ver', [
-            'model' => $model,
-            'dataProvDesignacion' => $dataProvDesignacion,
-            'searchModelDesignacion' => $searchModelDesignacion
-        ]);
-    }*/
 
     public function actionAprobar($id){
         $programa = $this->findModel($id);

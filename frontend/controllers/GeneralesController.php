@@ -27,16 +27,7 @@ class GeneralesController extends Controller
                'only' => ['index', 'view','create', 'update', 'delete'],
                'rules' => [
                    [
-                       'actions' => ['index', 'view',],
-                       'allow' => true,
-                       'roles' => ['@'],
-                       'matchCallback' => function ($rule, $action) {
-                        return PermisosHelpers::requerirMinimoRol('Usuario')
-                        && PermisosHelpers::requerirEstado('Activo');
-                       }
-                   ],
-                    [
-                       'actions' => [ 'create', 'update', 'delete'],
+                       'actions' => ['index', 'view','create', 'update', 'delete'],
                        'allow' => true,
                        'roles' => ['@'],
                        'matchCallback' => function ($rule, $action) {
@@ -73,26 +64,6 @@ class GeneralesController extends Controller
 
     public function actionDeptos(){
       return $this->render('deptos/portal');
-    }
-
-    public function actionEditar($id)
-    {
-        if(PermisosHelpers::requerirDirector($id)){
-          $model = $this->findModel($id);
-          $searchModel = new GeneralesSearch();
-          $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-          if ($model->load(Yii::$app->request->post()) && $model->save()) {
-              return $this->redirect(['index', 'id' => $model->id]);
-          }
-
-          return $this->render('editar', [
-            'model' => $model,
-            'searchModel' => $searchModel
-          ]);
-        } else {
-            Yii::$app->session->setFlash('danger','Usted no puede editar este programa');
-            return $this->redirect(['index']);
-        }
     }
 
     /**

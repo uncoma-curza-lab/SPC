@@ -23,9 +23,10 @@ $estado_programa = Status::findOne(['=','id',$model->status_id]);
 
 
 $mostrar = //(isset($estado_programa) && ($estado_programa->value > EstadoHelpers::getValue('Borrador')))
-            (($estado_programa->descripcion == "Borrador" || $estado_programa->descripcion == "Departamento")
+            ( (PermisosHelpers::requerirSerDueno($model->id)) ||
+              ($estado_programa->descripcion == "Borrador" || $estado_programa->descripcion == "Departamento")
               && PermisosHelpers::requerirDirector($model->id))
-            || ($estado_programa->descripcion == "Profesor"
+            || ($estado_programa->descripcion == "En espera"
               && PermisosHelpers::requerirProfesorAdjunto($model->id))
             || ($estado_programa->descripcion == "Administración Académica"
               && PermisosHelpers::requerirRol('Adm_academica'))
@@ -43,23 +44,8 @@ $items = [
         'label'=>'<i class="fas fa-home"></i> Observaciones',
         'content'=>
                   $this->render('forms/_gridObservaciones',['model' => $model]),
-        'visible' =>  PermisosHelpers::requerirProfesorAdjunto($model->id)
-                      || PermisosHelpers::requerirDirector($model->id)
-                      || ($estado_programa->descripcion == "Administración Académica"
-                        && PermisosHelpers::requerirRol('Adm_academica'))
-                      || ($estado_programa->descripcion == "Secretaría Académica"
-                        && PermisosHelpers::requerirRol('Sec_academica')),
+        'visible' =>  $mostrar,
     ],
-  /*  [
-        'label' => 'Designación de Cargos',
-        'content' => $this->render('forms/_gridDesignaciones',['model' => $model,]),
-        'visible' =>  PermisosHelpers::requerirProfesorAdjunto($model->id)
-                      || PermisosHelpers::requerirDirector($model->id)
-                      || ($estado_programa->descripcion == "Administración Académica"
-                        && PermisosHelpers::requerirRol('Adm_academica'))
-                      || ($estado_programa->descripcion == "Secretaría Académica"
-                        && PermisosHelpers::requerirRol('Sec_academica')),
-    ],*/
 
 ]; ?>
 <h3>Programa de <?= Html::encode($model->getAsignatura()->one()->nomenclatura)?> <br></h3>

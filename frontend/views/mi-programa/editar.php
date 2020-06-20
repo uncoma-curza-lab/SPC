@@ -31,7 +31,6 @@ if($estadoPrograma->descripcion == "Borrador"){
                max-height: 320px;  overflow-x: hidden;',
       ],
       'visible' => false
-
   ]);
   array_push($items,[
       'label' => 'Observaciones',

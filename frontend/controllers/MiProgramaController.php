@@ -112,21 +112,6 @@ class MiProgramaController extends Controller
         ]);
     }
 
-
-
-    /**
-     * Displays a single Programa model.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionView($id)
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
-    }
-
     public function actionVer($id) {
       $model = $this->findModel($id);
 
@@ -135,10 +120,9 @@ class MiProgramaController extends Controller
           return $this->redirect(['observacion/create', 'id'=>$model->id]);
       }
 
-      return $this->render('info',['model' => $model]);
+      return $this->render('/programa/info',['model' => $model]);
 
     }
-    
 
     /**
      * Displays a single Designacion model.
@@ -160,6 +144,11 @@ class MiProgramaController extends Controller
         ]);
     }*/
 
+
+    /**
+     * @Deprecated
+     * Verificar qué funcionalidades debe tener
+     */
     public function actionAprobar($id){
         $programa = $this->findModel($id);
         $programa->scenario = 'carrerap';
@@ -206,82 +195,8 @@ class MiProgramaController extends Controller
         }
     }
 
-    public function actionRechazar($id){
-        $programa = $this->findModel($id);
-        $programa->scenario = 'carrerap';
-        $userId = \Yii::$app->user->identity->id;
-        $estadoActual = Status::findOne($programa->status_id);
-
-        if ($estadoActual->descripcion == "Borrador" || $estadoActual->descripcion == "Profesor"){
-          Yii::error("No pudo rechazar el programa ID:".$id." con estado:".$estadoActual->descripcion,'estado-programa');
-          Yii::$app->session->setFlash('danger','Hubo un problema al intentar rechazar el programa');
-          return $this->redirect(['index']);
-        }
-        if(PermisosHelpers::requerirDirector($id) && $estadoActual->descripcion == "Departamento"){
-            if ($programa->setEstado("Borrador") && $programa->save()){
-              Yii::info("Cambió el estado de Departamento -> Borrador ID:".$id,'estado-programa');
-              Yii::$app->session->setFlash('warning','Se rechazó el programa correctamente');
-              return $this->redirect(['index']);
-            } else {
-              Yii::$app->session->setFlash('danger','Hubo un problema al rechazar el programa');
-              return $this->redirect(['index']);
-            }
-        }
-
-        if((PermisosHelpers::requerirRol("Adm_academica") && $estadoActual->descripcion == "Administración Académica") ||
-          (PermisosHelpers::requerirRol("Sec_academica") && $estadoActual->descripcion == "Secretaría Académica")
-        ){
-          if($programa->bajarEstado() &&  $programa->save()){
-            Yii::info("Rechazó el programa".$id." con estado actual".$estadoActual->descripcion,'estado-programa');
-            Yii::$app->session->setFlash('warning','Se rechazó el programa correctamente');
-            return $this->redirect(['index']);
-          } else {
-            Yii::error("No pudo rechazar el programa ".$id." con estado actual".$estadoActual->descripcion,'estado-programa');
-            Yii::$app->session->setFlash('danger','Hubo un problema al rechazar el programa');
-            return $this->redirect(['index']);
-          }
-        }
-    }
-
-
     /**
-     * Creates a new Programa model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
-    public function actionCreate()
-    {
-        $model = new Programa();
-        $model->scenario = 'crear';
-        // se crea en estado borrador
-        $model->status_id = Status::find()->where(['=','descripcion','Borrador'])->one()->id;
-        //obtener el id del director
-        $userId = \Yii::$app->user->identity->id;
-        if (PermisosHelpers::requerirRol('Departamento')){
-          $depto = Departamento::find()->where(['=','director',$userId])->one();
-          if (isset($depto)){
-            //filtrar todas las asignaturas
-            $searchModel = new AsignaturaSearch();
-            $asignaturas = new ActiveDataProvider([
-              //'query' => Asignatura::find()->where(['=','departamento_id',$depto->id])->all()
-              'query' => $depto->getAsignaturas()
-            ]);
-            return $this->render('create', [
-                'model' => $model,
-                'asignaturas' => $asignaturas
-            ]);
-          } else {
-            //no puede crear programas
-          }
-        }
-
-        //$asignaturas =
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        }
-    }
-    /**
-    * Edición del Punto 1 del programa -  Fundamentación
+    * Fundamentación de un Programa de Cátedra
     * @param Integer $id del programa
     * @throws ForbiddenHttpException si no tiene permisos de modificar el programa
     */
@@ -401,6 +316,7 @@ class MiProgramaController extends Controller
       }
       throw new ForbiddenHttpException('No tiene permisos para actualizar este elemento');
     }
+    
     /**
     *  Edición de campo Contenido Plan de estudios
     *  @param integer $id del programa
@@ -439,6 +355,7 @@ class MiProgramaController extends Controller
       }
       throw new ForbiddenHttpException('No tiene permisos para actualizar este elemento');
     }
+
     /**
     *  Edición de campo Contenido analítico
     *  @param integer $id del programa
@@ -477,6 +394,7 @@ class MiProgramaController extends Controller
       }
       throw new ForbiddenHttpException('No tiene permisos para actualizar este elemento');
     }
+    
     /**
     *  Edición de campo Bibliografía (consulta y básica)
     *  @param integer $id del programa
@@ -516,7 +434,8 @@ class MiProgramaController extends Controller
         ]);
       }
       throw new ForbiddenHttpException('No tiene permisos para actualizar este elemento');
-    }
+    }  
+
     /**
     *  Edición de campo de propuesta metodológica
     *  @param integer $id del programa
@@ -555,6 +474,7 @@ class MiProgramaController extends Controller
       }
       throw new ForbiddenHttpException('No tiene permisos para actualizar este elemento');
     }
+
     /**
     *  Edición de campo de evaluación y acreditación
     *  @param integer $id del programa
@@ -593,6 +513,7 @@ class MiProgramaController extends Controller
       }
       throw new ForbiddenHttpException('No tiene permisos para actualizar este elemento');
     }
+
     /**
     *  Edición de campo de parcial, recueratorio y promoción
     *  @param integer $id del programa
@@ -631,6 +552,7 @@ class MiProgramaController extends Controller
       }
       throw new ForbiddenHttpException('No tiene permisos para actualizar este elemento');
     }
+
     /**
     *  Edición de campo de distribución horaria
     *  @param integer $id del programa
@@ -669,6 +591,7 @@ class MiProgramaController extends Controller
       }
       throw new ForbiddenHttpException('No tiene permisos para actualizar este elemento');
     }
+
     /**
     *  Edición de campo de cronograma tentativo
     *  @param integer $id del programa
@@ -738,6 +661,7 @@ class MiProgramaController extends Controller
       }
       throw new ForbiddenHttpException('No tiene permisos para actualizar este elemento');
     }
+
     /**
     *  Edición de campo de actividad extracurricular
     *  @param integer $id del programa
@@ -776,6 +700,7 @@ class MiProgramaController extends Controller
       throw new ForbiddenHttpException('No tiene permisos para actualizar este elemento');
 
     }
+
     /**
     *  Copiar un programa
     *  @param integer $id del programa
@@ -819,6 +744,7 @@ class MiProgramaController extends Controller
       throw new ForbiddenHttpException('No tiene permisos realizar esta operación');
 
     }
+
     /**
     *  Edición de campo de actividad extracurricular
     *  @param integer $id del programa
@@ -862,6 +788,11 @@ class MiProgramaController extends Controller
       throw new ForbiddenHttpException('No tiene permisos para actualizar este elemento');
     }
 
+    /**
+     * This function add new "Programa Catedra"
+     * for users Profesor
+     * Redirect to mi-programa/anadir
+     */
     public function actionAnadir()
     {
           $model = new Programa();
@@ -891,6 +822,7 @@ class MiProgramaController extends Controller
           ]);
 
     }
+
     public function actionAsignar($id)
     {
         $model = $this->findModel($id);
@@ -1048,6 +980,7 @@ class MiProgramaController extends Controller
 
       //return $this->renderPartial('mpdf');
     }
+
     protected function mensajeGuardadoExito($model){
       Yii::info("Guardando el programa: ".$model->id,'miprograma');
     }
