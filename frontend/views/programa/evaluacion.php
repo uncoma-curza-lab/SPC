@@ -96,7 +96,7 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
             [
               'class' => 'yii\grid\ActionColumn',
               //'template' => $show_this_nav? '{view} {update} {delete} {pdf} {status}':'{view} {status} {pdf}',
-              'template' => $show_this_nav? '{editar} {aprobar} {rechazar} {pdf} {ver} ':' {pdf}',
+              'template' => $show_this_nav? '{aprobar} {rechazar} {pdf} {ver} ':' {pdf}',
               'buttons' => [
                 'pdf' => function ($url,$model) {
                     return Html::a(
@@ -155,46 +155,7 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
                         );
                     }
                 },
-                'asignar' => function ($url,$model) {
-
-                  if ((Status::findOne($model->status_id)->descripcion == "Borrador"
-                    && PermisosHelpers::requerirRol('Departamento')
-                     && PermisosHelpers::requerirDirector($model->id))
-                    || PermisosHelpers::requerirMinimoRol('Admin'))
-                  {
-                    return Html::a(
-                      '<span style="padding:5px; font-size:20px;" class="glyphicon glyphicon-user"></span>',
-                      ['designacion/asignar','id' => $model->id],
-                      [
-                          'title' => Yii::t('yii', 'Asignar cargo'),
-                      ]
-                    );
-                  }
-                },
-                'cargar' => function ($url,$model) {
-                  if ((Status::findOne($model->status_id)->descripcion == "Profesor"
-                    && PermisosHelpers::requerirRol('Profesor'))
-                    || PermisosHelpers::requerirMinimoRol('Admin'))
-                  {
-                    return Html::a(
-                      '<span style="padding:5px; font-size:20px;" class="glyphicon glyphicon-pencil"></span>',
-                      ['cargar','id' => $model->id]
-                    );
-                  }
-                },
-                'editar' => function ($url,$model) {
-                  if (/*(Status::findOne($model->status_id)->descripcion == "Borrador"
-                      && PermisosHelpers::requerirDirector($model->id) && PermisosHelpers::existeProfAdjunto($model->id))
-                      || (Status::findOne($model->status_id)->descripcion == "Departamento"
-                        && PermisosHelpers::requerirRol('Departamento') && PermisosHelpers::requerirDirector($model->id))
-                      ||*/ (PermisosHelpers::requerirMinimoRol('Admin')))
-                  {
-                    return Html::a(
-                      '<span style="padding:5px; font-size:20px;" class="glyphicon glyphicon-pencil"></span>',
-                      ['mi-programa/cargar','id' => $model->id]
-                    );
-                  }
-                },
+  
                 'ver' => function ($url,$model) {
                     return Html::a(
                       '<span style="padding:5px; font-size:20px; color:	#0CB7F2" class="glyphicon glyphicon-comment"></span>',
@@ -203,32 +164,6 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
                         [
                             'title' => Yii::t('yii', 'Observaciones'),
                         ]);
-                },
-                'view' => function ($url,$model) {
-                    return Html::a(
-                        '<span style="padding:5px; font-size:20px;" class="glyphicon glyphicon-eye-open"></span>',
-                        $url,
-                        [
-                            'title' => Yii::t('yii', 'Eliminar'),
-                        ]
-                      );
-                },
-
-                'delete' => function ($url,$model) {
-                    $userid  = Yii::$app->user->identity->id;
-                    if ((Status::findOne($model->status_id)->descripcion == "Borrador" && $model->created_by == $userid) || PermisosHelpers::requerirMinimoRol('Admin'))
-                    {
-                      return Html::a(
-                        '<span style="padding:5px; font-size:20px;" class="glyphicon glyphicon-trash"></span>',
-                        $url,
-                        [
-                            'title' => Yii::t('yii', 'Eliminar'),
-                            'data-confirm' => Yii::t('yii', '¿Quiere eliminar el programa?'),
-                            'data-method' => 'post',
-                        ]
-                      );
-                    }
-
                 },
               ]
             ],

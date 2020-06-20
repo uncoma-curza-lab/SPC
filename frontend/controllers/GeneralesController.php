@@ -48,7 +48,7 @@ class GeneralesController extends Controller
     }
 
     /**
-     * Lists all Generos models.
+     * Listado de todos los programas publicados y en circulación
      * @return mixed
      */
     public function actionIndex()
@@ -62,22 +62,11 @@ class GeneralesController extends Controller
         ]);
     }
 
-    public function actionDeptos(){
-      return $this->render('deptos/portal');
-    }
-
     /**
-     * Displays a single Generos model.
+     * Se reemplaza la visualización de programas.
+     * Puede que esta funcion ya no se utilice
      * @param integer $id
-     * @return mixed
      */
-    public function actionView($id)
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
-    }
-
     public function actionVer($id) {
       $model = $this->findModel($id);
       if(Yii::$app->request->post('submit') == 'observacion' &&
@@ -87,7 +76,11 @@ class GeneralesController extends Controller
       return $this->render('info',['model' => $model]);
     }
 
-
+    /**
+     * Permite a un director solicitar el programa
+     * Esto se hace ya que no es posible saber qué asignaturas evalua cada departamento
+     * @Update se debería usar la ordenanza de estructura departamental, se consiguió la misma Julio de 2020
+     */
     public function actionPedir($id){
       $model = $this->findModel($id);
       $model->scenario = 'pedir';
@@ -127,62 +120,11 @@ class GeneralesController extends Controller
       }
     }
 
-
     /**
-     * Creates a new Generos model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
-    public function actionCreate()
-    {
-        $model = new Generos();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
-        }
-    }
-
-    /**
-     * Updates an existing Generos model.
-     * If update is successful, the browser will be redirected to the 'view' page.
+     * Busca un programa
+     * Si no lo encuentra, entonces lo emite una excepción.
      * @param integer $id
-     * @return mixed
-     */
-    public function actionUpdate($id)
-    {
-        $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
-        }
-    }
-
-    /**
-     * Deletes an existing Generos model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
-    }
-
-    /**
-     * Finds the Generos model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return Generos the loaded model
+     * @return Programa the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)

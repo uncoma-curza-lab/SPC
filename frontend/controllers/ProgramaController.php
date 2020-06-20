@@ -48,7 +48,7 @@ class ProgramaController extends Controller
                  ],*/
                  'rules' => [
                      [
-                         'actions' => ['index', 'view','editar','export-pdf'],
+                         'actions' => ['export-pdf'],
                          'allow' => true,
                          'roles' => ['@'],
                          'matchCallback' => function ($rule, $action) {
@@ -59,7 +59,7 @@ class ProgramaController extends Controller
 
                      [
                           'actions' => [
-                            'create','update','delete','anadir', 'ver',
+                            'anadir', 'ver',
                             'aprobar', 'rechazar', 'evaluacion'
                           ],
                           'allow' => true,
@@ -100,20 +100,6 @@ class ProgramaController extends Controller
      * Lists all Programa models.
      * @return mixed
      */
-    public function actionIndex()
-    {
-        $searchModel = new ProgramaSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-    }
-    /**
-     * Lists all Programa models.
-     * @return mixed
-     */
     public function actionEvaluacion()
     {
         $searchModel = new ProgramaEvaluacionSearch();
@@ -122,20 +108,6 @@ class ProgramaController extends Controller
         return $this->render('evaluacion', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-        ]);
-    }
-
-
-    /**
-     * Displays a single Programa model.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionView($id)
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
         ]);
     }
 
@@ -199,10 +171,10 @@ class ProgramaController extends Controller
             Yii::$app->session->setFlash('danger','Hubo un problema al intentar aprobar el programa');
             return $this->redirect(['evaluacion']);
 
-//            throw new NotFoundHttpException("Ocurrió un error");
           }
         }
     }
+    
     public function actionRechazar($id){
         $programa = $this->findModel($id);
         $programa->scenario = 'carrerap';
@@ -251,80 +223,6 @@ class ProgramaController extends Controller
         }
     }
 
-
-    /**
-     * Creates a new Programa model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
-    public function actionCreate()
-    {
-        $model = new Programa();
-        $model->scenario = 'crear';
-        // se crea en estado borrador
-        $model->status_id = Status::find()->where(['=','descripcion','Borrador'])->one()->id;
-        //obtener el id del director
-        $userId = \Yii::$app->user->identity->id;
-        if (PermisosHelpers::requerirRol('Departamento')){
-          $depto = Departamento::find()->where(['=','director',$userId])->one();
-          if (isset($depto)){
-            //filtrar todas las asignaturas
-            $searchModel = new AsignaturaSearch();
-            $asignaturas = new ActiveDataProvider([
-              //'query' => Asignatura::find()->where(['=','departamento_id',$depto->id])->all()
-              'query' => $depto->getAsignaturas()
-            ]);
-            return $this->render('create', [
-                'model' => $model,
-                'asignaturas' => $asignaturas
-            ]);
-          } else {
-            //no puede crear programas
-          }
-        }
-
-        //$asignaturas =
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        }
-    }
-
-    public function actionEditar($id)
-    {
-        if(PermisosHelpers::requerirDirector($id)){
-          $model = $this->findModel($id);
-          $searchModel = new ProgramaSearch();
-          $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-          if ($model->load(Yii::$app->request->post()) && $model->save()) {
-              return $this->redirect(['index', 'id' => $model->id]);
-          }
-
-          return $this->render('editar', [
-            'model' => $model,
-            'searchModel' => $searchModel
-          ]);
-        } else {
-            Yii::$app->session->setFlash('danger','Usted no puede editar este programa');
-            return $this->redirect(['index']);
-        }
-    }
-
-    /**
-     * Deletes an existing Programa model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionDelete($id)
-    {
-        $model = $this->findModel($id);
-
-        $model->delete();
-
-        return $this->redirect(['index']);
-    }
-
     /**
      * Finds the Programa model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
@@ -369,18 +267,16 @@ class ProgramaController extends Controller
     public function actionExportPdf($id){
       $model = $this->findModel($id);
       $mpdf = new Mpdf\Mpdf(['utf-8','A4','tempDir' => __DIR__ . '/tmp']);
+      //cargar style
       $stylesheet = file_get_contents('css/estilo-pdf.css');
-      //$header = 'Document header';
-      //$html   = 'Your document content goes here';
-
-      //$mpdf = new Mpdf('utf-8', 'A4', 0, '', 12, 12, 25, 15, 12, 12);
-      //$mpdf->SetHTMLHeader($header);
       $mpdf->WriteHTML($stylesheet,\Mpdf\HTMLParserMode::HEADER_CSS);
+      //portada
       $mpdf->WriteHTML($this->renderPartial('portada',['model'=>$model]));
       $mpdf->addPage();
+      //paginacion 
       $footer =  '<span style="font-size:12px; !important"> Página {PAGENO} de {nb}</span>';
       $mpdf->SetHTMLFooter($footer);
-
+      //paginas siguientes
       $mpdf->WriteHTML($this->renderPartial('paginas',['model'=>$model]));
       $mpdf->Output();
     }
