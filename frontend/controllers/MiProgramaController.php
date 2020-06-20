@@ -54,11 +54,9 @@ class MiProgramaController extends Controller
                           && PermisosHelpers::requerirEstado('Activo');
                          }
                      ],
-
                      [
                           'actions' => [
-                            'create','update','delete','anadir', 'ver',
-                            'aprobar', 'rechazar','usuarios','lcrear',
+                            'delete','anadir', 'ver','aprobar', 'rechazar',
                             'fundamentacion','asignar', 'copy',
                             'objetivo-plan', 'contenido-analitico',
                             'contenido-plan', 'eval-acred', 'propuesta-metodologica',
@@ -73,7 +71,6 @@ class MiProgramaController extends Controller
                               && PermisosHelpers::requerirEstado('Activo');
                           }
                      ],
-
                  ],
              ],
             'verbs' => [

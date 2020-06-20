@@ -69,22 +69,7 @@ class ProgramaController extends Controller
                               && PermisosHelpers::requerirEstado('Activo');
                           }
                      ],
-                     [
-                          'actions' => [
-                            'fundamentacion',
-                            'objetivo-plan', 'contenido-analitico',
-                            'contenido-plan', 'eval-acred', 'propuesta-metodologica',
-                            'parcial-rec-promo', 'dist-horaria', 'crono-tentativo',
-                            'actividad-extracurricular', 'cargar'
-                          ],
-                          'allow' => true,
-                          'roles' => ['@'],
-                          'matchCallback' => function($rule,$action) {
-                            return PermisosHelpers::requerirRol('Profesor')
-                              && PermisosHelpers::requerirEstado('Activo');
-                          },
-
-                     ],
+                   
                  ],
              ],
             'verbs' => [
