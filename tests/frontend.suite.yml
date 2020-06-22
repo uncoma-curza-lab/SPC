@@ -1,0 +1,4 @@
+actor: FrontendTester
+modules:
+    enabled:
+        - \Helper\Frontend

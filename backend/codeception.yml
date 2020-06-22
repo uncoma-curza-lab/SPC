@@ -5,11 +5,11 @@ paths:
     output: tests/_output
     data: tests/_data
     support: tests/_support
+bootstrap: _bootstrap.php
 settings:
-    bootstrap: _bootstrap.php
     colors: true
     memory_limit: 1024M
 modules:
     config:
         Yii2:
-            configFile: 'config/test.php'
+            configFile: 'config/codeception-local.php'
