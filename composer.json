@@ -27,12 +27,18 @@
         "yiisoft/yii2-debug": "^2.0",
         "2amigos/yii2-tinymce-widget": "~1.1",
         "yiisoft/yii2-elasticsearch": "^2.0"
+       
     },
     "require-dev": {
         "yiisoft/yii2-gii": "~2.0.0",
         "yiisoft/yii2-faker": "~2.0.0",
-        "codeception/base": "^2.2.3",
-        "codeception/verify": "~0.3.1"
+        "codeception/codeception": "^4.0",
+        "codeception/module-asserts": "^1.0",
+        "codeception/module-yii2": "^1.0",
+        "codeception/module-filesystem": "^1.0",
+        "codeception/verify": "~0.5.0 || ~1.1.0",
+        "guzzlehttp/guzzle": ">=4.1.4 <7.0",
+        "codeception/module-phpbrowser": "^1.0"
     },
     "config": {
         "process-timeout": 1800,
