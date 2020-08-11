@@ -83,7 +83,11 @@ class ChangeEmailForm extends \yii\db\ActiveRecord
     public function changeEmail() {
         $user = $this->_user;
         $user->setEmail($this->email);
-        $user->estado_id = ValorHelpers::getEstadoId('VerificarEmail');
+        $user->estado_id = ValorHelpers::getEstadoId('Activo');
+        $user->verification_email_token = null;
+        return $user->save(false) ? $user : null;
+
+        /* SE COMENTA PARA SOLUCIONAR PROBLEMATICA DE EMAILS TARDE
         $setMail = $user->save(false);
         if($setMail){
             Yii::$app
@@ -97,7 +101,7 @@ class ChangeEmailForm extends \yii\db\ActiveRecord
                 ->setSubject('Verificación de correo de ' . Yii::$app->name)
                 ->send();
         }
-        return $setMail;
+        return $setMail;*/
     }
    
 }
