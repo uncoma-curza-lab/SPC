@@ -9,19 +9,7 @@ return [
             'password' => getenv('DB_PASSWORD') ? getenv('DB_PASSWORD') : 'curza' ,
             'charset' => 'utf8',
         ],
-        'mailer' => [
-            'class' => 'yii\swiftmailer\Mailer',
-            'viewPath' => '@common/mail',
-            //'useFileTransport' => true,
-            'transport' => [
-                'class' => 'Swift_SmtpTransport',
-                'host' => getenv('SMTP_HOST'),
-                'username' => getenv('SMTP_USER'),
-                'password' => getenv('SMTP_PASSWORD'),
-                'port' => getenv('SMTP_PORT', 25),
-                'encryption' => getenv('SMTP_ENCRYPTION', null),
-            ],
-        ],
+        
 
     ],
 ];
