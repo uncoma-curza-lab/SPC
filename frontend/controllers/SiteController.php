@@ -321,7 +321,7 @@ class SiteController extends Controller
         $model = new ChangeEmailForm($id);
         if ($model->load(\Yii::$app->request->post()) && $model->validate() && $model->changeEmail()) {
             \Yii::$app->session->setFlash('success', '<p>¡El Email ha sido cambiado! </p><p>Debe verificar el mismo para continuar</p>');
-            
+            return $this->redirect(['index']);
         }
         return $this->render('changeEmail', [
             'model' => $model,
