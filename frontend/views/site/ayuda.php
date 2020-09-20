@@ -12,13 +12,20 @@ var firstScriptTag = document.getElementsByTagName("script")[0];
 firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
 var player;
+var player2;
 function onYouTubePlayerAPIReady() {
   player = new YT.Player("ytplayer", {
     height: "360",
     width: "80%",
     videoId: "nX9PFjBi18s"
   });
-}';
+  player2 = new YT.Player("ytplayer2", {
+    height: "360",
+    width: "80%",
+    videoId: "7DsjDnw-b7s"
+  });
+}
+';
 $this->registerJs($script,View::POS_END);
 ?>
 
@@ -46,7 +53,10 @@ $this->registerJs($script,View::POS_END);
         [
             'label' => 'Videotutorial para profesores',
             'content' => '<p>Si es profesor y necesita cargar sus programas de cátedra, el siguiente videotutorial ayudará a solventar sus dudas.</p>
+            <h3> Parte 1 </h3>
             <div id="ytplayer"></div>
+            <h3> Parte 2 </h3>
+            <div id="ytplayer2"></div>
             <p>Si aún viendo el video sigue teniendo preguntas, escríba al siguiente correo electrónico:</p>
             <p>nestor.murphy (arroba) curza.uncoma.edu.ar</p>',
             'contentOptions' => [],

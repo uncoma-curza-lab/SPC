@@ -24,5 +24,6 @@ return [
                 // configure more hosts if you have a cluster
             ],
         ],
+       
     ],
 ];

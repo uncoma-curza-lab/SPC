@@ -10,7 +10,7 @@ use common\models\search\ProgramaSearch;
 use backend\models\AsignaturaSearch;
 use backend\models\Designacion;
 use backend\models\DesignacionSearch;
-
+use backend\models\SetStatusByYearForm;
 use backend\models\Status;
 use common\models\PermisosHelpers;
 use common\models\Departamento;
@@ -33,7 +33,7 @@ class ProgramaController extends Controller
                  'class' => \yii\filters\AccessControl::className(),
                  'only' => [
                    'index', 'view', 'create', 'update','delete',
-                   'update-departamento'
+                   'update-departamento', 'set-status-by-year'
               /*     'fundamentacion', 'objetivo-plan', 'contenido-analitico',
                    'contenido-plan', 'eval-acred', 'propuesta-metodologica',
                    'parcial-rec-promo', 'dist-horaria', 'crono-tentativo',
@@ -41,11 +41,11 @@ class ProgramaController extends Controller
                  ],
                  'rules' => [
                      [
-                         'actions' => ['index', 'view'],
+                         'actions' => ['index', 'view',  'set-status-by-year'],
                          'allow' => true,
                          'roles' => ['@'],
                          'matchCallback' => function ($rule, $action) {
-                          return PermisosHelpers::requerirMinimoRol('Usuario')
+                          return PermisosHelpers::requerirMinimoRol('SuperUsuario')
                           && PermisosHelpers::requerirEstado('Activo');
                          }
                      ],
@@ -600,47 +600,30 @@ class ProgramaController extends Controller
 
     }
 
-
-  /*  public function actionEnviarProfesor($id)
+    public function actionSetStatusByYear()
     {
-      $model = $this->findModel($id);
-      $model->scenario = 'enviarProfesor';
-      $nuevo_status = Status::find()->where(['=','descripcion','Profesor'])->one();
-      $model->status_id = $nuevo_status->id;
-      if ($model->save()) {
-        //enviar al profesor en estado
-        return $this->redirect(['index']);
-      }
-    }
+      $model = new SetStatusByYearForm();
 
-    public function actionAsignar($id) {
-      if(Yii::$app->request->post('submit') == 'designacion' &&
-        $model->load(Yii::$app->request->post()) && $model->save()) {
-          return $this->redirect(['anadir']);
-      } else {
-        $asignaturaId = $id;
-        $asignatura = Asignatura::findOne($asignaturaId);
-        if(isset($asignatura))
-        {
-          $model = new Programa();
-          $model->scenario = 'crear';
-          // se crea en estado borrador
-          $model->status_id = Status::find()->where(['=','descripcion','Borrador'])->one()->id;
-          $model->asignatura_id = $asignaturaId;
-          $designacion = new Designacion();
-
-          if ($model->save()){
-            $designacion->programa_id = $model->id;
-            return $this->render('asignar', [
-                'model' => $model,
-                'designacion' => $designacion,
-            ]);
-          }
+      if ($model->load(Yii::$app->request->post())) {
+        $programas = Programa::find()->where(['=','status_id',$model->current_status])
+          ->andWhere(['=','year',$model->year])->all();
+        foreach ($programas as $programa) {
+          $programa->status_id = $model->set_status;
+          $programa->update();
         }
       }
+      /*if ($estado->load(Yii::$app->request->post())) {
+        $superUserRol = Rol::find()->where(['rol_nombre' => "SuperUsuario"])->one();
+        $allUsers = User::find()->where(['<>','rol_id' ,$superUserRol->id])->all(); 
+        foreach ($allUsers as $user) {
+            $user->estado_id = $estado->estado;
+            $user->save(false);
+        }
+      } */
+    
+      return $this->render('set_status_by_year',['model' => $model ]);
 
-    }*/
-
+    }
 
     /**
      * Deletes an existing Programa model.

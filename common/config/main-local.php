@@ -4,15 +4,16 @@ return [
     'components' => [
         'db' => [
             'class' => 'yii\db\Connection',
-            'dsn' => getenv('CONNECT_DB')? getenv('CONNECT_DB') : 'mysql:host=localhost;dbname=aulasyprogramas',
+            'dsn' => getenv('CONNECT_DB')? getenv('CONNECT_DB') : 'mysql:host=mysql;dbname=curza',
             'username' => getenv('DB_USER') ? getenv('DB_USER') : 'curza',
             'password' => getenv('DB_PASSWORD') ? getenv('DB_PASSWORD') : 'curza' ,
             'charset' => 'utf8',
         ],
+        
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
             'viewPath' => '@common/mail',
-            'useFileTransport' => true,
+            //'useFileTransport' => true,
             'transport' => [
                 'class' => 'Swift_SmtpTransport',
                 'host' => getenv('SMTP_HOST'),
@@ -22,6 +23,5 @@ return [
                 'encryption' => getenv('SMTP_ENCRYPTION', null),
             ],
         ],
-
     ],
 ];
