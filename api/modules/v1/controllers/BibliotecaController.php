@@ -84,6 +84,18 @@ class BibliotecaController extends ActiveController
         ]);
         return $activeData;
     }
+    public function actionGetId($id)
+    {
+        $model = $this->findModel($id);
+
+        $activeData = new ActiveDataProvider([
+            //'query' => Plan::find()->andFilterWhere(['=','id',$_GET['dpto']]),
+            'query' => $model, 
+            'pagination' => false,
+        ]);
+
+        return $model;
+    }
 
     /*
     * Comienzan las funciones para crear y exportar un PDF
@@ -126,7 +138,15 @@ class BibliotecaController extends ActiveController
     protected function findModel($id)
     {
         if (is_numeric($id)) {
-            $model = Programa::find()->where('id = :id', [':id' => $id])->one();
+            $biblioteca = Status::find()->where(['=', 'descripcion', 'Biblioteca'])->one();
+            if (!$biblioteca) {
+                throw new NotFoundHttpException('Hubo un problema al buscar el programa.');
+            }
+
+            $bibliotecaId = $biblioteca->id;
+            $model = Programa::find()->where('id = :id', [':id' => $id])
+                                     ->andFilterWhere(['=','status_id',$bibliotecaId])
+                                     ->one();
             if ($model) {
                 return $model;
             }
