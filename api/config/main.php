@@ -90,6 +90,17 @@ return [
                     //    '{dpto}' => '<dpto:\\w+>'
                     //],
                 ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => [
+                        'v1/biblioteca' => 'v1/biblioteca'
+                    ],
+
+                    'extraPatterns' => [
+                        'GET export/<id:\d+>' => 'export-pdf',
+
+                    ],
+                ],
                 //'GET asign/buscar/<id:\d+>' => 'asignatura/buscar',
                 //'GET asign/index' => 'asignatura/index',
                 /*[
