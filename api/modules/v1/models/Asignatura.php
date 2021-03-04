@@ -5,6 +5,7 @@ use yii\web\Linkable;
 use yii\web\Link;
 use Yii;
 use api\modules\v1\models\Departamento;
+use common\models\Status;
 use common\models\Correlativa;
 use yii\helpers\Url;
 
@@ -114,13 +115,35 @@ class Asignatura extends \yii\db\ActiveRecord implements Linkable
             'requisitos' => 'Requisitos',
         ];
     }
-    public function getLinks(){
-        return [
-            Link::REL_SELF => Url::to(['asignatura/'.$this->id], true),
+    public function getLinks()
+    {
+        $withExports = false;
+        if (isset($_GET['withExport']) && ( $_GET['withExport'] === "1" || $_GET['withExport'] === 1 )) {
+            $bibliotecaStatus = Status::find()->where(['=', 'descripcion', 'Biblioteca'])->one();
+            if ($bibliotecaStatus) {
+                $bibliotecaId = $bibliotecaStatus->id;
+            }
+            $programas = $this->getProgramas()->andFilterWhere(['=', 'status_id', $bibliotecaId])->all();
+            $exports = [];
+            foreach($programas as $programa) {
+                
+                $exports[$programa->year][] = [
+                    $programa->asignatura->plan->ordenanza => Url::to(['biblioteca/export/' .  $programa->id], true) 
+                ];
+            }
+            $withExports = true;
+        }
+
+        $responseLinks = [
+            Link::REL_SELF => Url::to(['asignatura/' . $this->id], true),
             //'edit' => Url::to(['user/view', 'id' => $this->id], true),
             //'planes' => Url::to(['planes/carrera','id' => $this->id], true),
             //'index' => Url::to(['dpto'], true),
         ];    
+        if ($withExports) {
+            $responseLinks['exports'] = $exports;
+        }
+        return $responseLinks;
     }
     /**
     * @return \yii\db\ActiveQuery
