@@ -95,6 +95,10 @@ return [
                     'controller' => [
                         'v1/biblioteca' => 'v1/biblioteca'
                     ],
+                    'patterns' => [
+                        'GET' => 'index',
+                        'GET,HEAD {id}' => 'get-id',
+                    ],
 
                     'extraPatterns' => [
                         'GET export/<id:\d+>' => 'export-pdf',
