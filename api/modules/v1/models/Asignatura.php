@@ -108,9 +108,9 @@ class Asignatura extends \yii\db\ActiveRecord implements Linkable
             'nomenclatura' => 'Nomenclatura',
             'plan_id' => 'Plan ID',
             'curso' => 'Curso',
-		        'cuatrimestre' => 'Cuatrimestre',
-		        'carga_horaria_sem' => 'Carga Horaria Sem',
-		        'carga_horaria_cuatr' => 'Carga Horaria Cuatr',
+            'cuatrimestre' => 'Cuatrimestre',
+            'carga_horaria_sem' => 'Carga Horaria Sem',
+            'carga_horaria_cuatr' => 'Carga Horaria Cuatr',
             'departamento_id' => 'Departamento ID',
             'requisitos' => 'Requisitos',
         ];
@@ -125,12 +125,12 @@ class Asignatura extends \yii\db\ActiveRecord implements Linkable
             }
             $programas = $this->getProgramas()->andFilterWhere(['=', 'status_id', $bibliotecaId])->all();
             $exports = [];
+            $request = \Yii::$app->request;
+            
             foreach($programas as $programa) {
-                
-                $exports[$programa->year][] = [
-                    $programa->asignatura->plan->id => Url::to(['biblioteca/download/' .  $programa->id], true) 
-                ];
+                $exports[$programa->year] = Url::to(['biblioteca/download/' .  $programa->id], true);
             }
+            //if (strpos($request->pathInfo,'plan') !== false) {
             $withExports = true;
         }
 
