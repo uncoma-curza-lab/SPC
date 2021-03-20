@@ -128,7 +128,7 @@ class Asignatura extends \yii\db\ActiveRecord implements Linkable
             foreach($programas as $programa) {
                 
                 $exports[$programa->year][] = [
-                    $programa->asignatura->plan->ordenanza => Url::to(['biblioteca/export/' .  $programa->id], true) 
+                    $programa->asignatura->plan->id => Url::to(['biblioteca/download/' .  $programa->id], true) 
                 ];
             }
             $withExports = true;

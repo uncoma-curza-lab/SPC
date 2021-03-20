@@ -8,7 +8,7 @@ $designaciones = $model->getDesignaciones()->all();
 <head>
   <meta charset="utf-8">
   <title>Programa de <?= Html::encode($asignatura->nomenclatura) ?></title>
-  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+  <link href="/css/roboto.css" rel="stylesheet">
 
   <style type="text/css">
     body{

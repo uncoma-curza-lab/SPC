@@ -62,10 +62,11 @@ class Plan extends \yii\db\ActiveRecord implements Linkable
         ];
     }
     public function getLinks(){
+        $asignaturas = Url::to(['asignatura/plan','id' => $this->id], true) . '&withExport=1';
         return [
             Link::REL_SELF => Url::to(['plan/'.$this->id], true),
             //'edit' => Url::to(['user/view', 'id' => $this->id], true),
-            'asignaturas' => Url::to(['asignatura/plan','id' => $this->id], true),
+            'asignaturas' => $asignaturas,
             //'index' => Url::to(['dpto'], true),
         ];    
     }

@@ -128,6 +128,34 @@ class BibliotecaController extends ActiveController
         return $response;
     }
 
+    public function actionDownloadPdf($id)
+    {
+        $model = $this->findModel($id);
+        $response = [];
+        if (!file_exists('public/programas/' . $id . '.pdf')) {
+            $mpdf = new Mpdf\Mpdf(['utf-8', 'A4', 'tempDir' => __DIR__ . '/tmp']);
+            $stylesheet = file_get_contents('../../frontend/web/css/estilo-pdf.css');
+            //$header = 'Document header';
+            //$html   = 'Your document content goes here';
+
+            //$mpdf = new Mpdf('utf-8', 'A4', 0, '', 12, 12, 25, 15, 12, 12);
+            //$mpdf->SetHTMLHeader($header);
+            $mpdf->WriteHTML($stylesheet, \Mpdf\HTMLParserMode::HEADER_CSS);
+            $mpdf->WriteHTML($this->renderPartial('portada', ['model' => $model]));
+            $mpdf->addPage();
+            $footer =  '<span style="font-size:12px; !important"> Página {PAGENO} de {nb}</span>';
+            $mpdf->SetHTMLFooter($footer);
+
+            $mpdf->WriteHTML($this->renderPartial('paginas', ['model' => $model]));
+            $mpdf->Output('public/programas/' . $model->id . ".pdf", 'f');
+        }
+        //$response = [
+            //'file' => Url::to(['/public/programas/' . $id . '.pdf'], true),
+            //'status' => true
+        //];
+        return \Yii::$app->response->sendFile('public/programas/' . $model->id . ".pdf");
+    }
+
     /**
      * Finds the Programa model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
