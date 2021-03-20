@@ -1,27 +1,20 @@
 <?php
-
 return [
     'components' => [
         'db' => [
             'class' => 'yii\db\Connection',
-            'dsn' => getenv('CONNECT_DB')? getenv('CONNECT_DB') : 'mysql:host=mysql;dbname=curza',
-            'username' => getenv('DB_USER') ? getenv('DB_USER') : 'curza',
-            'password' => getenv('DB_PASSWORD') ? getenv('DB_PASSWORD') : 'curza' ,
+            'dsn' => 'mysql:host=mysql;dbname=curza',
+            'username' => 'curza',
+            'password' => 'curza',
             'charset' => 'utf8',
         ],
-        
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
             'viewPath' => '@common/mail',
-            //'useFileTransport' => true,
-            'transport' => [
-                'class' => 'Swift_SmtpTransport',
-                'host' => getenv('SMTP_HOST'),
-                'username' => getenv('SMTP_USER'),
-                'password' => getenv('SMTP_PASSWORD'),
-                'port' => getenv('SMTP_PORT', 25),
-                'encryption' => getenv('SMTP_ENCRYPTION', null),
-            ],
+            // send all mails to a file by default. You have to set
+            // 'useFileTransport' to false and configure a transport
+            // for the mailer to send real emails.
+            'useFileTransport' => true,
         ],
     ],
 ];

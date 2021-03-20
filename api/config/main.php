@@ -102,6 +102,7 @@ return [
 
                     'extraPatterns' => [
                         'GET export/<id:\d+>' => 'export-pdf',
+                        'GET download/<id:\d+>' => 'download-pdf',
 
                     ],
                 ],
