@@ -372,10 +372,10 @@ class ProgramaController extends Controller
         //if (PermisosHelpers::requerirRol('Profesor') &&
         //  ($estado->descripcion == "Profesor") && ($model->created_by == $userId)) {
         if (PermisosHelpers::requerirRol('Profesor') &&
-          ($estado->descripcion == "Profesor")) {
+          ($estado->descriptionIs(Status::EN_ESPERA))) {
             return true;
         } else if (PermisosHelpers::requerirDirector($model->id) &&
-          ($estado->descripcion == "Borrador")) {
+          ($estado->descriptionIs(Status::BORRADOR))) {
               return true;
         }
         if(PermisosHelpers::requerirMinimoRol('Admin')){
