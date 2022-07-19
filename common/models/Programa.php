@@ -429,7 +429,7 @@ class Programa extends \yii\db\ActiveRecord
     public function subirEstado():bool{
       $estadoActual = Status::findOne($this->status_id);
       if($estadoActual){
-        $estadoSiguiente = Status::find()->where(['>','value',$estadoActual->value])->orderBy('value')->one();
+        $estadoSiguiente = $estadoActual->nextStatus();
         if ($estadoSiguiente) {
             $this->status_id = $estadoSiguiente->id;
             return true;
@@ -445,7 +445,7 @@ class Programa extends \yii\db\ActiveRecord
     public function bajarEstado():bool{
       $estadoActual = Status::findOne($this->status_id);
       if($estadoActual){
-        $estadoAnterior = Status::find()->where(['<','value',$estadoActual->value])->orderBy('value DESC')->one();
+        $estadoAnterior = $estadoActual->prevStatus();
         if ($estadoAnterior) {
             $this->status_id = $estadoAnterior->id;
             return true;
