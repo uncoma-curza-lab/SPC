@@ -191,9 +191,9 @@ class MiProgramaController extends Controller
           Yii::$app->session->setFlash('danger','Debe pedir el programa antes de seguir');
           return $this->redirect(['index']);
        }
-       if( (PermisosHelpers::requerirDirector($id) && ($estadoActual->descripcion == "Departamento")) ||
-          (PermisosHelpers::requerirRol("Adm_academica") && $estadoActual->descripcion == "Administración Académica") ||
-          (PermisosHelpers::requerirRol("Sec_academica") && $estadoActual->descripcion == "Secretaría Académica")
+       if( (PermisosHelpers::requerirDirector($id) && ($estadoActual->descriptionIs(Status::DEPARTAMENTO))) ||
+          (PermisosHelpers::requerirRol("Adm_academica") && $estadoActual->descriptionIs(Status::ADMINISTRACION_ACADEMICA)) ||
+          (PermisosHelpers::requerirRol("Sec_academica") && $estadoActual->descriptionIs(Status::SECRETARIA_ACADEMICA))
         ){
           if($programa->subirEstado() && $programa->save()){
             Yii::info("Subió el estado del programa:".$id." Estaba en estado: ".$estadoActual->descripcion,'estado-programa');
