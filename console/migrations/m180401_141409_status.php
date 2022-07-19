@@ -48,7 +48,7 @@ class m180401_141409_status extends Migration
       ]);
       $this->insert('{{%status}}', [
           'id' => 3,
-          'descripcion' => 'Profesor',
+          'descripcion' => 'En espera',
           'value' => 7,
       ]);
     }
