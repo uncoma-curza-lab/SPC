@@ -284,7 +284,7 @@ class ProgramaController extends Controller
         $model = new Programa();
         $model->scenario = 'crear';
         // se crea en estado borrador
-        $model->status_id = Status::find()->where(['=','descripcion','Borrador'])->one()->id;
+        $model->status_id = Status::initialStatus();
         //obtener el id del director
         $userId = \Yii::$app->user->identity->id;
         if (PermisosHelpers::requerirRol('Departamento')){
