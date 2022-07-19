@@ -140,5 +140,13 @@ class PermisosHelpers
           (PermisosHelpers::requerirRol("Adm_academica") && $estadoActual->descripcion == "Administración Académica") ||
           (PermisosHelpers::requerirRol("Sec_academica") && $estadoActual->descripcion == "Secretaría Académica");
     }
+
+    public static function puedeRechazar($programaID, $estadoActual)
+    {
+      return (PermisosHelpers::requerirProfesorAdjunto($programaID) && $estadoActual->descripcion == "Profesor") ||
+          (PermisosHelpers::requerirDirector($programaID) && $estadoActual->descripcion == "Departamento") ||
+          (PermisosHelpers::requerirRol("Adm_academica") && $estadoActual->descripcion == "Administración Académica") ||
+          (PermisosHelpers::requerirRol("Sec_academica") && $estadoActual->descripcion == "Secretaría Académica");
+    }
   
 }

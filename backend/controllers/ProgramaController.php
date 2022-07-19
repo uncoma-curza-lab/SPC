@@ -172,11 +172,7 @@ class ProgramaController extends Controller
         $programa->scenario = 'carrerap';
         $userId = \Yii::$app->user->identity->id;
         $estadoActual = Status::findOne($programa->status_id);
-        if((PermisosHelpers::requerirProfesorAdjunto($id) && $estadoActual->descripcion == "Profesor") ||
-          (PermisosHelpers::requerirDirector($id) && $estadoActual->descripcion == "Departamento") ||
-          (PermisosHelpers::requerirRol("Adm_academica") && $estadoActual->descripcion == "Administración Académica") ||
-          (PermisosHelpers::requerirRol("Sec_academica") && $estadoActual->descripcion == "Secretaría Académica")
-        ){
+        if(PermisosHelpers::puedeRechazar($id, $estadoActual)){
           //$programa->status_id = Status::findOne(['descripcion','=','Departamento'])->id;
 
           $estadoSiguiente = Status::find()->where(['<','value',$estadoActual->value])->orderBy('value DESC')->one();
