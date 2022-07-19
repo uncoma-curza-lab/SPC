@@ -14,6 +14,13 @@ use Yii;
  */
 class Status extends \yii\db\ActiveRecord
 {
+    const BORRADOR_ID = 1;
+    const DEPARTAMENTO_ID = 2;
+    const EN_ESPERA_ID = 3;
+    const ADMINISTRACION_ACADEMICA_ID = 4;
+    const SECRETARIA_ACADEMICA_ID = 5;
+    const BIBLIOTECA_ID = 6;
+
     /**
      * {@inheritdoc}
      */
