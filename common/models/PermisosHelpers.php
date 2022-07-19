@@ -135,27 +135,35 @@ class PermisosHelpers
 
     public static function puedeAprobar($programaID, $estadoActual)
     {
-      return (
-          PermisosHelpers::requerirProfesorAdjunto($programaID) && $estadoActual->descriptionIs(Status::EN_ESPERA)
-        ) ||
-        (
-          PermisosHelpers::requerirDirector($programaID) && (
-            $estadoActual->descriptionIs(Status::DEPARTAMENTO) || $estadoActual->descriptionIs(Status::BORRADOR))
-        ) ||
-        (
-          PermisosHelpers::requerirRol("Adm_academica") && $estadoActual->descriptionIs(Status::ADMINISTRACION_ACADEMICA)
-        ) ||
-        (
-          PermisosHelpers::requerirRol("Sec_academica") && $estadoActual->descriptionIs(Status::SECRETARIA_ACADEMICA)
-        );
+        return (
+            PermisosHelpers::requerirProfesorAdjunto($programaID) && $estadoActual->descriptionIs(Status::EN_ESPERA)
+          ) ||
+          (
+            PermisosHelpers::requerirDirector($programaID) && (
+              $estadoActual->descriptionIs(Status::DEPARTAMENTO) || $estadoActual->descriptionIs(Status::BORRADOR))
+          ) ||
+          (
+            PermisosHelpers::requerirRol("Adm_academica") && $estadoActual->descriptionIs(Status::ADMINISTRACION_ACADEMICA)
+          ) ||
+          (
+            PermisosHelpers::requerirRol("Sec_academica") && $estadoActual->descriptionIs(Status::SECRETARIA_ACADEMICA)
+          );
     }
 
     public static function puedeRechazar($programaID, $estadoActual)
     {
-      return (PermisosHelpers::requerirProfesorAdjunto($programaID) && $estadoActual->descriptionIs(Status::EN_ESPERA)) ||
-          (PermisosHelpers::requerirDirector($programaID) && $estadoActual->descriptionIs(Status::DEPARTAMENTO)) ||
-          (PermisosHelpers::requerirRol("Adm_academica") && $estadoActual->descriptionIs(Status::ADMINISTRACION_ACADEMICA)) ||
-          (PermisosHelpers::requerirRol("Sec_academica") && $estadoActual->descriptionIs(Status::SECRETARIA_ACADEMICA));
+        return (
+            PermisosHelpers::requerirProfesorAdjunto($programaID) && $estadoActual->descriptionIs(Status::EN_ESPERA)
+          ) ||
+          (
+            PermisosHelpers::requerirDirector($programaID) && $estadoActual->descriptionIs(Status::DEPARTAMENTO)
+          ) ||
+          (
+            PermisosHelpers::requerirRol("Adm_academica") && $estadoActual->descriptionIs(Status::ADMINISTRACION_ACADEMICA)
+          ) ||
+          (
+            PermisosHelpers::requerirRol("Sec_academica") && $estadoActual->descriptionIs(Status::SECRETARIA_ACADEMICA)
+          );
     }
   
 }
