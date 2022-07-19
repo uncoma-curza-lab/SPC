@@ -48,18 +48,4 @@ class Status extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Programa::className(), ['status_id' => 'id']);
     }
-
-    public function prevStatus()
-    {
-        return Status::find()->where(['<','value',$this->value])
-                                           ->orderBy('value DESC')
-                                           ->one();
-    }
-
-    public function nextStatus()
-    {
-        return Status::find()->where(['>','value',$this->value])
-                                           ->orderBy('value')
-                                           ->one();
-    }
 }

@@ -58,4 +58,18 @@ class Status extends \yii\db\ActiveRecord
       $descripcion = $this->descripcion;
       return $descripcion;
     }
+
+    public function prevStatus()
+    {
+        return Status::find()->where(['<','value',$this->value])
+                                           ->orderBy('value DESC')
+                                           ->one();
+    }
+
+    public function nextStatus()
+    {
+        return Status::find()->where(['>','value',$this->value])
+                                           ->orderBy('value')
+                                           ->one();
+    }
 }
