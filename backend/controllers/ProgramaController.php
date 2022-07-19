@@ -11,9 +11,9 @@ use backend\models\AsignaturaSearch;
 use backend\models\Designacion;
 use backend\models\DesignacionSearch;
 use backend\models\SetStatusByYearForm;
-use backend\models\Status;
 use common\models\PermisosHelpers;
 use common\models\Departamento;
+use common\models\Status;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -155,7 +155,7 @@ class ProgramaController extends Controller
         if (PermisosHelpers::puedeAprobar($id, $estadoActual)) {
           //$programa->status_id = Status::findOne(['descripcion','=','Departamento'])->id;
 
-          $estadoSiguiente = Status::find()->where(['>','value',$estadoActual->value])->orderBy('value')->one();
+          $estadoSiguiente = $estadoActual->nextStatus();
           $programa->status_id = $estadoSiguiente->id;
           if( $programa->save()){
             Yii::$app->session->setFlash('success','Se confirmó el programa exitosamente');
@@ -172,10 +172,10 @@ class ProgramaController extends Controller
         $programa->scenario = 'carrerap';
         $userId = \Yii::$app->user->identity->id;
         $estadoActual = Status::findOne($programa->status_id);
-        if(PermisosHelpers::puedeRechazar($id, $estadoActual)){
+        if (PermisosHelpers::puedeRechazar($id, $estadoActual)) {
           //$programa->status_id = Status::findOne(['descripcion','=','Departamento'])->id;
 
-          $estadoSiguiente = Status::find()->where(['<','value',$estadoActual->value])->orderBy('value DESC')->one();
+          $estadoSiguiente = $estadoActual->prevStatus();
           $programa->status_id = $estadoSiguiente->id;
           if( $programa->save()){
             Yii::$app->session->setFlash('warning','Se rechazó el programa correctamente');

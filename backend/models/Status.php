@@ -5,12 +5,7 @@ namespace backend\models;
 use Yii;
 
 /**
- * This is the model class for table "status".
- *
- * @property int $id
- * @property string $descripcion
- *
- * @property Programa[] $programas
+ * @deprecated Status use common module
  */
 class Status extends \yii\db\ActiveRecord
 {
@@ -52,5 +47,19 @@ class Status extends \yii\db\ActiveRecord
     public function getProgramas()
     {
         return $this->hasMany(Programa::className(), ['status_id' => 'id']);
+    }
+
+    public function prevStatus()
+    {
+        return Status::find()->where(['<','value',$this->value])
+                                           ->orderBy('value DESC')
+                                           ->one();
+    }
+
+    public function nextStatus()
+    {
+        return Status::find()->where(['>','value',$this->value])
+                                           ->orderBy('value')
+                                           ->one();
     }
 }
