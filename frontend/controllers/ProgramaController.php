@@ -234,6 +234,8 @@ class ProgramaController extends Controller
           Yii::$app->session->setFlash('danger','Hubo un problema al intentar rechazar el programa');
           return $this->redirect(['evaluacion']);
         }
+
+        // bajar estado al minimo (del departamento a borrador)
         if((PermisosHelpers::requerirDirector($id)  || PermisosHelpers::requerirMinimoRol("Admin")) && $estadoActual->descripcion == "Departamento"){
             if ($programa->setEstado("Borrador") && $programa->save()){
               Yii::info("Cambió el estado de Departamento -> Borrador ID:".$id,'estado-programa');
