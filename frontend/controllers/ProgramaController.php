@@ -228,7 +228,7 @@ class ProgramaController extends Controller
         $userId = \Yii::$app->user->identity->id;
         $estadoActual = Status::findOne($programa->status_id);
 
-        if ($estadoActual->descripcion == "Borrador" || $estadoActual->descripcion == "Profesor"){
+        if ($estadoActual->descripcion == "Borrador" || $estadoActual->descripcion == "En espera"){
           Yii::error("No pudo rechazar el programa ID:".$id." con estado:".$estadoActual->descripcion,'estado-programa');
 
           Yii::$app->session->setFlash('danger','Hubo un problema al intentar rechazar el programa');
@@ -251,6 +251,7 @@ class ProgramaController extends Controller
             }
         }
 
+        // Si está más avanzado, devolver al estado anterior.
         if((PermisosHelpers::requerirRol("Adm_academica") && $estadoActual->descripcion == "Administración Académica") ||
           (PermisosHelpers::requerirRol("Sec_academica") && $estadoActual->descripcion == "Secretaría Académica") ||
           (PermisosHelpers::requerirMinimoRol("Admin"))
