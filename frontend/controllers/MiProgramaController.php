@@ -186,7 +186,7 @@ class MiProgramaController extends Controller
           }
         }
        if (PermisosHelpers::requerirRol("Departamento")
-        && $estadoActual->descripcion == "Profesor"
+        && $estadoActual->descriptionIs(Status::EN_ESPERA)
         && $programa->created_by != $userId ){
           Yii::$app->session->setFlash('danger','Debe pedir el programa antes de seguir');
           return $this->redirect(['index']);
