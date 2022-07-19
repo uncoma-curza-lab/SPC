@@ -212,7 +212,7 @@ class MiProgramaController extends Controller
         $userId = \Yii::$app->user->identity->id;
         $estadoActual = Status::findOne($programa->status_id);
 
-        if ($estadoActual->descripcion == "Borrador" || $estadoActual->descripcion == "Profesor"){
+        if ($estadoActual->descriptionIs(Status::BORRADOR) || $estadoActual->descriptionIs(Status::EN_ESPERA)){
           Yii::error("No pudo rechazar el programa ID:".$id." con estado:".$estadoActual->descripcion,'estado-programa');
           Yii::$app->session->setFlash('danger','Hubo un problema al intentar rechazar el programa');
           return $this->redirect(['index']);
