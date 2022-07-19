@@ -72,4 +72,13 @@ class Status extends \yii\db\ActiveRecord
                                            ->orderBy('value')
                                            ->one();
     }
+
+    public static function initialStatus()
+    {
+        return Status::find()->where([
+          '=',
+          'descripcion',
+          'Borrador'
+        ])->one()->id;
+    }
 }
