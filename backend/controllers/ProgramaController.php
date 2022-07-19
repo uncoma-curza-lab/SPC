@@ -571,7 +571,7 @@ class ProgramaController extends Controller
         $model->scenario = 'crear';
         //$model->year =Yii::$app->formatter->asDatetime(date('Y-m-d'), "php:d-m-Y H:i:s");
         $model->year =date('Y');
-        $model->status_id = Status::find()->where(['=','descripcion','Borrador'])->one()->id;
+        $model->status_id = Status::initialStatus();
         //obtener el id del director
         $userId = \Yii::$app->user->identity->id;
         if (PermisosHelpers::requerirRol('Departamento')){
