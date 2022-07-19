@@ -146,7 +146,8 @@ class ProgramaController extends Controller
             'model' => $model,
         ]);
     }
-    public function actionAprobar($id){
+    public function actionAprobar($id)
+    {
         $programa = $this->findModel($id);
         $programa->scenario = 'carrerap';
         $userId = \Yii::$app->user->identity->id;
@@ -169,6 +170,7 @@ class ProgramaController extends Controller
           }
         }
     }
+
     public function actionRechazar($id){
         $programa = $this->findModel($id);
         $programa->scenario = 'carrerap';
