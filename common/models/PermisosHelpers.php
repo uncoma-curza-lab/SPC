@@ -135,18 +135,27 @@ class PermisosHelpers
 
     public static function puedeAprobar($programaID, $estadoActual)
     {
-      return (PermisosHelpers::requerirProfesorAdjunto($programaID) && $estadoActual->descripcion == "Profesor") ||
-          (PermisosHelpers::requerirDirector($programaID) && ($estadoActual->descripcion == "Departamento"|| $estadoActual->descripcion == "Borrador")) ||
-          (PermisosHelpers::requerirRol("Adm_academica") && $estadoActual->descripcion == "Administración Académica") ||
-          (PermisosHelpers::requerirRol("Sec_academica") && $estadoActual->descripcion == "Secretaría Académica");
+      return (
+          PermisosHelpers::requerirProfesorAdjunto($programaID) && $estadoActual->descriptionIs(Status::EN_ESPERA)
+        ) ||
+        (
+          PermisosHelpers::requerirDirector($programaID) && (
+            $estadoActual->descriptionIs(Status::DEPARTAMENTO) || $estadoActual->descriptionIs(Status::BORRADOR))
+        ) ||
+        (
+          PermisosHelpers::requerirRol("Adm_academica") && $estadoActual->descriptionIs(Status::ADMINISTRACION_ACADEMICA)
+        ) ||
+        (
+          PermisosHelpers::requerirRol("Sec_academica") && $estadoActual->descriptionIs(Status::SECRETARIA_ACADEMICA)
+        );
     }
 
     public static function puedeRechazar($programaID, $estadoActual)
     {
-      return (PermisosHelpers::requerirProfesorAdjunto($programaID) && $estadoActual->descripcion == "Profesor") ||
-          (PermisosHelpers::requerirDirector($programaID) && $estadoActual->descripcion == "Departamento") ||
-          (PermisosHelpers::requerirRol("Adm_academica") && $estadoActual->descripcion == "Administración Académica") ||
-          (PermisosHelpers::requerirRol("Sec_academica") && $estadoActual->descripcion == "Secretaría Académica");
+      return (PermisosHelpers::requerirProfesorAdjunto($programaID) && $estadoActual->descriptionIs(Status::EN_ESPERA)) ||
+          (PermisosHelpers::requerirDirector($programaID) && $estadoActual->descriptionIs(Status::DEPARTAMENTO)) ||
+          (PermisosHelpers::requerirRol("Adm_academica") && $estadoActual->descriptionIs(Status::ADMINISTRACION_ACADEMICA)) ||
+          (PermisosHelpers::requerirRol("Sec_academica") && $estadoActual->descriptionIs(Status::SECRETARIA_ACADEMICA));
     }
   
 }

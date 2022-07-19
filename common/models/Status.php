@@ -21,6 +21,13 @@ class Status extends \yii\db\ActiveRecord
     const SECRETARIA_ACADEMICA_ID = 5;
     const BIBLIOTECA_ID = 6;
 
+    const BORRADOR = 'Borrador';
+    const DEPARTAMENTO = 'Departamento';
+    const EN_ESPERA = 'En espera';
+    const ADMINISTRACION_ACADEMICA = 'Administración Académica';
+    const SECRETARIA_ACADEMICA = 'Secretaría Académica';
+    const BIBLIOTECA = 'Biblioteca';
+
     /**
      * {@inheritdoc}
      */
@@ -87,5 +94,15 @@ class Status extends \yii\db\ActiveRecord
           'descripcion',
           'Borrador'
         ])->one()->id;
+    }
+
+    public function descriptionIs($statusDescription): bool
+    {
+        return $this->descripcion === $statusDescription;
+    }
+
+    public function is(int $id): bool
+    {
+        return $this->id === $id;
     }
 }
