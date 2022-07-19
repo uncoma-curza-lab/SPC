@@ -165,7 +165,7 @@ class MiProgramaController extends Controller
         $programa->scenario = 'carrerap';
         $userId = \Yii::$app->user->identity->id;
         $estadoActual = Status::findOne($programa->status_id);
-        $porcentajeCarga = 60;
+        //$porcentajeCarga = 60; deprecated 19jul2022
         if ($estadoActual->descripcion == "Borrador"){
           if(!$programa->hasMinimumLoadPercentage()) {
             Yii::error("Error al enviar programa con ID: ".$id.", menos del ". Programa::MIN_LOAD_PERCENTAGE ." cargado",'estado-programa');
