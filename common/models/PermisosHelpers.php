@@ -132,5 +132,13 @@ class PermisosHelpers
             return false;
         }
     }
+
+    public static function puedeAprobar($programaID, $estadoActual)
+    {
+      return (PermisosHelpers::requerirProfesorAdjunto($programaID) && $estadoActual->descripcion == "Profesor") ||
+          (PermisosHelpers::requerirDirector($programaID) && ($estadoActual->descripcion == "Departamento"|| $estadoActual->descripcion == "Borrador")) ||
+          (PermisosHelpers::requerirRol("Adm_academica") && $estadoActual->descripcion == "Administración Académica") ||
+          (PermisosHelpers::requerirRol("Sec_academica") && $estadoActual->descripcion == "Secretaría Académica");
+    }
   
 }
