@@ -167,8 +167,8 @@ class MiProgramaController extends Controller
         $estadoActual = Status::findOne($programa->status_id);
         $porcentajeCarga = 60;
         if ($estadoActual->descripcion == "Borrador"){
-          if($programa->calcularPorcentajeCarga() < $porcentajeCarga) {
-            Yii::error("Error al enviar programa con ID: ".$id.", menos del ".$porcentajeCarga." cargado",'estado-programa');
+          if(!$programa->hasMinimumLoadPercentage()) {
+            Yii::error("Error al enviar programa con ID: ".$id.", menos del ". Programa::MIN_LOAD_PERCENTAGE ." cargado",'estado-programa');
             Yii::$app->session->setFlash('danger','Debe completar el programa un 60%');
             return $this->redirect(['cargar','id' => $programa->id]);
           } else if ($programa->created_by == $userId){

@@ -46,6 +46,8 @@ class Programa extends \yii\db\ActiveRecord
 {
     const EVENT_NEW_PROGM = 'nuevo-programa';
 
+    const MIN_LOAD_PERCENTAGE = 60;
+
     public function sendMain($event){
       echo 'mail sent';
     }
@@ -356,6 +358,7 @@ class Programa extends \yii\db\ActiveRecord
     public function getEquipoCatedra(){
       return $this->equipo_catedra;
     }
+
     /**
      * obtiene el porcentaje de carga según 14 incisos.
      * si el inciso tiene más de 10 letras cuenta como completo
@@ -412,6 +415,12 @@ class Programa extends \yii\db\ActiveRecord
       //redondear porcentaje
       return round($porcentaje);
     }
+
+    public function hasMinimumLoadPercentage(): bool
+    {
+        return $this->calcularPorcentajeCarga() > self::MIN_LOAD_PERCENTAGE;
+    }
+
     public function getObjetivoPrograma(){
       return $this->objetivo_programa;
     }
