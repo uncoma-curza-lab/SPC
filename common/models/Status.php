@@ -75,7 +75,7 @@ class Status extends \yii\db\ActiveRecord
 
     public function prevStatus()
     {
-        return Status::find()->where(['<','value',$this->value])
+        return Status::find()->where(['<','value', $this->value])
                                            ->orderBy('value DESC')
                                            ->one();
     }
