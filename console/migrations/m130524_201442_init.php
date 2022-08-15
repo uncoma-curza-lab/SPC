@@ -20,8 +20,8 @@ class m130524_201442_init extends Migration
             'id' => Schema::TYPE_PK,
             'estado_nombre' => Schema::TYPE_STRING . "(45) NOT NULL",
             'estado_valor' => Schema::TYPE_INTEGER . "(11) NOT NULL",
-            'created_by' => Schema::TYPE_INTEGER . "(11) NOT NULL",
-            'updated_by' => Schema::TYPE_INTEGER . "(11) NOT NULL",
+            'created_by' => Schema::TYPE_TIMESTAMP . " NOT NULL DEFAULT CURRENT_TIMESTAMP",
+            'updated_by' => Schema::TYPE_TIMESTAMP . " NOT NULL DEFAULT CURRENT_TIMESTAMP",
         ], $this->tableOptions);
 
             $this->insert('{{%estado}}', [

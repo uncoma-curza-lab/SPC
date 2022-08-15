@@ -17,6 +17,10 @@ class m190225_205340_datos extends Migration
       $json = file_get_contents($url);
       $datos = json_decode(utf8_encode($json));
       //todos los departamentos
+      if (!$datos) {
+        echo "no process data departments";
+        return;
+      }
       foreach ($datos as $key) {
         // todas las carreras
         $carreras = "http://web.curza.uncoma.edu.ar/cms/wp-json/wp/v2/carrera/?departamento=".$key->id."&per_page=100&ordeby=curza_plugin_academico_materia_orden&order=asc";

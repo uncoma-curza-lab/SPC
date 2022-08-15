@@ -1,0 +1,21 @@
+version: '3.9'
+
+services:
+  app:
+    build:
+      dockerfile: Dockerfile
+      context: 'deploy/php'
+    volumes:
+      - ./:/app:delegated
+    env_file: .env
+    ports:
+      - 9880:9880
+      - 9881:9881
+
+  db:
+    image: mysql:5.7
+    command: --default-authentication-plugin=mysql_native_password --explicit_defaults_for_timestamp
+    env_file: .env
+    volumes:
+      - ./mysql_data:/var/lib/mysql
+
