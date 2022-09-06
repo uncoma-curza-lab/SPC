@@ -16,6 +16,8 @@ services:
     image: mysql:5.7
     command: --default-authentication-plugin=mysql_native_password --explicit_defaults_for_timestamp
     env_file: .env
+    ports:
+      - 3306:3306
     volumes:
       - ./mysql_data:/var/lib/mysql
 
