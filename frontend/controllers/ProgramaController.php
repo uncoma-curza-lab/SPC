@@ -157,7 +157,7 @@ class ProgramaController extends Controller
         $estadoActual = Status::findOne($programa->status_id);
         if ($estadoActual->descriptionIs(Status::BORRADOR)){
           if(!$programa->hasMinimumLoadPercentage()) {
-            Yii::error("Error al enviar programa con ID: ".$id.", menos del ".$porcentajeCarga." cargado",'estado-programa');
+            Yii::error("Error al enviar programa con ID: ".$id.", menos del ".Programa::MIN_LOAD_PERCENTAGE." cargado",'estado-programa');
 
             Yii::$app->session->setFlash('danger','Debe completar el programa un 40%');
             return $this->redirect(['cargar','id' => $programa->id]);
