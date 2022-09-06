@@ -5,6 +5,7 @@ use Yii;
 
 use yii\db\ActiveRecord;
 use common\models\User;
+use yii\behaviors\BlameableBehavior;
 //use common\models\Departamento;
 use yii\helpers\Url;
 use yii\helpers\Html;
@@ -116,14 +117,19 @@ class Perfil extends \yii\db\ActiveRecord
     {
         return [
             'timestamp' => [
-            'class' => 'yii\behaviors\TimestampBehavior',
-            'attributes' => [
-                                ActiveRecord::EVENT_BEFORE_INSERT => ['created_at', 'updated_at'],
-                                ActiveRecord::EVENT_BEFORE_UPDATE => ['updated_at'],
-                            ],
-            'value' => new Expression('NOW()'),
-                           ],
-               ];
+              'class' => 'yii\behaviors\TimestampBehavior',
+              'attributes' => [
+                  ActiveRecord::EVENT_BEFORE_INSERT => ['created_at', 'updated_at'],
+                  ActiveRecord::EVENT_BEFORE_UPDATE => ['updated_at'],
+              ],
+              'value' => new Expression('NOW()'),
+            ],
+            'blameable' => [
+              'class' => BlameableBehavior::className(),
+              'createdByAttribute' => 'created_by',
+              'updatedByAttribute' => 'updated_by',
+            ],
+        ];
     }
 
     /**
