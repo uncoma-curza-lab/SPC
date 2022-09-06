@@ -866,14 +866,9 @@ class MiProgramaController extends Controller
     {
           $model = new Programa();
           $model->scenario = 'crear';
-          //$model->year =Yii::$app->formatter->asDatetime(date('Y-m-d'), "php:d-m-Y H:i:s");
           $model->status_id = Status::find()->where(['=','descripcion','Borrador'])->one()->id;
           //obtener el id del director
           if ($model->load(Yii::$app->request->post())) {
-              //$yaExiste = Programa::find()->where(['=','asignatura_id',$model->asignatura_id]);
-              //$yaExiste = $yaExiste->where(['=','year', $model->year])->one();
-              //if($yaExiste)
-              //  Yii::$app->session->setFlash('danger','El programa ya existe. Verifique la información');
               if($model->save()){
                 Yii::$app->session->setFlash('warning','El programa se creó correctamente. <br>Complete el programa');
                 $this->mensajeGuardadoExito($model);
