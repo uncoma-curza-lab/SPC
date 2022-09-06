@@ -33,35 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'status_id',
             'asignatura_id',
             'year',
-
-            /*'curso',
-            'cuatrimestre',
-            'fundament:ntext',
-            'objetivo_plan:ntext',
-            'contenido_plan:ntext',
-            'propuesta_met:ntext',
-            'evycond_acreditacion:ntext',
-            'parcial_rec_promo:ntext',
-            'distr_horaria:ntext',
-            'crono_tentativo:ntext',
-            'actv_extracur:ntext',
-            'created_at',
-            'updated_at',
-            'created_by',
-            'updated_by',*/
         ],
     ]) ?>
-    <!--<? GridView::widget([
-        'dataProvider' => $dataProvDesignacion,
-        'filterModel' => $searchModelDesignacion,
-        'columns' => [
-            //['class' => 'yii\grid\SerialColumn'],
-
-            'cargo_id',
-            'user_id',
-
-            //['class' => 'yii\grid\ActionColumn'],
-        ],
-    ]); ?> -->
 
 </div>

@@ -74,8 +74,4 @@ $items = [
 
 
   <div class="col-xs-6">
-    <!-- <?php if ( PermisosHelpers::requerirMinimoRol('Departamento') ) : ?>
-      <h3>Observaciones</h3>
-        <?= $this->render('forms/_gridObservaciones',['model' => $model]) ?>
-    <?php endif; ?> -->
   </div>
