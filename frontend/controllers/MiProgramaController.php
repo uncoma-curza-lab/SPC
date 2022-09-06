@@ -888,9 +888,6 @@ class MiProgramaController extends Controller
     {
         $model = $this->findModel($id);
         $model->scenario = 'equipo_catedra';
-          //$model->year =Yii::$app->formatter->asDatetime(date('Y-m-d'), "php:d-m-Y H:i:s");
-          //$model->status_id = Status::find()->where(['=','descripcion','Borrador'])->one()->id;
-          //obtener el id del director
         $userId = \Yii::$app->user->identity->id;
         if (!PermisosHelpers::requerirSerDueno($id)
           || !$model->getStatus()->one()->descripcion == "Borrador"){

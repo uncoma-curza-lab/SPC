@@ -28,27 +28,6 @@ $this->params['breadcrumbs'][] = $this->title;
       'validateOnBlur'            => false,
     ]); ?>
 
-    <!--<? $form->field($designacion, 'cargo_id')->widget(Select2::classname(),[
-        'data' => ArrayHelper::map(Cargo::find()->all(),'id','nomenclatura'),
-        //'data' =>ArrayHelper::map(((new StatusSearch())->search(['model' => 'backend\models\Status'])),'id','descripcion'),
-        //'data' => (new StatusSearch())->search(['model' => 'backend\models\Status'])->id,
-        'language' => 'es',
-        'options' => ['placeholder' => 'Seleccione un estado'],
-        'pluginOptions' => [
-          'allowClear' => true,
-        ],
-      ]) ?>
-      <? $form->field($designacion, 'user_id')->widget(Select2::classname(),[
-          'data' => ArrayHelper::map(User::find()->all(),'id','username'),
-          //'data' =>ArrayHelper::map(((new StatusSearch())->search(['model' => 'backend\models\Status'])),'id','descripcion'),
-          //'data' => (new StatusSearch())->search(['model' => 'backend\models\Status'])->id,
-          'language' => 'es',
-          'options' => ['placeholder' => 'Seleccione un usuario'],
-          'pluginOptions' => [
-            'allowClear' => true,
-          ],
-        ]) ?>
-    <? $form->field($designacion, 'programa_id')->textInput() ?> -->
     <h3>Equipo de cátedra</h3>
     <?= $form->field($model, 'equipo_catedra')->widget(TinyMce::className(), [
         'options' => ['rows' => 12],
