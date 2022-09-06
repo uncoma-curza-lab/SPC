@@ -135,7 +135,7 @@ class MiProgramaController extends Controller
           return $this->redirect(['observacion/create', 'id'=>$model->id]);
       }
 
-      return $this->render('info',['model' => $model]);
+      return $this->render('@frontend/views/programa/info',['model' => $model]);
 
     }
     

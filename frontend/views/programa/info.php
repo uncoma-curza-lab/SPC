@@ -31,12 +31,17 @@ $items = [
         'label'=>'<i class="fas fa-home"></i> Observaciones',
         'content'=>
                   $this->render('forms/_gridObservaciones',['model' => $model]),
-        'visible' =>  PermisosHelpers::requerirProfesorAdjunto($model->id)
-                      || PermisosHelpers::requerirDirector($model->id)
-                      || ($estado_programa->descripcion == "Administración Académica"
-                        && PermisosHelpers::requerirRol('Adm_academica'))
-                      || ($estado_programa->descripcion == "Secretaría Académica"
-                        && PermisosHelpers::requerirRol('Sec_academica')),
+        'visible' =>  PermisosHelpers::requerirSerDueno($model->id) ||
+                      PermisosHelpers::requerirProfesorAdjunto($model->id) ||
+                      PermisosHelpers::requerirDirector($model->id) ||
+                      (
+                        $estado_programa->descripcion == "Administración Académica" &&
+                        PermisosHelpers::requerirRol('Adm_academica')
+                      ) ||
+                      (
+                        $estado_programa->descripcion == "Secretaría Académica" &&
+                        PermisosHelpers::requerirRol('Sec_academica')
+                      ),
     ],
 ]; ?>
 

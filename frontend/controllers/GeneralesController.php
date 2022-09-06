@@ -113,7 +113,7 @@ class GeneralesController extends Controller
           $model->load(Yii::$app->request->post()) && $model->save()) {
           return $this->redirect(['observacion/create', 'id'=>$model->id]);
       }
-      return $this->render('info',['model' => $model]);
+      return $this->render('@frontend/views/programa/info',['model' => $model]);
     }
 
 
