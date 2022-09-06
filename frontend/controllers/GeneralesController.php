@@ -107,6 +107,10 @@ class GeneralesController extends Controller
         ]);
     }
 
+    /**
+     * Puede migrarse a ProgramaController::actionVer
+     * @deprecated
+     */
     public function actionVer($id) {
       $model = $this->findModel($id);
       if(Yii::$app->request->post('submit') == 'observacion' &&

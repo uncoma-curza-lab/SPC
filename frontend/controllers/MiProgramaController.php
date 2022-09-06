@@ -127,6 +127,10 @@ class MiProgramaController extends Controller
         ]);
     }
 
+    /***
+     * Puede migrarse a Programa
+     * @deprecated
+     */
     public function actionVer($id) {
       $model = $this->findModel($id);
 
