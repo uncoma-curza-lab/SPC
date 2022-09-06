@@ -150,34 +150,13 @@ class ProgramaController extends Controller
 
     }
 
-    /**
-     * Displays a single Designacion model.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-  /*  public function actionVer($id)
-    {
-        $model = $this->findModel($id);
-        $searchModelDesignacion = new DesignacionSearch();
-        $dataProvDesignacion =  new ActiveDataProvider([
-          'query' => $model->getDesignaciones()
-        ]);
-        return $this->render('ver', [
-            'model' => $model,
-            'dataProvDesignacion' => $dataProvDesignacion,
-            'searchModelDesignacion' => $searchModelDesignacion
-        ]);
-    }*/
-
     public function actionAprobar($id){
         $programa = $this->findModel($id);
         $programa->scenario = 'carrerap';
         $userId = \Yii::$app->user->identity->id;
         $estadoActual = Status::findOne($programa->status_id);
-        $porcentajeCarga = 40;
-        if ($estadoActual->descripcion == "Borrador"){
-          if($programa->calcularPorcentajeCarga() < $porcentajeCarga) {
+        if ($estadoActual->descriptionIs(Status::BORRADOR)){
+          if(!$programa->hasMinimumLoadPercentage()) {
             Yii::error("Error al enviar programa con ID: ".$id.", menos del ".$porcentajeCarga." cargado",'estado-programa');
 
             Yii::$app->session->setFlash('danger','Debe completar el programa un 40%');
