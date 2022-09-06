@@ -864,9 +864,7 @@ class MiProgramaController extends Controller
 
     public function actionAnadir()
     {
-          $model = new Programa();
-          $model->scenario = 'crear';
-          $model->status_id = Status::find()->where(['=','descripcion','Borrador'])->one()->id;
+          $model = Programa::initNewProgram();
           //obtener el id del director
           if ($model->load(Yii::$app->request->post())) {
               if($model->save()){

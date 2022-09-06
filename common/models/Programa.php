@@ -532,4 +532,23 @@ class Programa extends \yii\db\ActiveRecord
       return $string;
     }
 
+    public static function initNewProgram()
+    {
+        $model = new Programa();
+        $model->scenario = 'crear';
+        $model->fundament = '';
+        $model->objetivo_plan = '';
+        $model->objetivo_programa = '';
+        $model->contenido_plan = '';
+        $model->propuesta_met = '';
+        $model->evycond_acreditacion = '';
+        $model->parcial_rec_promo = '';
+        $model->distr_horaria = '';
+        $model->crono_tentativo = '';
+        $model->actv_extracur = '';
+        $model->status_id = Status::find()->where(['=', 'descripcion', 'Borrador'])->one()->id;
+        return $model;
+
+    }
+
 }
