@@ -2,10 +2,13 @@
 
 namespace common\shares\commands;
 
+use common\domain\programs\commands\ApproveCommandResult;
 use common\models\PermisosHelpers;
 use common\models\Programa as Program;
 use common\models\Status;
 use Exception;
+use common\shared\commands\CommandExecutionResult;
+use common\shared\commands\CommandInterface;
 
 class ApproveProgram implements CommandInterface
 {
@@ -16,21 +19,21 @@ class ApproveProgram implements CommandInterface
       $this->program = $program;
   }
 
-  public function handle()
+  public function handle() : CommandExecutionResult
   {
-      $status = $this->program->getStatus();
-      // draft flow
       try { 
-        if ($this->validateDraftFlow() || ($this->validateDepartmentFlow() && $this->validateAreas())) {
+          if ($this->validateDraftFlow() || ($this->validateDepartmentFlow() && $this->validateAreas())) {
 
-            $this->program->subirEstado();
-            $this->program->save();
-            //TODO implements return result
-       }
+              $this->program->subirEstado();
+              $this->program->save();
+              return new ApproveCommandResult(true, 'Successful change status', []);
+         }
+          return new ApproveCommandResult(false, 'Not valid change status', []);
       } catch (Exception $e) {
-
+        return new ApproveCommandResult(false, 'Generic error', [
+          'error' => $e
+        ]);
       }
-      //TODO implements return result
   }
 
   private function validateDraftFlow() : bool

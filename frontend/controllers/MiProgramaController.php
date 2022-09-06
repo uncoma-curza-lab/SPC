@@ -16,6 +16,7 @@ use common\models\Status;
 use common\models\Departamento;
 
 use common\models\PermisosHelpers;
+use common\shares\commands\ApproveProgram;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\ForbiddenHttpException;
@@ -170,8 +171,15 @@ class MiProgramaController extends Controller
         $userId = \Yii::$app->user->identity->id;
         $estadoActual = Status::findOne($programa->status_id);
         //$porcentajeCarga = 60; deprecated 19jul2022
-        if ($estadoActual->descriptionIs(Status::BORRADOR)){
-          if(!$programa->hasMinimumLoadPercentage()) {
+        //
+
+        $command = new ApproveProgram($programa);
+        $execution = $command->handle();
+
+        if ()
+
+        if ($estadoActual->descriptionIs(Status::BORRADOR)){ // borrador
+          if(!$programa->hasMinimumLoadPercentage()) { // cumple con el minimo
             Yii::error("Error al enviar programa con ID: ".$id.", menos del ". Programa::MIN_LOAD_PERCENTAGE ." cargado",'estado-programa');
             Yii::$app->session->setFlash('danger','Debe completar el programa un '. Programa::MIN_LOAD_PERCENTAGE  .'%');
             return $this->redirect(['cargar','id' => $programa->id]);
