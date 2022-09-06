@@ -10,16 +10,17 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
 $estado_programa = Status::findOne(['=','id',$model->status_id]);
 
 
-$mostrar = //(isset($estado_programa) && ($estado_programa->value > EstadoHelpers::getValue('Borrador')))
-            (($estado_programa->descripcion == "Borrador" || $estado_programa->descripcion == "Departamento")
-              && PermisosHelpers::requerirDirector($model->id))
-            || ($estado_programa->descripcion == "Profesor"
-              && PermisosHelpers::requerirProfesorAdjunto($model->id))
-            || ($estado_programa->descripcion == "Administración Académica"
-              && PermisosHelpers::requerirRol('Adm_academica'))
-            || ($estado_programa->descripcion == "Secretaría Académica"
-              && PermisosHelpers::requerirRol('Sec_academica'))
-            || $esAdmin;
+// verificar actualmente no se está usando pero estaba descomentado
+//$mostrar = //(isset($estado_programa) && ($estado_programa->value > EstadoHelpers::getValue('Borrador')))
+//            (($estado_programa->descripcion == "Borrador" || $estado_programa->descripcion == "Departamento")
+//              && PermisosHelpers::requerirDirector($model->id))
+//            || ($estado_programa->descripcion == "Profesor"
+//              && PermisosHelpers::requerirProfesorAdjunto($model->id))
+//            || ($estado_programa->descripcion == "Administración Académica"
+//              && PermisosHelpers::requerirRol('Adm_academica'))
+//            || ($estado_programa->descripcion == "Secretaría Académica"
+//              && PermisosHelpers::requerirRol('Sec_academica'))
+//            || $esAdmin;
 
 $items = [
     [
