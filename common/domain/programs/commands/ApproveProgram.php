@@ -21,16 +21,25 @@ class ApproveProgram implements CommandInterface
 
   public function handle() : CommandExecutionResult
   {
+      $originalStatus = $this->program->getStatus();
       try { 
           if ($this->validateDraftFlow() || ($this->validateDepartmentFlow() && $this->validateAreas())) {
 
               $this->program->subirEstado();
               $this->program->save();
-              return new ApproveCommandResult(true, 'Successful change status', []);
-         }
-          return new ApproveCommandResult(false, 'Not valid change status', []);
+
+              $newStatus = $this->program->getStatus();
+              $message = "Subió el estado del programa de " . $originalStatus->descripcion . " a " . $newStatus->descripcion;
+
+              return new ApproveCommandResult(true, $message, [
+                'originalStatus' => $originalStatus,
+                'newStatus' => $newStatus 
+              ]);
+          }
+
+          return new ApproveCommandResult(false, 'No se pudo subir de estado', []);
       } catch (Exception $e) {
-        return new ApproveCommandResult(false, 'Generic error', [
+        return new ApproveCommandResult(false, 'No se cumple con los requisitos para subir de estado', [
           'error' => $e
         ]);
       }

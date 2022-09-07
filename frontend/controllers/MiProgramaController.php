@@ -175,47 +175,21 @@ class MiProgramaController extends Controller
 
         $command = new ApproveProgram($programa);
         $execution = $command->handle();
-
-        if ()
-
-        if ($estadoActual->descriptionIs(Status::BORRADOR)){ // borrador
-          if(!$programa->hasMinimumLoadPercentage()) { // cumple con el minimo
-            Yii::error("Error al enviar programa con ID: ".$id.", menos del ". Programa::MIN_LOAD_PERCENTAGE ." cargado",'estado-programa');
-            Yii::$app->session->setFlash('danger','Debe completar el programa un '. Programa::MIN_LOAD_PERCENTAGE  .'%');
-            return $this->redirect(['cargar','id' => $programa->id]);
-          } else if ($programa->created_by == $userId){
-            if ($programa->subirEstado() && $programa->save()) {
-              Yii::info("Subió el estado del programa. BORRADOR->".$programa->getStatus()->one()->descripcion,'estado-programa');
-
-              Yii::$app->session->setFlash('success','Se confirmó el programa exitosamente');
-            } else {
-              Yii::$app->session->setFlash('danger','Hubo un problema al confirmar el programa');
-            }
-            return $this->redirect(['index']);
-          } else {
-            Yii::warning("Intentó editar un programa ajeno. ID:".$id,'estado-programa');
-
-          }
-        }
-       if (PermisosHelpers::requerirRol("Departamento")
-        && $estadoActual->descriptionIs(Status::EN_ESPERA)
-        && $programa->created_by != $userId ){
-          Yii::$app->session->setFlash('danger','Debe pedir el programa antes de seguir');
-          return $this->redirect(['index']);
-       }
-       if( (PermisosHelpers::requerirDirector($id) && ($estadoActual->descriptionIs(Status::DEPARTAMENTO))) ||
-          (PermisosHelpers::requerirRol("Adm_academica") && $estadoActual->descriptionIs(Status::ADMINISTRACION_ACADEMICA)) ||
-          (PermisosHelpers::requerirRol("Sec_academica") && $estadoActual->descriptionIs(Status::SECRETARIA_ACADEMICA))
-        ){
-          if($programa->subirEstado() && $programa->save()){
-            Yii::info("Subió el estado del programa:".$id." Estaba en estado: ".$estadoActual->descripcion,'estado-programa');
+        if ($execution->getResult()) {
+            Yii::info($execution->getMessage(),'estado-programa');
             Yii::$app->session->setFlash('success','Se confirmó el programa exitosamente');
-          } else {
-            Yii::error("No pudo subir de estado ",'estado-programa');
+        } else {
+            Yii::error($execution->getMessage(),'estado-programa');
             Yii::$app->session->setFlash('danger','Hubo un problema al intentar aprobar el programa');
-          }
-          return $this->redirect(['index']);
         }
+        return $this->redirect(['index']);
+            //Yii::error("Error al enviar programa con ID: ".$id.", menos del ". Programa::MIN_LOAD_PERCENTAGE ." cargado",'estado-programa');
+            //Yii::$app->session->setFlash('danger','Debe completar el programa un '. Programa::MIN_LOAD_PERCENTAGE  .'%');
+
+            //Yii::warning("Intentó editar un programa ajeno. ID:".$id,'estado-programa');
+        //
+            //Yii::error("No pudo subir de estado ",'estado-programa');
+            //Yii::$app->session->setFlash('danger','Hubo un problema al intentar aprobar el programa');
     }
 
     public function actionRechazar($id){
