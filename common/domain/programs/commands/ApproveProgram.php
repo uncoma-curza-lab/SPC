@@ -1,6 +1,6 @@
 <?php
 
-namespace common\shares\commands;
+namespace common\domain\programs\commands;
 
 use common\domain\programs\commands\ApproveCommandResult;
 use common\models\PermisosHelpers;
@@ -21,14 +21,14 @@ class ApproveProgram implements CommandInterface
 
   public function handle() : CommandExecutionResult
   {
-      $originalStatus = $this->program->getStatus();
+      $originalStatus = $this->program->status;
       try { 
           if ($this->validateDraftFlow() || ($this->validateDepartmentFlow() && $this->validateAreas())) {
 
               $this->program->subirEstado();
               $this->program->save();
 
-              $newStatus = $this->program->getStatus();
+              $newStatus = $this->program->status;
               $message = "Subió el estado del programa de " . $originalStatus->descripcion . " a " . $newStatus->descripcion;
 
               return new ApproveCommandResult(true, $message, [
@@ -47,7 +47,7 @@ class ApproveProgram implements CommandInterface
 
   private function validateDraftFlow() : bool
   {
-      if ($this->program->getStatus()->descriptionIs(Status::BORRADOR)) {
+      if ($this->program->status->descriptionIs(Status::BORRADOR)) {
         if(!$this->program->hasMinimumLoadPercentage() || !PermisosHelpers::requerirSerDueno($this->program->id)) {
           throw new Exception('');
         }
@@ -62,7 +62,7 @@ class ApproveProgram implements CommandInterface
      // department flow -- require request program first
     if (
       PermisosHelpers::requerirRol("Departamento") &&
-      $this->program->getStatus()->descriptionIs(Status::EN_ESPERA) &&
+      $this->program->status->descriptionIs(Status::EN_ESPERA) &&
       !PermisosHelpers::requerirSerDueno($this->program->id)
     ){
       throw new Exception('request program first');
@@ -73,7 +73,7 @@ class ApproveProgram implements CommandInterface
 
   private function validateAreas() : bool
   {
-      $status = $this->program->getStatus();
+      $status = $this->program->status;
       if(
           (PermisosHelpers::requerirDirector($this->program->id) && ($status->descriptionIs(Status::DEPARTAMENTO))) ||
           (PermisosHelpers::requerirRol("Adm_academica") && $status->descriptionIs(Status::ADMINISTRACION_ACADEMICA)) ||

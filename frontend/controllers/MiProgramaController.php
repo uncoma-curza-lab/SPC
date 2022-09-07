@@ -16,7 +16,7 @@ use common\models\Status;
 use common\models\Departamento;
 
 use common\models\PermisosHelpers;
-use common\shares\commands\ApproveProgram;
+use common\domain\programs\commands\ApproveProgram;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\ForbiddenHttpException;

@@ -2,7 +2,7 @@
 
 namespace common\domain\programs\commands;
 
-use common\shares\commands\CommandExecutionResult;
+use common\shared\commands\CommandExecutionResult;
 
 class ApproveCommandResult implements CommandExecutionResult
 {
@@ -18,7 +18,7 @@ class ApproveCommandResult implements CommandExecutionResult
 
   }
 
-  public function getData() : mixed
+  public function getData() : array
   {
     return $this->data;
   }
