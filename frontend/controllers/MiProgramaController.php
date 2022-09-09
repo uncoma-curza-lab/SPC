@@ -193,6 +193,9 @@ class MiProgramaController extends Controller
             //Yii::$app->session->setFlash('danger','Hubo un problema al intentar aprobar el programa');
     }
 
+    /**
+     * @deprecated? general -> ProgramaController
+     */
     public function actionRechazar($id){
         $programa = $this->findModel($id);
         $programa->scenario = 'carrerap';
