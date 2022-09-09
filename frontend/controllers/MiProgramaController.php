@@ -200,7 +200,9 @@ class MiProgramaController extends Controller
         $programa = $this->findModel($id);
         $programa->scenario = 'carrerap';
 
-        $execution = new CommandRejectProcess($programa);
+        $command = new CommandRejectProcess($programa);
+        $execution = $command->handle();
+
         if ($execution) {
             Yii::info($execution->getMessage(),'estado-programa');
             Yii::$app->session->setFlash('warning','Se rechazó el programa correctamente');
