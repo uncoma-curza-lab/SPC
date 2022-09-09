@@ -17,6 +17,7 @@ use common\models\Departamento;
 
 use common\models\PermisosHelpers;
 use common\domain\programs\commands\ApproveProgram;
+use common\domain\programs\commands\RejectProgram\CommandRejectProcess;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\ForbiddenHttpException;
@@ -195,38 +196,47 @@ class MiProgramaController extends Controller
     public function actionRechazar($id){
         $programa = $this->findModel($id);
         $programa->scenario = 'carrerap';
-        $userId = \Yii::$app->user->identity->id;
-        $estadoActual = Status::findOne($programa->status_id);
 
-        if ($estadoActual->descriptionIs(Status::BORRADOR) || $estadoActual->descriptionIs(Status::EN_ESPERA)){
-          Yii::error("No pudo rechazar el programa ID:".$id." con estado:".$estadoActual->descripcion,'estado-programa');
-          Yii::$app->session->setFlash('danger','Hubo un problema al intentar rechazar el programa');
-          return $this->redirect(['index']);
-        }
-        if(PermisosHelpers::requerirDirector($id) && $estadoActual->descripcion == "Departamento"){
-            if ($programa->setEstado("Borrador") && $programa->save()){
-              Yii::info("Cambió el estado de Departamento -> Borrador ID:".$id,'estado-programa');
-              Yii::$app->session->setFlash('warning','Se rechazó el programa correctamente');
-              return $this->redirect(['index']);
-            } else {
-              Yii::$app->session->setFlash('danger','Hubo un problema al rechazar el programa');
-              return $this->redirect(['index']);
-            }
-        }
-
-        if((PermisosHelpers::requerirRol("Adm_academica") && $estadoActual->descripcion == "Administración Académica") ||
-          (PermisosHelpers::requerirRol("Sec_academica") && $estadoActual->descripcion == "Secretaría Académica")
-        ){
-          if($programa->bajarEstado() &&  $programa->save()){
-            Yii::info("Rechazó el programa".$id." con estado actual".$estadoActual->descripcion,'estado-programa');
+        $execution = new CommandRejectProcess($programa);
+        if ($execution) {
+            Yii::info($execution->getMessage(),'estado-programa');
             Yii::$app->session->setFlash('warning','Se rechazó el programa correctamente');
-            return $this->redirect(['index']);
-          } else {
-            Yii::error("No pudo rechazar el programa ".$id." con estado actual".$estadoActual->descripcion,'estado-programa');
-            Yii::$app->session->setFlash('danger','Hubo un problema al rechazar el programa');
-            return $this->redirect(['index']);
-          }
+        } else {
+            Yii::error($execution->getMessage(),'estado-programa');
+            Yii::$app->session->setFlash('danger','Hubo un problema al intentar rechazar el programa');
         }
+
+        return $this->redirect(['index']);
+
+        //if ($estadoActual->descriptionIs(Status::BORRADOR) || $estadoActual->descriptionIs(Status::EN_ESPERA)){
+        //  Yii::error("No pudo rechazar el programa ID:".$id." con estado:".$estadoActual->descripcion,'estado-programa');
+        //  Yii::$app->session->setFlash('danger','Hubo un problema al intentar rechazar el programa');
+        //  return $this->redirect(['index']);
+        //}
+        //if(PermisosHelpers::requerirDirector($id) && $estadoActual->descripcion == "Departamento"){
+        //    if ($programa->setEstado("Borrador") && $programa->save()){
+        //      Yii::info("Cambió el estado de Departamento -> Borrador ID:".$id,'estado-programa');
+        //      Yii::$app->session->setFlash('warning','Se rechazó el programa correctamente');
+        //      return $this->redirect(['index']);
+        //    } else {
+        //      Yii::$app->session->setFlash('danger','Hubo un problema al rechazar el programa');
+        //      return $this->redirect(['index']);
+        //    }
+        //}
+
+        //if((PermisosHelpers::requerirRol("Adm_academica") && $estadoActual->descripcion == "Administración Académica") ||
+        //  (PermisosHelpers::requerirRol("Sec_academica") && $estadoActual->descripcion == "Secretaría Académica")
+        //){
+        //  if($programa->bajarEstado() &&  $programa->save()){
+        //    Yii::info("Rechazó el programa".$id." con estado actual".$estadoActual->descripcion,'estado-programa');
+        //    Yii::$app->session->setFlash('warning','Se rechazó el programa correctamente');
+        //    return $this->redirect(['index']);
+        //  } else {
+        //    Yii::error("No pudo rechazar el programa ".$id." con estado actual".$estadoActual->descripcion,'estado-programa');
+        //    Yii::$app->session->setFlash('danger','Hubo un problema al rechazar el programa');
+        //    return $this->redirect(['index']);
+        //  }
+        //}
     }
 
 
