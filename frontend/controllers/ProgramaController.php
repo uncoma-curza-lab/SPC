@@ -10,11 +10,8 @@ use yii\data\ActiveDataProvider;
 use common\models\search\ProgramaSearch;
 use common\models\search\ProgramaEvaluacionSearch;
 use common\models\search\AsignaturaSearch;
-use common\models\search\DesignacionSearch;
 /* Modelos */
 use common\models\Programa;
-use common\models\Designacion;
-use common\models\Asignatura;
 use common\models\Status;
 use common\models\Departamento;
 
@@ -40,14 +37,6 @@ class ProgramaController extends Controller
         return [
           'access' => [
                  'class' => \yii\filters\AccessControl::className(),
-                 /*'only' => [
-                   'index', 'view', 'create', 'update','delete',
-                   'ver', 'anadir','fundamentacion','cargar',
-                   'fundamentacion', 'objetivo-plan', 'contenido-analitico',
-                   'contenido-plan', 'eval-acred', 'propuesta-metodologica',
-                   'parcial-rec-promo', 'dist-horaria', 'crono-tentativo',
-                   'actividad-extracurricular', 'aprobar', 'rechazar'
-                 ],*/
                  'rules' => [
                      [
                          'actions' => ['index', 'view','editar','export-pdf'],
@@ -169,6 +158,9 @@ class ProgramaController extends Controller
         }
         Yii::$app->session->setFlash($alertType, $execution->getMessage());
 
+        if (Yii::$app->request->referrer) {
+            return $this->goBack(Yii::$app->request->referrer);
+        }
         return $this->redirect(['index']);
     }
 
@@ -189,6 +181,9 @@ class ProgramaController extends Controller
         }
         Yii::$app->session->setFlash($alertType, $execution->getMessage());
 
+        if (Yii::$app->request->referrer) {
+            return $this->goBack(Yii::$app->request->referrer);
+        }
         return $this->redirect(['index']);
     }
 

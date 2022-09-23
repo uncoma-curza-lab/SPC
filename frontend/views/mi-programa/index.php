@@ -111,8 +111,6 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
                 'aprobar' => function ($url,$model){
                     $status = Status::findOne($model->status_id);
                     if ($status && (($status->descripcion == "Borrador"
-                        //&& PermisosHelpers::requerirDirector($model->id)
-                        //&& PermisosHelpers::existeProfAdjunto($model->id))
                         && PermisosHelpers::requerirMinimoRol("Profesor")
                         && PermisosHelpers::requerirSerDueno($model->id))
                       || ($status->descripcion == "Departamento"
@@ -125,7 +123,7 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
                     {
                         return Html::a(
                           '<span style="padding:5px; font-size:20px;color:#5cb85c" class="glyphicon glyphicon-send"></span>',
-                          ['aprobar','id' => $model->id],
+                          ['programa/aprobar','id' => $model->id],
                           [
                               'title' => Yii::t('yii', 'Enviar a evaluación'),
                               'data' => [
@@ -151,7 +149,7 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
                     {
                         return Html::a(
                           '<span style="padding:5px; font-size:20px;color:#d9534f" class="glyphicon glyphicon-remove"></span>',
-                          ['rechazar','id' => $model->id],
+                          ['programa/rechazar','id' => $model->id],
                           [
                               'title' => Yii::t('yii', 'Rechazar'),
                               'data-confirm' => Yii::t('yii', 'Está a punto de rechazar el programa. Recuerde añadir observaciones'),

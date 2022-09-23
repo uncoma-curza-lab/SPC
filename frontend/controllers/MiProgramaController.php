@@ -186,7 +186,9 @@ class MiProgramaController extends Controller
         }
         Yii::$app->session->setFlash($alertType, $execution->getMessage());
 
-        return $this->redirect(['index']);
+        return $this->goBack((!empty(Yii::$app->request->referrer) ? Yii::$app->request->referrer : null));
+
+        //return $this->redirect(['index']);
             //Yii::error("Error al enviar programa con ID: ".$id.", menos del ". Programa::MIN_LOAD_PERCENTAGE ." cargado",'estado-programa');
             //Yii::$app->session->setFlash('danger','Debe completar el programa un '. Programa::MIN_LOAD_PERCENTAGE  .'%');
 
