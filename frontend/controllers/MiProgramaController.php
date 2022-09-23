@@ -2,27 +2,23 @@
 
 namespace frontend\controllers;
 
+use common\domain\programs\commands\ApproveProgram\CommandApproveProcess;
+use common\domain\programs\commands\RejectProgram\CommandRejectProcess;
 use Yii;
 use yii\data\ActiveDataProvider;
 /* Searchs */
 use common\models\search\MiProgramaSearch;
 use common\models\search\AsignaturaSearch;
-use common\models\search\DesignacionSearch;
 /* Modelos */
 use common\models\Programa;
-use common\models\Designacion;
-use common\models\Asignatura;
 use common\models\Status;
 use common\models\Departamento;
 
 use common\models\PermisosHelpers;
-use common\domain\programs\commands\ApproveProgram;
-use common\domain\programs\commands\RejectProgram\CommandRejectProcess;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\ForbiddenHttpException;
 use yii\filters\VerbFilter;
-use Mpdf;
 
 
 /**
@@ -166,7 +162,12 @@ class MiProgramaController extends Controller
         ]);
     }*/
 
+    /**
+     * @Deprecated general -> ProgramaController
+     */
     public function actionAprobar($id){
+        throw new \Exception('Deprecated');
+
         $programa = $this->findModel($id);
         $programa->scenario = 'carrerap';
         $userId = \Yii::$app->user->identity->id;
@@ -174,15 +175,17 @@ class MiProgramaController extends Controller
         //$porcentajeCarga = 60; deprecated 19jul2022
         //
 
-        $command = new ApproveProgram($programa);
+        $command = new CommandApproveProcess($programa);
         $execution = $command->handle();
+        $alertType = 'danger';
         if ($execution->getResult()) {
-            Yii::info($execution->getMessage(),'estado-programa');
-            Yii::$app->session->setFlash('success','Se confirmó el programa exitosamente');
+            Yii::info($execution->getMessage(), 'estado-programa');
+            $alertType = 'success';
         } else {
             Yii::error($execution->getMessage(),'estado-programa');
-            Yii::$app->session->setFlash('danger','Hubo un problema al intentar aprobar el programa');
         }
+        Yii::$app->session->setFlash($alertType, $execution->getMessage());
+
         return $this->redirect(['index']);
             //Yii::error("Error al enviar programa con ID: ".$id.", menos del ". Programa::MIN_LOAD_PERCENTAGE ." cargado",'estado-programa');
             //Yii::$app->session->setFlash('danger','Debe completar el programa un '. Programa::MIN_LOAD_PERCENTAGE  .'%');
@@ -197,6 +200,7 @@ class MiProgramaController extends Controller
      * @deprecated? general -> ProgramaController
      */
     public function actionRechazar($id){
+        throw new \Exception('Deprecated');
         $programa = $this->findModel($id);
         $programa->scenario = 'carrerap';
 

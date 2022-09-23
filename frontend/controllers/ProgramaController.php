@@ -2,6 +2,8 @@
 
 namespace frontend\controllers;
 
+use common\domain\programs\commands\ApproveProgram\CommandApproveProcess;
+use common\domain\programs\commands\RejectProgram\CommandRejectProcess;
 use Yii;
 use yii\data\ActiveDataProvider;
 /* Searchs */
@@ -150,107 +152,148 @@ class ProgramaController extends Controller
 
     }
 
-    public function actionAprobar($id){
+    public function actionRechazar($id)
+    {
         $programa = $this->findModel($id);
         $programa->scenario = 'carrerap';
-        $userId = \Yii::$app->user->identity->id;
-        $estadoActual = Status::findOne($programa->status_id);
-        if ($estadoActual->descriptionIs(Status::BORRADOR)){
-          if(!$programa->hasMinimumLoadPercentage()) {
-            Yii::error("Error al enviar programa con ID: ".$id.", menos del ".Programa::MIN_LOAD_PERCENTAGE." cargado",'estado-programa');
 
-            Yii::$app->session->setFlash('danger','Debe completar el programa un 40%');
-            return $this->redirect(['cargar','id' => $programa->id]);
-          } else if ($programa->created_by == $userId){
-            if ($programa->subirEstado() && $programa->save()) {
-              Yii::info("Subió el estado del programa. BORRADOR->".$programa->getStatus()->one()->descripcion,'estado-programa');
-              Yii::$app->session->setFlash('success','Se confirmó el programa exitosamente');
-              Yii::$app->GenerateNotification->suscriptores(self::APROBAR_PROGRAMA,$id);
-            } else {
-              Yii::$app->session->setFlash('danger','Hubo un problema al confirmar el programa');
-            }
-            return $this->redirect(['evaluacion']);
-          } else {
-            Yii::warning("Intentó editar un programa ajeno. ID:".$id,'estado-programa');
-          }
+        $command = new CommandRejectProcess($programa);
+        $execution = $command->handle();
+
+        $alertType = 'danger';
+        if ($execution) {
+            Yii::info($execution->getMessage(),'estado-programa');
+            $alertType = 'warning';
+        } else {
+            Yii::error($execution->getMessage(),'estado-programa');
         }
-       if (PermisosHelpers::requerirRol("Departamento")
-        && $estadoActual->descripcion == "Profesor"
-        && $programa->created_by != $userId ){
-          Yii::$app->session->setFlash('danger','Debe pedir el programa antes de seguir');
-          return $this->redirect(['evaluacion']);
-       }
-       if( (PermisosHelpers::requerirDirector($id) && ($estadoActual->descripcion == "Departamento")) ||
-          (PermisosHelpers::requerirRol("Adm_academica") && $estadoActual->descripcion == "Administración Académica") ||
-          (PermisosHelpers::requerirRol("Sec_academica") && $estadoActual->descripcion == "Secretaría Académica")
-        ){
-          if($programa->subirEstado() && $programa->save()){
-            Yii::info("Subió el estado del programa:".$id." Estaba en estado: ".$estadoActual->descripcion,'estado-programa');
-            Yii::$app->session->setFlash('success','Se aprobó el programa exitosamente');
-            
-            Yii::$app->GenerateNotification->creador(self::APROBAR_PROGRAMA,$id);
-            Yii::$app->GenerateNotification->suscriptores(self::APROBAR_PROGRAMA,$id);
+        Yii::$app->session->setFlash($alertType, $execution->getMessage());
 
-            return $this->redirect(['evaluacion']);
-          } else {
-            Yii::error("No pudo subir de estado programa:".$id,'estado-programa');
-            Yii::$app->session->setFlash('danger','Hubo un problema al intentar aprobar el programa');
-            return $this->redirect(['evaluacion']);
-
-//            throw new NotFoundHttpException("Ocurrió un error");
-          }
-        }
+        return $this->redirect(['index']);
     }
-    public function actionRechazar($id){
+
+    public function actionAprobar($id)
+    {
         $programa = $this->findModel($id);
         $programa->scenario = 'carrerap';
-        $userId = \Yii::$app->user->identity->id;
-        $estadoActual = Status::findOne($programa->status_id);
 
-        if ($estadoActual->descripcion == "Borrador" || $estadoActual->descripcion == "En espera"){
-          Yii::error("No pudo rechazar el programa ID:".$id." con estado:".$estadoActual->descripcion,'estado-programa');
+        $command = new CommandApproveProcess($programa);
+        $execution = $command->handle();
+        $alertType = 'danger';
 
-          Yii::$app->session->setFlash('danger','Hubo un problema al intentar rechazar el programa');
-          return $this->redirect(['evaluacion']);
+        if ($execution->getResult()) {
+            Yii::info($execution->getMessage(), 'estado-programa');
+            $alertType = 'success';
+        } else {
+            Yii::error($execution->getMessage(),'estado-programa');
         }
+        Yii::$app->session->setFlash($alertType, $execution->getMessage());
 
-        // bajar estado al minimo (del departamento a borrador)
-        if((PermisosHelpers::requerirDirector($id)  || PermisosHelpers::requerirMinimoRol("Admin")) && $estadoActual->descripcion == "Departamento"){
-            if ($programa->setEstado("Borrador") && $programa->save()){
-              Yii::info("Cambió el estado de Departamento -> Borrador ID:".$id,'estado-programa');
-
-              Yii::$app->session->setFlash('warning','Se rechazó el programa correctamente');
-              Yii::$app->GenerateNotification->creador(self::RECHAZAR_PROGRAMA,$id);
-              Yii::$app->GenerateNotification->suscriptores(self::RECHAZAR_PROGRAMA,$id);
-
-              return $this->redirect(['evaluacion']);
-            } else {
-              Yii::$app->session->setFlash('danger','Hubo un problema al rechazar el programa');
-              return $this->redirect(['evaluacion']);
-            }
-        }
-
-        // Si está más avanzado, devolver al estado anterior.
-        if((PermisosHelpers::requerirRol("Adm_academica") && $estadoActual->descripcion == "Administración Académica") ||
-          (PermisosHelpers::requerirRol("Sec_academica") && $estadoActual->descripcion == "Secretaría Académica") ||
-          (PermisosHelpers::requerirMinimoRol("Admin"))
-        ){
-          //$programa->status_id = Status::findOne(['descripcion','=','Departamento'])->id;
-
-          if($programa->bajarEstado() &&  $programa->save()){
-            Yii::info("Rechazó el programa".$id." con estado actual".$estadoActual->descripcion,'estado-programa');
-            Yii::$app->GenerateNotification->creador(self::RECHAZAR_PROGRAMA,$id);
-            Yii::$app->GenerateNotification->suscriptores(self::RECHAZAR_PROGRAMA,$id);
-            Yii::$app->session->setFlash('warning','Se rechazó el programa correctamente');
-            return $this->redirect(['evaluacion']);
-          } else {
-            Yii::error("No pudo rechazar el programa ".$id." con estado actual".$estadoActual->descripcion,'estado-programa');
-
-            Yii::$app->session->setFlash('danger','Hubo un problema al rechazar el programa');
-            return $this->redirect(['evaluacion']);
-          }
-        }
+        return $this->redirect(['index']);
     }
+
+    // Deprecated
+    //public function actionAprobar($id){
+    //    $programa = $this->findModel($id);
+    //    $programa->scenario = 'carrerap';
+    //    $userId = \Yii::$app->user->identity->id;
+    //    $estadoActual = Status::findOne($programa->status_id);
+    //    if ($estadoActual->descriptionIs(Status::BORRADOR)){
+    //      if(!$programa->hasMinimumLoadPercentage()) {
+    //        Yii::error("Error al enviar programa con ID: ".$id.", menos del ".Programa::MIN_LOAD_PERCENTAGE." cargado",'estado-programa');
+
+    //        Yii::$app->session->setFlash('danger','Debe completar el programa un 40%');
+    //        return $this->redirect(['cargar','id' => $programa->id]);
+    //      } else if ($programa->created_by == $userId){
+    //        if ($programa->subirEstado() && $programa->save()) {
+    //          Yii::info("Subió el estado del programa. BORRADOR->".$programa->getStatus()->one()->descripcion,'estado-programa');
+    //          Yii::$app->session->setFlash('success','Se confirmó el programa exitosamente');
+    //          Yii::$app->GenerateNotification->suscriptores(self::APROBAR_PROGRAMA,$id);
+    //        } else {
+    //          Yii::$app->session->setFlash('danger','Hubo un problema al confirmar el programa');
+    //        }
+    //        return $this->redirect(['evaluacion']);
+    //      } else {
+    //        Yii::warning("Intentó editar un programa ajeno. ID:".$id,'estado-programa');
+    //      }
+    //    }
+    //   if (PermisosHelpers::requerirRol("Departamento")
+    //    && $estadoActual->descripcion == "Profesor"
+    //    && $programa->created_by != $userId ){
+    //      Yii::$app->session->setFlash('danger','Debe pedir el programa antes de seguir');
+    //      return $this->redirect(['evaluacion']);
+    //   }
+    //   if( (PermisosHelpers::requerirDirector($id) && ($estadoActual->descripcion == "Departamento")) ||
+    //      (PermisosHelpers::requerirRol("Adm_academica") && $estadoActual->descripcion == "Administración Académica") ||
+    //      (PermisosHelpers::requerirRol("Sec_academica") && $estadoActual->descripcion == "Secretaría Académica")
+    //    ){
+    //      if($programa->subirEstado() && $programa->save()){
+    //        Yii::info("Subió el estado del programa:".$id." Estaba en estado: ".$estadoActual->descripcion,'estado-programa');
+    //        Yii::$app->session->setFlash('success','Se aprobó el programa exitosamente');
+    //        
+    //        Yii::$app->GenerateNotification->creador(self::APROBAR_PROGRAMA,$id);
+    //        Yii::$app->GenerateNotification->suscriptores(self::APROBAR_PROGRAMA,$id);
+
+    //        return $this->redirect(['evaluacion']);
+    //      } else {
+    //        Yii::error("No pudo subir de estado programa:".$id,'estado-programa');
+    //        Yii::$app->session->setFlash('danger','Hubo un problema al intentar aprobar el programa');
+    //        return $this->redirect(['evaluacion']);
+    //      }
+    //    }
+    //}
+
+    // Deprecated
+    //public function actionRechazar($id){
+    //    $programa = $this->findModel($id);
+    //    $programa->scenario = 'carrerap';
+    //    $userId = \Yii::$app->user->identity->id;
+    //    $estadoActual = Status::findOne($programa->status_id);
+
+    //    if ($estadoActual->descripcion == "Borrador" || $estadoActual->descripcion == "En espera"){
+    //      Yii::error("No pudo rechazar el programa ID:".$id." con estado:".$estadoActual->descripcion,'estado-programa');
+
+    //      Yii::$app->session->setFlash('danger','Hubo un problema al intentar rechazar el programa');
+    //      return $this->redirect(['evaluacion']);
+    //    }
+
+    //    // bajar estado al minimo (del departamento a borrador)
+    //    if((PermisosHelpers::requerirDirector($id)  || PermisosHelpers::requerirMinimoRol("Admin")) && $estadoActual->descripcion == "Departamento"){
+    //        if ($programa->setEstado("Borrador") && $programa->save()){
+    //          Yii::info("Cambió el estado de Departamento -> Borrador ID:".$id,'estado-programa');
+
+    //          Yii::$app->session->setFlash('warning','Se rechazó el programa correctamente');
+    //          Yii::$app->GenerateNotification->creador(self::RECHAZAR_PROGRAMA,$id);
+    //          Yii::$app->GenerateNotification->suscriptores(self::RECHAZAR_PROGRAMA,$id);
+
+    //          return $this->redirect(['evaluacion']);
+    //        } else {
+    //          Yii::$app->session->setFlash('danger','Hubo un problema al rechazar el programa');
+    //          return $this->redirect(['evaluacion']);
+    //        }
+    //    }
+
+    //    // Si está más avanzado, devolver al estado anterior.
+    //    if((PermisosHelpers::requerirRol("Adm_academica") && $estadoActual->descripcion == "Administración Académica") ||
+    //      (PermisosHelpers::requerirRol("Sec_academica") && $estadoActual->descripcion == "Secretaría Académica") ||
+    //      (PermisosHelpers::requerirMinimoRol("Admin"))
+    //    ){
+    //      //$programa->status_id = Status::findOne(['descripcion','=','Departamento'])->id;
+
+    //      if($programa->bajarEstado() &&  $programa->save()){
+    //        Yii::info("Rechazó el programa".$id." con estado actual".$estadoActual->descripcion,'estado-programa');
+    //        Yii::$app->GenerateNotification->creador(self::RECHAZAR_PROGRAMA,$id);
+    //        Yii::$app->GenerateNotification->suscriptores(self::RECHAZAR_PROGRAMA,$id);
+    //        Yii::$app->session->setFlash('warning','Se rechazó el programa correctamente');
+    //        return $this->redirect(['evaluacion']);
+    //      } else {
+    //        Yii::error("No pudo rechazar el programa ".$id." con estado actual".$estadoActual->descripcion,'estado-programa');
+
+    //        Yii::$app->session->setFlash('danger','Hubo un problema al rechazar el programa');
+    //        return $this->redirect(['evaluacion']);
+    //      }
+    //    }
+    //}
 
 
     /**

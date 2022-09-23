@@ -121,7 +121,11 @@ class GeneralesController extends Controller
     }
 
 
-    public function actionPedir($id){
+    /**
+     * Esto se va a deprecar para autoasignar a partir de resoluciones
+     */
+    public function actionPedir($id)
+    {
       $model = $this->findModel($id);
       $model->scenario = 'pedir';
       $estadoActual = $model->getstatus()->one();

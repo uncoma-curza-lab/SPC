@@ -1,10 +1,10 @@
 <?php
 
-namespace common\domain\programs\commands;
+namespace common\domain\programs\commands\ApproveProgram;
 
 use common\shared\commands\CommandExecutionResult;
 
-class ApproveCommandResult implements CommandExecutionResult
+class CommandApproveResult implements CommandExecutionResult
 {
   protected bool $success;
   protected string $message;

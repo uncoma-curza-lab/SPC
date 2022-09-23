@@ -1,16 +1,14 @@
 <?php
 
-namespace common\domain\programs\commands;
+namespace common\domain\programs\commands\ApproveProgram;
 
-use common\domain\programs\commands\ApproveCommandResult;
 use common\models\PermisosHelpers;
 use common\models\Programa as Program;
 use common\models\Status;
 use Exception;
-use common\shared\commands\CommandExecutionResult;
 use common\shared\commands\CommandInterface;
 
-class ApproveProgram implements CommandInterface
+class CommandApproveProcess implements CommandInterface
 {
   protected Program $program;
 
@@ -19,7 +17,7 @@ class ApproveProgram implements CommandInterface
       $this->program = $program;
   }
 
-  public function handle() : CommandExecutionResult
+  public function handle() : CommandApproveResult
   {
       $originalStatus = $this->program->status;
       try { 
@@ -31,15 +29,15 @@ class ApproveProgram implements CommandInterface
               $newStatus = $this->program->status;
               $message = "Subió el estado del programa de " . $originalStatus->descripcion . " a " . $newStatus->descripcion;
 
-              return new ApproveCommandResult(true, $message, [
+              return new CommandApproveResult(true, $message, [
                 'originalStatus' => $originalStatus,
                 'newStatus' => $newStatus 
               ]);
           }
 
-          return new ApproveCommandResult(false, 'No se pudo subir de estado', []);
+          return new CommandApproveResult(false, 'No se pudo subir de estado', []);
       } catch (Exception $e) {
-        return new ApproveCommandResult(false, 'No se cumple con los requisitos para subir de estado', [
+        return new CommandApproveResult(false, $e->getMessage(), [
           'error' => $e
         ]);
       }
@@ -48,8 +46,11 @@ class ApproveProgram implements CommandInterface
   private function validateDraftFlow() : bool
   {
       if ($this->program->status->descriptionIs(Status::BORRADOR)) {
-        if(!$this->program->hasMinimumLoadPercentage() || !PermisosHelpers::requerirSerDueno($this->program->id)) {
-          throw new Exception('');
+        if(!$this->program->hasMinimumLoadPercentage()) {
+          throw new Exception('No cumple el mínimo de porcentaje de carga');
+        }
+        if (!PermisosHelpers::requerirSerDueno($this->program->id)) {
+          throw new Exception('No tiene permisos para eso');
         }
         return true;
       }
