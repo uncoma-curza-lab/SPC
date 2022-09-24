@@ -223,7 +223,7 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
                     return Html::a(
                         '<span style="padding:5px; font-size:20px;color:	#0CB7F2" class="glyphicon glyphicon-info-sign"></span>',
                         //$url);
-                        ['ver','id' => $model->id],
+                        ['programa/ver','id' => $model->id],
                         [
                             'title' => Yii::t('yii', 'Información'),
                         ]);

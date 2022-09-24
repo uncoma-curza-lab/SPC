@@ -178,9 +178,12 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
                 },
                 'cargar' => function ($url,$model) {
                   $status = Status::findOne($model->status_id);
-                  if ($status && ($status->descripcion == "Borrador"
-                      && PermisosHelpers::requerirMinimoRol('Profesor')
-                      && PermisosHelpers::requerirSerDueno($model->id)))
+                  if (
+                      $status &&
+                      $status->descripcion == "Borrador" &&
+                      PermisosHelpers::requerirMinimoRol('Profesor') &&
+                      PermisosHelpers::requerirSerDueno($model->id)
+                  )
                   {
                     return Html::a(
                       '<span style="padding:5px; font-size:20px; color:orange" class="glyphicon glyphicon-pencil "></span>',
@@ -188,25 +191,27 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
                     );
                   }
                 },
-                'editar' => function ($url,$model) {
-                  $status = Status::findOne($model->status_id);
-                  if ($status && ($status->descripcion == "Borrador"
-                      && PermisosHelpers::requerirDirector($model->id) && PermisosHelpers::existeProfAdjunto($model->id))
-                      || ($status->descripcion == "Departamento"
-                        && PermisosHelpers::requerirRol('Departamento') && PermisosHelpers::requerirDirector($model->id)))
-                  {
-                    return Html::a(
-                      '<span style="padding:5px; font-size:20px;" class="glyphicon glyphicon-pencil"></span>',
-                      ['editar','id' => $model->id]
-                    );
-                  }
-                },
+                // por ahora no deberia existir mas 
+                // el director ni el depto puede editar el programa
+                //'editar' => function ($url,$model) {
+                //  $status = Status::findOne($model->status_id);
+                //  if ($status && ($status->descripcion == "Borrador"
+                //      && PermisosHelpers::requerirDirector($model->id) && PermisosHelpers::existeProfAdjunto($model->id))
+                //      || ($status->descripcion == "Departamento"
+                //        && PermisosHelpers::requerirRol('Departamento') && PermisosHelpers::requerirDirector($model->id)))
+                //  {
+                //    return Html::a(
+                //      '<span style="padding:5px; font-size:20px;" class="glyphicon glyphicon-pencil"></span>',
+                //      ['editar','id' => $model->id]
+                //    );
+                //  }
+                //},
                 
                 'ver' => function ($url,$model) {
                     return Html::a(
                         '<span style="padding:5px; font-size:20px; color:	#0CB7F2" class="glyphicon glyphicon-comment"></span>',
                         //$url);
-                        ['ver','id' => $model->id],
+                        ['programa/ver','id' => $model->id],
                         [
                             'title' => Yii::t('yii', 'Observaciones'),
                         ]);

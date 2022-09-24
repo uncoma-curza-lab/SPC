@@ -25,7 +25,7 @@ class CommandRejectProcess implements CommandInterface
                 $this->program->save();
                 return new CommandRejectResult(
                     true,
-                    "Cambió el estado de " . $originalStatus->descripcion . "-> Borrador, ID:".$this->program->id,
+                    "Cambió el estado de " . $originalStatus->descripcion . " -> Borrador, Identificador de programa: ".$this->program->id,
                     [
                         'original_status' => $originalStatus,
                         'new_status' => Status::BORRADOR,
@@ -76,7 +76,7 @@ class CommandRejectProcess implements CommandInterface
     public function canSetFromAreas(): bool
     {
         $originalStatus = $this->program->status;
-        return (PermisosHelpers::requerirDirector($$this->program->id) && $originalStatus->descriptionIs(Status::DEPARTAMENTO)) ||
+        return (PermisosHelpers::requerirDirector($this->program->id) && $originalStatus->descriptionIs(Status::DEPARTAMENTO)) ||
             (PermisosHelpers::requerirRol("Adm_academica") && $originalStatus->descriptionIs(Status::ADMINISTRACION_ACADEMICA)) ||
             (PermisosHelpers::requerirRol("Sec_academica") && $originalStatus->descriptionIs(Status::SECRETARIA_ACADEMICA));
     }

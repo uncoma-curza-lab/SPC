@@ -130,6 +130,7 @@ class MiProgramaController extends Controller
      * @deprecated
      */
     public function actionVer($id) {
+      throw new \Exception("Deprecated method");
       $model = $this->findModel($id);
 
       if(Yii::$app->request->post('submit') == 'observacion' &&

@@ -112,6 +112,7 @@ class GeneralesController extends Controller
      * @deprecated
      */
     public function actionVer($id) {
+      throw new \Exception("Deprecated method");
       $model = $this->findModel($id);
       if(Yii::$app->request->post('submit') == 'observacion' &&
           $model->load(Yii::$app->request->post()) && $model->save()) {
