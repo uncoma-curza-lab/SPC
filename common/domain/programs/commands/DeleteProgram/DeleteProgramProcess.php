@@ -22,7 +22,6 @@ class DeleteProgramProcess implements CommandInterface
 
     public function handle() : DeleteProgramResult
     {
-        $userId = \Yii::$app->user->identity->id;
         $transaccion = Yii::$app->db->beginTransaction();
         try {
             // si está en borrador y es dueño
