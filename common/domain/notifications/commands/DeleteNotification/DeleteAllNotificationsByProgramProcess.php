@@ -3,12 +3,8 @@
 namespace common\domain\notifications\commands\DeleteNotification;
 
 use common\models\Notification;
-use common\models\PermisosHelpers;
 use common\models\Programa as Program;
-use common\models\Status;
-use Exception;
 use common\shared\commands\CommandInterface;
-use Yii;
 
 class DeleteAllNotificationsByProgramProcess implements CommandInterface
 {
@@ -23,7 +19,7 @@ class DeleteAllNotificationsByProgramProcess implements CommandInterface
     {
         try {
             Notification::deleteAll([
-                'program_id' => $this->program->id
+                'programa_id' => $this->program->id
             ]);
 
             return new DeleteNotificationResult(true, 'Fueron eliminadas con éxito', []);
@@ -31,3 +27,4 @@ class DeleteAllNotificationsByProgramProcess implements CommandInterface
             return new DeleteNotificationResult(false, 'Hubo un error al eliminar alguna notification', ['exception' => $e]);
         }
     }
+}

@@ -244,7 +244,7 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
                     {
                       return Html::a(
                         '<span style="padding:5px; font-size:20px; color:	#d9534f" class="glyphicon glyphicon-trash"></span>',
-                        $url,
+                        ['programa/delete', 'id' => $model->id],
                         [
                             'title' => Yii::t('yii', 'Eliminar'),
                             'data-confirm' => Yii::t('yii', '¿Quiere eliminar el programa?'),

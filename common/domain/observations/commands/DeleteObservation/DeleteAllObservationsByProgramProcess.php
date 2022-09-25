@@ -2,13 +2,9 @@
 
 namespace common\domain\observations\commands\DeleteObservation;
 
-use common\models\Notification;
-use common\models\PermisosHelpers;
+use common\models\Observacion;
 use common\models\Programa as Program;
-use common\models\Status;
-use Exception;
 use common\shared\commands\CommandInterface;
-use Yii;
 
 class DeleteAllObservationsByProgramProcess implements CommandInterface
 {
@@ -22,8 +18,8 @@ class DeleteAllObservationsByProgramProcess implements CommandInterface
     public function handle() : DeleteObservationResult
     {
         try {
-            DeleteObservation::deleteAll([
-                'program_id' => $this->program->id
+            Observacion::deleteAll([
+                'programa_id' => $this->program->id
             ]);
 
             return new DeleteObservationResult(true, 'Las observaciones fueron eliminadas con éxito', []);
@@ -31,3 +27,4 @@ class DeleteAllObservationsByProgramProcess implements CommandInterface
             return new DeleteObservationResult(false, 'Hubo un error al eliminar alguna observación', ['exception' => $e]);
         }
     }
+}

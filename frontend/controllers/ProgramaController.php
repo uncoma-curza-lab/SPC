@@ -374,6 +374,10 @@ class ProgramaController extends Controller
 
         Yii::$app->session->setFlash($alertType, $result->getMessage());
 
+        if (Yii::$app->request->referrer) {
+            return $this->redirect(Yii::$app->request->referrer);
+        }
+        return $this->redirect(['index']);
        // $estado = $model->getStatus()->one()->getDescripcion();
        // $userId = \Yii::$app->user->identity->id;
        // 
