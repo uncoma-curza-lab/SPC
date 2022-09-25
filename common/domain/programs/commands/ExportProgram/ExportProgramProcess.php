@@ -3,13 +3,9 @@
 namespace common\domain\programs\commands\ExportProgram;
 
 use common\models\Programa as Program;
-use common\models\Status;
-use Exception;
 use common\shared\commands\CommandInterface;
 use Mpdf\HTMLParserMode;
 use Mpdf\Mpdf;
-use yii\base\View;
-use yii\web\View as WebView;
 
 class ExportProgramProcess implements CommandInterface
 {
