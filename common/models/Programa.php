@@ -78,9 +78,9 @@ class Programa extends \yii\db\ActiveRecord
             [['equipo_catedra'],'required','on' => 'equipo_catedra','message' => "Debe completar este campo"],
             [['firma','biblio_basica','biblio_consulta','equipo_catedra','contenido_analitico','fundament', 'objetivo_plan', 'contenido_plan', 'propuesta_met', 'evycond_acreditacion', 'parcial_rec_promo', 'distr_horaria', 'crono_tentativo', 'actv_extracur'], 'string'],
             [['created_at', 'updated_at'], 'safe'],
-            [['asignatura_id'], 'exist', 'skipOnError' => true, 'targetClass' => Asignatura::className(), 'targetAttribute' => ['asignatura_id' => 'id']],
-            [['departamento_id'], 'exist', 'skipOnError' => true, 'targetClass' => Departamento::className(), 'targetAttribute' => ['departamento_id' => 'id']],
-            [['status_id'], 'exist', 'skipOnError' => true, 'targetClass' => Status::className(), 'targetAttribute' => ['status_id' => 'id']],
+            [['asignatura_id'], 'exist', 'skipOnError' => true, 'targetClass' => Asignatura::class, 'targetAttribute' => ['asignatura_id' => 'id']],
+            [['departamento_id'], 'exist', 'skipOnError' => true, 'targetClass' => Departamento::class, 'targetAttribute' => ['departamento_id' => 'id']],
+            [['status_id'], 'exist', 'skipOnError' => true, 'targetClass' => Status::class, 'targetAttribute' => ['status_id' => 'id']],
         ];
     }
 
@@ -97,7 +97,7 @@ class Programa extends \yii\db\ActiveRecord
             'value' => new Expression('NOW()'),
         ],
         'blameable' => [
-            'class' => BlameableBehavior::className(),
+            'class' => BlameableBehavior::class,
             'createdByAttribute' => 'created_by',
             'updatedByAttribute' => 'updated_by',
         ],
@@ -188,7 +188,7 @@ class Programa extends \yii\db\ActiveRecord
      */
     public function getCarreraprogramas()
     {
-        return $this->hasMany(Carreraprograma::className(), ['programa_id' => 'id']);
+        return $this->hasMany(Carreraprograma::class, ['programa_id' => 'id']);
     }
 
     /**
@@ -198,7 +198,7 @@ class Programa extends \yii\db\ActiveRecord
      */
     public function getDesignaciones()
     {
-        return $this->hasMany(Designacion::className(), ['programa_id' => 'id']);
+        return $this->hasMany(Designacion::class, ['programa_id' => 'id']);
     }
 
     /**
@@ -255,11 +255,11 @@ class Programa extends \yii\db\ActiveRecord
      */
     public function getDepartamento()
     {
-        return $this->hasOne(Departamento::className(), ['id' => 'departamento_id']);
+        return $this->hasOne(Departamento::class, ['id' => 'departamento_id']);
     }
     public function getDepartamentoasignatura()
     {
-      return $this->hasOne(Departamento::className(), ['id' => 'departamento_id'])
+      return $this->hasOne(Departamento::class, ['id' => 'departamento_id'])
         ->via('asignatura');
     }
 
@@ -269,7 +269,7 @@ class Programa extends \yii\db\ActiveRecord
      */
     public function getStatus()
     {
-        return $this->hasOne(Status::className(), ['id' => 'status_id']);
+        return $this->hasOne(Status::class, ['id' => 'status_id']);
     }
 
     /**
@@ -279,7 +279,7 @@ class Programa extends \yii\db\ActiveRecord
      */
     public function getUnidades()
     {
-        return $this->hasMany(Unidad::className(), ['programa_id' => 'id']);
+        return $this->hasMany(Unidad::class, ['programa_id' => 'id']);
     }
 
     /**
@@ -288,7 +288,7 @@ class Programa extends \yii\db\ActiveRecord
      */
     public function getCreador()
     {
-        return $this->hasOne(Perfil::className(), ['user_id' => 'created_by'])->one();
+        return $this->hasOne(Perfil::class, ['user_id' => 'created_by'])->one();
     }
     /**
      * Obtiene el perfil del creador del programa
@@ -296,7 +296,7 @@ class Programa extends \yii\db\ActiveRecord
      */
     public function getPerfil()
     {
-        return $this->hasOne(Perfil::className(), ['user_id' => 'created_by']);
+        return $this->hasOne(Perfil::class, ['user_id' => 'created_by']);
     }
     /**
      * Obtiene al creador del programa
