@@ -12,6 +12,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use common\models\PermisosHelpers;
 use common\models\Status;
+use Exception;
 use Mpdf;
 
 /**
@@ -192,6 +193,7 @@ class GeneralesController extends Controller
      */
     public function actionUpdate($id)
     {
+        throw new Exception('deprecated method]');
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -206,14 +208,16 @@ class GeneralesController extends Controller
     /**
      * Deletes an existing Generos model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
+     * @deprecated
      * @param integer $id
      * @return mixed
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        throw new Exception('deprecated method]');
+       // $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+       // return $this->redirect(['index']);
     }
 
     /**
