@@ -138,7 +138,7 @@ class UserNotificationsController extends Controller
         $notification->setRead();
         $notification->save(false);
 
-        $this->redirect(['mi-programa/ver','id' => $id]);
+        $this->redirect(['programa/ver','id' => $id]);
 
     }
     public function actionAllRead(){

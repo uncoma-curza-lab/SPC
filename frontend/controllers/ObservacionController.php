@@ -33,10 +33,6 @@ class ObservacionController extends Controller
         return [
             'access' => [
                 'class' => \yii\filters\AccessControl::className(),
-                /*'only' => [
-                  'index', 'view', 'create', 'update','delete',
-                
-                ],*/
                 'rules' => [
                     [
                          'actions' => [
