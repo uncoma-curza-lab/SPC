@@ -416,8 +416,14 @@ class ProgramaController extends Controller
             $resultData = $result->getData();
             $exportMpdf = $resultData['mpdf'];
             $exportMpdf->Output();
+        } else {
+            Yii::$app->session->setFlash('danger', 'No fue posible exportar el programa');
+
+            if (Yii::$app->request->referrer) {
+                return $this->goBack(Yii::$app->request->referrer);
+            }
+            return $this->redirect(['index']);
         }
-        var_dump($result);
         //$mpdf = new Mpdf\Mpdf(['utf-8','A4','tempDir' => __DIR__ . '/tmp']);
         //$stylesheet = file_get_contents('css/estilo-pdf.css');
         //$mpdf->WriteHTML($stylesheet,\Mpdf\HTMLParserMode::HEADER_CSS);
