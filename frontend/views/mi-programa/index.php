@@ -220,7 +220,7 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
                   return Html::a(
                       '<span style="padding:5px; font-size:20px; color:	#BFAB57" class="glyphicon glyphicon-duplicate"></span>',
                       //$url);
-                      ['copy','id' => $model->id],
+                      ['programa/copy','id' => $model->id],
                       [
                           'title' => Yii::t('yii', 'Copiar'),
                       ]);

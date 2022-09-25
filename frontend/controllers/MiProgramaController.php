@@ -34,17 +34,9 @@ class MiProgramaController extends Controller
         return [
           'access' => [
                  'class' => \yii\filters\AccessControl::className(),
-                 /*'only' => [
-                   'index', 'view', 'create', 'update','delete',
-                   'ver', 'anadir','fundamentacion','cargar',
-                   'fundamentacion', 'objetivo-plan', 'contenido-analitico',
-                   'contenido-plan', 'eval-acred', 'propuesta-metodologica',
-                   'parcial-rec-promo', 'dist-horaria', 'crono-tentativo',
-                   'actividad-extracurricular', 'aprobar', 'rechazar'
-                 ],*/
                  'rules' => [
                      [
-                         'actions' => ['index', 'view','editar','export-pdf'],
+                         'actions' => ['index', 'view','editar'],
                          'allow' => true,
                          'roles' => ['@'],
                          'matchCallback' => function ($rule, $action) {
@@ -57,7 +49,7 @@ class MiProgramaController extends Controller
                           'actions' => [
                             'create','update','delete','anadir', 'ver',
                             'aprobar', 'rechazar','usuarios','lcrear',
-                            'fundamentacion','asignar', 'copy',
+                            'fundamentacion','asignar',
                             'objetivo-plan', 'contenido-analitico',
                             'contenido-plan', 'eval-acred', 'propuesta-metodologica',
                             'parcial-rec-promo', 'dist-horaria', 'crono-tentativo',

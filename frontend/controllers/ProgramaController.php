@@ -53,7 +53,7 @@ class ProgramaController extends Controller
                      [
                           'actions' => [
                             'create','update','delete','anadir', 'ver',
-                            'aprobar', 'rechazar', 'evaluacion'
+                            'aprobar', 'rechazar', 'evaluacion', 'copy'
                           ],
                           'allow' => true,
                           'roles' => ['@'],
@@ -161,7 +161,7 @@ class ProgramaController extends Controller
         Yii::$app->session->setFlash($alertType, $execution->getMessage());
 
         if (Yii::$app->request->referrer) {
-            return $this->goBack(Yii::$app->request->referrer);
+            return $this->redirect(Yii::$app->request->referrer);
         }
         return $this->redirect(['index']);
     }
@@ -184,7 +184,7 @@ class ProgramaController extends Controller
         Yii::$app->session->setFlash($alertType, $execution->getMessage());
 
         if (Yii::$app->request->referrer) {
-            return $this->goBack(Yii::$app->request->referrer);
+            return $this->redirect(Yii::$app->request->referrer);
         }
         return $this->redirect(['index']);
     }
@@ -444,55 +444,67 @@ class ProgramaController extends Controller
     * @throws ForbiddenHttpException si no tiene permisos de copiar el programa
     */
     public function actionCopy($id){
-      $model = $this->findModel($id);
-      $model->scenario = 'copy';
+        $model = $this->findModel($id);
+        $model->scenario = 'copy';
 
-      // falta enviar data post
-      $command = new CloneProgramProcess($model);
-      $result = $command->handle();
-      if (!$result->getResult()) {
-        throw new ForbiddenHttpException('No tiene permisos realizar esta operación');
-      }
+        // falta enviar data post
+        $command = new CloneProgramProcess($model);
+        $result = $command->handle();
+        if (!$result->getResult()) {
+            if (array_key_exists('new_program', $result->getData())) {
+                return $this->render('forms/_copy', [
+                    'model' => $result->getData()['new_program'],
+                    'oldModel' => $model
+                ]);
+            }
+            Yii::$app->session->setFlash('danger', $result->getMessage());
+        } else {
+            Yii::$app->session->setFlash('success', $result->getMessage());
+        }
+        if (Yii::$app->request->referrer) {
+            return $this->goBack(Yii::$app->request->referrer);
+        }
+        return $this->redirect(['index']);
 
-      Yii::$app->session->setFlash('success','Se ha generado una copia correctamente');
-      //return $this->render('forms/_copy', [
-      //    'model' => $result->getData()['new_program'],
-      //    'oldModel' => $model
-      //]);
+        //Yii::$app->session->setFlash('success','Se ha generado una copia correctamente');
+        //return $this->render('forms/_copy', [
+        //    'model' => $result->getData()['new_program'],
+        //    'oldModel' => $model
+        //]);
 
 
-      //$estado = Status::findOne($model->status_id);
-      //$validarPermisos = $this->validarPermisos($model, $estado);
-      //if ($validarPermisos) {
-      //  $modelNew = clone $model;
-      //  $modelNew->scenario = 'copy';
-      //  $modelNew->status_id = Status::find()->where(['=','descripcion','Borrador'])->one()->id;
-      //  $modelNew->isNewRecord = true;
-      //  $modelNew->id = null;
-      //  $modelNew->departamento_id = null;
-      //  $modelNew->setAsignatura('null');
-      //  if ($modelNew->load(Yii::$app->request->post())){
-      //    if($modelNew->save()){
-      //      // mensaje a usuario
-      //      Yii::$app->session->setFlash('success','Se ha generado una copia correctamente');
-      //      // LOG de éxito
-      //      $this->mensajeGuardadoExito($modelNew);
-      //      
-      //      return $this->redirect(['index']);
-      //    } else {
-      //      // mensaje a usuario
-      //      Yii::$app->session->setFlash('danger','Hubo un problema al guardar los cambios');
-      //      // log de fallo
-      //      $this->mensajeGuardadoFalla($modelNew);
-      //    }
-      //  }
-      //  
-      //  return $this->render('forms/_copy', [
-      //      'model' => $modelNew,
-      //      'oldModel' => $model
-      //  ]);
-      //}
-      //throw new ForbiddenHttpException('No tiene permisos realizar esta operación');
+        //$estado = Status::findOne($model->status_id);
+        //$validarPermisos = $this->validarPermisos($model, $estado);
+        //if ($validarPermisos) {
+        //  $modelNew = clone $model;
+        //  $modelNew->scenario = 'copy';
+        //  $modelNew->status_id = Status::find()->where(['=','descripcion','Borrador'])->one()->id;
+        //  $modelNew->isNewRecord = true;
+        //  $modelNew->id = null;
+        //  $modelNew->departamento_id = null;
+        //  $modelNew->setAsignatura('null');
+        //  if ($modelNew->load(Yii::$app->request->post())){
+        //    if($modelNew->save()){
+        //      // mensaje a usuario
+        //      Yii::$app->session->setFlash('success','Se ha generado una copia correctamente');
+        //      // LOG de éxito
+        //      $this->mensajeGuardadoExito($modelNew);
+        //      
+        //      return $this->redirect(['index']);
+        //    } else {
+        //      // mensaje a usuario
+        //      Yii::$app->session->setFlash('danger','Hubo un problema al guardar los cambios');
+        //      // log de fallo
+        //      $this->mensajeGuardadoFalla($modelNew);
+        //    }
+        //  }
+        //  
+        //  return $this->render('forms/_copy', [
+        //      'model' => $modelNew,
+        //      'oldModel' => $model
+        //  ]);
+        //}
+        //throw new ForbiddenHttpException('No tiene permisos realizar esta operación');
 
     }
 }

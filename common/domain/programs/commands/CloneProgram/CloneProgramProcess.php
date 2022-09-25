@@ -20,6 +20,10 @@ class CloneProgramProcess implements CommandInterface
 
     public function handle() : CloneProgramResult
     {
+        $modelNew = null;
+        $message = '';
+        $statusResponse = false;
+        $dataResponse = [];
         try {
             if (!$this->validate()) {
                 throw new Exception('No tiene permisos para clonar el programa');
@@ -32,14 +36,18 @@ class CloneProgramProcess implements CommandInterface
             $modelNew->departamento_id = null;
             // TODO Borrar firma y equipo de catedra
             $modelNew->setAsignatura('null');
-            if (!$modelNew->save()) {
-                throw new Exception('No se pudo guardar la copia');
+            $dataResponse['new_program'] = $modelNew;
+            if (Yii::$app->request->post() && $modelNew->load(Yii::$app->request->post()) && $modelNew->save()) {
+                $message = 'El programa se clonó con éxito';
+                $statusResponse = true;
             }
-            return new CloneProgramResult(true, 'El programa fue clonado con éxito', [
-                'new_program' => $modelNew
-            ]);
         } catch (\Throwable $e) {
-            return new CloneProgramResult(false, 'No se pudo clonar el programa', ['exception' => $e]);
+            $statusResponse = false;
+            $message = $e->getMessage();
+            $dataResponse['exception'] = $e;
+        } finally {
+            return new CloneProgramResult($statusResponse, $message, $dataResponse);
+
         }
     }
 
