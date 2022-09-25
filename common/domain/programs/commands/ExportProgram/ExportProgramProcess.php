@@ -27,7 +27,7 @@ class ExportProgramProcess implements CommandInterface
             $mpdf = new Mpdf([
                 'utf-8',
                 'A4',
-                'tempDir' => __DIR__ . '/tmp'
+                'tempDir' => \Yii::getAlias('@common/tmp')
             ]);
             $stylesheet = file_get_contents(\Yii::getAlias('@frontend/web/css/estilo-pdf.css'));
             $mpdf->WriteHTML($stylesheet, HTMLParserMode::HEADER_CSS);
