@@ -208,7 +208,7 @@ class Programa extends \yii\db\ActiveRecord
      */
     public function getObjetivos()
     {
-        return $this->hasMany(Objetivo::className(), ['programa_id' => 'id']);
+        return $this->hasMany(Objetivo::class, ['programa_id' => 'id']);
     }
 
     /**
@@ -217,7 +217,7 @@ class Programa extends \yii\db\ActiveRecord
      */
     public function getObservaciones()
     {
-        return $this->hasMany(Observacion::className(), ['programa_id' => 'id']);
+        return $this->hasMany(Observacion::class, ['programa_id' => 'id']);
     }
      /**
      * Obtener observaciones de un programa
@@ -226,11 +226,11 @@ class Programa extends \yii\db\ActiveRecord
     public function getNotificationEmail()
     {
         //return NotificationEmail::find()->where(['programa_id' => $this->id]);
-        return $this->hasMany(NotificationEmail::className(), ['programa_id' => 'id']);
+        return $this->hasMany(NotificationEmail::class, ['programa_id' => 'id']);
     }
     public function getNotificationPanel()
     {
-      return $this->hasMany(NotificationPanel::className(), ['programa_id' => 'id']);
+      return $this->hasMany(NotificationPanel::class, ['programa_id' => 'id']);
 
     }
 
