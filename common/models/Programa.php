@@ -245,7 +245,7 @@ class Programa extends \yii\db\ActiveRecord
      */
     public function getAsignatura()
     {
-        return $this->hasOne(Asignatura::className(), ['id' => 'asignatura_id']);
+        return $this->hasOne(Asignatura::class, ['id' => 'asignatura_id']);
     }
 
     /**
