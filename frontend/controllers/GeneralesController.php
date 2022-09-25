@@ -171,18 +171,18 @@ class GeneralesController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
-    {
-        $model = new Generos();
+    //public function actionCreate()
+    //{
+    //    $model = new Generos();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
-        }
-    }
+    //    if ($model->load(Yii::$app->request->post()) && $model->save()) {
+    //        return $this->redirect(['view', 'id' => $model->id]);
+    //    } else {
+    //        return $this->render('create', [
+    //            'model' => $model,
+    //        ]);
+    //    }
+    //}
 
     /**
      * Updates an existing Generos model.
@@ -232,7 +232,8 @@ class GeneralesController extends Controller
         }
     }
 
-    /*
+    /**
+    * @deprecated
     * Comienzan las funciones para crear y exportar un PDF
     */
     public function actionExportPdf($id){

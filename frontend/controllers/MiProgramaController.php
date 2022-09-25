@@ -1030,7 +1030,8 @@ class MiProgramaController extends Controller
       return false;
     }
 
-    /*
+    /**
+    * @deprecated
     * Comienzan las funciones para crear y exportar un PDF
     */
     public function actionExportPdf($id){
