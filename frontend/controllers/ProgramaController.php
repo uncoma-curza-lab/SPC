@@ -3,6 +3,7 @@
 namespace frontend\controllers;
 
 use common\domain\programs\commands\ApproveProgram\CommandApproveProcess;
+use common\domain\programs\commands\CloneProgram\CloneProgramProcess;
 use common\domain\programs\commands\ExportProgram\ExportProgramProcess;
 use common\domain\programs\commands\RejectProgram\CommandRejectProcess;
 use Yii;
@@ -21,7 +22,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use Mpdf;
-
+use yii\web\ForbiddenHttpException;
 
 /**
  * ProgramaController implements the CRUD actions for Programa model.
@@ -434,5 +435,64 @@ class ProgramaController extends Controller
 
         //$mpdf->WriteHTML($this->renderPartial('paginas',['model'=>$model]));
         //$mpdf->Output();
+    }
+
+    /**
+    *  Copiar un programa
+    *  @param integer $id del programa
+    *  @return mixed
+    * @throws ForbiddenHttpException si no tiene permisos de copiar el programa
+    */
+    public function actionCopy($id){
+      $model = $this->findModel($id);
+      $model->scenario = 'copy';
+
+      // falta enviar data post
+      $command = new CloneProgramProcess($model);
+      $result = $command->handle();
+      if (!$result->getResult()) {
+        throw new ForbiddenHttpException('No tiene permisos realizar esta operación');
+      }
+
+      Yii::$app->session->setFlash('success','Se ha generado una copia correctamente');
+      //return $this->render('forms/_copy', [
+      //    'model' => $result->getData()['new_program'],
+      //    'oldModel' => $model
+      //]);
+
+
+      //$estado = Status::findOne($model->status_id);
+      //$validarPermisos = $this->validarPermisos($model, $estado);
+      //if ($validarPermisos) {
+      //  $modelNew = clone $model;
+      //  $modelNew->scenario = 'copy';
+      //  $modelNew->status_id = Status::find()->where(['=','descripcion','Borrador'])->one()->id;
+      //  $modelNew->isNewRecord = true;
+      //  $modelNew->id = null;
+      //  $modelNew->departamento_id = null;
+      //  $modelNew->setAsignatura('null');
+      //  if ($modelNew->load(Yii::$app->request->post())){
+      //    if($modelNew->save()){
+      //      // mensaje a usuario
+      //      Yii::$app->session->setFlash('success','Se ha generado una copia correctamente');
+      //      // LOG de éxito
+      //      $this->mensajeGuardadoExito($modelNew);
+      //      
+      //      return $this->redirect(['index']);
+      //    } else {
+      //      // mensaje a usuario
+      //      Yii::$app->session->setFlash('danger','Hubo un problema al guardar los cambios');
+      //      // log de fallo
+      //      $this->mensajeGuardadoFalla($modelNew);
+      //    }
+      //  }
+      //  
+      //  return $this->render('forms/_copy', [
+      //      'model' => $modelNew,
+      //      'oldModel' => $model
+      //  ]);
+      //}
+      //throw new ForbiddenHttpException('No tiene permisos realizar esta operación');
+
     }
 }
