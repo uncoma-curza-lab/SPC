@@ -233,6 +233,12 @@ class Programa extends \yii\db\ActiveRecord
       return $this->hasMany(NotificationPanel::className(), ['programa_id' => 'id']);
 
     }
+
+    public function getNotifications()
+    {
+        return $this->hasMany(Notification::class, ['programa_id' => 'id']);
+    }
+
     /**
      * Obtiene las asignaturas de un programa
      * @return \yii\db\ActiveQuery

@@ -869,84 +869,85 @@ class MiProgramaController extends Controller
     /**
      * Deletes an existing Programa model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
+     * @deprecated
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionDelete($id)
     {
-        $model = $this->findModel($id);
-        //$designaciones = $model->getDesignaciones()->all();
-        /*foreach ($designaciones as $key) {
-          $key->delete();
-        }*/
-        $estado = $model->getStatus()->one()->getDescripcion();
-        $userId = \Yii::$app->user->identity->id;
+        throw new \Exception('deprecated method');
+        //$model = $this->findModel($id);
+
+
+        // deprecated
+        //$estado = $model->getStatus()->one()->getDescripcion();
+        //$userId = \Yii::$app->user->identity->id;
         
 
-        $transaccion = Yii::$app->db->beginTransaction();
-        try {
-            if($estado == "Borrador" && $model->getCreatedBy() == $userId){
-              $flag = true;
-              if ($notifEmail = $model->getNotificationEmail()->all()) {
-                foreach ($notifEmail as $notificacion) {
-                  $notifID = $notificacion->id;
-                  if($notificacion->delete()){
-                    Yii::info("Se eliminó la notificacion".$notifID." por la acción de borrar programa: ".$id,'- miprograma');
-                  } else {
-                    $flag = false;
-                    break;
-                    $transaccion->rollBack();
-                  }
-                }
-              }
-              if ($notifPanel = $model->getNotificationPanel()->all()) {
-                foreach ($notifPanel as $notificacion) {
-                  $notifID = $notificacion->id;
-                  if($notificacion->delete()){
-                    Yii::info("Se eliminó la notificacion".$notifID." por la acción de borrar programa: ".$id,'- miprograma');
-                  } else {
-                    $flag = false;
-                    break;
-                    $transaccion->rollBack();
-                  }
-                }
-              }
-              if($observaciones = $model->getObservaciones()->all()){
-                foreach ($observaciones as $obs) {
-                  $obsId = $obs->id;
-                  if($obs->delete()) {
-                    Yii::info("Se eliminó la observación".$obsId." por la acción de borrar programa: ".$id,'- miprograma');
-                  } else {
-                    $flag = false;
-                    break;
-                    $transaccion->rollBack();
-                  }
-                }
-              }
-              
-              if ($flag && $model->delete()){
-                $transaccion->commit();
-                Yii::$app->session->setFlash('success','El programa eliminó correctamente.');
-                Yii::info("Eliminó el programa: ".$id,'miprograma');
-              } else {
-                $transaccion->rollBack();
-                Yii::$app->session->setFlash('danger','El programa no se pudo eliminar.');
-                Yii::error("No se pudo eliminar el programa: ".$id,'miprograma');
-              }
-            } else {
-              Yii::$app->session->setFlash('danger','No puede realizar esta acción.');
-            }
-        } catch(Exception $e) {
-          $transaccion->rollBack();
-          Yii::error("No se pudo eliminar el programa: ".$id,'miprograma'. "Error de en transaction".$e);
-        }
-        return $this->redirect(['index']);
+        //$transaccion = Yii::$app->db->beginTransaction();
+        //try {
+        //    if($estado == "Borrador" && $model->getCreatedBy() == $userId){
+        //      $flag = true;
+        //      if ($notifEmail = $model->getNotificationEmail()->all()) {
+        //        foreach ($notifEmail as $notificacion) {
+        //          $notifID = $notificacion->id;
+        //          if($notificacion->delete()){
+        //            Yii::info("Se eliminó la notificacion".$notifID." por la acción de borrar programa: ".$id,'- miprograma');
+        //          } else {
+        //            $flag = false;
+        //            break;
+        //            $transaccion->rollBack();
+        //          }
+        //        }
+        //      }
+        //      if ($notifPanel = $model->getNotificationPanel()->all()) {
+        //        foreach ($notifPanel as $notificacion) {
+        //          $notifID = $notificacion->id;
+        //          if($notificacion->delete()){
+        //            Yii::info("Se eliminó la notificacion".$notifID." por la acción de borrar programa: ".$id,'- miprograma');
+        //          } else {
+        //            $flag = false;
+        //            break;
+        //            $transaccion->rollBack();
+        //          }
+        //        }
+        //      }
+        //      if($observaciones = $model->getObservaciones()->all()){
+        //        foreach ($observaciones as $obs) {
+        //          $obsId = $obs->id;
+        //          if($obs->delete()) {
+        //            Yii::info("Se eliminó la observación".$obsId." por la acción de borrar programa: ".$id,'- miprograma');
+        //          } else {
+        //            $flag = false;
+        //            break;
+        //            $transaccion->rollBack();
+        //          }
+        //        }
+        //      }
+        //      
+        //      if ($flag && $model->delete()){
+        //        $transaccion->commit();
+        //        Yii::$app->session->setFlash('success','El programa eliminó correctamente.');
+        //        Yii::info("Eliminó el programa: ".$id,'miprograma');
+        //      } else {
+        //        $transaccion->rollBack();
+        //        Yii::$app->session->setFlash('danger','El programa no se pudo eliminar.');
+        //        Yii::error("No se pudo eliminar el programa: ".$id,'miprograma');
+        //      }
+        //    } else {
+        //      Yii::$app->session->setFlash('danger','No puede realizar esta acción.');
+        //    }
+        //} catch(Exception $e) {
+        //  $transaccion->rollBack();
+        //  Yii::error("No se pudo eliminar el programa: ".$id,'miprograma'. "Error de en transaction".$e);
+        //}
+        //return $this->redirect(['index']);
     }
 
     /**
-     * Finds the Programa model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
+     * F//inds the Programa model based on its primary key value.
+     * I//f the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
      * @return Programa the loaded model
      * @throws NotFoundHttpException if the model cannot be found
