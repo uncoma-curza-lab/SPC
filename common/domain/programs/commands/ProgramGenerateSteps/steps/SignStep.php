@@ -4,8 +4,10 @@ namespace common\domain\programs\commands\ProgramGenerateSteps\steps;
 
 use common\domain\programs\commands\ProgramGenerateSteps\ProgramStepResult;
 use common\domain\programs\commands\ProgramGenerateSteps\StepInterface;
+use common\models\PermisosHelpers;
 use common\models\Programa;
 use Yii;
+use yii\web\ForbiddenHttpException;
 
 class SignStep extends StepInterface
 {
@@ -18,6 +20,9 @@ class SignStep extends StepInterface
 
     function handle(): ProgramStepResult
     {
+        if (!parent::validatePermission() || !PermisosHelpers::requerirSerDueno($this->program->id)) {
+            throw new ForbiddenHttpException('No tiene permisos para actualizar este elemento');
+        }
         $this->program->scenario = 'firma';
         if($this->program->getFirma() == null){
           $html =

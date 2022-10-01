@@ -4,8 +4,10 @@ namespace common\domain\programs\commands\ProgramGenerateSteps\steps;
 
 use common\domain\programs\commands\ProgramGenerateSteps\ProgramStepResult;
 use common\domain\programs\commands\ProgramGenerateSteps\StepInterface;
+use common\models\PermisosHelpers;
 use common\models\Programa;
 use Yii;
+use yii\web\ForbiddenHttpException;
 
 class BibliographyStep extends StepInterface
 {
@@ -18,6 +20,9 @@ class BibliographyStep extends StepInterface
 
     function handle(): ProgramStepResult
     {
+        if (!parent::validatePermission() || !PermisosHelpers::requerirSerDueno($this->program->id)) {
+            throw new ForbiddenHttpException('No tiene permisos para actualizar este elemento');
+        }
         $this->program->scenario = 'bibliografia';
         if ($this->program->biblio_basica == null) {
             $this->program->biblio_basica = "<p><strong>Bibliograf&iacute;a b&aacute;sica</strong></p> <p>&nbsp;</p><p><strong>Bibliograf&iacute;a de consulta</strong></p>";
