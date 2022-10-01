@@ -51,8 +51,9 @@ class PermisosHelpers
     */
     public static function requerirDirector($programaID){
       $programa = Programa::findOne($programaID);
-      if (!PermisosHelpers::requerirRol("Departamento") && !$programa)
+      if (!PermisosHelpers::requerirRol("Departamento") || !$programa)
         return false;
+
       //si el programa tiene el departamento
       $departamento = $programa->getDepartamento()->one();
 
@@ -60,25 +61,17 @@ class PermisosHelpers
       $cargo = Cargo::find()->where(['=','nomenclatura','Director'])->one();
       $perfil = \Yii::$app->user->identity->perfil;
 
-
-      if($perfil)
-        $designacion = Designacion::find()->where(['=','cargo_id',$cargo->id])
-          ->andWhere(['=','perfil_id',$perfil->id])->one();
-        // si el programa no tiene el dpto busco al que corresponda la designacion
-      else {
-        return false;
-      }
-      //antes buscaba por dpto de programa
-      //$departamento = $programa->getDepartamento()->one();
-      if($designacion && $departamento){
-        if ($designacion->departamento_id == $departamento->id) {
-          return true;
-        } else {
+      if (!$perfil) {
           return false;
-        }
       }
-      return false;
+
+      // Perfil tiene una designación de director 
+      // y corresponde al departamento del programa
+      $designacion = Designacion::find()->where(['=','cargo_id',$cargo->id])
+          ->andWhere(['=','perfil_id',$perfil->id])->one();
+      return $designacion && $departamento && $designacion->departamento_id == $departamento->id;
     }
+
     public static function requerirSerDueno($programaID){
       $userID = \Yii::$app->user->identity->id;
       $programa = Programa::findOne($programaID);

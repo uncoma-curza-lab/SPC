@@ -21,8 +21,10 @@ class ExportProgramProcess implements CommandInterface
 
     public function handle() : ExportProgramResult
     {
-        $this->checkPermission();
         try {
+            if (!$this->checkPermission()) {
+                throw new \Exception('No tiene permisos');
+            }
             $mpdf = new Mpdf([
                 'utf-8',
                 'A4',
@@ -62,12 +64,11 @@ class ExportProgramProcess implements CommandInterface
     protected function checkPermission()
     {
       $status = $this->program->status;
-      PermisosHelpers::requireMinStatus($this->program->id, Status::EN_ESPERA_ID);
       if(
           $status->descriptionIs(Status::BIBLIOTECA) ||
-          ($status->descriptionIs(Status::BORRADOR) && PermisosHelpers::requerirSerDueno($this->program->id)) ||
-          (PermisosHelpers::requerirMinimoRol("Adm_academica") && PermisosHelpers::requireMinStatus($this->program->id, Status::EN_ESPERA_ID)) ||
-          (PermisosHelpers::requerirDirector($this->program->id) && ($status->descriptionIs(Status::DEPARTAMENTO))) 
+          (PermisosHelpers::requerirSerDueno($this->program->id)) ||
+          (PermisosHelpers::requerirMinimoRol("Departamento") && PermisosHelpers::requireMinStatus($this->program->id, Status::EN_ESPERA_ID)) // ||
+          //(PermisosHelpers::requerirDirector($this->program->id)) todavia no se puede activar
        ){
          return true;
        }
