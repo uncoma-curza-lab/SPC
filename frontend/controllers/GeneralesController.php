@@ -98,6 +98,7 @@ class GeneralesController extends Controller
 
     /**
      * Displays a single Generos model.
+     * @deprecated
      * @param integer $id
      * @return mixed
      */

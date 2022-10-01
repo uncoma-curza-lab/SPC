@@ -12,6 +12,7 @@ use common\models\PermisosHelpers;
 
 
 /**
+ * @deprecated
  * RolController implements the CRUD actions for Rol model.
  */
 class RolController extends Controller

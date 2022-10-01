@@ -10,6 +10,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
+ * @Deprecated not used
  * CarreraController implements the CRUD actions for Carrera model.
  */
 class CarreraController extends Controller
