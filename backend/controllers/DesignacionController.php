@@ -24,8 +24,21 @@ class DesignacionController extends Controller
     public function behaviors()
     {
         return [
+           'access' => [
+                  'class' => \yii\filters\AccessControl::class,
+                  'rules' => [
+                      [
+                           'allow' => true,
+                           'roles' => ['@'],
+                           'matchCallback' => function($rule,$action) {
+                             return PermisosHelpers::requerirMinimoRol('Admin')
+                               && PermisosHelpers::requerirEstado('Activo');
+                           }
+                      ],
+                  ]
+           ],
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => VerbFilter::class,
                 'actions' => [
                     'delete' => ['POST'],
                 ],
