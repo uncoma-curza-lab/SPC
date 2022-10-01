@@ -4,49 +4,49 @@ namespace common\models;
 
 use Yii;
 use frontend\models\Perfil;
-//behaviors library
 use yii\db\Expression;
 use yii\behaviors\BlameableBehavior;
 use yii\db\ActiveRecord;
 
-/**
- * This is the model class for table "programa".
- *
- * @property int $id
- * @property int $departamento_id
- * @property int $status_id
- * @property int $asignatura_id
- * @property string $curso
- * @property int $year
- * @property int $cuatrimestre
- * @property string $fundament
- * @property string $objetivo_plan
- * @property string $contenido_plan
- * @property string $propuesta_met
- * @property string $evycond_acreditacion
- * @property string $parcial_rec_promo
- * @property string $distr_horaria
- * @property string $crono_tentativo
- * @property string $actv_extracur
- * @property string $created_at
- * @property string $updated_at
- * @property int $created_by
- * @property int $updated_by
- *
- * @property Carreraprograma[] $carreraprogramas
- * @property Designacion[] $designacions
- * @property Objetivo[] $objetivos
- * @property Observacion[] $observacions
- * @property Asignatura $asignatura
- * @property Departamento $departamento
- * @property Status $status
- * @property Unidad[] $unidads
- */
 class Programa extends \yii\db\ActiveRecord
 {
     const EVENT_NEW_PROGM = 'nuevo-programa';
 
     const MIN_LOAD_PERCENTAGE = 60;
+
+    const CREATE_PROGRAM_STEP = 'create';
+    const FUNDAMENTALS_STEP = 'fundamentals';
+    const PLAN_OBJECTIVE_STEP = 'plan-objective';
+    const PROGRAM_OBJECTIVE_STEP = 'program-objective';
+    const PLAN_CONTENT_STEP = 'plan-content';
+    const ANALYTICAL_CONTENT_STEP = 'analytical-content';
+    const BIBLIOGRAPHY_STEP = 'bibliography';
+    const METHOD_PROPOSAL_STEP = 'method-proposal';
+    const EVALUATION_AND_ACCREDITATION_STEP = 'evaluation-accreditation';
+    const EXAMS_AND_PROMOTION_STEP = 'exams-promotion';
+    const TIME_DISTRIBUTION_STEP = 'time-distribution';
+    const TIMELINE_STEP = 'timeline';
+    const ACTIVITIES_STEP = 'activities';
+    const SIGN_STEP = 'sign';
+    const SAVE_STEP = 14;
+
+    const STEPS = [
+        'create',
+        'fundamentals',
+        'plan-objective',
+        'program-objective',
+        'plan-content',
+        'analytical-content',
+        'bibliography',
+        'method-proposal',
+        'evaluation-accreditation',
+        'exams-promotion',
+        'time-distribution',
+        'timeline',
+        'activities',
+        'sign',
+        'save'
+    ];
 
     public function sendMain($event){
       echo 'mail sent';
