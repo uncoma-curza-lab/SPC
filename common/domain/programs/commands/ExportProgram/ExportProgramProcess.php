@@ -2,7 +2,9 @@
 
 namespace common\domain\programs\commands\ExportProgram;
 
+use common\models\PermisosHelpers;
 use common\models\Programa as Program;
+use common\models\Status;
 use common\shared\commands\CommandInterface;
 use Mpdf\HTMLParserMode;
 use Mpdf\Mpdf;
@@ -19,6 +21,7 @@ class ExportProgramProcess implements CommandInterface
 
     public function handle() : ExportProgramResult
     {
+        $this->checkPermission();
         try {
             $mpdf = new Mpdf([
                 'utf-8',
@@ -54,5 +57,20 @@ class ExportProgramProcess implements CommandInterface
                 'exception' => $e
             ]);
         }
+    }
+
+    protected function checkPermission()
+    {
+      $status = $this->program->status;
+      PermisosHelpers::requireMinStatus($this->program->id, Status::EN_ESPERA_ID);
+      if(
+          $status->descriptionIs(Status::BIBLIOTECA) ||
+          ($status->descriptionIs(Status::BORRADOR) && PermisosHelpers::requerirSerDueno($this->program->id)) ||
+          (PermisosHelpers::requerirMinimoRol("Adm_academica") && PermisosHelpers::requireMinStatus($this->program->id, Status::EN_ESPERA_ID)) ||
+          (PermisosHelpers::requerirDirector($this->program->id) && ($status->descriptionIs(Status::DEPARTAMENTO))) 
+       ){
+         return true;
+       }
+      return false;
     }
 }

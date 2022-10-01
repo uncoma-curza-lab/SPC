@@ -103,7 +103,7 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
                 'pdf' => function ($url,$model) {
                     return Html::a(
                         '<span style="padding:5px; font-size:20px;color:gray" class="glyphicon glyphicon-print"></span>',
-                        ['export-pdf','id'=> $model->id],[
+                        ['programa/export-pdf','id'=> $model->id],[
                             'title' => Yii::t('yii', 'Exportar PDF'),
                             'target' => '_blank'
                         ]);

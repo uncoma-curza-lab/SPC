@@ -165,5 +165,16 @@ class PermisosHelpers
             PermisosHelpers::requerirRol("Sec_academica") && $estadoActual->descriptionIs(Status::SECRETARIA_ACADEMICA)
           );
     }
+
+    public static function requireMinStatus(int $programaID, int $minStatusID): bool
+    {
+        $programa = Programa::find()->where(['=', 'id', $programaID])->one();
+        $minStatus = Status::findOne($minStatusID);
+        $greaterStatuses =  array_map(function($status) {
+            return $status['id'];
+        }, Status::find()->select('id')->where(['>=', 'value', $minStatus->value])->all());
+
+        return in_array($programa->status->id, $greaterStatuses);
+    }
   
 }
