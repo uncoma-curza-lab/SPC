@@ -12,6 +12,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use common\models\PermisosHelpers;
 use common\models\Status;
+use Exception;
 use Mpdf;
 
 /**
@@ -97,6 +98,7 @@ class GeneralesController extends Controller
 
     /**
      * Displays a single Generos model.
+     * @deprecated
      * @param integer $id
      * @return mixed
      */
@@ -107,17 +109,26 @@ class GeneralesController extends Controller
         ]);
     }
 
+    /**
+     * Puede migrarse a ProgramaController::actionVer
+     * @deprecated
+     */
     public function actionVer($id) {
+      throw new \Exception("Deprecated method");
       $model = $this->findModel($id);
       if(Yii::$app->request->post('submit') == 'observacion' &&
           $model->load(Yii::$app->request->post()) && $model->save()) {
           return $this->redirect(['observacion/create', 'id'=>$model->id]);
       }
-      return $this->render('info',['model' => $model]);
+      return $this->render('@frontend/views/programa/info',['model' => $model]);
     }
 
 
-    public function actionPedir($id){
+    /**
+     * Esto se va a deprecar para autoasignar a partir de resoluciones
+     */
+    public function actionPedir($id)
+    {
       $model = $this->findModel($id);
       $model->scenario = 'pedir';
       $estadoActual = $model->getstatus()->one();
@@ -162,18 +173,18 @@ class GeneralesController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
-    {
-        $model = new Generos();
+    //public function actionCreate()
+    //{
+    //    $model = new Generos();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
-        }
-    }
+    //    if ($model->load(Yii::$app->request->post()) && $model->save()) {
+    //        return $this->redirect(['view', 'id' => $model->id]);
+    //    } else {
+    //        return $this->render('create', [
+    //            'model' => $model,
+    //        ]);
+    //    }
+    //}
 
     /**
      * Updates an existing Generos model.
@@ -183,6 +194,7 @@ class GeneralesController extends Controller
      */
     public function actionUpdate($id)
     {
+        throw new Exception('deprecated method]');
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -197,14 +209,16 @@ class GeneralesController extends Controller
     /**
      * Deletes an existing Generos model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
+     * @deprecated
      * @param integer $id
      * @return mixed
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        throw new Exception('deprecated method]');
+       // $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+       // return $this->redirect(['index']);
     }
 
     /**
@@ -223,7 +237,8 @@ class GeneralesController extends Controller
         }
     }
 
-    /*
+    /**
+    * @deprecated
     * Comienzan las funciones para crear y exportar un PDF
     */
     public function actionExportPdf($id){

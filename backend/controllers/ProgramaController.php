@@ -11,9 +11,9 @@ use backend\models\AsignaturaSearch;
 use backend\models\Designacion;
 use backend\models\DesignacionSearch;
 use backend\models\SetStatusByYearForm;
-use backend\models\Status;
 use common\models\PermisosHelpers;
 use common\models\Departamento;
+use common\models\Status;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -146,19 +146,16 @@ class ProgramaController extends Controller
             'model' => $model,
         ]);
     }
-    public function actionAprobar($id){
+    public function actionAprobar($id)
+    {
         $programa = $this->findModel($id);
         $programa->scenario = 'carrerap';
         $userId = \Yii::$app->user->identity->id;
         $estadoActual = Status::findOne($programa->status_id);
-        if((PermisosHelpers::requerirProfesorAdjunto($id) && $estadoActual->descripcion == "Profesor") ||
-          (PermisosHelpers::requerirDirector($id) && ($estadoActual->descripcion == "Departamento"|| $estadoActual->descripcion == "Borrador")) ||
-          (PermisosHelpers::requerirRol("Adm_academica") && $estadoActual->descripcion == "Administración Académica") ||
-          (PermisosHelpers::requerirRol("Sec_academica") && $estadoActual->descripcion == "Secretaría Académica")
-        ){
+        if (PermisosHelpers::puedeAprobar($id, $estadoActual)) {
           //$programa->status_id = Status::findOne(['descripcion','=','Departamento'])->id;
 
-          $estadoSiguiente = Status::find()->where(['>','value',$estadoActual->value])->orderBy('value')->one();
+          $estadoSiguiente = $estadoActual->nextStatus();
           $programa->status_id = $estadoSiguiente->id;
           if( $programa->save()){
             Yii::$app->session->setFlash('success','Se confirmó el programa exitosamente');
@@ -169,19 +166,16 @@ class ProgramaController extends Controller
           }
         }
     }
+
     public function actionRechazar($id){
         $programa = $this->findModel($id);
         $programa->scenario = 'carrerap';
         $userId = \Yii::$app->user->identity->id;
         $estadoActual = Status::findOne($programa->status_id);
-        if((PermisosHelpers::requerirProfesorAdjunto($id) && $estadoActual->descripcion == "Profesor") ||
-          (PermisosHelpers::requerirDirector($id) && $estadoActual->descripcion == "Departamento") ||
-          (PermisosHelpers::requerirRol("Adm_academica") && $estadoActual->descripcion == "Administración Académica") ||
-          (PermisosHelpers::requerirRol("Sec_academica") && $estadoActual->descripcion == "Secretaría Académica")
-        ){
+        if (PermisosHelpers::puedeRechazar($id, $estadoActual)) {
           //$programa->status_id = Status::findOne(['descripcion','=','Departamento'])->id;
 
-          $estadoSiguiente = Status::find()->where(['<','value',$estadoActual->value])->orderBy('value DESC')->one();
+          $estadoSiguiente = $estadoActual->prevStatus();
           $programa->status_id = $estadoSiguiente->id;
           if( $programa->save()){
             Yii::$app->session->setFlash('warning','Se rechazó el programa correctamente');
@@ -203,7 +197,7 @@ class ProgramaController extends Controller
         $model = new Programa();
         $model->scenario = 'crear';
         // se crea en estado borrador
-        $model->status_id = Status::find()->where(['=','descripcion','Borrador'])->one()->id;
+        $model->status_id = Status::initialStatus();
         //obtener el id del director
         $userId = \Yii::$app->user->identity->id;
         if (PermisosHelpers::requerirRol('Departamento')){
@@ -577,7 +571,7 @@ class ProgramaController extends Controller
         $model->scenario = 'crear';
         //$model->year =Yii::$app->formatter->asDatetime(date('Y-m-d'), "php:d-m-Y H:i:s");
         $model->year =date('Y');
-        $model->status_id = Status::find()->where(['=','descripcion','Borrador'])->one()->id;
+        $model->status_id = Status::initialStatus();
         //obtener el id del director
         $userId = \Yii::$app->user->identity->id;
         if (PermisosHelpers::requerirRol('Departamento')){

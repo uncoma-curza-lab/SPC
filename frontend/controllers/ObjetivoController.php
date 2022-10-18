@@ -5,11 +5,13 @@ namespace frontend\controllers;
 use Yii;
 use common\models\Objetivo;
 use common\models\search\ObjetivoSearch;
+use Exception;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
+ * @deprecated
  * ObjetivoController implements the CRUD actions for Objetivo model.
  */
 class ObjetivoController extends Controller
@@ -64,6 +66,7 @@ class ObjetivoController extends Controller
      */
     public function actionCreate($id)
     {
+        throw new Exception('Deprecated module');
         $model = new Objetivo();
         $model->programa_id=$id;
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -84,6 +87,20 @@ class ObjetivoController extends Controller
      */
     public function actionUpdate($id)
     {
+        throw new Exception('Deprecated module');
+        $model = new Objetivo();
+        $model->programa_id=$id;
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['programa/objetivo-plan', 'id' =>$id]);
+        }
+
+        return $this->render('create', [
+            'model' => $model,
+        ]);
+    }
+
+    /**
+     * 
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {

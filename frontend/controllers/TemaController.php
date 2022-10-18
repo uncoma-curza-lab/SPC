@@ -11,6 +11,7 @@ use yii\filters\VerbFilter;
 use common\models\PermisosHelpers;
 
 /**
+ * @deprecated
  * TemaController implements the CRUD actions for Tema model.
  */
 class TemaController extends Controller

@@ -5,12 +5,7 @@ namespace backend\models;
 use Yii;
 
 /**
- * This is the model class for table "status".
- *
- * @property int $id
- * @property string $descripcion
- *
- * @property Programa[] $programas
+ * @deprecated Status use common module
  */
 class Status extends \yii\db\ActiveRecord
 {

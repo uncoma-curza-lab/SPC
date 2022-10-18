@@ -51,8 +51,9 @@ class PermisosHelpers
     */
     public static function requerirDirector($programaID){
       $programa = Programa::findOne($programaID);
-      if (!PermisosHelpers::requerirRol("Departamento") && !$programa)
+      if (!PermisosHelpers::requerirRol("Departamento") || !$programa)
         return false;
+
       //si el programa tiene el departamento
       $departamento = $programa->getDepartamento()->one();
 
@@ -60,25 +61,17 @@ class PermisosHelpers
       $cargo = Cargo::find()->where(['=','nomenclatura','Director'])->one();
       $perfil = \Yii::$app->user->identity->perfil;
 
-
-      if($perfil)
-        $designacion = Designacion::find()->where(['=','cargo_id',$cargo->id])
-          ->andWhere(['=','perfil_id',$perfil->id])->one();
-        // si el programa no tiene el dpto busco al que corresponda la designacion
-      else {
-        return false;
-      }
-      //antes buscaba por dpto de programa
-      //$departamento = $programa->getDepartamento()->one();
-      if($designacion && $departamento){
-        if ($designacion->departamento_id == $departamento->id) {
-          return true;
-        } else {
+      if (!$perfil) {
           return false;
-        }
       }
-      return false;
+
+      // Perfil tiene una designación de director 
+      // y corresponde al departamento del programa
+      $designacion = Designacion::find()->where(['=','cargo_id',$cargo->id])
+          ->andWhere(['=','perfil_id',$perfil->id])->one();
+      return $designacion && $departamento && $designacion->departamento_id == $departamento->id;
     }
+
     public static function requerirSerDueno($programaID){
       $userID = \Yii::$app->user->identity->id;
       $programa = Programa::findOne($programaID);
@@ -131,6 +124,50 @@ class PermisosHelpers
         } else {
             return false;
         }
+    }
+
+    public static function puedeAprobar($programaID, $estadoActual)
+    {
+        return (
+            PermisosHelpers::requerirProfesorAdjunto($programaID) && $estadoActual->descriptionIs(Status::EN_ESPERA)
+          ) ||
+          (
+            PermisosHelpers::requerirDirector($programaID) && (
+              $estadoActual->descriptionIs(Status::DEPARTAMENTO) || $estadoActual->descriptionIs(Status::BORRADOR))
+          ) ||
+          (
+            PermisosHelpers::requerirRol("Adm_academica") && $estadoActual->descriptionIs(Status::ADMINISTRACION_ACADEMICA)
+          ) ||
+          (
+            PermisosHelpers::requerirRol("Sec_academica") && $estadoActual->descriptionIs(Status::SECRETARIA_ACADEMICA)
+          );
+    }
+
+    public static function puedeRechazar($programaID, $estadoActual)
+    {
+        return (
+            PermisosHelpers::requerirProfesorAdjunto($programaID) && $estadoActual->descriptionIs(Status::EN_ESPERA)
+          ) ||
+          (
+            PermisosHelpers::requerirDirector($programaID) && $estadoActual->descriptionIs(Status::DEPARTAMENTO)
+          ) ||
+          (
+            PermisosHelpers::requerirRol("Adm_academica") && $estadoActual->descriptionIs(Status::ADMINISTRACION_ACADEMICA)
+          ) ||
+          (
+            PermisosHelpers::requerirRol("Sec_academica") && $estadoActual->descriptionIs(Status::SECRETARIA_ACADEMICA)
+          );
+    }
+
+    public static function requireMinStatus(int $programaID, int $minStatusID): bool
+    {
+        $programa = Programa::find()->where(['=', 'id', $programaID])->one();
+        $minStatus = Status::findOne($minStatusID);
+        $greaterStatuses =  array_map(function($status) {
+            return $status['id'];
+        }, Status::find()->select('id')->where(['>=', 'value', $minStatus->value])->all());
+
+        return in_array($programa->status->id, $greaterStatuses);
     }
   
 }

@@ -33,10 +33,6 @@ class ObservacionController extends Controller
         return [
             'access' => [
                 'class' => \yii\filters\AccessControl::className(),
-                /*'only' => [
-                  'index', 'view', 'create', 'update','delete',
-                
-                ],*/
                 'rules' => [
                     [
                          'actions' => [
@@ -100,11 +96,11 @@ class ObservacionController extends Controller
         $model->programa_id = $id;
 
         if ($model->load(Yii::$app->request->post())) {
-          if($model->save()){
+          if($model->save()) {
             Yii::$app->session->setFlash('success','Observación agregada exitosamente');
             //generar notificacion
             Yii::$app->GenerateNotification->creador(self::CREAR_OBSERVACION,$id);
-            return $this->redirect(['generales/ver', 'id' => $model->programa_id]);
+            return $this->redirect(['programa/ver', 'id' => $model->programa_id]);
           } else {
             Yii::$app->session->setFlash('danger','Observación no agregada');
           }

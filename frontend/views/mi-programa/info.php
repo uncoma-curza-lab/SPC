@@ -1,20 +1,8 @@
 <?php
 
 use yii\helpers\Html;
-use yii\grid\GridView;
-use yii\widgets\Pjax;
 use common\models\PermisosHelpers;
-use common\models\EstadoHelpers;
-
-use yii\widgets\DetailView;
-use yii\bootstrap\card;
-//use common\models\search\CarreraProgramaSearch;
 use common\models\Status;
-
-//use common\models\CarreraPrograma;
-use common\models\Carrera;
-use common\models\Programa;
-use yii\data\ActiveDataProvider;
 use kartik\tabs\TabsX;
 
 $show_this_nav = PermisosHelpers::requerirMinimoRol('Profesor');
@@ -74,8 +62,4 @@ $items = [
 
 
   <div class="col-xs-6">
-    <!-- <?php if ( PermisosHelpers::requerirMinimoRol('Departamento') ) : ?>
-      <h3>Observaciones</h3>
-        <?= $this->render('forms/_gridObservaciones',['model' => $model]) ?>
-    <?php endif; ?> -->
   </div>

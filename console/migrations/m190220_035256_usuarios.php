@@ -15,6 +15,9 @@ class m190220_035256_usuarios extends Migration
       $this->alterColumn('{{%perfil}}','genero_id',$this->integer());
       $this->update('{{%perfil}}',['genero_id' => null],'genero_id');
 
+      if (!file_exists('usuarios.csv')) {
+        return;
+      }
       $fp = fopen ("usuarios.csv","r");
       $security = Yii::$app->getSecurity();
       $existen = [];

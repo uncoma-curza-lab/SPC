@@ -93,7 +93,7 @@ class PerfilController extends Controller
                     'model' => $this->findModel($ya_existe),
                 ]);
             } elseif ($model->load(Yii::$app->request->post())){
-                $model->imageFile = UploadedFile::getInstance($model,'imageFile');
+                $model->imagen = '';
                 if($model->save()){
                     return $this->redirect(['view']);
                 }

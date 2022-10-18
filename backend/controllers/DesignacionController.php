@@ -24,8 +24,21 @@ class DesignacionController extends Controller
     public function behaviors()
     {
         return [
+           'access' => [
+                  'class' => \yii\filters\AccessControl::class,
+                  'rules' => [
+                      [
+                           'allow' => true,
+                           'roles' => ['@'],
+                           'matchCallback' => function($rule,$action) {
+                             return PermisosHelpers::requerirMinimoRol('Admin')
+                               && PermisosHelpers::requerirEstado('Activo');
+                           }
+                      ],
+                  ]
+           ],
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => VerbFilter::class,
                 'actions' => [
                     'delete' => ['POST'],
                 ],
@@ -68,62 +81,61 @@ class DesignacionController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-     public function actionCreate()
-     {
-         $model = new Designacion();
+    public function actionCreate()
+    {
+        $model = new Designacion();
+        $transaction = Yii::$app->db->beginTransaction();
 
-         if ($model->load(Yii::$app->request->post()) ) {
-           $transaction = Yii::$app->db->beginTransaction();
-           try {
-             if($model->save(false)){
-               if ($model->departamento_id != null) {
-                 $depto = Departamento::findOne($model->departamento_id);
-                 $depto->director = $model->id;
-                 if ($depto->save(false)){
-                   Yii::$app->session->setFlash('success','Designación agregada correctamente');
+        if ($model->load(Yii::$app->request->post())) {
+          try {
+            if($model->save(false) && $model->departamento_id != null) { // no validateA
+                $depto = Departamento::findOne($model->departamento_id);
+                $depto->director = $model->id;
+                if ($depto->save(false)) {
+                  Yii::$app->session->setFlash('success','Designación agregada correctamente');
 
-                   $transaction->commit();
-                   return $this->redirect(['view', 'id' => $model->id]);
-                 }
-               }
-             }
-             Yii::$app->session->setFlash('warning','Hubo un problema al agregar la designación');
+                  $transaction->commit();
+                  return $this->redirect(['view', 'id' => $model->id]);
+                }
+            }
+            Yii::$app->session->setFlash('warning','Hubo un problema al agregar la designación');
+            $transaction->rollBack();
+            return $this->redirect(['index']);
+          }catch (\Exception $e) {
+              $transaction->rollBack();
+              throw $e;
+          }
+        }
 
-             $transaction->rollBack();
-             return $this->redirect(['index']);
-           }catch (\Exception $e) {
-               $transaction->rollBack();
-               throw $e;
-           }
-         }
+        return $this->render('create', [
+            'model' => $model,
+        ]);
+    }
 
-         return $this->render('create', [
-             'model' => $model,
-         ]);
-     }
-
+    /**
+     * @deprecated
+     */
     public function actionAsignar($id)
     {
-      $model = new Designacion();
-      $model->programa_id = $id;
+        $model = new Designacion();
+        $model->programa_id = $id;
 
-      if ($model->load(Yii::$app->request->post())) {
-          $cargoProfAdj = Cargo::find()->where(['=','carga_programa',1])->one();
-          if ($cargoProfAdj->id == $model->cargo_id && PermisosHelpers::existeProfAdjunto($id)){
-            throw new NotFoundHttpException('Ya existe un Profesor Adjunto');
-          }
-          if ($model->save()){
-            Yii::$app->session->setFlash('success','Se asignó el cargo exitosamente');
-            $this->redirect(['programa/index', 'id' => $id]);
-          } else {
+        if ($model->load(Yii::$app->request->post())) {
+            $cargoProfAdj = Cargo::find()->where(['=','carga_programa',1])->one();
+            if ($cargoProfAdj->id == $model->cargo_id && PermisosHelpers::existeProfAdjunto($id)){
+              throw new NotFoundHttpException('Ya existe un Profesor Adjunto');
+            }
+            if ($model->save()){
+              Yii::$app->session->setFlash('success','Se asignó el cargo exitosamente');
+              return $this->redirect(['programa/index', 'id' => $id]);
+            }
             Yii::$app->session->setFlash('warning','Hubo un problema al asignar el cargo');
-            $this->redirect(['asignar', 'id' => $id]);
-          }
-      }
+            return $this->redirect(['asignar', 'id' => $id]);
+        }
 
-      return $this->render('asignar', [
-          'model' => $model,
-      ]);
+        return $this->render('asignar', [
+            'model' => $model,
+        ]);
     }
 
     /**

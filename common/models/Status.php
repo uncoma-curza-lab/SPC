@@ -14,6 +14,20 @@ use Yii;
  */
 class Status extends \yii\db\ActiveRecord
 {
+    const BORRADOR_ID = 1;
+    const DEPARTAMENTO_ID = 2;
+    const EN_ESPERA_ID = 3;
+    const ADMINISTRACION_ACADEMICA_ID = 4;
+    const SECRETARIA_ACADEMICA_ID = 5;
+    const BIBLIOTECA_ID = 6;
+
+    const BORRADOR = 'Borrador';
+    const DEPARTAMENTO = 'Departamento';
+    const EN_ESPERA = 'En espera';
+    const ADMINISTRACION_ACADEMICA = 'Administración Académica';
+    const SECRETARIA_ACADEMICA = 'Secretaría Académica';
+    const BIBLIOTECA = 'Biblioteca';
+
     /**
      * {@inheritdoc}
      */
@@ -57,5 +71,38 @@ class Status extends \yii\db\ActiveRecord
     public function getDescripcion(){
       $descripcion = $this->descripcion;
       return $descripcion;
+    }
+
+    public function prevStatus()
+    {
+        return Status::find()->where(['<','value', $this->value])
+                                           ->orderBy('value DESC')
+                                           ->one();
+    }
+
+    public function nextStatus()
+    {
+        return Status::find()->where(['>','value',$this->value])
+                                           ->orderBy('value')
+                                           ->one();
+    }
+
+    public static function initialStatus()
+    {
+        return Status::find()->where([
+          '=',
+          'descripcion',
+          'Borrador'
+        ])->one()->id;
+    }
+
+    public function descriptionIs($statusDescription): bool
+    {
+        return $this->descripcion === $statusDescription;
+    }
+
+    public function is(int $id): bool
+    {
+        return $this->id === $id;
     }
 }

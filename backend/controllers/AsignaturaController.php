@@ -4,6 +4,7 @@ namespace backend\controllers;
 
 use Yii;
 use common\models\Asignatura;
+use common\models\PermisosHelpers;
 use common\models\search\AsignaturaSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -20,8 +21,21 @@ class AsignaturaController extends Controller
     public function behaviors()
     {
         return [
+           'access' => [
+                  'class' => \yii\filters\AccessControl::class,
+                  'rules' => [
+                      [
+                           'allow' => true,
+                           'roles' => ['@'],
+                           'matchCallback' => function($rule,$action) {
+                             return PermisosHelpers::requerirMinimoRol('Admin')
+                               && PermisosHelpers::requerirEstado('Activo');
+                           }
+                      ],
+                  ]
+           ],
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => VerbFilter::class,
                 'actions' => [
                     'delete' => ['POST'],
                 ],

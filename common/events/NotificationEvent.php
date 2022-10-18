@@ -86,24 +86,26 @@ class NotificationEvent extends Event
     }
     protected function notificationEmail()
     {
+        $from = getenv("SMTP_USER");
+        $userReceiver = User::findOne($this->userReceiver);
+        if (!$from || !$userReceiver) {
+            return;
+        }
         $notificationEmail = new NotificationEmail();
         $notificationEmail->setMessage($this->message); 
         $notificationEmail->setUserReceiverID($this->userReceiver);
         $notificationEmail->setUserInitID($this->userInit);
         $notificationEmail->setEventTypeID($this->eventType->getID());
         $notificationEmail->setProgramaID($this->programaID);
-        $userReceiver = User::findOne($this->userReceiver);
-        if ( $userReceiver ) {
-            $userEmail = $userReceiver->getEmail();
-            
-            $sendMail = \Yii::$app->mailer->compose()
+        $userEmail = $userReceiver->getEmail();
+        
+        $sendMail = \Yii::$app->mailer->compose()
             ->setFrom(getenv("SMTP_USER"))
             ->setTo($userEmail)
             ->setSubject($this->eventType->descripcion)
             ->setHtmlBody($notificationEmail->getMessage())
             ->send();
-            $notificationEmail->save();
-        }
+       $notificationEmail->save();
         
     }
 }

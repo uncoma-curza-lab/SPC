@@ -103,7 +103,7 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
                 'pdf' => function ($url,$model) {
                     return Html::a(
                         '<span style="padding:5px; font-size:20px;color:gray" class="glyphicon glyphicon-print"></span>',
-                        ['export-pdf','id'=> $model->id],[
+                        ['programa/export-pdf','id'=> $model->id],[
                             'title' => Yii::t('yii', 'Exportar PDF'),
                             'target' => '_blank'
                         ]);
@@ -111,8 +111,6 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
                 'aprobar' => function ($url,$model){
                     $status = Status::findOne($model->status_id);
                     if ($status && (($status->descripcion == "Borrador"
-                        //&& PermisosHelpers::requerirDirector($model->id)
-                        //&& PermisosHelpers::existeProfAdjunto($model->id))
                         && PermisosHelpers::requerirMinimoRol("Profesor")
                         && PermisosHelpers::requerirSerDueno($model->id))
                       || ($status->descripcion == "Departamento"
@@ -125,7 +123,7 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
                     {
                         return Html::a(
                           '<span style="padding:5px; font-size:20px;color:#5cb85c" class="glyphicon glyphicon-send"></span>',
-                          ['aprobar','id' => $model->id],
+                          ['programa/aprobar','id' => $model->id],
                           [
                               'title' => Yii::t('yii', 'Enviar a evaluación'),
                               'data' => [
@@ -151,7 +149,7 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
                     {
                         return Html::a(
                           '<span style="padding:5px; font-size:20px;color:#d9534f" class="glyphicon glyphicon-remove"></span>',
-                          ['rechazar','id' => $model->id],
+                          ['programa/rechazar','id' => $model->id],
                           [
                               'title' => Yii::t('yii', 'Rechazar'),
                               'data-confirm' => Yii::t('yii', 'Está a punto de rechazar el programa. Recuerde añadir observaciones'),
@@ -180,9 +178,12 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
                 },
                 'cargar' => function ($url,$model) {
                   $status = Status::findOne($model->status_id);
-                  if ($status && ($status->descripcion == "Borrador"
-                      && PermisosHelpers::requerirMinimoRol('Profesor')
-                      && PermisosHelpers::requerirSerDueno($model->id)))
+                  if (
+                      $status &&
+                      $status->descripcion == "Borrador" &&
+                      PermisosHelpers::requerirMinimoRol('Profesor') &&
+                      PermisosHelpers::requerirSerDueno($model->id)
+                  )
                   {
                     return Html::a(
                       '<span style="padding:5px; font-size:20px; color:orange" class="glyphicon glyphicon-pencil "></span>',
@@ -190,25 +191,27 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
                     );
                   }
                 },
-                'editar' => function ($url,$model) {
-                  $status = Status::findOne($model->status_id);
-                  if ($status && ($status->descripcion == "Borrador"
-                      && PermisosHelpers::requerirDirector($model->id) && PermisosHelpers::existeProfAdjunto($model->id))
-                      || ($status->descripcion == "Departamento"
-                        && PermisosHelpers::requerirRol('Departamento') && PermisosHelpers::requerirDirector($model->id)))
-                  {
-                    return Html::a(
-                      '<span style="padding:5px; font-size:20px;" class="glyphicon glyphicon-pencil"></span>',
-                      ['editar','id' => $model->id]
-                    );
-                  }
-                },
+                // por ahora no deberia existir mas 
+                // el director ni el depto puede editar el programa
+                //'editar' => function ($url,$model) {
+                //  $status = Status::findOne($model->status_id);
+                //  if ($status && ($status->descripcion == "Borrador"
+                //      && PermisosHelpers::requerirDirector($model->id) && PermisosHelpers::existeProfAdjunto($model->id))
+                //      || ($status->descripcion == "Departamento"
+                //        && PermisosHelpers::requerirRol('Departamento') && PermisosHelpers::requerirDirector($model->id)))
+                //  {
+                //    return Html::a(
+                //      '<span style="padding:5px; font-size:20px;" class="glyphicon glyphicon-pencil"></span>',
+                //      ['editar','id' => $model->id]
+                //    );
+                //  }
+                //},
                 
                 'ver' => function ($url,$model) {
                     return Html::a(
                         '<span style="padding:5px; font-size:20px; color:	#0CB7F2" class="glyphicon glyphicon-comment"></span>',
                         //$url);
-                        ['ver','id' => $model->id],
+                        ['programa/ver','id' => $model->id],
                         [
                             'title' => Yii::t('yii', 'Observaciones'),
                         ]);
@@ -217,7 +220,7 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
                   return Html::a(
                       '<span style="padding:5px; font-size:20px; color:	#BFAB57" class="glyphicon glyphicon-duplicate"></span>',
                       //$url);
-                      ['copy','id' => $model->id],
+                      ['programa/copy','id' => $model->id],
                       [
                           'title' => Yii::t('yii', 'Copiar'),
                       ]);
@@ -241,7 +244,7 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
                     {
                       return Html::a(
                         '<span style="padding:5px; font-size:20px; color:	#d9534f" class="glyphicon glyphicon-trash"></span>',
-                        $url,
+                        ['programa/delete', 'id' => $model->id],
                         [
                             'title' => Yii::t('yii', 'Eliminar'),
                             'data-confirm' => Yii::t('yii', '¿Quiere eliminar el programa?'),

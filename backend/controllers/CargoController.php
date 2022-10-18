@@ -5,6 +5,7 @@ namespace backend\controllers;
 use Yii;
 use backend\models\Cargo;
 use backend\models\CargoSearch;
+use common\models\PermisosHelpers;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -20,8 +21,21 @@ class CargoController extends Controller
     public function behaviors()
     {
         return [
+           'access' => [
+                  'class' => \yii\filters\AccessControl::class,
+                  'rules' => [
+                      [
+                           'allow' => true,
+                           'roles' => ['@'],
+                           'matchCallback' => function($rule,$action) {
+                             return PermisosHelpers::requerirMinimoRol('Admin')
+                               && PermisosHelpers::requerirEstado('Activo');
+                           }
+                      ],
+                  ]
+           ],
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => VerbFilter::class,
                 'actions' => [
                     'delete' => ['POST'],
                 ],
