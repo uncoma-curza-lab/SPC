@@ -34,7 +34,7 @@ RUN  apt update && apt install -y \
 #	/usr/local/bin/docker-php-entrypoint \
 #        /usr/local/bin/composer
 RUN curl -sS https://getcomposer.org/installer | php -- \
-        --filename=composer.phar \
+        --filename=composer \
         --install-dir=/usr/local/bin 
 
 ENV PHP_ENABLE_XDEBUG=0 \
