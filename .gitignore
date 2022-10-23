@@ -37,3 +37,4 @@ phpunit.phar
 usuarios.csv 
 *.env
 mysql_data
+*.override.yml
