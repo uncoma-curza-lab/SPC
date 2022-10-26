@@ -52,5 +52,6 @@ class m221026_224750_create_distribucion_horaria_table extends Migration
         $this->dropForeignKey('time_distribution_module','{{%time_distribution}}');
         $this->dropForeignKey('time_distribution_lesson_type','{{%time_distribution}}');
         $this->dropTable('{{%time_distribution}}');
+        $this->dropTable('{{%lesson_types}}');
     }
 }
