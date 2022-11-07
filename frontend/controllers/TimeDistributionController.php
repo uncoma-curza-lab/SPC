@@ -2,18 +2,22 @@
 
 namespace frontend\controllers;
 
+use common\domain\LessonType\commands\GetLessonTypes\GetLessonTypesCommand;
+use common\domain\programs\commands\ProgramGenerateSteps\ProgramStepFactory;
+use common\domain\TimeDistribution\commands\CreateNewTimeDistribution\NewTimeDistributionCommand;
+use common\domain\TimeDistribution\Entities\TimeDistribution;
+use common\models\Module;
+use common\models\Programa;
+use frontend\models\TimeDistributionCreationForm;
 use Yii;
-use common\models\Carrera;
-use common\models\search\CarreraSearch;
 use yii\web\Controller;
-use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
  * @Deprecated not used
  * CarreraController implements the CRUD actions for Carrera model.
  */
-class CarreraController extends Controller
+class TimeDistributionController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -30,99 +34,45 @@ class CarreraController extends Controller
         ];
     }
 
-    /**
-     * Lists all Carrera models.
-     * @return mixed
-     */
-    public function actionIndex()
-    {
-        $searchModel = new CarreraSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-    }
-
-    /**
-     * Displays a single Carrera model.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionView($id)
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
-    }
-
-    /**
-     * Creates a new Carrera model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
     public function actionCreate()
     {
-        $model = new Carrera();
+        $lessonTypesCommand = new GetLessonTypesCommand();
+        $lessonTypesResult = $lessonTypesCommand->handle();
+        if (!$lessonTypesResult->getResult()) {
+            return $this->goBack();
+        }
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        $lessonTypes = $lessonTypesResult->getData()['data'];
+
+        $model = new TimeDistributionCreationForm();
+        //$model = new TimeDistribution();
+        $model->program = Programa::initNewProgram();
+        //$model->module = new Module();
+        //$model->module->program = $model->program;
+
+
+        $programModel = $this->previousCreate();
+
+        if (Yii::$app->request->post()) {
+            $command = new NewTimeDistributionCommand(1);
             return $this->redirect(['view', 'id' => $model->id]);
         }
+        //if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        //    return $this->redirect(['view', 'id' => $model->id]);
+        //}
 
         return $this->render('create', [
             'model' => $model,
+            'lessonTypes' => $lessonTypes
         ]);
     }
 
-    /**
-     * Updates an existing Carrera model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionUpdate($id)
+    private function previousCreate()
     {
-        $model = $this->findModel($id);
+        $command = ProgramStepFactory::getStep(Programa::CREATE_PROGRAM_STEP);
+        $result = $command->handle();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        }
-
-        return $this->render('update', [
-            'model' => $model,
-        ]);
+        return $result->getProgram();
     }
 
-    /**
-     * Deletes an existing Carrera model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
-    }
-
-    /**
-     * Finds the Carrera model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return Carrera the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    protected function findModel($id)
-    {
-        if (($model = Carrera::findOne($id)) !== null) {
-            return $model;
-        }
-
-        throw new NotFoundHttpException('The requested page does not exist.');
-    }
 }

@@ -1,9 +1,6 @@
 <?php
   use yii\helpers\Html;
   use yii\widgets\ActiveForm;
-  use kartik\select2\Select2;
-  use yii\helpers\ArrayHelper;
-  use common\models\Asignatura;
   use dosamigos\tinymce\TinyMce;
   $js = "$(document).ready(function(){
     $('[data-toggle=\"popover\"]').popover();
@@ -43,39 +40,11 @@
 <h2>Portada</h2>
 <?php $form = ActiveForm::begin(); ?>
 
-<?= $form->field($model, 'year')->textInput(['maxlength' => true])
-          ->label('<span><a href="#"
-            data-toggle="tooltip"
-            title="Año del programa">Año</a></span>') ?>
+  <?= $this->render('forms/_portada', [
+        'form' => $form,
+        'model' => $model,
+  ]) ?>
 
-
-<?= $form->field($model, 'asignatura_id')->widget(Select2::classname(),[
-    'data' => ArrayHelper::map(Asignatura::find()->all(),
-                'id',
-                function($model,$e){
-                  $plan = $model->getPlan()->one();
-                  $carrera = $plan->getCarrera()->one();
-                  $dep = $carrera->getDepartamento()->one();
-                  return isset($dep) ? $model->nomenclatura." (".$plan->planordenanza.")" : "N";
-                },
-                function($model,$e){
-                  $plan = $model->getPlan()->one();
-                  $carrera = $plan->getCarrera()->one();
-                  $dep = $carrera->getDepartamento()->one();
-                  return isset($dep) ? $dep->nom : "N";
-                }
-              ),
-    //'data' =>ArrayHelper::map(((new StatusSearch())->search(['model' => 'backend\models\Status'])),'id','descripcion'),
-    //'data' => (new StatusSearch())->search(['model' => 'backend\models\Status'])->id,
-
-    'language' => 'es',
-    'options' => ['placeholder' => 'Seleccione una asignatura'],
-    'pluginOptions' => [
-      'allowClear' => true,
-    ],
-  ])  ->label('<span><a href="#"
-      data-toggle="tooltip"
-      title="Asignatura correspondiente al programa">Asignatura</a></span>') ?>
   <hr>
   <h3>
     Equipo de cátedra
