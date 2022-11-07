@@ -13,7 +13,7 @@ class GetLessonTypesCommand implements CommandInterface
         try {
             $lessonTypesFromDB = LessonTypeDbModel::find()->all();
             $lessonTypes = array_map(function(LessonTypeDbModel $lessonType) {
-                return new LessonType($lessonType->description, $lessonType->max_use_percentage);
+                return new LessonType($lessonType->id, $lessonType->description, $lessonType->max_use_percentage);
             }, $lessonTypesFromDB);
             return new GetLessonTypesResult(true, 'Fueron eliminadas con éxito', [ 'data' => $lessonTypes ]);
         } catch (\Throwable $e) {

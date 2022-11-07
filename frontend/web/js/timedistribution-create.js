@@ -3,53 +3,107 @@ const usedHours = 'used-hours'
 const availableHours = 'available-hours'
 const courseTotalHours = 'course-total-hours'
 const API_ERROR = 'spc_api_error'
+const SAVE_BUTTON = 'save-button'
+const SECTION_DISTRIBUTE_SCHEMA = 'time-distribution-schema'
+
 
 document.addEventListener("DOMContentLoaded", function(event) { 
     let totalHours = 0
     let courseTotalHourWeek = 0
+    let availableHoursShowElement = $(`#${availableHours}`)
+    let usedHoursShowElement = $(`#${usedHours}`)
+    let sectionElement = $(`#${SECTION_DISTRIBUTE_SCHEMA}`)
+    const saveButton = $(`#${SAVE_BUTTON}`) 
+    const multipleRowList = $(`.${LIST}`)
+
+    sectionElement.hide()
+
+    usedHoursShowElement.html(totalHours) 
     
     $('#programa-asignatura_id').select2().on('change', (e) => {
         const courseId = $('#programa-asignatura_id').val()
-        console.log('fetching...', `${SPC_URL_API}/v1/asignatura/${courseId}`)
         fetch(`${SPC_URL_API}/v1/asignatura/${courseId}`)
-            .then((response) => response.json())
+            .then((response) => (response.ok) ? response.json() : showError())
             .then(result => {
-                console.log('retrieve', result)
+                multipleRowList.multipleInput('clear')
                 courseTotalHourWeek = result.carga_sem
                 $(`#${courseTotalHours}`).html(`Carga total de la semana: ${courseTotalHourWeek}`)
+                recalculateHours()
+                sectionElement.show()
             })
             .catch(() => {
-                $(`#${API_ERROR}`).html('Ocurrió un error al obtener la información de la asignatura')
-                await.delay(100)
-                $(`#${API_ERROR}`).html('')
+                showError()
             })
     })
 
-    let availableHoursShowElement = $(`#${availableHours}`)
-    let usedHoursShowElement = $(`#${usedHours}`)
+    const showError = () => {
+        $(`#${API_ERROR}`).html('Ocurrió un error al obtener la información de la asignatura')
+        setTimeout(() => {
+            $(`#${API_ERROR}`).html('')
+        }, 3000)
+        sectionElement.hide()
+    }
 
-    usedHoursShowElement.html(totalHours) 
-
-    function recalculateHours() {
+    const recalculateHours = () => {
         totalHours = 0
-        $(`.${LIST}`).find('input[type=number]').get().map((item, algo) => {
+        multipleRowList.find('.list-cell__leson_type_hours input[type=number]').get().map((item, algo) => {
             totalHours += parseFloat(item.value)
         })
 
         usedHoursShowElement.html(totalHours) 
+        availableHoursShowElement.html(courseTotalHourWeek - totalHours)
+
+        if ((courseTotalHourWeek - totalHours) < 0) {
+            saveButton.prop('disabled', true)
+        } else {
+            saveButton.prop('disabled', false)
+        }
+
 
     }
 
-    $(`.${LIST}`).on('change', (e) => {
+    multipleRowList.on('change', (e) => {
         recalculateHours()
-
-        //$(`.${LIST}`).find('tbody.tr.multiple-input-list__item').map((item) => console.log(item))
     })
 
-    $(`.${LIST}`).on('afterAddRow', (e, row, currentIndex) => {
+    const getMaxHourPerLessonType = (row) => {
+
+        const selectLessonType = row.find('.list-cell__leson_type select').first()
+        let lessonTypeID = selectLessonType.val()
+        let maxUsePercentage = 100
+        if (!isNaN(lessonTypeID)) {
+            maxUsePercentage = maxPercentageByLessonType[lessonTypeID]
+        }
+
+        return maxUsePercentage
+    }
+
+    const determineMaxHourPerLessonType = (row) => {
+        let maxUsePercentage = getMaxHourPerLessonType(row)
+
+        row.find('.list-cell__leson_type_max_percentage input[type=number]')
+            .first()
+            .val(courseTotalHourWeek * maxUsePercentage / 100)
+    }
+
+    multipleRowList.on('afterAddRow', (e, row, currentIndex) => {
+        const selectLessonType = row.find('.list-cell__leson_type select').first()
+        const cantHoursRow = row.find('.list-cell__leson_type_hours input[type=number]').first()
+        determineMaxHourPerLessonType(row)
+        selectLessonType.on('change', () => {
+            determineMaxHourPerLessonType(row)
+        })
+        cantHoursRow.on('change', () => {
+            let maxUsePercentage =  getMaxHourPerLessonType(row)
+            if (parseFloat(cantHoursRow.val()) > (courseTotalHourWeek * maxUsePercentage / 100)) {
+                saveButton.prop('disabled', true)
+            }
+            console.log(parseFloat(cantHoursRow.val()) > (courseTotalHourWeek * maxUsePercentage / 100), parseFloat(cantHoursRow.val()), (courseTotalHourWeek * maxUsePercentage / 100))
+        })
+
     })
 
-    $(`.${LIST}`).on('afterDeleteRow', (e, row, currentIndex) => {
+    multipleRowList.on('afterDeleteRow', (e, row, currentIndex) => {
         recalculateHours()
     })
 })
