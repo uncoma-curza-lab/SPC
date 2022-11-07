@@ -17,29 +17,12 @@ class TimeDistributionCreationForm extends Model
     public $lesson_types;
     public Module $module;
 
-
-    /**
-     * {@inheritdoc}
-     */
-    //public function rules()
-    //{
-    //    return [
-    //        // name, email, subject and body are required
-    //        [['name', 'email', 'subject', 'body'], 'required'],
-    //        // email has to be a valid email address
-    //        ['email', 'email'],
-    //        // verifyCode needs to be entered correctly
-    //        ['verifyCode', 'captcha'],
-    //    ];
-    //}
-
     /**
      * {@inheritdoc}
      */
     public function attributeLabels()
     {
         return [
-            'verifyCode' => 'Verification Code',
         ];
     }
 
@@ -68,11 +51,7 @@ class TimeDistributionCreationForm extends Model
         $totalUsed = 0;
 
         $distributions = [];
-
-// * @property int $id
-// * @property int $module_id
-// * @property int $lesson_type_id
-// * @property int $percentage_quantity
+        // move to create bulk
         foreach($distributionSchema as $lessonTypeDistribution) {
             $lessonTypeId = $lessonTypeDistribution['lesson_type'];
             $lessonType = ModelsLessonType::findOne($lessonTypeId);
@@ -95,9 +74,7 @@ class TimeDistributionCreationForm extends Model
             throw new Exception('not used 100%');
         }
 
-        // TODO save in bulk
-
-        $command = new NewTimeDistributionCommand((int) $program->id, 1231, $data['TimeDistributionCreationForm']);
+        //$command = new NewTimeDistributionCommand((int) $program->id, 1231, $data['TimeDistributionCreationForm']);
 
     }
 
