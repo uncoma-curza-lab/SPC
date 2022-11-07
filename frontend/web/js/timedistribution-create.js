@@ -76,14 +76,16 @@ document.addEventListener("DOMContentLoaded", function(event) {
     }
 
     const runValidationsAndSetButton = () => {
-        if ((courseTotalHourWeek - recalculateHours()) < 0) {
+        if ((courseTotalHourWeek - recalculateHours()) != 0) {
             saveButton.prop('disabled', true)
             return;
         }
+         
         if (!validateAllPercentages()) {
             saveButton.prop('disabled', true)
             return;
         }
+
         saveButton.prop('disabled', false)
     }
 
@@ -108,6 +110,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         determineMaxHourPerLessonType(row)
         selectLessonType.on('change', () => {
             determineMaxHourPerLessonType(row)
+            runValidationsAndSetButton()
         })
         cantHoursRow.on('change', () => {
             runValidationsAndSetButton()
