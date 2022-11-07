@@ -8,7 +8,7 @@ class NewTimeDistributionCommand implements CommandInterface
 {
     protected $programId;
 
-    public function __construct(int $programId)
+    public function __construct(int $programId, int $year, array $lessonTypes)
     {
         $this->programId = $programId;
     }

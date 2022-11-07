@@ -29,7 +29,7 @@ $this->registerJsFile('@web/js/timedistribution-create.js');
                'max' => count($lessonTypes),
                'columns' => [
                    [
-                       'name'  => 'leson_type',
+                       'name'  => 'lesson_type',
                        'title' => 'Tipo de clase',
                        'type' => Select2::class,
                        'options' => [
@@ -37,7 +37,7 @@ $this->registerJsFile('@web/js/timedistribution-create.js');
                        ]
                    ],
                    [
-                       'name'  => 'leson_type_hours',
+                       'name'  => 'lesson_type_hours',
                        'title' => 'Cantidad de horas',
                        'type' => 'textInput',
                        'options' => [
@@ -46,7 +46,7 @@ $this->registerJsFile('@web/js/timedistribution-create.js');
                        ]
                    ],
                    [
-                       'name'  => 'leson_type_max_percentage',
+                       'name'  => 'lesson_type_max_percentage',
                        'title' => 'Máximo total',
                        'type' => 'textInput',
                        'options' => [

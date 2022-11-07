@@ -46,15 +46,20 @@ class TimeDistributionController extends Controller
 
         $model = new TimeDistributionCreationForm();
         //$model = new TimeDistribution();
-        $model->program = Programa::initNewProgram();
+        //$model->program = Programa::initNewProgram();
         //$model->module = new Module();
         //$model->module->program = $model->program;
 
 
         $programModel = $this->previousCreate();
+        $model->program = $programModel;
+
 
         if (Yii::$app->request->post()) {
-            $command = new NewTimeDistributionCommand(1);
+            $postInfo = $model->loadData(Yii::$app->request->post());
+            var_dump(Yii::$app->request->post());
+            die;
+            //$command = new NewTimeDistributionCommand(1);
             return $this->redirect(['view', 'id' => $model->id]);
         }
         //if ($model->load(Yii::$app->request->post()) && $model->save()) {
