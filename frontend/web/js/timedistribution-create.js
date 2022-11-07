@@ -62,10 +62,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
     }
 
-    multipleRowList.on('change', (e) => {
-        recalculateHours()
-    })
-
     const getMaxHourPerLessonType = (row) => {
 
         const selectLessonType = row.find('.list-cell__leson_type select').first()
@@ -94,6 +90,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
             determineMaxHourPerLessonType(row)
         })
         cantHoursRow.on('change', () => {
+            recalculateHours()
             let maxUsePercentage =  getMaxHourPerLessonType(row)
             if (parseFloat(cantHoursRow.val()) > (courseTotalHourWeek * maxUsePercentage / 100)) {
                 saveButton.prop('disabled', true)

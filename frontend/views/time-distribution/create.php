@@ -47,7 +47,7 @@ $this->registerJsFile('@web/js/timedistribution-create.js');
                    ],
                    [
                        'name'  => 'leson_type_max_percentage',
-                       'title' => 'Máximo',
+                       'title' => 'Máximo total',
                        'type' => 'textInput',
                        'options' => [
                            'type' => 'number',
