@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 multipleRowList.multipleInput('clear')
                 courseTotalHourWeek = result.carga_sem
                 $(`#${courseTotalHours}`).html(`Carga total de la semana: ${courseTotalHourWeek}`)
-                recalculateHours()
+                runValidationsAndSetButton()
                 sectionElement.show()
             })
             .catch(() => {
@@ -50,20 +50,13 @@ document.addEventListener("DOMContentLoaded", function(event) {
             totalHours += parseFloat(item.value)
         })
 
-        usedHoursShowElement.html(totalHours) 
-        availableHoursShowElement.html(courseTotalHourWeek - totalHours)
+        usedHoursShowElement.html(totalHours.toFixed(2)) 
+        availableHoursShowElement.html((courseTotalHourWeek - totalHours).toFixed(2))
 
-        if ((courseTotalHourWeek - totalHours) < 0) {
-            saveButton.prop('disabled', true)
-        } else {
-            saveButton.prop('disabled', false)
-        }
-
-
+        return totalHours
     }
 
     const getMaxHourPerLessonType = (row) => {
-
         const selectLessonType = row.find('.list-cell__leson_type select').first()
         let lessonTypeID = selectLessonType.val()
         let maxUsePercentage = 100
@@ -82,6 +75,33 @@ document.addEventListener("DOMContentLoaded", function(event) {
             .val(courseTotalHourWeek * maxUsePercentage / 100)
     }
 
+    const runValidationsAndSetButton = () => {
+        if ((courseTotalHourWeek - recalculateHours()) < 0) {
+            saveButton.prop('disabled', true)
+            return;
+        }
+        if (!validateAllPercentages()) {
+            saveButton.prop('disabled', true)
+            return;
+        }
+        saveButton.prop('disabled', false)
+    }
+
+    const validateAllPercentages = () => {
+
+        const rows = multipleRowList.find('tr.multiple-input-list__item').get()
+        const result = rows.some((rowElement) => {
+            const row = $(rowElement)
+            let maxUsePercentage =  getMaxHourPerLessonType(row)
+            const cantHoursRow = row.find('.list-cell__leson_type_hours input[type=number]').first()
+            if (parseFloat(cantHoursRow.val()) > (courseTotalHourWeek * maxUsePercentage / 100)) {
+                return true
+            }
+        })
+
+        return !result
+    }
+
     multipleRowList.on('afterAddRow', (e, row, currentIndex) => {
         const selectLessonType = row.find('.list-cell__leson_type select').first()
         const cantHoursRow = row.find('.list-cell__leson_type_hours input[type=number]').first()
@@ -90,18 +110,13 @@ document.addEventListener("DOMContentLoaded", function(event) {
             determineMaxHourPerLessonType(row)
         })
         cantHoursRow.on('change', () => {
-            recalculateHours()
-            let maxUsePercentage =  getMaxHourPerLessonType(row)
-            if (parseFloat(cantHoursRow.val()) > (courseTotalHourWeek * maxUsePercentage / 100)) {
-                saveButton.prop('disabled', true)
-            }
-            console.log(parseFloat(cantHoursRow.val()) > (courseTotalHourWeek * maxUsePercentage / 100), parseFloat(cantHoursRow.val()), (courseTotalHourWeek * maxUsePercentage / 100))
+            runValidationsAndSetButton()
         })
 
     })
 
     multipleRowList.on('afterDeleteRow', (e, row, currentIndex) => {
-        recalculateHours()
+        runValidationsAndSetButton()
     })
 })
 
