@@ -14,7 +14,8 @@ class m221026_224750_create_distribucion_horaria_table extends Migration
     {
         $this->createTable('{{%lesson_types}}', [
             'id' => $this->primaryKey(),
-            'description' => $this->integer()->notNull(),
+            'description' => $this->string()->notNull(),
+            'max_use_percentage' => $this->tinyInteger()->notNull()->defaultValue(100)->unsigned(),
         ]);
 
         $this->createTable('{{%time_distribution}}', [
@@ -33,6 +34,7 @@ class m221026_224750_create_distribucion_horaria_table extends Migration
           'no action',
           'no action'
         );
+
         $this->addForeignKey(
           'time_distribution_lesson_type',
           '{{%time_distribution}}',
