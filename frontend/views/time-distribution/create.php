@@ -25,7 +25,7 @@ $this->registerJsFile('@web/js/timedistribution-create.js',['depends' => [\yii\w
 
 
     <div id="time-distribution-schema">
-        <?= $form->field($model, 'lesson_type')->widget(MultipleInput::className(), [
+        <?= $form->field($model, 'lesson_type')->widget(MultipleInput::class, [
                'min' => 0,
                'max' => count($lessonTypes),
                'columns' => [

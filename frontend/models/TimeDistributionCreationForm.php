@@ -9,6 +9,8 @@ use common\models\Module;
 use common\models\Programa;
 use common\models\TimeDistribution;
 use Exception;
+use Throwable;
+use Yii;
 use yii\base\Model;
 
 class TimeDistributionCreationForm extends Model
@@ -27,51 +29,78 @@ class TimeDistributionCreationForm extends Model
     }
 
 
-    public function loadData(array $data): void
+    public function createDistributionTime(array $data): array
     {
         $this->validations($data);
-        $program = $data['Programa'];
-        $createProgramCommand = new CreateNewProgramCommand($program['asignatura_id'], $program['year']);
-        $resultNewProgram = $createProgramCommand->handle();
-        if(!$resultNewProgram->getResult()) {
-            // throw error
-            return;
-        }
-        $program = $resultNewProgram->getResult()['model'];
 
-        $module = new Module();
-
-        $module->program_id = $program->id;
-        $module->save();
-
-        $distributionSchema = $data['TimeDistributionCreationForm']['lesson_type'];
-
-
-        $totalHours = $program->asignatura->carga_horaria_sem;
-        $totalUsed = 0;
-
-        $distributions = [];
-        // move to create bulk
-        foreach($distributionSchema as $lessonTypeDistribution) {
-            $lessonTypeId = $lessonTypeDistribution['lesson_type'];
-            $lessonType = ModelsLessonType::findOne($lessonTypeId);
-            $hours = $lessonTypeDistribution['lesson_type_hours'];
-            if ($hours > ($lessonType->max_use_percentage * $totalHours / 100)) {
-                throw new Exception("Max Percentage Limit");
+        $transaction = Yii::$app->db->beginTransaction();
+        try {
+            $program = $data['Programa'];
+            $createProgramCommand = new CreateNewProgramCommand($program['asignatura_id'], $program['year']);
+            $resultNewProgram = $createProgramCommand->handle();
+            if(!$resultNewProgram->getResult()) {
+                // throw error
+                throw new Exception('error create program');
             }
-            $totalUsed += $hours;
-            $usePercentage = $hours * $lessonType->max_use_percentage / 100;
-            $distribution = new TimeDistribution();
-            $distribution->module_id = $module->id;
-            $distribution->program_id = $program->id;
-            $distribution->lesson_type_id = $lessonTypeId;
-            $distribution->percentage_quantity = $usePercentage;
 
-            $distributions[] = $distribution;
-        }
+            $program = $resultNewProgram->getData()['model'];
 
-        if ($totalUsed != $totalHours) {
-            throw new Exception('not used 100%');
+            $module = new Module();
+            $module->program_id = $program->id;
+            $module->value = "test";
+            $module->type = TimeDistribution::MODULE_NAME;
+            if (!$module->save()) {
+                //revert
+                throw new Exception('Save module error');
+            }
+
+            $distributionSchema = $data['TimeDistributionCreationForm']['lesson_type'];
+
+
+            $totalHours = $program->asignatura->carga_horaria_sem;
+            $totalUsed = 0;
+
+            $distributions = [];
+            // move to create bulk
+            foreach($distributionSchema as $lessonTypeDistribution) {
+                $lessonTypeId = $lessonTypeDistribution['lesson_type'];
+                $lessonType = ModelsLessonType::findOne($lessonTypeId);
+                $hours = $lessonTypeDistribution['lesson_type_hours'];
+                $maxHours = ($lessonType->max_use_percentage * $totalHours / 100);
+                if ($hours > $maxHours) {
+                    throw new Exception("Max Percentage Limit hours: " . $hours . " > " . $maxHours);
+                }
+                $totalUsed += $hours;
+                $usePercentage = $hours * 100 / $totalHours;
+                $distribution = new TimeDistribution();
+                $distribution->module_id = $module->id;
+                //$distribution->program_id = $program->id;
+                $distribution->lesson_type_id = $lessonTypeId;
+                $distribution->percentage_quantity = $usePercentage;
+
+                $distributions[] = $distribution;
+                if (!$distribution->save()) {
+                    throw new Exception('Distribution not saved, lesson type: ' . $lessonTypeId);
+                }
+            }
+
+            if ($totalUsed != $totalHours) {
+                throw new Exception('not used 100%');
+            }
+            $transaction->commit();
+            return [
+                'result' => true,
+                'module' => $module,
+                'distributions' => $distributions
+            ];
+
+        } catch(Throwable $e) {
+            $transaction->rollBack();
+            return [
+                'result' => false,
+                'error' => $e,
+                'message' => $e->getMessage(),
+            ];
         }
 
         //$command = new NewTimeDistributionCommand((int) $program->id, 1231, $data['TimeDistributionCreationForm']);

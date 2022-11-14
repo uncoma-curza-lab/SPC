@@ -17,6 +17,7 @@ use Yii;
  */
 class TimeDistribution extends \yii\db\ActiveRecord
 {
+    const MODULE_NAME = 'time_distribution';
     /**
      * {@inheritdoc}
      */
@@ -33,8 +34,8 @@ class TimeDistribution extends \yii\db\ActiveRecord
         return [
             [['module_id', 'lesson_type_id'], 'required'],
             [['module_id', 'lesson_type_id', 'percentage_quantity'], 'integer'],
-            [['lesson_type_id'], 'exist', 'skipOnError' => true, 'targetClass' => LessonType::className(), 'targetAttribute' => ['lesson_type_id' => 'id']],
-            [['module_id'], 'exist', 'skipOnError' => true, 'targetClass' => Module::className(), 'targetAttribute' => ['module_id' => 'id']],
+            [['lesson_type_id'], 'exist', 'skipOnError' => true, 'targetClass' => LessonType::class, 'targetAttribute' => ['lesson_type_id' => 'id']],
+            [['module_id'], 'exist', 'skipOnError' => true, 'targetClass' => Module::class, 'targetAttribute' => ['module_id' => 'id']],
         ];
     }
 
@@ -56,7 +57,7 @@ class TimeDistribution extends \yii\db\ActiveRecord
      */
     public function getLessonType()
     {
-        return $this->hasOne(LessonType::className(), ['id' => 'lesson_type_id']);
+        return $this->hasOne(LessonType::class, ['id' => 'lesson_type_id']);
     }
 
     /**
@@ -64,7 +65,7 @@ class TimeDistribution extends \yii\db\ActiveRecord
      */
     public function getModule()
     {
-        return $this->hasOne(Module::className(), ['id' => 'module_id']);
+        return $this->hasOne(Module::class, ['id' => 'module_id']);
     }
 
     /**

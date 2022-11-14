@@ -10,9 +10,10 @@ use Yii;
  * @property int $id
  * @property string $value
  * @property int $program_id
+ * @property string $type
  *
  * @property Programa $program
- * @property Reviews[] $reviews
+ * @property Review[] $reviews
  * @property TimeDistribution[] $timeDistributions
  */
 class Module extends \yii\db\ActiveRecord
@@ -34,7 +35,8 @@ class Module extends \yii\db\ActiveRecord
             [['value'], 'required'],
             [['program_id'], 'integer'],
             [['value'], 'string', 'max' => 255],
-            [['program_id'], 'exist', 'skipOnError' => true, 'targetClass' => Programa::className(), 'targetAttribute' => ['program_id' => 'id']],
+            [['type'], 'string', 'max' => 255],
+            [['program_id'], 'exist', 'skipOnError' => true, 'targetClass' => Programa::class, 'targetAttribute' => ['program_id' => 'id']],
         ];
     }
 
@@ -47,6 +49,7 @@ class Module extends \yii\db\ActiveRecord
             'id' => 'ID',
             'value' => 'Value',
             'program_id' => 'Program ID',
+            'type' => 'Tipo de modulo',
         ];
     }
 
@@ -55,7 +58,7 @@ class Module extends \yii\db\ActiveRecord
      */
     public function getProgram()
     {
-        return $this->hasOne(Programa::className(), ['id' => 'program_id']);
+        return $this->hasOne(Programa::class, ['id' => 'program_id']);
     }
 
     /**
@@ -63,7 +66,7 @@ class Module extends \yii\db\ActiveRecord
      */
     public function getReviews()
     {
-        return $this->hasMany(Reviews::className(), ['module_id' => 'id']);
+        return $this->hasMany(Review::class, ['module_id' => 'id']);
     }
 
     /**
@@ -71,7 +74,7 @@ class Module extends \yii\db\ActiveRecord
      */
     public function getTimeDistributions()
     {
-        return $this->hasMany(TimeDistribution::className(), ['module_id' => 'id']);
+        return $this->hasMany(TimeDistribution::class, ['module_id' => 'id']);
     }
 
     /**

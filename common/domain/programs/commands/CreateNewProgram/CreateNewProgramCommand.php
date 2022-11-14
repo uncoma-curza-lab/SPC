@@ -30,6 +30,9 @@ class CreateNewProgramCommand implements CommandInterface
 
             $model->setAsignatura($course->id);
             $model->year = $this->year;
+            if (!$model->save()) {
+                throw new Exception('Error save program');
+            }
             return new CreateNewProgramResult(
                 true,
                 "Se creó el programa correctamente",

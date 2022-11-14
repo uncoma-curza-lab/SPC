@@ -3,7 +3,9 @@
 namespace frontend\controllers;
 
 use common\domain\LessonType\commands\GetLessonTypes\GetLessonTypesCommand;
+use common\models\Module;
 use common\models\Programa;
+use common\models\TimeDistribution;
 use frontend\models\TimeDistributionCreationForm;
 use Yii;
 use yii\web\Controller;
@@ -52,17 +54,50 @@ class TimeDistributionController extends Controller
 
 
         if (Yii::$app->request->post()) {
-            $postInfo = $model->loadData(Yii::$app->request->post());
-            var_dump(Yii::$app->request->post());
-            die;
+            $response = $model->createDistributionTime(Yii::$app->request->post());
+            if ($response['result']) {
+                return $this->redirect(['index']);
+            } else {
+                var_dump($response['error']);
+                die;
+            }
             //$command = new NewTimeDistributionCommand(1);
-            return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('create', [
             'model' => $model,
             'lessonTypes' => $lessonTypes
         ]);
+    }
+
+    public function actionView($id)
+    {
+        $module = Module::find()->where(['program_id' => $id])
+                                ->andWhere(['type' => TimeDistribution::MODULE_NAME])
+                                ->with(['timeDistributions'])->one();
+
+        $viewModule = $this->mapDistribution($module);
+
+        return $this->render('view-module', ['model' => $viewModule]);
+    }
+
+    private function mapDistribution(Module $module)
+    {
+        $response = [];
+        $loadTimeWeek = $module->program->asignatura->carga_horaria_sem;
+        $totalLoadTime = $module->program->asignatura->carga_horaria_cuatr;
+        foreach($module->timeDistributions as $distribution) {
+            $response['time_distribution'][] = [
+                'lesson_type' => $distribution->lessonType->description,
+                'percentage' => $distribution->percentage_quantity,
+                'relative_hours' => $loadTimeWeek * $distribution->percentage_quantity / 100
+            ];
+        }
+
+        $response['week_load_time'] = $loadTimeWeek;
+        $response['total_load_time'] = $totalLoadTime;
+
+        return $response;
     }
 
 }
