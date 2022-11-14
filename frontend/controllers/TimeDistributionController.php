@@ -56,12 +56,13 @@ class TimeDistributionController extends Controller
         if (Yii::$app->request->post()) {
             $response = $model->createDistributionTime(Yii::$app->request->post());
             if ($response['result']) {
-                return $this->redirect(['index']);
+                return $this->redirect([
+                    'view',
+                    'id' => $response['module']->program->id
+                ]);
             } else {
-                var_dump($response['error']);
-                die;
+                //error
             }
-            //$command = new NewTimeDistributionCommand(1);
         }
 
         return $this->render('create', [
