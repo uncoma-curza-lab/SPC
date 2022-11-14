@@ -7,7 +7,8 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 $this->registerJs('const SPC_URL_API = "' . SPC_URL_API . '"',  \yii\web\View::POS_HEAD);
 $this->registerJs('const maxPercentageByLessonType = ' . json_encode(ArrayHelper::map($lessonTypes,'id', 'max_use_percentage')), \yii\web\View::POS_HEAD);
-$this->registerJsFile('@web/js/timedistribution-create.js');
+//$this->registerJsFile('@web/js/timedistribution-create.js');
+$this->registerJsFile('@web/js/timedistribution-create.js',['depends' => [\yii\web\JqueryAsset::class]]);
 
 ?>
     <h2> Distribución horaria </h2>

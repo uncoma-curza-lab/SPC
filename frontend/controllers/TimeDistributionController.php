@@ -3,10 +3,6 @@
 namespace frontend\controllers;
 
 use common\domain\LessonType\commands\GetLessonTypes\GetLessonTypesCommand;
-use common\domain\programs\commands\ProgramGenerateSteps\ProgramStepFactory;
-use common\domain\TimeDistribution\commands\CreateNewTimeDistribution\NewTimeDistributionCommand;
-use common\domain\TimeDistribution\Entities\TimeDistribution;
-use common\models\Module;
 use common\models\Programa;
 use frontend\models\TimeDistributionCreationForm;
 use Yii;
@@ -19,6 +15,13 @@ use yii\filters\VerbFilter;
  */
 class TimeDistributionController extends Controller
 {
+
+    public function beforeAction($action) {
+        if(defined('YII_DEBUG') && YII_DEBUG){
+            \Yii::$app->assetManager->forceCopy = true;
+        }
+        return parent::beforeAction($action);
+    }
     /**
      * {@inheritdoc}
      */
@@ -45,14 +48,7 @@ class TimeDistributionController extends Controller
         $lessonTypes = $lessonTypesResult->getData()['data'];
 
         $model = new TimeDistributionCreationForm();
-        //$model = new TimeDistribution();
-        //$model->program = Programa::initNewProgram();
-        //$model->module = new Module();
-        //$model->module->program = $model->program;
-
-
-        $programModel = $this->previousCreate();
-        $model->program = $programModel;
+        $model->program = Programa::initNewProgram();
 
 
         if (Yii::$app->request->post()) {
@@ -62,22 +58,11 @@ class TimeDistributionController extends Controller
             //$command = new NewTimeDistributionCommand(1);
             return $this->redirect(['view', 'id' => $model->id]);
         }
-        //if ($model->load(Yii::$app->request->post()) && $model->save()) {
-        //    return $this->redirect(['view', 'id' => $model->id]);
-        //}
 
         return $this->render('create', [
             'model' => $model,
             'lessonTypes' => $lessonTypes
         ]);
-    }
-
-    private function previousCreate()
-    {
-        $command = ProgramStepFactory::getStep(Programa::CREATE_PROGRAM_STEP);
-        $result = $command->handle();
-
-        return $result->getProgram();
     }
 
 }

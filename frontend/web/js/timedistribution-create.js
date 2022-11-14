@@ -6,8 +6,7 @@ const API_ERROR = 'spc_api_error'
 const SAVE_BUTTON = 'save-button'
 const SECTION_DISTRIBUTE_SCHEMA = 'time-distribution-schema'
 
-
-document.addEventListener("DOMContentLoaded", function(event) { 
+window.addEventListener("DOMContentLoaded", function(event) { 
     let totalHours = 0
     let courseTotalHourWeek = 0
     let availableHoursShowElement = $(`#${availableHours}`)
@@ -46,7 +45,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
     const recalculateHours = () => {
         totalHours = 0
-        multipleRowList.find('.list-cell__leson_type_hours input[type=number]').get().map((item, algo) => {
+        multipleRowList.find('.list-cell__lesson_type_hours input[type=number]').get().map((item, algo) => {
             totalHours += parseFloat(item.value)
         })
 
@@ -57,7 +56,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     }
 
     const getMaxHourPerLessonType = (row) => {
-        const selectLessonType = row.find('.list-cell__leson_type select').first()
+        const selectLessonType = row.find('.list-cell__lesson_type select').first()
         let lessonTypeID = selectLessonType.val()
         let maxUsePercentage = 100
         if (!isNaN(lessonTypeID)) {
@@ -70,7 +69,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     const determineMaxHourPerLessonType = (row) => {
         let maxUsePercentage = getMaxHourPerLessonType(row)
 
-        row.find('.list-cell__leson_type_max_percentage input[type=number]')
+        row.find('.list-cell__lesson_type_max_percentage input[type=number]')
             .first()
             .val(courseTotalHourWeek * maxUsePercentage / 100)
     }
@@ -95,7 +94,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         const result = rows.some((rowElement) => {
             const row = $(rowElement)
             let maxUsePercentage =  getMaxHourPerLessonType(row)
-            const cantHoursRow = row.find('.list-cell__leson_type_hours input[type=number]').first()
+            const cantHoursRow = row.find('.list-cell__lesson_type_hours input[type=number]').first()
             if (parseFloat(cantHoursRow.val()) > (courseTotalHourWeek * maxUsePercentage / 100)) {
                 return true
             }
@@ -105,8 +104,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
     }
 
     multipleRowList.on('afterAddRow', (e, row, currentIndex) => {
-        const selectLessonType = row.find('.list-cell__leson_type select').first()
-        const cantHoursRow = row.find('.list-cell__leson_type_hours input[type=number]').first()
+        const selectLessonType = row.find('.list-cell__lesson_type select').first()
+        const cantHoursRow = row.find('.list-cell__lesson_type_hours input[type=number]').first()
         determineMaxHourPerLessonType(row)
         selectLessonType.on('change', () => {
             determineMaxHourPerLessonType(row)
