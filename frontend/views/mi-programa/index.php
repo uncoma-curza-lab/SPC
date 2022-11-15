@@ -22,9 +22,9 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
 <div class="programa-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-    <p id="">
+    <p>
         <?= Html::a('Añadir Programa', ['anadir'],['id'=> 'agregar','class' => 'btn btn-success']) ?>
+        <?= Html::a('Añadir y presentar distribución horaria', ['time-distribution/create'],['class' => 'btn btn-success']) ?>
     </p>
     <?= GridView::widget([
         'summary' => "Mostrando {begin} de {totalCount} programas",
@@ -98,7 +98,7 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
             [
               'class' => 'yii\grid\ActionColumn',
               //'template' => $show_this_nav? '{view} {update} {delete} {pdf} {status}':'{view} {status} {pdf}',
-              'template' => $show_this_nav? ' {asignar} {aprobar} {rechazar} {delete} {pdf} {ver} {copy} {cargar}':'{subir} {status} {pdf}',
+              'template' => $show_this_nav? ' {asignar} {aprobar} {rechazar} {delete} {pdf} {ver} {copy} {cargar} {time-distribution}':'{subir} {status} {pdf} {time-distribution}',
               'buttons' => [
                 'pdf' => function ($url,$model) {
                     return Html::a(
@@ -252,8 +252,16 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
                         ]
                       );
                     }
-
                 },
+                'time-distribution' => function($url, $model) {
+                    return Html::a(
+                      '<span style="padding:5px; font-size:20px; color:	#807979" class="glyphicon glyphicon-dashboard"></span>',
+                      ['time-distribution/view', 'id' => $model->id],
+                      [
+                          'title' => Yii::t('yii', 'Ver distribución horaria'),
+                      ]
+                    );
+                }
               ]
             ],
         ],

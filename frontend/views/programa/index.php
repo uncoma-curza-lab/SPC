@@ -24,10 +24,10 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
     <h1><?=  Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
     <?php if (PermisosHelpers::requerirRol('Departamento')) : ?>
-    <p id="">
-        <?= Html::a('Añadir Programa', ['anadir'],['id'=> 'agregar','class' => 'btn btn-success']) ?>
-    </p>
-  <?php endif; ?>
+        <p>
+            <?= Html::a('Añadir Programa', ['anadir'],['id'=> 'agregar','class' => 'btn btn-success']) ?>
+        </p>
+    <?php endif; ?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
