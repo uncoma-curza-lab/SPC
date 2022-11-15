@@ -24,7 +24,7 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
     <h1><?= Html::encode($this->title) ?></h1>
     <p>
         <?= Html::a('Añadir Programa', ['anadir'],['id'=> 'agregar','class' => 'btn btn-success']) ?>
-        <?= Html::a('Añadir y presentar distribución horaria', ['time-distribution/create'],['class' => 'btn btn-success']) ?>
+        <?= Html::a('Añadir Programa y presentar distribución horaria', ['time-distribution/create'],['class' => 'btn btn-info']) ?>
     </p>
     <?= GridView::widget([
         'summary' => "Mostrando {begin} de {totalCount} programas",
