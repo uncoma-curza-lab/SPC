@@ -33,7 +33,8 @@ class TimeDistribution extends \yii\db\ActiveRecord
     {
         return [
             [['module_id', 'lesson_type_id'], 'required'],
-            [['module_id', 'lesson_type_id', 'percentage_quantity'], 'integer'],
+            [['module_id', 'lesson_type_id'], 'integer'],
+            [['percentage_quantity'], 'number'],
             [['lesson_type_id'], 'exist', 'skipOnError' => true, 'targetClass' => LessonType::class, 'targetAttribute' => ['lesson_type_id' => 'id']],
             [['module_id'], 'exist', 'skipOnError' => true, 'targetClass' => Module::class, 'targetAttribute' => ['module_id' => 'id']],
         ];

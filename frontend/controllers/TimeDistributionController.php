@@ -52,6 +52,8 @@ class TimeDistributionController extends Controller
         $model = new TimeDistributionCreationForm();
         $model->program = Programa::initNewProgram();
 
+        $error = null;
+
 
         if (Yii::$app->request->post()) {
             $response = $model->createDistributionTime(Yii::$app->request->post());
@@ -61,13 +63,16 @@ class TimeDistributionController extends Controller
                     'id' => $response['module']->program->id
                 ]);
             } else {
+                $model->load(Yii::$app->request->post());
+                $error = $response['message'];
                 //error
             }
         }
 
         return $this->render('create', [
             'model' => $model,
-            'lessonTypes' => $lessonTypes
+            'lessonTypes' => $lessonTypes,
+            'error' => $error
         ]);
     }
 
@@ -76,6 +81,13 @@ class TimeDistributionController extends Controller
         $module = Module::find()->where(['program_id' => $id])
                                 ->andWhere(['type' => TimeDistribution::MODULE_NAME])
                                 ->with(['timeDistributions'])->one();
+
+        if (!$module) {
+            Yii::$app->session->setFlash('warning',
+             '<p>Lamentamos molestarlo, </p>
+             <p>El programa no posee el modulo de distribución horaria.</p>');
+            return $this->goBack();
+        }
 
         $viewModule = $this->mapDistribution($module);
 

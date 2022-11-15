@@ -71,7 +71,7 @@ class TimeDistributionCreationForm extends Model
                     throw new Exception("Max Percentage Limit hours: " . $hours . " > " . $maxHours);
                 }
                 $totalUsed += $hours;
-                $usePercentage = $hours * 100 / $totalHours;
+                $usePercentage = round($hours * 100 / $totalHours, 2);
                 $distribution = new TimeDistribution();
                 $distribution->module_id = $module->id;
                 //$distribution->program_id = $program->id;
@@ -79,7 +79,12 @@ class TimeDistributionCreationForm extends Model
                 $distribution->percentage_quantity = $usePercentage;
 
                 $distributions[] = $distribution;
+
                 if (!$distribution->save()) {
+                    var_dump($usePercentage);
+                    var_dump($distribution->validate());
+                    var_dump($distribution->errors);
+                    die;
                     throw new Exception('Distribution not saved, lesson type: ' . $lessonTypeId);
                 }
             }

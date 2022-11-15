@@ -22,7 +22,7 @@ class m221026_224750_create_distribucion_horaria_table extends Migration
             'id' => $this->primaryKey(),
             'module_id' => $this->integer()->notNull(),
             'lesson_type_id' => $this->integer()->notNull(),
-            'percentage_quantity' => $this->integer(),
+            'percentage_quantity' => $this->float(2),
         ]);
 
         $this->addForeignKey(

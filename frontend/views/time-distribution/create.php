@@ -23,6 +23,9 @@ $this->registerJsFile('@web/js/timedistribution-create.js',['depends' => [\yii\w
     <small id="spc_api_error" style="color:red;"></small>
     <small id="course-total-hours"></small>
 
+    <?php if($error): ?>
+        <div><?= $error ?></div>
+    <? endif; ?>
 
     <div id="time-distribution-schema">
         <?= $form->field($model, 'lesson_type')->widget(MultipleInput::class, [
