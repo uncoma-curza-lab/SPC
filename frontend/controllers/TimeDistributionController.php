@@ -103,7 +103,7 @@ class TimeDistributionController extends Controller
             $response['time_distribution'][] = [
                 'lesson_type' => $distribution->lessonType->description,
                 'percentage' => $distribution->percentage_quantity,
-                'relative_hours' => $loadTimeWeek * $distribution->percentage_quantity / 100
+                'relative_hours' => round($loadTimeWeek * $distribution->percentage_quantity / 100, 2)
             ];
         }
 
