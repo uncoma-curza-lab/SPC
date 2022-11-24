@@ -43,6 +43,16 @@ $this->registerJs($js);
     <? endif; ?>
 
     <div id="time-distribution-schema">
+    <? foreach($lessonTypes as $lesson): ?>
+        <?=
+            $form->field($model, 'lesson_type')
+                 ->textInput(['maxlength' => true])
+                 ->label(
+                     $lesson->name
+                 )
+         ?>
+    <? endforeach; ?>
+        
     <?= $form->field($model, 'lesson_type')->widget(MultipleInput::class, [
            'min' => 0,
            'max' => count($lessonTypes),

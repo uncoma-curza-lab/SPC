@@ -211,6 +211,11 @@ class Programa extends \yii\db\ActiveRecord
         return $this->hasMany(Objetivo::class, ['programa_id' => 'id']);
     }
 
+    public function getModules()
+    {
+        return $this->hasMany(Module::class, ['program_id' => 'id']);
+    }
+
     /**
      * Obtener observaciones de un programa
      * @return \yii\db\ActiveQuery

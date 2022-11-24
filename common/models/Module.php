@@ -18,6 +18,8 @@ use Yii;
  */
 class Module extends \yii\db\ActiveRecord
 {
+    const TIME_DISTRIBUTION_TYPE = 'time_distribution';
+
     /**
      * {@inheritdoc}
      */
@@ -34,7 +36,7 @@ class Module extends \yii\db\ActiveRecord
         return [
             [['value'], 'required'],
             [['program_id'], 'integer'],
-            [['value'], 'string', 'max' => 255],
+            [['value'], 'string'],
             [['type'], 'string', 'max' => 255],
             [['program_id'], 'exist', 'skipOnError' => true, 'targetClass' => Programa::class, 'targetAttribute' => ['program_id' => 'id']],
         ];
@@ -85,4 +87,12 @@ class Module extends \yii\db\ActiveRecord
     {
         return new ModulesQuery(get_called_class());
     }
+
+    public function isSpecialModule()
+    {
+        return [
+            self::TIME_DISTRIBUTION_TYPE,
+        ];
+    }
+
 }
