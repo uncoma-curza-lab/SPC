@@ -9,7 +9,7 @@ class m221106_233335_add_new_lesson_types extends Migration
 {
     const DESCRIPTIONS = [
         [
-            'Presencial',
+            'Presencialidad en el establecimiento',
             100,
         ],
         [
@@ -17,7 +17,7 @@ class m221106_233335_add_new_lesson_types extends Migration
             100,
         ],
         [
-            'Herramientas de educación a distancia',
+            'EAD Asincronica - PEDCO',
             45,
         ],
     ];

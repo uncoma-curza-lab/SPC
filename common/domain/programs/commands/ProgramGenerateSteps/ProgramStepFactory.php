@@ -15,6 +15,8 @@ use Exception;
 class ProgramStepFactory
 {
     /**
+     * send step and instance(for update)
+     * define flow and validations
      */
     static function getStep(string $type, Programa $program = null, array $data = null): StepInterface
     {
