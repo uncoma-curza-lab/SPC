@@ -2,6 +2,7 @@
 
 namespace frontend\controllers;
 
+use common\domain\LessonType\commands\GetLessonTypes\GetLessonTypesCommand;
 use common\domain\programs\commands\ApproveProgram\CommandApproveProcess;
 use common\domain\programs\commands\ProgramGenerateSteps\ProgramStepFactory;
 use common\domain\programs\commands\RejectProgram\CommandRejectProcess;
@@ -715,42 +716,40 @@ class MiProgramaController extends Controller
      * @throws ForbiddenHttpException si no tiene permisos de modificar el programa
      */
     public function actionDistHoraria($id){
-        return $this->prepareGenericStepAction(
-            $id,
-            Programa::TIME_DISTRIBUTION_STEP,
-            'forms/_dist-horaria',
-            'crono-tentativo'
-        );
-      //$model = $this->findModel($id);
-      //$model->scenario = 'dist-horaria';
-      //$estado = Status::findOne($model->status_id);
-      //$validarPermisos = $this->validarPermisos($model, $estado);
+        $step = Programa::TIME_DISTRIBUTION_STEP;
+        $programId = $id;
+        $view = 'forms/_dist-horaria';
+        $nextView = 'crono-tentativo';
+        $model = $this->findModel($programId);
+        $command = ProgramStepFactory::getStep($step, $model);
+        $result = $command->handle();
 
-      //if ($validarPermisos) {
-      //  if ($model->load(Yii::$app->request->post())){
-      //    if($model->save()){
-      //      // LOG de éxito
-      //      $this->mensajeGuardadoExito($model);
-      //      // mensaje a usuario
-      //      Yii::$app->session->setFlash('success','La sección de Distribución horaria se guardó con éxito');
-      //      // redirección dependiendo el botón
-      //      if(Yii::$app->request->post('submit') == 'salir'){
-      //        return $this->redirect(['index']);
-      //      }
-      //      return $this->redirect(['crono-tentativo', 'id' => $model->id]);
-      //    } else {
-      //      // log de fallo
-      //      $this->mensajeGuardadoFalla($model);
-      //      // mensaje a usuario
-      //      Yii::$app->session->setFlash('danger','Hubo un problema al guardar los cambios');
-      //    }
-      //  }
 
-      //  return $this->render('forms/_dist-horaria', [
-      //      'model' => $model,
-      //  ]);
-      //}
-      //throw new ForbiddenHttpException('No tiene permisos para actualizar este elemento');
+        $lessonTypesCommand = new GetLessonTypesCommand();
+        $lessonTypesResult = $lessonTypesCommand->handle();
+        if (!$lessonTypesResult->getResult()) {
+            return $this->goBack();
+        }
+
+        $lessonTypes = $lessonTypesResult->getData()['data'];
+
+        $lessonTypes = $lessonTypesResult->getData()['data'];
+        if($result->getResult()) {
+            if(Yii::$app->request->post('submit') == 'salir'){
+                return $this->redirect(['index']);
+            }
+            return $this->redirect([$nextView, 'id' => $programId]);
+        }
+
+        if ($result->getMessage()) {
+            Yii::$app->session->setFlash('danger','Hubo un problema al guardar el programa');
+        }
+
+        return $this->render($view, [
+            'model' => $model,
+            'lessonTypes' => $lessonTypes,
+            'error' => null
+        ]);
     }
 
     /**
