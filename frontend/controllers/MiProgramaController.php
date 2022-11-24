@@ -288,11 +288,11 @@ class MiProgramaController extends Controller
      * @param Integer $id del programa
      * @throws ForbiddenHttpException si no tiene permisos de modificar el programa
      */
-    public function actionCargar($id)
+    public function actionFundamentacion($id)
     {
         return $this->prepareGenericStepAction(
             $id,
-            Programa::FUNDAMENTALS_STEP,
+            Programa::TIME_DISTRIBUTION_STEP,
             'forms/_fundamentacion',
             'objetivo-plan'
         );
@@ -937,7 +937,7 @@ class MiProgramaController extends Controller
 
         if ($result->getResult()) {
             Yii::$app->session->setFlash('warning','El programa se creó correctamente. <br>Complete el programa');
-            return $this->redirect(['cargar', 'id' => $result->getProgram()->id]);
+            return $this->redirect(['dist-horaria', 'id' => $result->getProgram()->id]);
         }
         if ($result->getMessage()) {
             Yii::$app->session->setFlash('danger','Hubo un problema al crear el programa');
@@ -946,25 +946,6 @@ class MiProgramaController extends Controller
         return $this->render('anadir', [
             'model' => $result->getProgram(),
         ]);
-
-        //  $model = Programa::initNewProgram();
-        //  //obtener el id del director
-        //  if ($model->load(Yii::$app->request->post())) {
-        //      if($model->save()) {
-        //        Yii::$app->session->setFlash('warning','El programa se creó correctamente. <br>Complete el programa');
-        //        $this->mensajeGuardadoExito($model);
-        //        return $this->redirect(['cargar', 'id' => $model->id]);
-        //      } else {
-        //        Yii::$app->session->setFlash('danger','Hubo un problema al crear el programa');
-        //        $this->mensajeGuardadoFalla($model);
-        //      }
-        //  } else {
-        //        $model->year= date('Y');
-        //  }
-
-        //  return $this->render('anadir', [
-        //      'model' => $model,
-        //  ]);
 
     }
 
