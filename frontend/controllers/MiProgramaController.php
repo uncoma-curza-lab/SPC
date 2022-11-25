@@ -721,29 +721,29 @@ class MiProgramaController extends Controller
         $view = 'forms/_dist-horaria';
         $nextView = 'crono-tentativo';
         $model = $this->findModel($programId);
-        $command = ProgramStepFactory::getStep($step, $model);
-        $result = $command->handle();
+        //$command = ProgramStepFactory::getStep($step, $model);
 
 
+        if(Yii::$app->request->post()){
+            var_dump(Yii::$app->request->post());
+            die;
+        }
         $lessonTypesCommand = new GetLessonTypesCommand();
         $lessonTypesResult = $lessonTypesCommand->handle();
         if (!$lessonTypesResult->getResult()) {
             return $this->goBack();
         }
-
         $lessonTypes = $lessonTypesResult->getData()['data'];
+        //if($result->getResult()) {
+        //    if(Yii::$app->request->post('submit') == 'salir'){
+        //        return $this->redirect(['index']);
+        //    }
+        //    return $this->redirect([$nextView, 'id' => $programId]);
+        //}
 
-        $lessonTypes = $lessonTypesResult->getData()['data'];
-        if($result->getResult()) {
-            if(Yii::$app->request->post('submit') == 'salir'){
-                return $this->redirect(['index']);
-            }
-            return $this->redirect([$nextView, 'id' => $programId]);
-        }
-
-        if ($result->getMessage()) {
-            Yii::$app->session->setFlash('danger','Hubo un problema al guardar el programa');
-        }
+        //if ($result->getMessage()) {
+        //    Yii::$app->session->setFlash('danger','Hubo un problema al guardar el programa');
+        //}
 
         return $this->render($view, [
             'model' => $model,

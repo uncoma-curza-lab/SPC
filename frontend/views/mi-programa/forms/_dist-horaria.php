@@ -21,7 +21,7 @@ $this->registerJs($js);
   'currentView' => Programa::TIME_DISTRIBUTION_STEP
 ]) ?>
 
-<h3>9. Distribución horaria<span  style="font-size:15px"><a href="#" data-toggle="popover" title="Distribución horaria"
+<h3>Distribución horaria<span  style="font-size:15px"><a href="#" data-toggle="popover" title="Distribución horaria"
     data-content="Según horas semanales establecidas por plan de estudio.">
     <span class="glyphicon glyphicon-question-sign"></span> Ayuda</a></span></h3>
 
@@ -45,51 +45,44 @@ $this->registerJs($js);
     <div id="time-distribution-schema">
     <? foreach($lessonTypes as $lesson): ?>
         <?=
-            $form->field($model, 'lesson_type')
-                 ->textInput(['maxlength' => true])
+            $form->field($model, 'modules[time_distribution]['.$lesson->id.'][lesson_type]')
+                 ->textInput(['maxlength' => true, 'readOnly' => true, 'value' => $lesson->description])
+                 ->label(false)->hiddenInput()
+         ?>
+        <div class="col-md-6"> 
+        <?=
+            $form->field($model, 'modules[time_distribution]['.$lesson->id.'][name]')
+                 ->textInput(['maxlength' => true, 'readOnly' => true, 'value' => $lesson->description])
                  ->label(
-                     $lesson->name
+                     'Modalidad'
                  )
          ?>
+        </div> 
+        <div class="col-md-4"> 
+        <?=
+            $form->field($model, 'modules[time_distribution]['.$lesson->id.'][lesson_type_hours]')
+                 ->textInput(['maxlength' => true])
+                 ->label(
+                     'Horas'
+                 )
+         ?>
+        </div> 
+        <div class="col-md-2"> 
+        <?=
+            $form->field($model, 'modules[time_distribution]['.$lesson->id.'][lesson_type_hours]')
+                 ->textInput(['maxlength' => true, 'readOnly' => true, 'value' => $lesson->max_use_percentage])
+                 ->label(
+                     'Max %'
+                 )
+         ?>
+        </div> 
     <? endforeach; ?>
         
-    <?= $form->field($model, 'lesson_type')->widget(MultipleInput::class, [
-           'min' => 0,
-           'max' => count($lessonTypes),
-           'columns' => [
-               [
-                   'name'  => 'lesson_type',
-                   'title' => 'Tipo de clase',
-                   'type' => Select2::class,
-                   'options' => [
-                       'data' => ArrayHelper::map($lessonTypes, 'id', 'description')
-                   ]
-               ],
-               [
-                   'name'  => 'lesson_type_hours',
-                   'title' => 'Cantidad de horas',
-                   'type' => 'textInput',
-                   'options' => [
-                       'type' => 'number',
-                       'step' => '0.01'
-                   ]
-               ],
-               [
-                   'name'  => 'lesson_type_max_percentage',
-                   'title' => 'Máximo total',
-                   'type' => 'textInput',
-                   'options' => [
-                       'type' => 'number',
-                       'disabled' => true,
-                   ]
-               ],
-           ]
-           ])->label(false);
-    ?>
-
     <p> Total de horas usadas <span id="used-hours"></span></p>
     <p> Total de horas disponibles <span id="available-hours"></span></p>
     </div>
+    
+    <h3> Observaciones adicionales </h3>
 
     <?= $form->field($model, 'distr_horaria')->widget(TinyMce::className(), [
         'options' => ['rows' => 16],

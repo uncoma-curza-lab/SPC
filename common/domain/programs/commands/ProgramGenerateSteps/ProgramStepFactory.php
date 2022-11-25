@@ -8,6 +8,7 @@ use common\domain\programs\commands\ProgramGenerateSteps\steps\FundamentalsStep;
 use common\domain\programs\commands\ProgramGenerateSteps\steps\GenericStep;
 use common\domain\programs\commands\ProgramGenerateSteps\steps\SaveStep;
 use common\domain\programs\commands\ProgramGenerateSteps\steps\SignStep;
+use common\domain\programs\commands\ProgramGenerateSteps\steps\TimeDistributionStep;
 use common\domain\programs\commands\ProgramGenerateSteps\steps\TimelineStep;
 use common\models\Programa;
 use Exception;
@@ -55,7 +56,7 @@ class ProgramStepFactory
             case Programa::EXAMS_AND_PROMOTION_STEP:
                 return new GenericStep($program, 'parc-rec-promo');
             case Programa::TIME_DISTRIBUTION_STEP:
-                return new GenericStep($program, 'dist-horaria');
+                return new TimeDistributionStep($program);
             case Programa::TIMELINE_STEP:
                 return new TimelineStep($program);
             case Programa::ACTIVITIES_STEP:
