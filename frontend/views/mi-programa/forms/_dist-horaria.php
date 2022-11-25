@@ -14,7 +14,11 @@ $(function () {
   $('[data-toggle=\"tooltip\"]').tooltip()
 })";
 $this->registerJs($js);
-
+$courseTotalHours = $model->asignatura->carga_horaria_cuatr;
+$courseTotalHourWeek = $model->asignatura->carga_horaria_sem;
+$this->registerJs('const courseTotalHourWeek = parseInt(' . $courseTotalHourWeek . ')', \yii\web\View::POS_HEAD);
+$this->registerJs('const maxPercentageByLessonType = ' . json_encode(ArrayHelper::map($lessonTypes,'id', 'max_use_percentage')), \yii\web\View::POS_HEAD);
+$this->registerJsFile('@web/js/timedistribution-create.js',['depends' => [\yii\web\JqueryAsset::class]]);
 ?>
 <?= $this->render('_menu_steps', [
   'model' => $model,
@@ -35,8 +39,7 @@ $this->registerJs($js);
 
 ]); ?>
 
-    <small id="spc_api_error" style="color:red;"></small>
-    <small id="course-total-hours"></small>
+    <small id="js-error" style="color:red;"></small>
 
     <?php if($error): ?>
         <div><?= $error ?></div>
@@ -44,42 +47,45 @@ $this->registerJs($js);
 
     <div id="time-distribution-schema">
     <? foreach($lessonTypes as $lesson): ?>
-        <?=
-            $form->field($model, 'modules[time_distribution]['.$lesson->id.'][lesson_type]')
-                 ->textInput(['maxlength' => true, 'readOnly' => true, 'value' => $lesson->description])
-                 ->label(false)->hiddenInput()
-         ?>
-        <div class="col-md-6"> 
-        <?=
-            $form->field($model, 'modules[time_distribution]['.$lesson->id.'][name]')
-                 ->textInput(['maxlength' => true, 'readOnly' => true, 'value' => $lesson->description])
-                 ->label(
-                     'Modalidad'
-                 )
-         ?>
-        </div> 
-        <div class="col-md-4"> 
-        <?=
-            $form->field($model, 'modules[time_distribution]['.$lesson->id.'][lesson_type_hours]')
-                 ->textInput(['maxlength' => true])
-                 ->label(
-                     'Horas'
-                 )
-         ?>
-        </div> 
-        <div class="col-md-2"> 
-        <?=
-            $form->field($model, 'modules[time_distribution]['.$lesson->id.'][lesson_type_hours]')
-                 ->textInput(['maxlength' => true, 'readOnly' => true, 'value' => $lesson->max_use_percentage])
-                 ->label(
-                     'Max %'
-                 )
-         ?>
-        </div> 
+        <div class="distribution-specification">
+            <?=
+                $form->field($model, 'modules[time_distribution]['.$lesson->id.'][lesson_type]')
+                     ->textInput(['maxlength' => true, 'readOnly' => true, 'value' => $lesson->description])
+                     ->label(false)->hiddenInput()
+             ?>
+            <div class="col-md-6"> 
+            <?=
+                $form->field($model, 'modules[time_distribution]['.$lesson->id.'][name]')
+                     ->textInput(['maxlength' => true, 'readOnly' => true, 'value' => $lesson->description])
+                     ->label(
+                         'Modalidad'
+                     )
+             ?>
+            </div> 
+            <div class="col-md-4"> 
+            <?=
+                $form->field($model, 'modules[time_distribution]['.$lesson->id.'][lesson_type_hours]')
+                     ->textInput(['maxlength' => true, 'value' => 0, 'class' => ['form-control hours']])
+                     ->label(
+                         'Horas'
+                     )
+             ?>
+            </div> 
+            <div class="col-md-2"> 
+            <?=
+                $form->field($model, 'modules[time_distribution]['.$lesson->id.'][lesson_type_hours]')
+                     ->textInput(['maxlength' => true, 'readOnly' => true, 'class' => ['form-control max_hours']])
+                     ->label(
+                         'Max <span class="max_percentage">' . $lesson->max_use_percentage . '</span>%'
+                     )
+             ?>
+            </div> 
+        </div>
     <? endforeach; ?>
         
     <p> Total de horas usadas <span id="used-hours"></span></p>
     <p> Total de horas disponibles <span id="available-hours"></span></p>
+    <small id="course-total-hours"> Horas totales de la asignatura seleccionada <?= $courseTotalHours ?></small>
     </div>
     
     <h3> Observaciones adicionales </h3>
