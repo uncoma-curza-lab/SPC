@@ -745,6 +745,7 @@ class MiProgramaController extends Controller
         $lessonTypesCommand = new GetLessonTypesCommand();
         $lessonTypesResult = $lessonTypesCommand->handle();
         if (!$lessonTypesResult->getResult()) {
+            Yii::$app->session->setFlash('danger','Hubo un problema al obtener los datos del módulo');
             return $this->goBack();
         }
         $lessonTypes = $lessonTypesResult->getData()['data'];

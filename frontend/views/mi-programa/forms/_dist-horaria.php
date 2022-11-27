@@ -97,14 +97,12 @@ $this->registerJsFile('@web/js/timedistribution-create.js',['depends' => [\yii\w
         'language' => 'es',
         'clientOptions' => [
             'plugins' => [
-                "advlist autolink lists link charmap
-                "//print
-                ."preview anchor",
+                "advlist autolink lists link charmap preview anchor",
                 "searchreplace visualblocks code fullscreen",
                 "insertdatetime  table contextmenu paste"
             ],
             'branding' => false,
-            'toolbar' => "table | undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link | fullscreen ",
+            'toolbar' => "table | undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link | fullscreen",
             'contextmenu' => "copy  paste | link"
         ]
     ])->label('') ?>
