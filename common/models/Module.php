@@ -95,4 +95,16 @@ class Module extends \yii\db\ActiveRecord
         ];
     }
 
+    public function clearModule()
+    {
+        if ($this->isSpecialModule()) {
+            switch($this->type) {
+                case self::TIME_DISTRIBUTION_TYPE:
+                    TimeDistribution::deleteAll(['module_id' => $this->id]);
+                    break;
+            }
+
+        }
+    }
+
 }

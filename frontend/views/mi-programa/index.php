@@ -186,7 +186,7 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
                   {
                     return Html::a(
                       '<span style="padding:5px; font-size:20px; color:orange" class="glyphicon glyphicon-pencil "></span>',
-                      ['cargar','id' => $model->id]
+                      ['fundamentacion','id' => $model->id]
                     );
                   }
                 },

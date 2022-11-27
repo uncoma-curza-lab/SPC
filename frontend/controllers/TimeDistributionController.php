@@ -108,7 +108,7 @@ class TimeDistributionController extends Controller
         }
 
         $response['week_load_time'] = $loadTimeWeek;
-        $response['total_load_time'] = $totalLoadTime;
+        $response['total_load_time'] = $totalLoadTime;;
 
         return $response;
     }

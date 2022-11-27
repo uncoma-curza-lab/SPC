@@ -37,7 +37,9 @@ $this->registerJsFile('@web/js/timedistribution-create.js',['depends' => [\yii\w
 'validateOnSubmit'          => false,
 'validateOnBlur'            => false,
 
-]); ?>
+]); 
+
+?>
 
     <small id="js-error" style="color:red;"></small>
 
@@ -49,9 +51,9 @@ $this->registerJsFile('@web/js/timedistribution-create.js',['depends' => [\yii\w
     <? foreach($lessonTypes as $lesson): ?>
         <div class="distribution-specification">
             <?=
-                $form->field($model, 'modules[time_distribution]['.$lesson->id.'][lesson_type]')
-                     ->textInput(['maxlength' => true, 'readOnly' => true, 'value' => $lesson->description])
-                     ->label(false)->hiddenInput()
+                $form->field($model, 'modules[time_distribution]['.$lesson->id.'][lesson_type_id]')
+                     ->textInput(['maxlength' => true, 'readOnly' => true])
+                     ->label(false)->hiddenInput(['value' => $lesson->id])
              ?>
             <div class="col-md-6"> 
             <?=
@@ -65,7 +67,7 @@ $this->registerJsFile('@web/js/timedistribution-create.js',['depends' => [\yii\w
             <div class="col-md-4"> 
             <?=
                 $form->field($model, 'modules[time_distribution]['.$lesson->id.'][lesson_type_hours]')
-                     ->textInput(['maxlength' => true, 'value' => 0, 'class' => ['form-control hours']])
+                     ->textInput(['maxlength' => true, 'value' => $timeByLessons[$lesson->id] ?? 0, 'class' => ['form-control hours']])
                      ->label(
                          'Horas'
                      )
@@ -73,7 +75,7 @@ $this->registerJsFile('@web/js/timedistribution-create.js',['depends' => [\yii\w
             </div> 
             <div class="col-md-2"> 
             <?=
-                $form->field($model, 'modules[time_distribution]['.$lesson->id.'][lesson_type_hours]')
+                $form->field($model, 'modules[time_distribution]['.$lesson->id.'][lesson_type_hours_max_percentage]')
                      ->textInput(['maxlength' => true, 'readOnly' => true, 'class' => ['form-control max_hours']])
                      ->label(
                          'Max <span class="max_percentage">' . $lesson->max_use_percentage . '</span>%'
@@ -90,8 +92,8 @@ $this->registerJsFile('@web/js/timedistribution-create.js',['depends' => [\yii\w
     
     <h3> Observaciones adicionales </h3>
 
-    <?= $form->field($model, 'distr_horaria')->widget(TinyMce::className(), [
-        'options' => ['rows' => 16],
+    <?= $form->field($model, 'modules[time_distribution][value]')->widget(TinyMce::className(), [
+        'options' => ['rows' => 16, 'value' => $module->value],
         'language' => 'es',
         'clientOptions' => [
             'plugins' => [

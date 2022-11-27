@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use Throwable;
 use Yii;
 
 /**
@@ -76,5 +77,16 @@ class TimeDistribution extends \yii\db\ActiveRecord
     public static function find()
     {
         return new TimeDistributionQuery(get_called_class());
+    }
+
+    public function getInHours(): float
+    {
+        try {
+            $course = $this->module->program->asignatura;
+            $weekHours = $course->carga_horaria_sem;
+            return round($weekHours * $this->percentage_quantity / 100, 2);
+        } catch (Throwable $e) {
+            return 0;
+        }
     }
 }

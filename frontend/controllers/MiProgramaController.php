@@ -4,6 +4,7 @@ namespace frontend\controllers;
 
 use common\domain\LessonType\commands\GetLessonTypes\GetLessonTypesCommand;
 use common\domain\programs\commands\ApproveProgram\CommandApproveProcess;
+use common\domain\programs\commands\GetCompleteProgram\GetCompleteProgramCommand;
 use common\domain\programs\commands\ProgramGenerateSteps\ProgramStepFactory;
 use common\domain\programs\commands\RejectProgram\CommandRejectProcess;
 use Yii;
@@ -15,13 +16,17 @@ use common\models\search\AsignaturaSearch;
 use common\models\Programa;
 use common\models\Status;
 use common\models\Departamento;
-
+use common\models\LessonType;
+use common\models\Module;
 use common\models\PermisosHelpers;
+use common\models\TimeDistribution;
+use common\services\ModuleService;
+use Exception;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\ForbiddenHttpException;
 use yii\filters\VerbFilter;
-
+use yii\helpers\ArrayHelper;
 
 /**
  * ProgramaController implements the CRUD actions for Programa model.
@@ -721,33 +726,45 @@ class MiProgramaController extends Controller
         $view = 'forms/_dist-horaria';
         $nextView = 'crono-tentativo';
         $model = $this->findModel($programId);
-        //$command = ProgramStepFactory::getStep($step, $model);
 
+        if(Yii::$app->request->post()) {
+            $data = Yii::$app->request->post();
+            $moduleService = new ModuleService();
+            $modules = $data['Programa']['modules'];
+            $record = $moduleService->processAndSaveModules($model, $modules);
 
-        if(Yii::$app->request->post()){
-            var_dump(Yii::$app->request->post());
-            die;
+            if (!$record['modules']) {
+                Yii::$app->session->setFlash('danger','Hubo un problema al guardar el programa: ' . $record['error']);
+            } else if(Yii::$app->request->post('submit') == 'salir') {
+                return $this->redirect(['index']);
+            } else {
+                return $this->redirect([$nextView, 'id' => $programId]);
+            }
         }
+
         $lessonTypesCommand = new GetLessonTypesCommand();
         $lessonTypesResult = $lessonTypesCommand->handle();
         if (!$lessonTypesResult->getResult()) {
             return $this->goBack();
         }
         $lessonTypes = $lessonTypesResult->getData()['data'];
-        //if($result->getResult()) {
-        //    if(Yii::$app->request->post('submit') == 'salir'){
-        //        return $this->redirect(['index']);
-        //    }
-        //    return $this->redirect([$nextView, 'id' => $programId]);
-        //}
 
-        //if ($result->getMessage()) {
-        //    Yii::$app->session->setFlash('danger','Hubo un problema al guardar el programa');
-        //}
+
+        // get current time distributions
+        $module = $model->getModules()->where(['=', 'type', 'time_distribution'])->one();
+        $timeByLessons = [];
+        if ($module) {
+            $currentTimeDistributions = $module->timeDistributions;
+            foreach($currentTimeDistributions as $timeDistribution) {
+                $timeByLessons[$timeDistribution->lesson_type_id] = $timeDistribution->getInHours();
+            }
+        }
 
         return $this->render($view, [
             'model' => $model,
             'lessonTypes' => $lessonTypes,
+            'module' => $module,
+            'timeByLessons' => $timeByLessons,
             'error' => null
         ]);
     }
@@ -1058,13 +1075,21 @@ class MiProgramaController extends Controller
      * @return Programa the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
+    protected function findModel($programId)
     {
-        if (($model = Programa::findOne($id)) !== null) {
-            return $model;
-        }
+        $command = new GetCompleteProgramCommand($programId);
+        $response = $command->handle();
+        $data = $response->getData();
 
-        throw new NotFoundHttpException('No se pudo encontrar lo que buscaba');
+        if (!$response->getResult()) {
+            var_dump($response);
+            die;
+            if (array_key_exists('exception', $data)) {
+               throw new NotFoundHttpException($response->getMessage());
+            }
+            throw new Exception('Error -> Contacte al administrador');
+        }
+        return $data['program'];
     }
 
     protected function validarPermisos($model, $estado) {
