@@ -19,7 +19,7 @@ use dosamigos\tinymce\TinyMce;
 
  ]); ?>
 
-<h3>10. Cronograma Tentativo</h3>
+<h3>Cronograma Tentativo</h3>
 
 <?= $form->field($model, 'crono_tentativo')->widget(TinyMce::className(), [
     'options' => ['rows' => 16],

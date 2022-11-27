@@ -4,7 +4,7 @@ use common\models\Programa;
 use yii\helpers\Url;
 $mensaje = [ 'onclick'=>"return confirm('No se guardarán los cambios de esta pestaña, ¿desea salir?')"];
 $breads = [
-    Programa::FUNDAMENTALS_STEP => ['label' => 'Fundamentación','url' => Url::to(['cargar', 'id' => $model->id]), 'options'=>[ 'onclick'=>"return confirm('No se guardarán los cambios de esta pestaña, ¿desea salir?')"]],
+    Programa::FUNDAMENTALS_STEP => ['label' => 'Fundamentación','url' => Url::to(['fundamentacion', 'id' => $model->id]), 'options'=>[ 'onclick'=>"return confirm('No se guardarán los cambios de esta pestaña, ¿desea salir?')"]],
     Programa::PLAN_OBJECTIVE_STEP => ['label' => 'Objetivos según plan de estudio', 'url' => Url::to(['objetivo-plan', 'id' => $model->id]), 'options'=> $mensaje],
     Programa::PROGRAM_OBJECTIVE_STEP => ['label' => 'Objetivos del programa', 'url' => Url::to(['objetivo-programa', 'id' => $model->id]), 'options'=> $mensaje],
     Programa::PLAN_CONTENT_STEP => ['label' => 'Contenidos según plan de estudio', 'url' => Url::to(['contenido-plan', 'id' => $model->id]), 'options'=> $mensaje],
