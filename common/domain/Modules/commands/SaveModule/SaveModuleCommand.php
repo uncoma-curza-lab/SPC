@@ -42,7 +42,11 @@ class SaveModuleCommand implements CommandInterface
             }
 
             $module->program_id = $this->program->id;
-            $module->value = $this->data['value'];
+            if ($this->data['value']) {
+                $module->value = $this->data['value'];
+            } else {
+                $module->value = '--';
+            }
             $module->type = $this->type;
 
             if (!$module->save()) {

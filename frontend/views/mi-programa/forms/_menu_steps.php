@@ -25,14 +25,14 @@ foreach ($breads as $key => $step) {
     }
     $this->params['items'][] = $step;
 }
-$this->params['breadcrumbs'][] = ['label' => '...'];
-$this->params['breadcrumbs'][] = ['label' => "Evaluacion y acreditación", 'url' => ['eval-acred', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = ['label' => "Parciales, recuperatorios y coloquios", 'url' => ['parc-rec-promo', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Distribución Horaria';
+//$this->params['breadcrumbs'][] = ['label' => '...'];
+//$this->params['breadcrumbs'][] = ['label' => "Evaluacion y acreditación", 'url' => ['eval-acred', 'id' => $model->id]];
+//$this->params['breadcrumbs'][] = ['label' => "Parciales, recuperatorios y coloquios", 'url' => ['parc-rec-promo', 'id' => $model->id]];
+//$this->params['breadcrumbs'][] = 'Distribución Horaria';
 $porcentaje = $model->calcularPorcentajeCarga();
 
 ?>
-<div class="row">
+<div class="row" style="margin-top:10px">
   <div class="col-md-2 text-right">
     <label>Programa completado: </label>
   </div>
