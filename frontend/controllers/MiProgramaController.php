@@ -296,16 +296,15 @@ class MiProgramaController extends Controller
      */
     public function actionFundamentacion($id)
     {
-        $step = Programa::FUNDAMENTALS_STEP;
+        $step = Programa::FUNDAMENTALS_STEP; // deprecated
         $type = Module::FUNDAMENTALS_TYPE;
         $view = 'forms/_fundamentacion';
         $nextView = 'objetivo-plan';
         $model = $this->findModel($id);
-        $attribute = 'fundament';
+        //$attribute = 'fundament'; not used
 
-        if(Yii::$app->request->post()) {
+        if($model->load(Yii::$app->request->post())) {
             $data = Yii::$app->request->post();
-            // load $model->load($data); campo viejo
             
             // -> campo nuevo
             $fundamentalsModule = [$type => ['value' => $data['fundament']]];
@@ -322,11 +321,11 @@ class MiProgramaController extends Controller
             }
         }
 
-        $module = $model->getModules()->where(['=', 'type', $type])->one();
+        //$module = $model->getModules()->where(['=', 'type', $type])->one();
 
         return $this->render($view, [
             'model' => $model,
-            'module' => $module,
+            //'module' => $module,
             'error' => null
         ]);
         //return $this->prepareGenericStepAction(
