@@ -298,7 +298,7 @@ class MiProgramaController extends Controller
     {
         return $this->prepareGenericStepAction(
             $id,
-            Programa::TIME_DISTRIBUTION_STEP,
+            Programa::FUNDAMENTALS_STEP,
             'forms/_fundamentacion',
             'objetivo-plan'
         );
