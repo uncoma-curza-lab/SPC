@@ -19,6 +19,7 @@ use Yii;
 class Module extends \yii\db\ActiveRecord
 {
     const TIME_DISTRIBUTION_TYPE = 'time_distribution';
+    const FUNDAMENTALS_TYPE = 'fundamentals';
 
     /**
      * {@inheritdoc}

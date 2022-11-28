@@ -46,7 +46,7 @@ use yii\helpers\Url;
         <?= Html::submitButton('Guardar y salir',['class' => 'btn btn-info' , 'name'=>'submit','value' => 'salir']) ?>
       </div>
       <div class="col-xs-6 text-right">
-        <?= Html::a('Atrás', ['cargar', 'id' => $model->id],['onclick'=>"return confirm('No se guardarán los cambios de esta sección, ¿desea salir?')",'class' => 'btn btn-warning']) ?>
+        <?= Html::a('Atrás', ['fundamentacion', 'id' => $model->id],['onclick'=>"return confirm('No se guardarán los cambios de esta sección, ¿desea salir?')",'class' => 'btn btn-warning']) ?>
         <?= Html::submitButton('Siguiente', ['class' => 'btn btn-success']); ?>
       </div>
     </div>

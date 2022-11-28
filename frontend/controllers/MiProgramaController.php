@@ -296,42 +296,45 @@ class MiProgramaController extends Controller
      */
     public function actionFundamentacion($id)
     {
-        return $this->prepareGenericStepAction(
-            $id,
-            Programa::FUNDAMENTALS_STEP,
-            'forms/_fundamentacion',
-            'objetivo-plan'
-        );
-        // scenario para campo fundamentacion obligatorio
-        //$model->scenario = 'fundamentacion';
-        //$estado = Status::findOne($model->status_id);
-        //$validarPermisos = $this->validarPermisos($model, $estado);
+        $step = Programa::FUNDAMENTALS_STEP;
+        $type = Module::FUNDAMENTALS_TYPE;
+        $view = 'forms/_fundamentacion';
+        $nextView = 'objetivo-plan';
+        $model = $this->findModel($id);
+        $attribute = 'fundament';
 
-        //if ($validarPermisos) {
-        //  // si es post realizo los cambios sobre el modelo
-        //  if($model->load(Yii::$app->request->post())) {
-        //      //intento de guardado
-        //      if($model->save()){
-        //        // LOG de éxito
-        //        $this->mensajeGuardadoExito($model);
-        //        // mensaje a usuario
-        //        Yii::$app->session->setFlash('success','El programa se guardó exitosamente');
-        //        //redireccion dependiendo del botón presionado
-        //        if(Yii::$app->request->post('submit') == 'salir'){
-        //          return $this->redirect(['index']);
-        //        }
-        //        return $this->redirect(['objetivo-plan', 'id' => $model->id]);
+        if(Yii::$app->request->post()) {
+            $data = Yii::$app->request->post();
+            // load $model->load($data); campo viejo
+            
+            // -> campo nuevo
+            $fundamentalsModule = [$type => ['value' => $data['fundament']]];
 
-        //      } else {
-        //        // LOG de falla
-        //        $this->mensajeGuardadoFalla($model);
-        //        // mensaje a usuario
-        //        Yii::$app->session->setFlash('danger','Hubo un problema al intentar guardar el programa');
-        //      }
-        //  }
-        //  return $this->render('forms/_fundamentacion',['model'=>$model]);
-        //}
-        //throw new ForbiddenHttpException('No tiene permisos para actualizar este elemento');
+            $moduleService = new ModuleService();
+            $record = $moduleService->processAndSaveModules($model, [$type => $fundamentalsModule]);
+
+            if (!$record['modules']) {
+                Yii::$app->session->setFlash('danger','Hubo un problema al guardar el programa: ' . $record['error']);
+            } else if(Yii::$app->request->post('submit') == 'salir') {
+                return $this->redirect(['index']);
+            } else {
+                return $this->redirect([$nextView, 'id' => $id]);
+            }
+        }
+
+        $module = $model->getModules()->where(['=', 'type', $type])->one();
+
+        return $this->render($view, [
+            'model' => $model,
+            'module' => $module,
+            'error' => null
+        ]);
+        //return $this->prepareGenericStepAction(
+        //    $id,
+        //    Programa::FUNDAMENTALS_STEP,
+        //    'forms/_fundamentacion',
+        //    'objetivo-plan'
+        //);
     }
 
     /**
@@ -1134,24 +1137,24 @@ class MiProgramaController extends Controller
       Yii::error("Error al guardar el programa: ".$model->id,'miprograma');
     }
 
-    private function prepareGenericStepAction($programId, $step, $view, $nextView)
+    private function prepareGenericStepAction($programId, $step, $view, $nextView, $moduleType)
     {
-        $model = $this->findModel($programId);
-        $command = ProgramStepFactory::getStep($step, $model);
-        $result = $command->handle();
-        if($result->getResult()) {
-            if(Yii::$app->request->post('submit') == 'salir'){
-                return $this->redirect(['index']);
-            }
-            return $this->redirect([$nextView, 'id' => $programId]);
-        }
+        //$model = $this->findModel($programId);
+        //$command = ProgramStepFactory::getStep($step, $model);
+        //$result = $command->handle();
+        //if($result->getResult()) {
+        //    if(Yii::$app->request->post('submit') == 'salir'){
+        //        return $this->redirect(['index']);
+        //    }
+        //    return $this->redirect([$nextView, 'id' => $programId]);
+        //}
 
-        if ($result->getMessage()) {
-            Yii::$app->session->setFlash('danger','Hubo un problema al guardar el programa');
-        }
+        //if ($result->getMessage()) {
+        //    Yii::$app->session->setFlash('danger','Hubo un problema al guardar el programa');
+        //}
 
-        return $this->render($view, [
-            'model' => $model,
-        ]);
+        //return $this->render($view, [
+        //    'model' => $model,
+        //]);
     }
 }
