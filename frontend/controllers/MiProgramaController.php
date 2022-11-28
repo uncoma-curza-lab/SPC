@@ -722,10 +722,9 @@ class MiProgramaController extends Controller
      */
     public function actionDistHoraria($id){
         $step = Programa::TIME_DISTRIBUTION_STEP;
-        $programId = $id;
         $view = 'forms/_dist-horaria';
         $nextView = 'crono-tentativo';
-        $model = $this->findModel($programId);
+        $model = $this->findModel($id);
 
         if(Yii::$app->request->post()) {
             $data = Yii::$app->request->post();
@@ -738,7 +737,7 @@ class MiProgramaController extends Controller
             } else if(Yii::$app->request->post('submit') == 'salir') {
                 return $this->redirect(['index']);
             } else {
-                return $this->redirect([$nextView, 'id' => $programId]);
+                return $this->redirect([$nextView, 'id' => $id]);
             }
         }
 
@@ -1083,8 +1082,6 @@ class MiProgramaController extends Controller
         $data = $response->getData();
 
         if (!$response->getResult()) {
-            var_dump($response);
-            die;
             if (array_key_exists('exception', $data)) {
                throw new NotFoundHttpException($response->getMessage());
             }
