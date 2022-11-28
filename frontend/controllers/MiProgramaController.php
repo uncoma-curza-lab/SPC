@@ -728,10 +728,11 @@ class MiProgramaController extends Controller
         $nextView = 'crono-tentativo';
         $model = $this->findModel($id);
 
-        if(Yii::$app->request->post()) {
+        if($model->load(Yii::$app->request->post())) {
             $data = Yii::$app->request->post();
             $moduleService = new ModuleService();
             $modules = $data['Programa']['modules'];
+            $modules['time_distribution']['value'] = $model->distr_horaria;
             $record = $moduleService->processAndSaveModules($model, $modules);
 
             if (!$record['modules']) {
