@@ -953,7 +953,7 @@ class MiProgramaController extends Controller
         $result = $command->handle();
 
         if ($result->getResult()) {
-            Yii::$app->session->setFlash('warning','El programa se creó correctamente. <br>Complete el programa');
+            Yii::$app->session->setFlash('warning','El programa se creó correctamente. <br>Complete el programa<br> Puede cargar la distribución horaria y continuar con el programa en otro momento.');
             return $this->redirect(['dist-horaria', 'id' => $result->getProgram()->id]);
         }
         if ($result->getMessage()) {

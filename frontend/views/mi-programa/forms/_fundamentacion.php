@@ -49,18 +49,14 @@ use yii\widgets\ActiveForm;
 ])->label('') ?>
 <br>
 
-<div class="form-group">
-  <div class="row">
-    <div class="col-xs-6 text-left">
-        <?= Html::a('Salir sin guardar', ['index'],['onclick'=>"return confirm('No se guardarán los cambios de esta sección, ¿desea salir?')",'data-toggle'=>"tooltip",
-        'title'=>"La sección actual no se guardará", 'class' => 'btn btn-danger']); ?>
-        <?= Html::submitButton('Guardar y salir',['data-toggle'=>"tooltip",
-        'title'=>"Guarda la sección actual",'class' => 'btn btn-info' , 'name'=>'submit','value' => 'salir']); ?>
-    </div>
-    <div class="col-xs-6 text-right">
-      <?= Html::submitButton('Seguir', ['data-toggle'=>"tooltip",
-      'title'=>"Guarda la sección actual",'class' => 'btn btn-success']); ?>
-    </div>
+<div class="row">
+  <div class="col-xs-6 text-left">
+    <?= Html::a('Salir sin guardar', ['index'],['onclick'=>"return confirm('No se guardarán los cambios de esta sección, ¿desea salir?')",'class' => 'btn btn-danger']); ?>
+    <?= Html::submitButton('Guardar y salir',['class' => 'btn btn-info' , 'name'=>'submit','value' => 'salir']) ?>
+  </div>
+  <div class="col-xs-6 text-right">
+    <?= Html::a('Atrás', ['parcial-rec-promo', 'id' => $model->id],['onclick'=>"return confirm('No se guardarán los cambios de esta sección, ¿desea salir?')",'class' => 'btn btn-warning']) ?>
+    <?= Html::submitButton('Siguiente', ['class' => 'btn btn-success']); ?>
   </div>
 </div>
 <?php ActiveForm::end(); ?>

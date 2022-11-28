@@ -97,7 +97,7 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
             [
               'class' => 'yii\grid\ActionColumn',
               //'template' => $show_this_nav? '{view} {update} {delete} {pdf} {status}':'{view} {status} {pdf}',
-              'template' => $show_this_nav? ' {asignar} {aprobar} {rechazar} {delete} {pdf} {ver} {copy} {cargar} {time-distribution}':'{subir} {status} {pdf} {time-distribution}',
+              'template' => $show_this_nav? ' {asignar} {aprobar} {rechazar} {delete} {pdf} {ver} {copy} {cargar}':'{subir} {status} {pdf}',
               'buttons' => [
                 'pdf' => function ($url,$model) {
                     return Html::a(
@@ -186,7 +186,7 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
                   {
                     return Html::a(
                       '<span style="padding:5px; font-size:20px; color:orange" class="glyphicon glyphicon-pencil "></span>',
-                      ['fundamentacion','id' => $model->id]
+                      ['dist-horaria','id' => $model->id]
                     );
                   }
                 },

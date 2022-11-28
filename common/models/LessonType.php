@@ -29,7 +29,7 @@ class LessonType extends \yii\db\ActiveRecord
     {
         return [
             [['description'], 'required'],
-            [['description'], 'integer'],
+            [['description'], 'string'],
         ];
     }
 

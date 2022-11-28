@@ -7,7 +7,7 @@ use yii\widgets\Pjax;
 /* @var $searchModel common\models\search\LessonTypeSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Lesson Types';
+$this->title = 'Modalidad de clase';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="lesson-type-index">
@@ -17,7 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create Lesson Type', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Crear modalidad de clases', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
