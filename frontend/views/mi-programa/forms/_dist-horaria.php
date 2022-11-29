@@ -7,6 +7,8 @@ use unclead\multipleinput\MultipleInput;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+
+$isModule = boolval($module);
 $js = "$(document).ready(function(){
   $('[data-toggle=\"popover\"]').popover();
 });
@@ -14,11 +16,13 @@ $(function () {
   $('[data-toggle=\"tooltip\"]').tooltip()
 })";
 $this->registerJs($js);
-$courseTotalHours = $model->asignatura->carga_horaria_cuatr;
-$courseTotalHourWeek = $model->asignatura->carga_horaria_sem;
-$this->registerJs('const courseTotalHourWeek = parseInt(' . $courseTotalHourWeek . ')', \yii\web\View::POS_HEAD);
-$this->registerJs('const maxPercentageByLessonType = ' . json_encode(ArrayHelper::map($lessonTypes,'id', 'max_use_percentage')), \yii\web\View::POS_HEAD);
-$this->registerJsFile('@web/js/timedistribution-create.js',['depends' => [\yii\web\JqueryAsset::class]]);
+if ($isModule){
+    $courseTotalHours = $model->asignatura->carga_horaria_cuatr;
+    $courseTotalHourWeek = $model->asignatura->carga_horaria_sem;
+    $this->registerJs('const courseTotalHourWeek = parseInt(' . $courseTotalHourWeek . ')', \yii\web\View::POS_HEAD);
+    $this->registerJs('const maxPercentageByLessonType = ' . json_encode(ArrayHelper::map($lessonTypes,'id', 'max_use_percentage')), \yii\web\View::POS_HEAD);
+    $this->registerJsFile('@web/js/timedistribution-create.js',['depends' => [\yii\web\JqueryAsset::class]]);
+}
 ?>
 <?= $this->render('_menu_steps', [
   'model' => $model,
@@ -28,7 +32,6 @@ $this->registerJsFile('@web/js/timedistribution-create.js',['depends' => [\yii\w
 <h3>Distribución horaria<span  style="font-size:15px"><a href="#" data-toggle="popover" title="Distribución horaria"
     data-content="Según horas semanales establecidas por plan de estudio.">
     <span class="glyphicon glyphicon-question-sign"></span> Ayuda</a></span></h3>
-
 
 <?php $form = ActiveForm::begin([
 'enableAjaxValidation'      => false,
@@ -46,6 +49,8 @@ $this->registerJsFile('@web/js/timedistribution-create.js',['depends' => [\yii\w
     <?php if($error): ?>
         <div><?= $error ?></div>
     <? endif; ?>
+
+    <?php if ($isModule): ?>
 
     <div id="time-distribution-schema">
     <? foreach($lessonTypes as $lesson): ?>
@@ -91,6 +96,7 @@ $this->registerJsFile('@web/js/timedistribution-create.js',['depends' => [\yii\w
     </div>
     
     <h3> Observaciones adicionales </h3>
+<?php endif; ?>
 
     <?= $form->field($model, 'distr_horaria')->widget(TinyMce::className(), [
         'options' => ['rows' => 16],
