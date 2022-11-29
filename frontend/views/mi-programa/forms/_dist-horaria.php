@@ -92,8 +92,8 @@ $this->registerJsFile('@web/js/timedistribution-create.js',['depends' => [\yii\w
     
     <h3> Observaciones adicionales </h3>
 
-    <?= $form->field($model, 'modules[time_distribution][value]')->widget(TinyMce::className(), [
-        'options' => ['rows' => 16, 'value' => $module->value],
+    <?= $form->field($model, 'distr_horaria')->widget(TinyMce::className(), [
+        'options' => ['rows' => 16],
         'language' => 'es',
         'clientOptions' => [
             'plugins' => [

@@ -726,13 +726,16 @@ class MiProgramaController extends Controller
         $nextView = 'crono-tentativo';
         $model = $this->findModel($id);
 
-        if(Yii::$app->request->post()) {
+        if(Yii::$app->request->post() && $model->load(Yii::$app->request->post())) {
             $data = Yii::$app->request->post();
             $moduleService = new ModuleService();
             $modules = $data['Programa']['modules'];
+            $modules['time_distribution']['value'] = $model->distr_horaria;
             $record = $moduleService->processAndSaveModules($model, $modules);
+            $command = ProgramStepFactory::getStep($step, $model);
+            $result = $command->handle();
 
-            if (!$record['modules']) {
+            if (!$record['modules'] || !$result->getResult()) {
                 Yii::$app->session->setFlash('danger','Hubo un problema al guardar el programa: ' . $record['error']);
             } else if(Yii::$app->request->post('submit') == 'salir') {
                 return $this->redirect(['index']);
