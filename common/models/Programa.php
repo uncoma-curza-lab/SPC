@@ -562,4 +562,20 @@ class Programa extends \yii\db\ActiveRecord
 
     }
 
+    public function defineScenario($step)
+    {
+        switch($step) {
+            case 'default':
+                $this->scenario = 'default';
+                break;
+            case Programa::TIME_DISTRIBUTION_STEP:
+                $this->scenario = 'dist-horaria';
+                break;
+
+            default:
+                throw new \Exception('Error, step not implemented');
+
+        }
+    }
+
 }

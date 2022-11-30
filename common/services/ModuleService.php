@@ -33,6 +33,9 @@ class ModuleService
                 }
                 $newModules[] = $dataResult['module'];
             }
+            if (!$program->load(Yii::$app->request->post()) || !$program->save()){
+                throw new Exception('Hubo un error al intentar guardar el Programa'); // add translt
+            }
             $transaction->commit();
             return [
                 'modules' => $newModules

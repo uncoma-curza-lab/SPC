@@ -724,18 +724,16 @@ class MiProgramaController extends Controller
         $step = Programa::TIME_DISTRIBUTION_STEP;
         $view = 'forms/_dist-horaria';
         $nextView = 'crono-tentativo';
-        $model = $this->findModel($id);
+        $model = $this->findModel($id, $step);
 
-        if(Yii::$app->request->post() && $model->load(Yii::$app->request->post())) {
+        if(Yii::$app->request->post()) {
             $data = Yii::$app->request->post();
             $moduleService = new ModuleService();
             $modules = $data['Programa']['modules'];
             $modules['time_distribution']['value'] = $model->distr_horaria;
             $record = $moduleService->processAndSaveModules($model, $modules);
-            $command = ProgramStepFactory::getStep($step, $model);
-            $result = $command->handle();
 
-            if (!$record['modules'] || !$result->getResult()) {
+            if (!$record['modules']) {
                 Yii::$app->session->setFlash('danger','Hubo un problema al guardar el programa: ' . $record['error']);
             } else if(Yii::$app->request->post('submit') == 'salir') {
                 return $this->redirect(['index']);
@@ -1078,9 +1076,9 @@ class MiProgramaController extends Controller
      * @return Programa the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($programId)
+    protected function findModel($programId, $step = 'default')
     {
-        $command = new GetCompleteProgramCommand($programId);
+        $command = new GetCompleteProgramCommand($programId, $step);
         $response = $command->handle();
         $data = $response->getData();
 
