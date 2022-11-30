@@ -562,13 +562,13 @@ class Programa extends \yii\db\ActiveRecord
 
     }
 
-    public function defineScenario($step)
+    public function defineScenario($moduleType)
     {
-        switch($step) {
+        switch($moduleType) {
             case 'default':
                 $this->scenario = 'default';
                 break;
-            case Programa::TIME_DISTRIBUTION_STEP:
+            case Module::TIME_DISTRIBUTION_TYPE:
                 $this->scenario = 'dist-horaria';
                 break;
 
@@ -576,6 +576,23 @@ class Programa extends \yii\db\ActiveRecord
                 throw new \Exception('Error, step not implemented');
 
         }
+    }
+
+    public function saveModuleData(Module $module) : bool
+    {
+        $moduleType = $module->type;
+        switch($moduleType) {
+            case Module::TIME_DISTRIBUTION_TYPE:
+                $this->defineScenario($moduleType);
+                $this->distr_horaria = $module->value;
+                break;
+            
+                //TODO: Agregar todos los modulos necesarios para guardar la data;
+            default:
+                throw new \Exception('Error, Modulo no encontrado');
+        }
+
+        return $this->save();
     }
 
 }

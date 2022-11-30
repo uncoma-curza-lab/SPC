@@ -721,12 +721,12 @@ class MiProgramaController extends Controller
      * @throws ForbiddenHttpException si no tiene permisos de modificar el programa
      */
     public function actionDistHoraria($id){
-        $step = Programa::TIME_DISTRIBUTION_STEP;
+        $moduleType = Module::TIME_DISTRIBUTION_TYPE;
         $view = 'forms/_dist-horaria';
         $nextView = 'crono-tentativo';
-        $model = $this->findModel($id, $step);
+        $model = $this->findModel($id, $moduleType);
 
-        if(Yii::$app->request->post()) {
+        if(Yii::$app->request->post() && $model->load(Yii::$app->request->post())) {
             $data = Yii::$app->request->post();
             $moduleService = new ModuleService();
             $modules = $data['Programa']['modules'];
@@ -1076,9 +1076,9 @@ class MiProgramaController extends Controller
      * @return Programa the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($programId, $step = 'default')
+    protected function findModel($programId, $moduleType = 'default')
     {
-        $command = new GetCompleteProgramCommand($programId, $step);
+        $command = new GetCompleteProgramCommand($programId, $moduleType);
         $response = $command->handle();
         $data = $response->getData();
 

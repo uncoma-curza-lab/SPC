@@ -31,10 +31,10 @@ class ModuleService
                     }
                     throw new Exception('Hubo un error al intentar crear el módulo'); // add translt
                 }
+                if (!$program->saveModuleData($dataResult['module'])){
+                    throw new Exception('Hubo un error al intentar guardar el Programa'); // add translt
+                }
                 $newModules[] = $dataResult['module'];
-            }
-            if (!$program->load(Yii::$app->request->post()) || !$program->save()){
-                throw new Exception('Hubo un error al intentar guardar el Programa'); // add translt
             }
             $transaction->commit();
             return [

@@ -10,10 +10,10 @@ class GetCompleteProgramCommand implements CommandInterface
 {
     protected int $programId;
 
-    public function __construct(int $programId, string $step = "default")
+    public function __construct(int $programId, string $moduleType = "default")
     {
         $this->programId = $programId;
-        $this->step = $step;
+        $this->moduleType = $moduleType;
 
     }
 
@@ -31,7 +31,7 @@ class GetCompleteProgramCommand implements CommandInterface
                 throw new NotFoundHttpException('El programa no pudo encontrarse');
             }
 
-            $program->defineScenario($this->step);
+            $program->defineScenario($this->moduleType);
 
             return new GetCompleteProgramResult(
                 true,
