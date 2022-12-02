@@ -571,6 +571,9 @@ class Programa extends \yii\db\ActiveRecord
             case Module::TIME_DISTRIBUTION_TYPE:
                 $this->scenario = 'dist-horaria';
                 break;
+            case Module::FUNDAMENTALS_TYPE:
+                $this->scenario = 'fundamentacion';
+                break;
 
             default:
                 throw new \Exception('Error, step not implemented');
@@ -586,7 +589,10 @@ class Programa extends \yii\db\ActiveRecord
             case Module::TIME_DISTRIBUTION_TYPE:
                 $this->distr_horaria = $module->value;
                 break;
-            
+            case Module::FUNDAMENTALS_TYPE:
+                $this->fundament = $module->value;
+                break;
+
                 //TODO: Agregar todos los modulos necesarios para guardar la data;
             default:
                 throw new \Exception('Error, Modulo no encontrado');
