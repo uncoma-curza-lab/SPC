@@ -108,4 +108,12 @@ class Module extends \yii\db\ActiveRecord
         }
     }
 
+    public static function isModuleType(string $type) : bool
+    {
+        return in_array($type, [
+            self::TIME_DISTRIBUTION_TYPE,
+            self::FUNDAMENTALS_TYPE,
+        ]);
+    }
+
 }

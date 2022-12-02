@@ -1170,6 +1170,9 @@ class MiProgramaController extends Controller
 
     private function prepareGenericModuleAction($programId, $model, $moduleType, $nextView, $view)
     {
+        if(!Module::isModuleType($moduleType)) {
+            throw new Exception("ERROR: '$moduleType' is not a valid Moduel Type");
+        }
         if(Yii::$app->request->post()) {
             $data = Yii::$app->request->post();
             $moduleService = new ModuleService();
