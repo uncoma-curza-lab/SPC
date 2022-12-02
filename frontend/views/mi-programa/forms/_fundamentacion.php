@@ -31,8 +31,8 @@ use yii\widgets\ActiveForm;
     data-content="Ubicación de la asignatura dentro del Plan de estudios. Correlativas anteriores y posteriores. Sentido de la asignatura. Propósitos y estructura del programa.">
     <span class="glyphicon glyphicon-question-sign"></span> Ayuda</a></span></h3>
 
-<?= $form->field($model, 'fundament')->widget(TinyMce::className(), [
-    'options' => ['rows' => 16],
+<?= $form->field($model, 'modules[value]')->widget(TinyMce::className(), [
+    'options' => ['rows' => 16, 'value' => $model->fundament],
     'language' => 'es',
     'clientOptions' => [
         'plugins' => [

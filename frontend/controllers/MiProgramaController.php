@@ -296,12 +296,21 @@ class MiProgramaController extends Controller
      */
     public function actionFundamentacion($id)
     {
+        $moduleType = Module::FUNDAMENTALS_TYPE;
+        $view = 'forms/_fundamentacion';
+        $nextView = 'objetivo-plan';
+        $model = $this->findModel($id, $moduleType);
+
+        return $this->prepareGenericModuleAction($id, $model, $moduleType, $nextView, $view);
+
+/*
         return $this->prepareGenericStepAction(
             $id,
             Programa::FUNDAMENTALS_STEP,
             'forms/_fundamentacion',
             'objetivo-plan'
         );
+ */
         // scenario para campo fundamentacion obligatorio
         //$model->scenario = 'fundamentacion';
         //$estado = Status::findOne($model->status_id);
@@ -723,7 +732,7 @@ class MiProgramaController extends Controller
     public function actionDistHoraria($id){
         $moduleType = Module::TIME_DISTRIBUTION_TYPE;
         $view = 'forms/_dist-horaria';
-        $nextView = 'crono-tentativo';
+        $nextView = 'fundamentacion';
         $model = $this->findModel($id, $moduleType);
 
         if(Yii::$app->request->post() && $model->load(Yii::$app->request->post())) {
@@ -1135,6 +1144,9 @@ class MiProgramaController extends Controller
       Yii::error("Error al guardar el programa: ".$model->id,'miprograma');
     }
 
+    /**
+     * @deprecated
+     */
     private function prepareGenericStepAction($programId, $step, $view, $nextView)
     {
         $model = $this->findModel($programId);
@@ -1154,5 +1166,32 @@ class MiProgramaController extends Controller
         return $this->render($view, [
             'model' => $model,
         ]);
+    }
+
+    private function prepareGenericModuleAction($programId, $model, $moduleType, $nextView, $view)
+    {
+        if(Yii::$app->request->post()) {
+            $data = Yii::$app->request->post();
+            $moduleService = new ModuleService();
+            $modules[$moduleType]['value'] = $data['Programa']['modules']['value'];
+            $record = $moduleService->processAndSaveModules($model, $modules);
+
+            if (!$record['modules']) {
+                Yii::$app->session->setFlash('danger','Hubo un problema al guardar el programa: ' . $record['error']);
+            } else if(Yii::$app->request->post('submit') == 'salir') {
+                return $this->redirect(['index']);
+            } else {
+                return $this->redirect([$nextView, 'id' => $programId]);
+            }
+        }
+
+        $module = $model->getModules()->where(['=', 'type', $moduleType])->one();
+
+        return $this->render($view, [
+            'model' => $model,
+            'module' => $module,
+            'error' => null
+        ]);
+
     }
 }
