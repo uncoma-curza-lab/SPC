@@ -581,9 +581,9 @@ class Programa extends \yii\db\ActiveRecord
     public function saveModuleData(Module $module) : bool
     {
         $moduleType = $module->type;
+        $this->defineScenario($moduleType);
         switch($moduleType) {
             case Module::TIME_DISTRIBUTION_TYPE:
-                $this->defineScenario($moduleType);
                 $this->distr_horaria = $module->value;
                 break;
             
