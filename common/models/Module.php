@@ -20,6 +20,7 @@ class Module extends \yii\db\ActiveRecord
 {
     const TIME_DISTRIBUTION_TYPE = 'time_distribution';
     const FUNDAMENTALS_TYPE = 'fundamentals';
+    const PLAN_OBJECTIVE_TYPE = 'plan_objetive';
 
     /**
      * {@inheritdoc}
@@ -113,6 +114,7 @@ class Module extends \yii\db\ActiveRecord
         return in_array($type, [
             self::TIME_DISTRIBUTION_TYPE,
             self::FUNDAMENTALS_TYPE,
+            self::PLAN_OBJECTIVE_TYPE,
         ]);
     }
 

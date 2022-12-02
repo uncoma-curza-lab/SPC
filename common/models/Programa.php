@@ -574,6 +574,9 @@ class Programa extends \yii\db\ActiveRecord
             case Module::FUNDAMENTALS_TYPE:
                 $this->scenario = 'fundamentacion';
                 break;
+            case Module::PLAN_OBJECTIVE_TYPE:
+                $this->scenario = 'obj-plan';
+                break;
 
             default:
                 throw new \Exception('Error, step not implemented');
@@ -591,6 +594,9 @@ class Programa extends \yii\db\ActiveRecord
                 break;
             case Module::FUNDAMENTALS_TYPE:
                 $this->fundament = $module->value;
+                break;
+            case Module::PLAN_OBJECTIVE_TYPE:
+                $this->objetivo_plan = $module->value;
                 break;
 
                 //TODO: Agregar todos los modulos necesarios para guardar la data;

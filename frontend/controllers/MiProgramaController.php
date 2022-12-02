@@ -299,9 +299,8 @@ class MiProgramaController extends Controller
         $moduleType = Module::FUNDAMENTALS_TYPE;
         $view = 'forms/_fundamentacion';
         $nextView = 'objetivo-plan';
-        $model = $this->findModel($id, $moduleType);
 
-        return $this->prepareGenericModuleAction($id, $model, $moduleType, $nextView, $view);
+        return $this->prepareGenericModuleAction($id,$moduleType, $view, $nextView);
 
 /*
         return $this->prepareGenericStepAction(
@@ -352,12 +351,19 @@ class MiProgramaController extends Controller
      */
     public function actionObjetivoPlan($id)
     {
-        return $this->prepareGenericStepAction(
+        return $this->prepareGenericModuleAction(
             $id,
-            Programa::PLAN_OBJECTIVE_STEP,
+            Module::PLAN_OBJECTIVE_TYPE,
             'forms/_objetivo-plan',
             'objetivo-programa'
         );
+
+//        return $this->prepareGenericStepAction(
+//            $id,
+//            Programa::PLAN_OBJECTIVE_STEP,
+//            'forms/_objetivo-plan',
+//            'objetivo-programa'
+//        );
       // $model = $this->findModel($id);
       // $model->scenario = 'obj-plan';
       // $estado = Status::findOne($model->status_id);
@@ -1168,11 +1174,12 @@ class MiProgramaController extends Controller
         ]);
     }
 
-    private function prepareGenericModuleAction($programId, $model, $moduleType, $nextView, $view)
+    private function prepareGenericModuleAction($programId, $moduleType, $view, $nextView)
     {
         if(!Module::isModuleType($moduleType)) {
             throw new Exception("ERROR: '$moduleType' is not a valid Moduel Type");
         }
+        $model = $this->findModel($programId, $moduleType);
         if(Yii::$app->request->post()) {
             $data = Yii::$app->request->post();
             $moduleService = new ModuleService();
@@ -1187,7 +1194,6 @@ class MiProgramaController extends Controller
                 return $this->redirect([$nextView, 'id' => $programId]);
             }
         }
-
         $module = $model->getModules()->where(['=', 'type', $moduleType])->one();
 
         return $this->render($view, [

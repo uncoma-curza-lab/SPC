@@ -21,8 +21,8 @@ use yii\helpers\Url;
 
 <h3> Objetivos según Plan de estudio</h3>
 
-<?= $form->field($model, 'objetivo_plan')->widget(TinyMce::className(), [
-  'options' => ['rows' => 16],
+<?= $form->field($model, 'modules[value]')->widget(TinyMce::className(), [
+  'options' => ['rows' => 16, 'value' => $model->objetivo_plan],
   'language' => 'es',
     'clientOptions' => [
         'plugins' => [
