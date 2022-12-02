@@ -577,6 +577,36 @@ class Programa extends \yii\db\ActiveRecord
             case Module::PLAN_OBJECTIVE_TYPE:
                 $this->scenario = 'obj-plan';
                 break;
+            case Module::PROGRAM_OBJECTIVE_TYPE:
+                $this->senario = 'objetivo-programa';
+                break;
+            case Module::PLAN_CONTENT_TYPE:
+                $this->senario = 'cont-plan';
+                break;
+            case Module::ANALYTICAL_CONTENT_TYPE:
+                $this->senario = 'contenido_analitico';
+                break;
+            case Module::BIBLIOGRAPHY_TYPE:
+                $this->senario = 'bibliografia';
+                break;
+            case Module::METHOD_PROPOSAL_TYPE:
+                $this->senario = 'prop-met';
+                break;
+            case Module::EVALUATION_AND_ACCREDITATION_TYPE:
+                $this->senario = 'eval-acred';
+                break;
+            case Module::EXAMS_AND_PROMOTION_TYPE:
+                $this->senario = 'parc-rec-promo';
+                break;
+            case Module::TIMELINE_TYPE:
+                $this->senario = 'crono-tent';
+                break;
+            case Module::ACTIVITIES_TYPE:
+                $this->senario = 'actv-extra';
+                break;
+            case Module::SIGN_TYPE:
+                $this->senario = 'firma';
+                break;
 
             default:
                 throw new \Exception('Error, step not implemented');

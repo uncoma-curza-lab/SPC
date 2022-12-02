@@ -21,6 +21,16 @@ class Module extends \yii\db\ActiveRecord
     const TIME_DISTRIBUTION_TYPE = 'time_distribution';
     const FUNDAMENTALS_TYPE = 'fundamentals';
     const PLAN_OBJECTIVE_TYPE = 'plan_objetive';
+    const PROGRAM_OBJECTIVE_TYPE = 'program_objective';
+    const PLAN_CONTENT_TYPE = 'plan_content';
+    const ANALYTICAL_CONTENT_TYPE = 'analytical_content';
+    const BIBLIOGRAPHY_TYPE = 'bibliography';
+    const METHOD_PROPOSAL_TYPE = 'method-proposal';
+    const EVALUATION_AND_ACCREDITATION_TYPE = 'evaluation-accreditation';
+    const EXAMS_AND_PROMOTION_TYPE = 'exams-promotion';
+    const TIMELINE_TYPE = 'timeline';
+    const ACTIVITIES_TYPE = 'activities';
+    const SIGN_TYPE = 'sign';
 
     /**
      * {@inheritdoc}
@@ -115,6 +125,16 @@ class Module extends \yii\db\ActiveRecord
             self::TIME_DISTRIBUTION_TYPE,
             self::FUNDAMENTALS_TYPE,
             self::PLAN_OBJECTIVE_TYPE,
+            self::PROGRAM_OBJECTIVE_TYPE,
+            self::PLAN_CONTENT_TYPE,
+            self::ANALYTICAL_CONTENT_TYPE,
+            self::BIBLIOGRAPHY_TYPE,
+            self::METHOD_PROPOSAL_TYPE,
+            self::EVALUATION_AND_ACCREDITATION_TYPE,
+            self::EXAMS_AND_PROMOTION_TYPE,
+            self::TIMELINE_TYPE,
+            self::ACTIVITIES_TYPE,
+            self::SIGN_TYPE
         ]);
     }
 
