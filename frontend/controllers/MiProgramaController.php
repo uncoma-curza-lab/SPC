@@ -522,9 +522,9 @@ class MiProgramaController extends Controller
      * @throws ForbiddenHttpException si no tiene permisos de modificar el programa
      */
     public function actionActividadExtracurricular($id){
-        return $this->prepareGenericStepAction(
+        return $this->prepareGenericModuleAction(
             $id,
-            Programa::ACTIVITIES_STEP,
+            Module::ACTIVITIES_TYPE,
             'forms/_activ-extrac',
             'firma'
         );

@@ -651,11 +651,14 @@ class Programa extends \yii\db\ActiveRecord
             case Module::TIMELINE_TYPE:
                 $this->crono_tentativo = $module->value;
                 break;
+            case Module::ACTIVITIES_TYPE:
+                $this->actv_extracur = $module->value;
+                break;
+
 
                 //TODO: Agregar todos los modulos necesarios para guardar la data;
                 /*            
             'equipo_catedra' => 'Equipo de catedra',
-            'actv_extracur' => 'Actv Extracur',
             'firma' => 'Firma',
                  */
             default:

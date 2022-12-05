@@ -27,8 +27,8 @@ $this->registerJs($js);
 <h3>Planificación de actividades Extracurriculares<span  style="font-size:15px"><a href="#" data-toggle="popover" title="Planificación de actividades Extracurriculares"
     data-content="Se prevé la participación de la cátedra en la organización de las Jornadas. Asimismo las actividades de extensión de cátedra">
     <span class="glyphicon glyphicon-question-sign"></span> Ayuda</a></span></h3>
-<?= $form->field($model, 'actv_extracur')->widget(TinyMce::className(), [
-    'options' => ['rows' => 16],
+<?= $form->field($model, 'modules[value]')->widget(TinyMce::className(), [
+    'options' => ['rows' => 16, 'value' => $model->actv_extracur],
     'language' => 'es',
     'clientOptions' => [
         'plugins' => [
