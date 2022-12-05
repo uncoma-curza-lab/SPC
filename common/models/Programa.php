@@ -571,6 +571,9 @@ class Programa extends \yii\db\ActiveRecord
             case Module::TIME_DISTRIBUTION_TYPE:
                 $this->scenario = 'dist-horaria';
                 break;
+            case Module::PROFESSORSHIP_TEAM_TYPE:
+                $this->scenario = 'equipo_catedra';
+                break; 
             case Module::FUNDAMENTALS_TYPE:
                 $this->scenario = 'fundamentacion';
                 break;
@@ -620,6 +623,9 @@ class Programa extends \yii\db\ActiveRecord
         switch($moduleType) {
             case Module::TIME_DISTRIBUTION_TYPE:
                 $this->distr_horaria = $module->value;
+                break;
+            case Module::PROFESSORSHIP_TEAM_TYPE:
+                $this->equipo_catedra = $module->value;
                 break;
             case Module::FUNDAMENTALS_TYPE:
                 $this->fundament = $module->value;

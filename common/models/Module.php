@@ -19,6 +19,7 @@ use Yii;
 class Module extends \yii\db\ActiveRecord
 {
     const TIME_DISTRIBUTION_TYPE = 'time_distribution';
+    const PROFESSORSHIP_TEAM_TYPE = 'professorship_team';
     const FUNDAMENTALS_TYPE = 'fundamentals';
     const PLAN_OBJECTIVE_TYPE = 'plan_objetive';
     const PROGRAM_OBJECTIVE_TYPE = 'program_objective';
@@ -123,6 +124,7 @@ class Module extends \yii\db\ActiveRecord
     {
         return in_array($type, [
             self::TIME_DISTRIBUTION_TYPE,
+            self::PROFESSORSHIP_TEAM_TYPE,
             self::FUNDAMENTALS_TYPE,
             self::PLAN_OBJECTIVE_TYPE,
             self::PROGRAM_OBJECTIVE_TYPE,

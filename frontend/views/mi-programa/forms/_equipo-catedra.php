@@ -38,8 +38,8 @@ $this->registerJs($js);
     </span>
   </h3>
 
-  <?= $form->field($model, 'equipo_catedra')->widget(TinyMce::className(), [
-      'options' => ['rows' => 6,],
+  <?= $form->field($model, 'modules[value]')->widget(TinyMce::className(), [
+      'options' => ['rows' => 6, 'value' => $model->equipo_catedra],
       'language' => 'es',
       'clientOptions' => [
 

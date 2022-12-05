@@ -1,10 +1,12 @@
 <?php
 
+use common\models\Module;
 use common\models\Programa;
 use yii\helpers\Url;
 $mensaje = [ 'onclick'=>"return confirm('No se guardarán los cambios de esta pestaña, ¿desea salir?')"];
 $breads = [
     Programa::TIME_DISTRIBUTION_STEP => ['label' => 'Distribución horaria', 'url' => Url::to(['dist-horaria', 'id' => $model->id]), 'options'=>[ 'onclick'=>"return confirm('No se guardarán los cambios de esta pestaña, ¿desea salir?')"]],
+    Module::PROFESSORSHIP_TEAM_TYPE => ['label' => 'Equipo de Catedra','url' => Url::to(['equipo-catedra', 'id' => $model->id]), 'options'=> $mensaje],
     Programa::FUNDAMENTALS_STEP => ['label' => 'Fundamentación','url' => Url::to(['fundamentacion', 'id' => $model->id]), 'options'=> $mensaje],
     Programa::PLAN_OBJECTIVE_STEP => ['label' => 'Objetivos según plan de estudio', 'url' => Url::to(['objetivo-plan', 'id' => $model->id]), 'options'=> $mensaje],
     Programa::PROGRAM_OBJECTIVE_STEP => ['label' => 'Objetivos del programa', 'url' => Url::to(['objetivo-programa', 'id' => $model->id]), 'options'=> $mensaje],

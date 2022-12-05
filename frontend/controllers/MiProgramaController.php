@@ -61,7 +61,7 @@ class MiProgramaController extends Controller
                             'contenido-plan', 'eval-acred', 'propuesta-metodologica',
                             'parcial-rec-promo', 'dist-horaria', 'crono-tentativo',
                             'actividad-extracurricular', 'cargar',
-                            'bibliografia','objetivo-programa','firma'
+                            'bibliografia','objetivo-programa','firma', 'equipo-catedra'
                           ],
                           'allow' => true,
                           'roles' => ['@'],
@@ -451,7 +451,7 @@ class MiProgramaController extends Controller
     public function actionDistHoraria($id){
         $moduleType = Module::TIME_DISTRIBUTION_TYPE;
         $view = 'forms/_dist-horaria';
-        $nextView = 'fundamentacion';
+        $nextView = 'equipo-catedra';
         $model = $this->findModel($id, $moduleType);
 
         if(Yii::$app->request->post() && $model->load(Yii::$app->request->post())) {
@@ -569,6 +569,23 @@ class MiProgramaController extends Controller
 
     }
 
+   /**
+     * Step: 3
+     *  Edición de campo de Equipo catedra
+     *  @param integer $id del programa
+     *  @return mixed
+     * @throws ForbiddenHttpException si no tiene permisos de modificar el programa
+     */
+    public function actionEquipoCatedra($id)
+    {
+        return $this->prepareGenericModuleAction(
+            $id,
+            Module::PROFESSORSHIP_TEAM_TYPE,
+            'forms/_equipo-catedra',
+            'fundamentacion'
+        );
+
+    }
     public function actionAsignar($id)
     {
         $model = $this->findModel($id);
@@ -764,7 +781,7 @@ class MiProgramaController extends Controller
     private function prepareGenericModuleAction($programId, $moduleType, $view, $nextView)
     {
         if(!Module::isModuleType($moduleType)) {
-            throw new Exception("ERROR: '$moduleType' is not a valid Moduel Type");
+            throw new Exception("ERROR: '$moduleType' is not a valid Module Type");
         }
         $model = $this->findModel($programId, $moduleType);
         $model->setDefaultValues($moduleType);
