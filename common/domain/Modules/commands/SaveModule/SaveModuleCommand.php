@@ -46,7 +46,7 @@ class SaveModuleCommand implements CommandInterface
             $module->program_id = $this->program->id;
             if ($this->data['value']) {
                 $module->value = $this->data['value'];
-            } else {
+            } else if ($module->type === Module::TIME_DISTRIBUTION_TYPE){
                 $module->value = '--';
             }
             $module->type = $this->type;
