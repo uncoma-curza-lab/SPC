@@ -19,8 +19,8 @@ use yii\helpers\Url;
   'currentView' => Programa::SIGN_STEP
 ]) ?>
 <h3>Firma</h3>
-<?= $form->field($model, 'firma')->widget(TinyMce::className(), [
-    'options' => ['rows' => 16],
+<?= $form->field($model, 'modules[value]')->widget(TinyMce::className(), [
+    'options' => ['rows' => 16, 'value' => $model->firma],
     'language' => 'es',
     'clientOptions' => [
         'plugins' => [

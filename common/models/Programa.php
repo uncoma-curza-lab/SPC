@@ -654,6 +654,9 @@ class Programa extends \yii\db\ActiveRecord
             case Module::ACTIVITIES_TYPE:
                 $this->actv_extracur = $module->value;
                 break;
+            case Module::SIGN_TYPE:
+                $this->firma = $module->value;
+                break;
 
 
                 //TODO: Agregar todos los modulos necesarios para guardar la data;
@@ -711,8 +714,18 @@ class Programa extends \yii\db\ActiveRecord
                     ';
                 }
                 break;
+            case Module::SIGN_TYPE:
+                if($this->getFirma() == null){
+                  $html =
+                      '<div class="" style="text-align: center;">Firma del responsable <br />Aclaraci&oacute;n <br />Cargo</div>
+                      <div class="" style="text-align: center;">&nbsp;</div>
+                      <div class="" style="text-align: center;"><br />
+                      <div class="" style="text-align: right;">Lugar y fecha de entrega</div>
+                      </div>';
+                  $this->setFirma($html);
+                }
+                break;            
 
-            
             default:
                 break;
         }

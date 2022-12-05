@@ -538,9 +538,9 @@ class MiProgramaController extends Controller
      * @throws ForbiddenHttpException si no tiene permisos de modificar el programa
      */
     public function actionFirma($id){
-        return $this->prepareGenericStepAction(
+        return $this->prepareGenericModuleAction(
             $id,
-            Programa::SIGN_STEP,
+            Module::SIGN_TYPE,
             'forms/_firma',
             'index'
         );
