@@ -24,7 +24,11 @@ class CreateStep extends StepInterface
                 return new ProgramStepResult(false, 'Hubo un problema al crear el programa', [], $model);
             }
         } else {
-              $model->year= date('Y');
+            $dateMonth = date('m');
+            $model->year= date('Y');
+            if ($dateMonth > 10) {
+                $model->year= $model->year + 1;
+            }
         }
 
         return new ProgramStepResult(false, '', [], $model);
