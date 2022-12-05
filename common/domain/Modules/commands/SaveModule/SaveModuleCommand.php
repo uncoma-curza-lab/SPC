@@ -44,12 +44,12 @@ class SaveModuleCommand implements CommandInterface
             }
 
             $module->program_id = $this->program->id;
+            $module->type = $this->type;
             if ($this->data['value']) {
                 $module->value = $this->data['value'];
             } else if ($module->type === Module::TIME_DISTRIBUTION_TYPE){
                 $module->value = '--';
             }
-            $module->type = $this->type;
 
             if (!$module->save()) {
                 throw new Exception('Module validation error');

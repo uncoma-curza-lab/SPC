@@ -646,7 +646,6 @@ class Programa extends \yii\db\ActiveRecord
                 //TODO: Agregar todos los modulos necesarios para guardar la data;
                 /*            
             'equipo_catedra' => 'Equipo de catedra',
-            'propuesta_met' => 'Propuesta Met',
             'evycond_acreditacion' => 'Evycond Acreditacion',
             'parcial_rec_promo' => 'Parcial Rec Promo',
             'distr_horaria' => 'Distr Horaria',
@@ -672,7 +671,6 @@ class Programa extends \yii\db\ActiveRecord
                 break;
             
             default:
-                throw new \Exception('Error, Modulo no encontrado');
                 break;
         }
     }

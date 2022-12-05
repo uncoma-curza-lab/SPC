@@ -767,6 +767,7 @@ class MiProgramaController extends Controller
             throw new Exception("ERROR: '$moduleType' is not a valid Moduel Type");
         }
         $model = $this->findModel($programId, $moduleType);
+        $model->setDefaultValues($moduleType);
         if(Yii::$app->request->post()) {
             $data = Yii::$app->request->post();
             $moduleService = new ModuleService();
