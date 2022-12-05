@@ -406,12 +406,19 @@ class MiProgramaController extends Controller
       //$model = $this->findModel($id);
       //$model->scenario = 'objetivo-programa';
 
-        return $this->prepareGenericStepAction(
+        return $this->prepareGenericModuleAction(
             $id,
-            Programa::PROGRAM_OBJECTIVE_STEP,
+            Module::PROGRAM_OBJECTIVE_TYPE,
             'forms/_objetivo-programa',
             'contenido-plan'
         );
+
+        // return $this->prepareGenericStepAction(
+        //     $id,
+        //     Programa::PROGRAM_OBJECTIVE_STEP,
+        //     'forms/_objetivo-programa',
+        //     'contenido-plan'
+        // );
       //$estado = Status::findOne($model->status_id);
       //$validarPermisos = $this->validarPermisos($model, $estado);
 
@@ -1096,7 +1103,6 @@ class MiProgramaController extends Controller
         $command = new GetCompleteProgramCommand($programId, $moduleType);
         $response = $command->handle();
         $data = $response->getData();
-
         if (!$response->getResult()) {
             if (array_key_exists('exception', $data)) {
                throw new NotFoundHttpException($response->getMessage());
@@ -1195,7 +1201,6 @@ class MiProgramaController extends Controller
             }
         }
         $module = $model->getModules()->where(['=', 'type', $moduleType])->one();
-
         return $this->render($view, [
             'model' => $model,
             'module' => $module,
