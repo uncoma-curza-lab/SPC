@@ -400,12 +400,13 @@ class MiProgramaController extends Controller
      * @throws ForbiddenHttpException si no tiene permisos de modificar el programa
      */
     public function actionPropuestaMetodologica($id){
-        return $this->prepareGenericStepAction(
+        return $this->prepareGenericModuleAction(
             $id,
-            Programa::BIBLIOGRAPHY_STEP,
+            Module::METHOD_PROPOSAL_TYPE,
             'forms/_propuesta-metodologica',
             'eval-acred'
         );
+
     }
 
     /**

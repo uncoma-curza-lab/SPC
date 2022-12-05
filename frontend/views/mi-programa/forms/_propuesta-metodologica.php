@@ -28,8 +28,8 @@ una actividad para promover la escritura académica como línea de fortalecimien
   'validateOnSubmit'          => false,
   'validateOnBlur'            => false,
 ]); ?>
-<?= $form->field($model, 'propuesta_met')->widget(TinyMce::className(), [
-    'options' => ['rows' => 16],
+<?= $form->field($model, 'modules[value]')->widget(TinyMce::className(), [
+    'options' => ['rows' => 16, 'value' => $model->propuesta_met],
     'language' => 'es',
     'clientOptions' => [
         'plugins' => [

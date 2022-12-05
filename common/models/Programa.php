@@ -639,13 +639,12 @@ class Programa extends \yii\db\ActiveRecord
             case Module::BIBLIOGRAPHY_TYPE:
                 $this->biblio_basica = $module->value;
                 break;
+            case Module::METHOD_PROPOSAL_TYPE:
+                $this->propuesta_met = $module->value;
+                break;
 
                 //TODO: Agregar todos los modulos necesarios para guardar la data;
                 /*            
-            'contenido_plan' => 'Contenido Plan',
-            'contenido_analitico' => 'Contenido Analítico',
-            'biblio_basica' => 'Bibliografía básica',
-            'biblio_consulta' => 'Bibliografía de consulta',
             'equipo_catedra' => 'Equipo de catedra',
             'propuesta_met' => 'Propuesta Met',
             'evycond_acreditacion' => 'Evycond Acreditacion',
