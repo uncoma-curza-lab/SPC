@@ -578,36 +578,35 @@ class Programa extends \yii\db\ActiveRecord
                 $this->scenario = 'obj-plan';
                 break;
             case Module::PROGRAM_OBJECTIVE_TYPE:
-                $this->senario = 'objetivo-programa';
+                $this->scenario = 'objetivo-programa';
                 break;
             case Module::PLAN_CONTENT_TYPE:
-                $this->senario = 'cont-plan';
+                $this->scenario = 'cont-plan';
                 break;
             case Module::ANALYTICAL_CONTENT_TYPE:
-                $this->senario = 'contenido_analitico';
+                $this->scenario = 'contenido_analitico';
                 break;
             case Module::BIBLIOGRAPHY_TYPE:
-                $this->senario = 'bibliografia';
+                $this->scenario = 'bibliografia';
                 break;
             case Module::METHOD_PROPOSAL_TYPE:
-                $this->senario = 'prop-met';
+                $this->scenario = 'prop-met';
                 break;
             case Module::EVALUATION_AND_ACCREDITATION_TYPE:
-                $this->senario = 'eval-acred';
+                $this->scenario = 'eval-acred';
                 break;
             case Module::EXAMS_AND_PROMOTION_TYPE:
-                $this->senario = 'parc-rec-promo';
+                $this->scenario = 'parc-rec-promo';
                 break;
             case Module::TIMELINE_TYPE:
-                $this->senario = 'crono-tent';
+                $this->scenario = 'crono-tent';
                 break;
             case Module::ACTIVITIES_TYPE:
-                $this->senario = 'actv-extra';
+                $this->scenario = 'actv-extra';
                 break;
             case Module::SIGN_TYPE:
-                $this->senario = 'firma';
+                $this->scenario = 'firma';
                 break;
-
             default:
                 throw new \Exception('Error, step not implemented');
 
@@ -627,6 +626,9 @@ class Programa extends \yii\db\ActiveRecord
                 break;
             case Module::PLAN_OBJECTIVE_TYPE:
                 $this->objetivo_plan = $module->value;
+                break;
+            case Module::PROGRAM_OBJECTIVE_TYPE:
+                $this->objetivo_programa = $module->value;
                 break;
 
                 //TODO: Agregar todos los modulos necesarios para guardar la data;
