@@ -168,7 +168,7 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
                   {
                     return Html::a(
                       '<span style="padding:5px; font-size:20px;" class="glyphicon glyphicon-user"></span>',
-                      ['asignar','id' => $model->id],
+                      ['equipo-catedra','id' => $model->id],
                       [
                           'title' => Yii::t('yii', 'Modificar equipo de cátedra'),
                       ]
