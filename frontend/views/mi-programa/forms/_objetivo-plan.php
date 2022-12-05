@@ -1,6 +1,6 @@
 <?php
 
-use common\models\Programa;
+use common\models\Module;
 use kartik\tabs\TabsX;
 use dosamigos\tinymce\TinyMce;
 use yii\helpers\Html;
@@ -9,7 +9,7 @@ use yii\helpers\Url;
 ?>
 <?= $this->render('_menu_steps', [
   'model' => $model,
-  'currentView' => Programa::PLAN_OBJECTIVE_STEP
+  'currentView' => Module::PLAN_OBJECTIVE_TYPE
 ]) ?>
 <?php $form = ActiveForm::begin([
 'enableAjaxValidation'      => false,

@@ -1,6 +1,6 @@
 <?php
 
-use common\models\Programa;
+use common\models\Module;
 use dosamigos\tinymce\TinyMce;
 use kartik\select2\Select2;
 use unclead\multipleinput\MultipleInput;
@@ -26,7 +26,7 @@ if ($isModule){
 ?>
 <?= $this->render('_menu_steps', [
   'model' => $model,
-  'currentView' => Programa::TIME_DISTRIBUTION_STEP
+  'currentView' => Module::TIME_DISTRIBUTION_TYPE
 ]) ?>
 
 <h3>Distribución horaria<span  style="font-size:15px"><a href="#" data-toggle="popover" title="Distribución horaria"

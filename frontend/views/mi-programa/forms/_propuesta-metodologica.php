@@ -1,6 +1,6 @@
 <?php
 
-use common\models\Programa;
+use common\models\Module;
 use dosamigos\tinymce\TinyMce;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
@@ -15,7 +15,7 @@ $this->registerJs($js);
 ?>
 <?= $this->render('_menu_steps', [
   'model' => $model,
-  'currentView' => Programa::METHOD_PROPOSAL_STEP
+  'currentView' => Module::METHOD_PROPOSAL_TYPE
 ]) ?>
 <h3>Propuesta Metodológica <span  style="font-size:15px"><a href="#" data-toggle="popover" title="Propuesta Metodológica"
     data-content="Señalar la metodología en general y el plan de trabajos prácticos. Se recomienda establecer

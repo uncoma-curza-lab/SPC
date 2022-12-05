@@ -1,6 +1,6 @@
 <?php
 
-use common\models\Programa;
+use common\models\Module;
 use dosamigos\tinymce\TinyMce;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
@@ -22,7 +22,7 @@ $this->registerJs($js);
 ]); ?>
 <?= $this->render('_menu_steps', [
   'model' => $model,
-  'currentView' => Programa::EVALUATION_AND_ACCREDITATION_STEP
+  'currentView' => Module::EVALUATION_AND_ACCREDITATION_TYPE
 ]) ?>
 <h3>Evaluación y condiciones de acreditación<span  style="font-size:15px"><a href="#" data-toggle="popover" title="Evaluación y condiciones de acreditación"
     data-content="Señalar alternativas de cursado regular, promocional, y libre y criterios de evaluación y acreditación de forma discriminada.">

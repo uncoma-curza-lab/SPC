@@ -1,6 +1,6 @@
 <?php
 
-use common\models\Programa;
+use common\models\Module;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use dosamigos\tinymce\TinyMce;
@@ -16,7 +16,7 @@ use yii\helpers\Url;
 
 <?= $this->render('_menu_steps', [
   'model' => $model,
-  'currentView' => Programa::SIGN_STEP
+  'currentView' => Module::SIGN_TYPE
 ]) ?>
 <h3>Firma</h3>
 <?= $form->field($model, 'modules[value]')->widget(TinyMce::className(), [

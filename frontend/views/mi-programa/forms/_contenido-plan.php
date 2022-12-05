@@ -1,6 +1,6 @@
 <?php
 
-use common\models\Programa;
+use common\models\Module;
 use dosamigos\tinymce\TinyMce;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
@@ -16,7 +16,7 @@ $this->registerJs($js);
  ?>
 <?= $this->render('_menu_steps', [
   'model' => $model,
-  'currentView' => Programa::PLAN_CONTENT_STEP
+  'currentView' => Module::PLAN_CONTENT_TYPE
 ]) ?>
  <?php $form = ActiveForm::begin([
    'enableAjaxValidation'      => false,

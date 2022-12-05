@@ -1,6 +1,6 @@
 <?php
 
-use common\models\Programa;
+use common\models\Module;
 use yii\jui\DatePicker;
 use dosamigos\tinymce\TinyMce;
 use yii\widgets\ActiveForm;
@@ -9,7 +9,7 @@ use yii\helpers\Url;
 ?>
 <?= $this->render('_menu_steps', [
   'model' => $model,
-  'currentView' => Programa::BIBLIOGRAPHY_STEP
+  'currentView' => Module::BIBLIOGRAPHY_TYPE
 ]) ?>
 
 <h3>Bibliografía</h3>

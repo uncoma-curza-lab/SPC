@@ -1,7 +1,7 @@
 
 <?php
 
-use common\models\Programa;
+use common\models\Module;
 use dosamigos\tinymce\TinyMce;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
@@ -16,7 +16,7 @@ use yii\widgets\ActiveForm;
 ?>
 <?= $this->render('_menu_steps', [
   'model' => $model,
-  'currentView' => Programa::FUNDAMENTALS_STEP
+  'currentView' => Module::FUNDAMENTALS_TYPE
 ]) ?>
 
 

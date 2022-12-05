@@ -1,6 +1,6 @@
 <?php
 
-use common\models\Programa;
+use common\models\Module;
 use yii\jui\DatePicker;
 use dosamigos\tinymce\TinyMce;
 use yii\widgets\ActiveForm;
@@ -16,7 +16,7 @@ $this->registerJs($js);
 ?>
 <?= $this->render('_menu_steps', [
   'model' => $model,
-  'currentView' => Programa::ANALYTICAL_CONTENT_STEP
+  'currentView' => Module::ANALYTICAL_CONTENT_TYPE
 ]) ?>
 
 <h3>Contenidos analíticos<span  style="font-size:15px"><a href="#" data-toggle="popover" title="Contenidos analíticos"

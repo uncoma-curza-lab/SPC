@@ -1,6 +1,6 @@
 <?php
 
-use common\models\Programa;
+use common\models\Module;
 use kartik\tabs\TabsX;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
@@ -8,7 +8,7 @@ use dosamigos\tinymce\TinyMce;
  ?>
   <?= $this->render('_menu_steps', [
       'model' => $model,
-      'currentView' => Programa::TIMELINE_STEP
+      'currentView' => Module::TIMELINE_TYPE
   ]) ?>
  <?php $form = ActiveForm::begin([
    'enableAjaxValidation'      => false,
