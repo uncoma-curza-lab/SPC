@@ -55,6 +55,7 @@ class ExportProgramProcess implements CommandInterface
             );
         } catch (\Throwable $e) {
             // TODO: log exception
+            \Yii::warning($e->getMessage());
             return new ExportProgramResult(false, 'Error to process export', [
                 'exception' => $e
             ]);
