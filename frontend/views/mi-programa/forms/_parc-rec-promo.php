@@ -29,8 +29,8 @@ $this->registerJs($js);
 unidades que corresponden.">
     <span class="glyphicon glyphicon-question-sign"></span> Ayuda</a></span></h3>
 
-<?= $form->field($model, 'parcial_rec_promo')->widget(TinyMce::className(), [
-  'options' => ['rows' => 16],
+<?= $form->field($model, 'modules[value]')->widget(TinyMce::className(), [
+  'options' => ['rows' => 16, 'value' => $model->parcial_rec_promo],
   'language' => 'es',
     'clientOptions' => [
         'plugins' => [

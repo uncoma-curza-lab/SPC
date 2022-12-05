@@ -433,11 +433,11 @@ class MiProgramaController extends Controller
      * @throws ForbiddenHttpException si no tiene permisos de modificar el programa
      */
     public function actionParcialRecPromo($id){
-        return $this->prepareGenericStepAction(
+        return $this->prepareGenericModuleAction(
             $id,
-            Programa::EXAMS_AND_PROMOTION_STEP,
+            Module::EXAMS_AND_PROMOTION_TYPE,
             'forms/_parc-rec-promo',
-            'dist-horaria'
+            'crono-tentativo'
         );
     }
 

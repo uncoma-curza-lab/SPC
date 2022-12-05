@@ -12,7 +12,9 @@ use common\domain\programs\commands\ProgramGenerateSteps\steps\TimeDistributionS
 use common\domain\programs\commands\ProgramGenerateSteps\steps\TimelineStep;
 use common\models\Programa;
 use Exception;
-
+/*
+ * @deprecated
+ */
 class ProgramStepFactory
 {
     /**

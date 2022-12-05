@@ -645,6 +645,9 @@ class Programa extends \yii\db\ActiveRecord
             case Module::EVALUATION_AND_ACCREDITATION_TYPE:
                 $this->evycond_acreditacion = $module->value;
                 break;
+            case Module::EXAMS_AND_PROMOTION_TYPE:
+                $this->parcial_rec_promo = $module->value;
+                break;
 
                 //TODO: Agregar todos los modulos necesarios para guardar la data;
                 /*            
