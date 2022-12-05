@@ -31,7 +31,9 @@ class SaveModuleCommand implements CommandInterface
             $commandGenerateModuleClass = null;
             switch($this->type) {
                 case Module::TIME_DISTRIBUTION_TYPE:
-                    $commandGenerateModuleClass = NewTimeDistributionCommand::class;
+                    if ($this->program->getYear() >= 2023) {
+                        $commandGenerateModuleClass = NewTimeDistributionCommand::class;
+                    }
                     break;
             }
             $module = $this->getModule($this->program->id, $this->type);

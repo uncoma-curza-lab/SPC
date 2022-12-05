@@ -8,7 +8,7 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
-$isModule = boolval($module);
+$isModule = $model->year > 2022;
 $js = "$(document).ready(function(){
   $('[data-toggle=\"popover\"]').popover();
 });
