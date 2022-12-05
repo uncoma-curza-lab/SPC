@@ -661,8 +661,7 @@ class Programa extends \yii\db\ActiveRecord
 
                 //TODO: Agregar todos los modulos necesarios para guardar la data;
                 /*            
-            'equipo_catedra' => 'Equipo de catedra',
-            'firma' => 'Firma',
+                    'equipo_catedra' => 'Equipo de catedra',
                  */
             default:
                 throw new \Exception('Error, Modulo no encontrado');
