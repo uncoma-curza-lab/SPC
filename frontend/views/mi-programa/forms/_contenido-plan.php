@@ -30,8 +30,8 @@ $this->registerJs($js);
     data-content="Son los referidos al plan de estudios tal lo allí establecido.">
     <span class="glyphicon glyphicon-question-sign"></span> Ayuda</a></span></h3>
 
-<?= $form->field($model, 'contenido_plan')->widget(TinyMce::className(), [
-    'options' => ['rows' => 16],
+<?= $form->field($model, 'modules[value]')->widget(TinyMce::className(), [
+    'options' => ['rows' => 16, 'value' => $model->contenido_plan],
     'language' => 'es',
     'clientOptions' => [
         'plugins' => [

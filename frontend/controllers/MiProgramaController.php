@@ -403,8 +403,6 @@ class MiProgramaController extends Controller
      * @throws ForbiddenHttpException si no tiene permisos de modificar el programa
      */
     public function actionObjetivoPrograma($id){
-      //$model = $this->findModel($id);
-      //$model->scenario = 'objetivo-programa';
 
         return $this->prepareGenericModuleAction(
             $id,
@@ -459,13 +457,19 @@ class MiProgramaController extends Controller
      */
     public function actionContenidoPlan($id)
     {
-
-        return $this->prepareGenericStepAction(
+        return $this->prepareGenericModuleAction(
             $id,
-            Programa::PLAN_CONTENT_STEP,
+            Module::PLAN_CONTENT_TYPE,
             'forms/_contenido-plan',
             'contenido-analitico'
         );
+
+      //  return $this->prepareGenericStepAction(
+      //      $id,
+      //      Programa::PLAN_CONTENT_STEP,
+      //      'forms/_contenido-plan',
+      //      'contenido-analitico'
+      //  );
 
 
       //$model = $this->findModel($id);

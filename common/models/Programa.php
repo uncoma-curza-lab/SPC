@@ -630,8 +630,25 @@ class Programa extends \yii\db\ActiveRecord
             case Module::PROGRAM_OBJECTIVE_TYPE:
                 $this->objetivo_programa = $module->value;
                 break;
+            case Module::PLAN_CONTENT_TYPE:
+                $this->contenido_plan = $module->value;
+                break;
 
                 //TODO: Agregar todos los modulos necesarios para guardar la data;
+                /*            
+            'contenido_plan' => 'Contenido Plan',
+            'contenido_analitico' => 'Contenido Analítico',
+            'biblio_basica' => 'Bibliografía básica',
+            'biblio_consulta' => 'Bibliografía de consulta',
+            'equipo_catedra' => 'Equipo de catedra',
+            'propuesta_met' => 'Propuesta Met',
+            'evycond_acreditacion' => 'Evycond Acreditacion',
+            'parcial_rec_promo' => 'Parcial Rec Promo',
+            'distr_horaria' => 'Distr Horaria',
+            'crono_tentativo' => 'Crono Tentativo',
+            'actv_extracur' => 'Actv Extracur',
+            'firma' => 'Firma',
+                 */
             default:
                 throw new \Exception('Error, Modulo no encontrado');
         }
