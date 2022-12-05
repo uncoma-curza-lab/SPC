@@ -642,6 +642,9 @@ class Programa extends \yii\db\ActiveRecord
             case Module::METHOD_PROPOSAL_TYPE:
                 $this->propuesta_met = $module->value;
                 break;
+            case Module::EVALUATION_AND_ACCREDITATION_TYPE:
+                $this->evycond_acreditacion = $module->value;
+                break;
 
                 //TODO: Agregar todos los modulos necesarios para guardar la data;
                 /*            

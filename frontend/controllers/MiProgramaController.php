@@ -417,9 +417,9 @@ class MiProgramaController extends Controller
      * @throws ForbiddenHttpException si no tiene permisos de modificar el programa
      */
     public function actionEvalAcred($id){
-        return $this->prepareGenericStepAction(
+        return $this->prepareGenericModuleAction(
             $id,
-            Programa::EVALUATION_AND_ACCREDITATION_STEP,
+            Module::EVALUATION_AND_ACCREDITATION_TYPE,
             'forms/_eval-acred',
             'parcial-rec-promo'
         );

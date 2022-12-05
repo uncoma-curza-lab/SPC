@@ -28,12 +28,10 @@ $this->registerJs($js);
     data-content="Señalar alternativas de cursado regular, promocional, y libre y criterios de evaluación y acreditación de forma discriminada.">
     <span class="glyphicon glyphicon-question-sign"></span> Ayuda</a></span></h3>
 
-<?= $form->field($model, 'evycond_acreditacion')->widget(TinyMce::className(), [
-    'options' => ['rows' => 16 ],
+<?= $form->field($model, 'modules[value]')->widget(TinyMce::className(), [
+    'options' => ['rows' => 16, 'value' => $model->evycond_acreditacion],
     'language' => 'es',
     'clientOptions' => [
-        'placeholder' => 'qasdasdasdwe',
-
         'plugins' => [
             "advlist autolink lists link charmap
             "//print
