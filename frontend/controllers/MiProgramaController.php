@@ -513,13 +513,19 @@ class MiProgramaController extends Controller
      */
     public function actionContenidoAnalitico($id)
     {
-
-        return $this->prepareGenericStepAction(
+        return $this->prepareGenericModuleAction(
             $id,
-            Programa::ANALYTICAL_CONTENT_STEP,
+            Module::ANALYTICAL_CONTENT_TYPE,
             'forms/_contenido-analitico',
             'bibliografia'
         );
+
+      //  return $this->prepareGenericStepAction(
+      //      $id,
+      //      Programa::ANALYTICAL_CONTENT_STEP,
+      //      'forms/_contenido-analitico',
+      //      'bibliografia'
+      //  );
       //$model = $this->findModel($id);
       //$model->scenario = 'contenido_analitico';
       //$estado = Status::findOne($model->status_id);

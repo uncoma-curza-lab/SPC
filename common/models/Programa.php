@@ -633,6 +633,9 @@ class Programa extends \yii\db\ActiveRecord
             case Module::PLAN_CONTENT_TYPE:
                 $this->contenido_plan = $module->value;
                 break;
+            case Module::ANALYTICAL_CONTENT_TYPE:
+                $this->contenido_analitico = $module->value;
+                break;
 
                 //TODO: Agregar todos los modulos necesarios para guardar la data;
                 /*            

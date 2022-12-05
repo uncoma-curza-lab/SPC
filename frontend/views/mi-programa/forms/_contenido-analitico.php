@@ -31,8 +31,8 @@ $this->registerJs($js);
     'validateOnBlur'            => false,
   ]); ?>
 
-  <?= $form->field($model, 'contenido_analitico')->widget(TinyMce::className(), [
-    'options' => ['rows' => 16],
+  <?= $form->field($model, 'modules[value]')->widget(TinyMce::className(), [
+    'options' => ['rows' => 16, 'value' => $model->contenido_analitico],
       'language' => 'es',
       'clientOptions' => [
           'plugins' => [
