@@ -648,14 +648,13 @@ class Programa extends \yii\db\ActiveRecord
             case Module::EXAMS_AND_PROMOTION_TYPE:
                 $this->parcial_rec_promo = $module->value;
                 break;
+            case Module::TIMELINE_TYPE:
+                $this->crono_tentativo = $module->value;
+                break;
 
                 //TODO: Agregar todos los modulos necesarios para guardar la data;
                 /*            
             'equipo_catedra' => 'Equipo de catedra',
-            'evycond_acreditacion' => 'Evycond Acreditacion',
-            'parcial_rec_promo' => 'Parcial Rec Promo',
-            'distr_horaria' => 'Distr Horaria',
-            'crono_tentativo' => 'Crono Tentativo',
             'actv_extracur' => 'Actv Extracur',
             'firma' => 'Firma',
                  */
@@ -675,6 +674,41 @@ class Programa extends \yii\db\ActiveRecord
                     $this->biblio_basica = "<p><strong>Bibliograf&iacute;a b&aacute;sica</strong></p> <p>&nbsp;</p><p><strong>Bibliograf&iacute;a de consulta</strong></p>";
                 }
                 break;
+            case Module::TIMELINE_TYPE:
+                if ($this->crono_tentativo == null ) {
+                    $this->crono_tentativo = '
+                    <table style="border-collapse: collapse; height: 110px; border-color: black; border-style: solid; float: left;" border="1">
+                      <tbody>
+                      <tr style="height: 22px;">
+                      <th style="width: 400.2px; height: 22px;" colspan="5">Cuatrimestre</th>
+                      </tr>
+                      <tr style="height: 44px;">
+                      <th style="width: 106px; height: 44px;">Tiempo <br />/ Unidades</th>
+                      <th style="width: 68px; height: 44px;">Marzo</th>
+                      <th style="width: 53px; height: 44px;">Abril</th>
+                      <th style="width: 61px; height: 44px;">Mayo</th>
+                      <th style="width: 57px; height: 44px;">Junio</th>
+                      </tr>
+                      <tr style="height: 22px;">
+                      <td style="width: 106px; height: 22px;">Unidad 1</td>
+                      <td style="width: 68px; height: 22px;">X</td>
+                      <td style="width: 53px; height: 22px;">&nbsp;</td>
+                      <td style="width: 61px; height: 22px;">&nbsp;</td>
+                      <td style="width: 57px; height: 22px;">&nbsp;</td>
+                      </tr>
+                      <tr style="height: 22px;">
+                      <td style="width: 106px; height: 22px;">Unidad 2</td>
+                      <td style="width: 68px; height: 22px;">&nbsp;</td>
+                      <td style="width: 53px; height: 22px;">&nbsp;</td>
+                      <td style="width: 61px; height: 22px;">&nbsp;</td>
+                      <td style="width: 57px; height: 22px;">&nbsp;</td>
+                      </tr>
+                      </tbody>
+                      </table>
+                    ';
+                }
+                break;
+
             
             default:
                 break;

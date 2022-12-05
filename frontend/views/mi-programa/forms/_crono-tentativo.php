@@ -21,8 +21,8 @@ use dosamigos\tinymce\TinyMce;
 
 <h3>Cronograma Tentativo</h3>
 
-<?= $form->field($model, 'crono_tentativo')->widget(TinyMce::className(), [
-    'options' => ['rows' => 16],
+<?= $form->field($model, 'modules[value]')->widget(TinyMce::className(), [
+    'options' => ['rows' => 16, 'value' => $model->crono_tentativo],
     'language' => 'es',
     'clientOptions' => [
         'plugins' => [

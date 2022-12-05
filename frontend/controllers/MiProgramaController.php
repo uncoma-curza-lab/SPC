@@ -506,9 +506,9 @@ class MiProgramaController extends Controller
      * @throws ForbiddenHttpException si no tiene permisos de modificar el programa
      */
     public function actionCronoTentativo($id){
-        return $this->prepareGenericStepAction(
+        return $this->prepareGenericModuleAction(
             $id,
-            Programa::TIMELINE_STEP,
+            Module::TIMELINE_TYPE,
             'forms/_crono-tentativo',
             'actividad-extracurricular'
         );
