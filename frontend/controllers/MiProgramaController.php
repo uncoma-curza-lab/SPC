@@ -567,9 +567,9 @@ class MiProgramaController extends Controller
      */
     public function actionBibliografia($id)
     {
-        return $this->prepareGenericStepAction(
+        return $this->prepareGenericModuleAction(
             $id,
-            Programa::BIBLIOGRAPHY_STEP,
+            Module::BIBLIOGRAPHY_TYPE,
             'forms/_bibliografia',
             'propuesta-metodologica'
         );

@@ -636,6 +636,9 @@ class Programa extends \yii\db\ActiveRecord
             case Module::ANALYTICAL_CONTENT_TYPE:
                 $this->contenido_analitico = $module->value;
                 break;
+            case Module::BIBLIOGRAPHY_TYPE:
+                $this->biblio_basica = $module->value;
+                break;
 
                 //TODO: Agregar todos los modulos necesarios para guardar la data;
                 /*            

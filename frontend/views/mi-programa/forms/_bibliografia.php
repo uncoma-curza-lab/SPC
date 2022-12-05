@@ -20,8 +20,8 @@ use yii\helpers\Url;
     'validateOnSubmit'          => false,
     'validateOnBlur'            => false,
   ]); ?>
-  <?= $form->field($model, 'biblio_basica')->widget(TinyMce::className(), [
-      'options' => ['rows' => 12],
+  <?= $form->field($model, 'modules[value]')->widget(TinyMce::className(), [
+      'options' => ['rows' => 12, 'value' => $model->biblio_basica],
       'language' => 'es',
       'value' => 'pepe',
       'clientOptions' => [
