@@ -211,6 +211,11 @@ class Programa extends \yii\db\ActiveRecord
         return $this->hasMany(Objetivo::class, ['programa_id' => 'id']);
     }
 
+    public function getModules()
+    {
+        return $this->hasMany(Module::class, ['program_id' => 'id']);
+    }
+
     /**
      * Obtener observaciones de un programa
      * @return \yii\db\ActiveQuery
@@ -555,6 +560,180 @@ class Programa extends \yii\db\ActiveRecord
         $model->status_id = Status::find()->where(['=', 'descripcion', 'Borrador'])->one()->id;
         return $model;
 
+    }
+
+    public function defineScenario($moduleType)
+    {
+        switch($moduleType) {
+            case 'default':
+                $this->scenario = 'default';
+                break;
+            case Module::TIME_DISTRIBUTION_TYPE:
+                $this->scenario = 'dist-horaria';
+                break;
+            case Module::PROFESSORSHIP_TEAM_TYPE:
+                $this->scenario = 'equipo_catedra';
+                break; 
+            case Module::FUNDAMENTALS_TYPE:
+                $this->scenario = 'fundamentacion';
+                break;
+            case Module::PLAN_OBJECTIVE_TYPE:
+                $this->scenario = 'obj-plan';
+                break;
+            case Module::PROGRAM_OBJECTIVE_TYPE:
+                $this->scenario = 'objetivo-programa';
+                break;
+            case Module::PLAN_CONTENT_TYPE:
+                $this->scenario = 'cont-plan';
+                break;
+            case Module::ANALYTICAL_CONTENT_TYPE:
+                $this->scenario = 'contenido_analitico';
+                break;
+            case Module::BIBLIOGRAPHY_TYPE:
+                $this->scenario = 'bibliografia';
+                break;
+            case Module::METHOD_PROPOSAL_TYPE:
+                $this->scenario = 'prop-met';
+                break;
+            case Module::EVALUATION_AND_ACCREDITATION_TYPE:
+                $this->scenario = 'eval-acred';
+                break;
+            case Module::EXAMS_AND_PROMOTION_TYPE:
+                $this->scenario = 'parc-rec-promo';
+                break;
+            case Module::TIMELINE_TYPE:
+                $this->scenario = 'crono-tent';
+                break;
+            case Module::ACTIVITIES_TYPE:
+                $this->scenario = 'actv-extra';
+                break;
+            case Module::SIGN_TYPE:
+                $this->scenario = 'firma';
+                break;
+            default:
+                throw new \Exception('Error, step not implemented');
+                break;
+        }
+    }
+
+    public function saveModuleData(Module $module) : bool
+    {
+        $moduleType = $module->type;
+        $this->defineScenario($moduleType);
+        switch($moduleType) {
+            case Module::TIME_DISTRIBUTION_TYPE:
+                $this->distr_horaria = $module->value;
+                break;
+            case Module::PROFESSORSHIP_TEAM_TYPE:
+                $this->equipo_catedra = $module->value;
+                break;
+            case Module::FUNDAMENTALS_TYPE:
+                $this->fundament = $module->value;
+                break;
+            case Module::PLAN_OBJECTIVE_TYPE:
+                $this->objetivo_plan = $module->value;
+                break;
+            case Module::PROGRAM_OBJECTIVE_TYPE:
+                $this->objetivo_programa = $module->value;
+                break;
+            case Module::PLAN_CONTENT_TYPE:
+                $this->contenido_plan = $module->value;
+                break;
+            case Module::ANALYTICAL_CONTENT_TYPE:
+                $this->contenido_analitico = $module->value;
+                break;
+            case Module::BIBLIOGRAPHY_TYPE:
+                $this->biblio_basica = $module->value;
+                break;
+            case Module::METHOD_PROPOSAL_TYPE:
+                $this->propuesta_met = $module->value;
+                break;
+            case Module::EVALUATION_AND_ACCREDITATION_TYPE:
+                $this->evycond_acreditacion = $module->value;
+                break;
+            case Module::EXAMS_AND_PROMOTION_TYPE:
+                $this->parcial_rec_promo = $module->value;
+                break;
+            case Module::TIMELINE_TYPE:
+                $this->crono_tentativo = $module->value;
+                break;
+            case Module::ACTIVITIES_TYPE:
+                $this->actv_extracur = $module->value;
+                break;
+            case Module::SIGN_TYPE:
+                $this->firma = $module->value;
+                break;
+
+
+                //TODO: Agregar todos los modulos necesarios para guardar la data;
+                /*            
+                    'equipo_catedra' => 'Equipo de catedra',
+                 */
+            default:
+                throw new \Exception('Error, Modulo no encontrado');
+                break;
+        }
+
+        return $this->save();
+    }
+
+    public function setDefaultValues($moduleType) : void
+    {
+        switch ($moduleType) {
+            case Module::BIBLIOGRAPHY_TYPE:
+                if ($this->biblio_basica == null) {
+                    $this->biblio_basica = "<p><strong>Bibliograf&iacute;a b&aacute;sica</strong></p> <p>&nbsp;</p><p><strong>Bibliograf&iacute;a de consulta</strong></p>";
+                }
+                break;
+            case Module::TIMELINE_TYPE:
+                if ($this->crono_tentativo == null ) {
+                    $this->crono_tentativo = '
+                    <table style="border-collapse: collapse; height: 110px; border-color: black; border-style: solid; float: left;" border="1">
+                      <tbody>
+                      <tr style="height: 22px;">
+                      <th style="width: 400.2px; height: 22px;" colspan="5">Cuatrimestre</th>
+                      </tr>
+                      <tr style="height: 44px;">
+                      <th style="width: 106px; height: 44px;">Tiempo <br />/ Unidades</th>
+                      <th style="width: 68px; height: 44px;">Marzo</th>
+                      <th style="width: 53px; height: 44px;">Abril</th>
+                      <th style="width: 61px; height: 44px;">Mayo</th>
+                      <th style="width: 57px; height: 44px;">Junio</th>
+                      </tr>
+                      <tr style="height: 22px;">
+                      <td style="width: 106px; height: 22px;">Unidad 1</td>
+                      <td style="width: 68px; height: 22px;">X</td>
+                      <td style="width: 53px; height: 22px;">&nbsp;</td>
+                      <td style="width: 61px; height: 22px;">&nbsp;</td>
+                      <td style="width: 57px; height: 22px;">&nbsp;</td>
+                      </tr>
+                      <tr style="height: 22px;">
+                      <td style="width: 106px; height: 22px;">Unidad 2</td>
+                      <td style="width: 68px; height: 22px;">&nbsp;</td>
+                      <td style="width: 53px; height: 22px;">&nbsp;</td>
+                      <td style="width: 61px; height: 22px;">&nbsp;</td>
+                      <td style="width: 57px; height: 22px;">&nbsp;</td>
+                      </tr>
+                      </tbody>
+                      </table>
+                    ';
+                }
+                break;
+            case Module::SIGN_TYPE:
+                if($this->getFirma() == null){
+                  $html =
+                      '<div class="" style="text-align: center;">Firma del responsable <br />Aclaraci&oacute;n <br />Cargo</div>
+                      <div class="" style="text-align: center;">&nbsp;</div>
+                      <div class="" style="text-align: center;"><br />
+                      <div class="" style="text-align: right;">Lugar y fecha de entrega</div>
+                      </div>';
+                  $this->setFirma($html);
+                }
+                break;            
+
+            default:
+                break;
+        }
     }
 
 }

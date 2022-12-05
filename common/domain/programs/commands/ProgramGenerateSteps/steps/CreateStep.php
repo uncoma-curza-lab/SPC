@@ -20,16 +20,15 @@ class CreateStep extends StepInterface
         if ($model->load(Yii::$app->request->post())) {
             if($model->save()) {
                 return  new ProgramStepResult(true, 'El programa se creó correctamente', [], $model);
-                //Yii::$app->session->setFlash('warning','El programa se creó correctamente. <br>Complete el programa');
-                //$this->mensajeGuardadoExito($model);
-                //return $this->redirect(['cargar', 'id' => $model->id]);
             } else {
                 return new ProgramStepResult(false, 'Hubo un problema al crear el programa', [], $model);
-                //Yii::$app->session->setFlash('danger','Hubo un problema al crear el programa');
-                //$this->mensajeGuardadoFalla($model);
             }
         } else {
-              $model->year= date('Y');
+            $dateMonth = date('m');
+            $model->year= date('Y');
+            if ($dateMonth > 10) {
+                $model->year= $model->year + 1;
+            }
         }
 
         return new ProgramStepResult(false, '', [], $model);

@@ -1,27 +1,14 @@
 <?php
+
+use common\models\Module;
 use dosamigos\tinymce\TinyMce;
+use kartik\select2\Select2;
+use unclead\multipleinput\MultipleInput;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use yii\helpers\Url;
-$mensaje = [ 'onclick'=>"return confirm('No se guardarán los cambios de esta pestaña, ¿desea salir?')"];
-$this->params['items'][] = ['label' => '1. Fundamentación','url' => Url::to(['cargar', 'id' => $model->id]), 'options'=>[ 'onclick'=>"return confirm('No se guardarán los cambios de esta pestaña, ¿desea salir?')"]];
-$this->params['items'][] = ['label' => '2. Objetivos según plan de estudio', 'url' => Url::to(['objetivo-plan', 'id' => $model->id]), 'options'=> $mensaje];
-$this->params['items'][] = ['label' => '2.1 Objetivos del programa', 'url' => Url::to(['objetivo-programa', 'id' => $model->id]), 'options'=> $mensaje];
-$this->params['items'][] = ['label' => '3. Contenidos según plan de estudio', 'url' => Url::to(['contenido-plan', 'id' => $model->id]), 'options'=> $mensaje];
-$this->params['items'][] = ['label' => '4. Contenidos analíticos', 'url' => Url::to(['contenido-analitico', 'id' => $model->id]), 'options'=> $mensaje];
-$this->params['items'][] = ['label' => '5. Bibliografía', 'url' => Url::to(['bibliografia', 'id' => $model->id]), 'options'=> $mensaje];
-$this->params['items'][] = ['label' => '6. Propuesta Metodológica', 'url' => Url::to(['propuesta-metodologica', 'id' => $model->id]), 'options'=> $mensaje];
-$this->params['items'][] = ['label' => '7. Evaluación y cond. de acreditación', 'url' => Url::to(['eval-acred', 'id' => $model->id]), 'options'=> $mensaje];
-$this->params['items'][] = ['label' => '8. Parciales, recuperatorios y promociones', 'url' => Url::to(['parcial-rec-promo', 'id' => $model->id]), 'options'=> $mensaje];
-$this->params['items'][] = ['label' => '9. Distribución horaria'];
-$this->params['items'][] = ['label' => '10. Cronograma tentativo', 'url' => Url::to(['crono-tentativo', 'id' => $model->id]), 'options'=> $mensaje];
-$this->params['items'][] = ['label' => '11. Actividad extracurricular', 'url' => Url::to(['actividad-extracurricular', 'id' => $model->id]), 'options'=> $mensaje];
-$this->params['items'][] = ['label' => 'Firma','url' => Url::to(['firma', 'id' => $model->id]), 'options'=> $mensaje];
-$this->params['breadcrumbs'][] = ['label' => '...'];
-$this->params['breadcrumbs'][] = ['label' => "Evaluacion y acreditación", 'url' => ['eval-acred', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = ['label' => "Parciales, recuperatorios y coloquios", 'url' => ['parc-rec-promo', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Distribución Horaria';
-$porcentaje = $model->calcularPorcentajeCarga();
+
+$isModule = $model->year > 2022;
 $js = "$(document).ready(function(){
   $('[data-toggle=\"popover\"]').popover();
 });
@@ -29,58 +16,116 @@ $(function () {
   $('[data-toggle=\"tooltip\"]').tooltip()
 })";
 $this->registerJs($js);
- ?>
- <div class="row">
-   <div class="col-md-2 text-right">
-     <label>Programa completado: </label>
-   </div>
-   <div class="col-md-10 ">
-     <div class="progress">
-       <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?= $porcentaje ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?= $porcentaje ?>%">
-          <?= $porcentaje ?>%
-       </div>
-     </div>
-   </div>
- </div>
- <?php $form = ActiveForm::begin([
-   'enableAjaxValidation'      => false,
-   'enableClientValidation'    => false,
-   'validateOnChange'          => true,
-   'validateOnSubmit'          => false,
-   'validateOnBlur'            => false,
+if ($isModule){
+    $courseTotalHours = $model->asignatura->carga_horaria_cuatr;
+    $courseTotalHourWeek = $model->asignatura->carga_horaria_sem;
+    $this->registerJs('const courseTotalHourWeek = parseInt(' . $courseTotalHourWeek . ')', \yii\web\View::POS_HEAD);
+    $this->registerJs('const maxPercentageByLessonType = ' . json_encode(ArrayHelper::map($lessonTypes,'id', 'max_use_percentage')), \yii\web\View::POS_HEAD);
+    $this->registerJsFile('@web/js/timedistribution-create.js',['depends' => [\yii\web\JqueryAsset::class]]);
+}
+?>
+<?= $this->render('_menu_steps', [
+  'model' => $model,
+  'currentView' => Module::TIME_DISTRIBUTION_TYPE
+]) ?>
 
- ]); ?>
-
-<h3>9. Distribución horaria<span  style="font-size:15px"><a href="#" data-toggle="popover" title="Distribución horaria"
+<h3>Distribución horaria<span  style="font-size:15px"><a href="#" data-toggle="popover" title="Distribución horaria"
     data-content="Según horas semanales establecidas por plan de estudio.">
     <span class="glyphicon glyphicon-question-sign"></span> Ayuda</a></span></h3>
 
-<?= $form->field($model, 'distr_horaria')->widget(TinyMce::className(), [
-    'options' => ['rows' => 16],
-    'language' => 'es',
-    'clientOptions' => [
-        'plugins' => [
-            "advlist autolink lists link charmap
-            "//print
-            ."preview anchor",
-            "searchreplace visualblocks code fullscreen",
-            "insertdatetime  table contextmenu paste"
-        ],
-        'branding' => false,
-        'toolbar' => "table | undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link | fullscreen ",
-        'contextmenu' => "copy  paste | link"
-    ]
-])->label('') ?>
+<?php $form = ActiveForm::begin([
+'enableAjaxValidation'      => false,
+'enableClientValidation'    => false,
+'validateOnChange'          => true,
+'validateOnSubmit'          => false,
+'validateOnBlur'            => false,
+
+]); 
+
+?>
+
+    <small id="js-error" style="color:red;"></small>
+
+    <?php if($error): ?>
+        <div><?= $error ?></div>
+    <? endif; ?>
+
+    <?php if ($isModule): ?>
+
+    <div id="time-distribution-schema">
+    <? foreach($lessonTypes as $lesson): ?>
+        <div class="distribution-specification">
+            <?=
+                $form->field($model, 'modules[time_distribution]['.$lesson->id.'][lesson_type_id]')
+                     ->textInput(['maxlength' => true, 'readOnly' => true])
+                     ->label(false)->hiddenInput(['value' => $lesson->id])
+             ?>
+            <div class="col-md-6"> 
+            <?=
+                $form->field($model, 'modules[time_distribution]['.$lesson->id.'][name]')
+                     ->textInput(['maxlength' => true, 'readOnly' => true, 'value' => $lesson->description])
+                     ->label(
+                         'Modalidad de clase'
+                     )
+             ?>
+            </div> 
+            <div class="col-md-4"> 
+            <?=
+                $form->field($model, 'modules[time_distribution]['.$lesson->id.'][lesson_type_hours]')
+                     ->textInput(['maxlength' => true, 'value' => $timeByLessons[$lesson->id] ?? 0, 'class' => ['form-control hours']])
+                     ->label(
+                         'Horas'
+                     )
+             ?>
+            </div> 
+            <div class="col-md-2"> 
+            <?=
+                $form->field($model, 'modules[time_distribution]['.$lesson->id.'][lesson_type_hours_max_percentage]')
+                     ->textInput(['maxlength' => true, 'readOnly' => true, 'class' => ['form-control max_hours']])
+                     ->label(
+                         'Max <span class="max_percentage">' . $lesson->max_use_percentage . '</span>%'
+                     )
+             ?>
+            </div> 
+        </div>
+    <? endforeach; ?>
+        
+    <p> Total de horas usadas <span id="used-hours"></span></p>
+    <p> Total de horas disponibles <span id="available-hours"></span></p>
+    <small id="course-total-hours"> Horas totales de la asignatura seleccionada <?= $courseTotalHours ?></small>
+    </div>
+    
+    <h3> Observaciones adicionales </h3>
+<?php endif; ?>
+
+    <?= $form->field($model, 'distr_horaria')->widget(TinyMce::className(), [
+        'options' => ['rows' => 16],
+        'language' => 'es',
+        'clientOptions' => [
+            'plugins' => [
+                "advlist autolink lists link charmap preview anchor",
+                "searchreplace visualblocks code fullscreen",
+                "insertdatetime  table contextmenu paste"
+            ],
+            'branding' => false,
+            'toolbar' => "table | undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link | fullscreen",
+            'contextmenu' => "copy  paste | link"
+        ]
+    ])->label('') ?>
 <br>
 
-<div class="row">
-  <div class="col-xs-6 text-left">
-    <?= Html::a('Salir sin guardar', ['index'],['onclick'=>"return confirm('No se guardarán los cambios de esta sección, ¿desea salir?')",'class' => 'btn btn-danger']); ?>
-    <?= Html::submitButton('Guardar y salir',['class' => 'btn btn-info' , 'name'=>'submit','value' => 'salir']) ?>
-  </div>
-  <div class="col-xs-6 text-right">
-    <?= Html::a('Atrás', ['parcial-rec-promo', 'id' => $model->id],['onclick'=>"return confirm('No se guardarán los cambios de esta sección, ¿desea salir?')",'class' => 'btn btn-warning']) ?>
-    <?= Html::submitButton('Siguiente', ['class' => 'btn btn-success']); ?>
+<div class="form-group">
+  <div class="row">
+    <div class="col-xs-6 text-left">
+        <?= Html::a('Salir sin guardar', ['index'],['onclick'=>"return confirm('No se guardarán los cambios de esta sección, ¿desea salir?')",'data-toggle'=>"tooltip",
+        'title'=>"La sección actual no se guardará", 'class' => 'btn btn-danger']); ?>
+        <?= Html::submitButton('Guardar y salir',['data-toggle'=>"tooltip",
+        'title'=>"Guarda la sección actual",'class' => 'btn btn-info' , 'name'=>'submit','value' => 'salir']); ?>
+    </div>
+    <div class="col-xs-6 text-right">
+      <?= Html::submitButton('Seguir', ['data-toggle'=>"tooltip",
+      'title'=>"Guarda la sección actual",'class' => 'btn btn-success']); ?>
+    </div>
   </div>
 </div>
 <?php ActiveForm::end(); ?>

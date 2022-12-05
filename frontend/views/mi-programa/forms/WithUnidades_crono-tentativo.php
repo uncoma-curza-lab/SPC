@@ -13,7 +13,7 @@ $this->params['breadcrumbs'][] = ['label' => "Distribución Horaria", 'url' => [
 $this->params['breadcrumbs'][] = 'Cronograma tentativo';
  ?>
 
-<h3>9. Cronograma Tentativo</h3>
+<h3>Cronograma Tentativo</h3>
 
 <?= GridView::widget([
     'dataProvider' => new ActiveDataProvider([

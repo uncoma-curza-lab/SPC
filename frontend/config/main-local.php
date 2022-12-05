@@ -9,13 +9,13 @@ $config = [
     ],
 ];
 
-if (!YII_ENV_TEST) {
+if (YII_ENV == 'dev') {
     // configuration adjustments for 'dev' environment
     $config['bootstrap'][] = 'debug';
     $config['modules']['debug'] = [
         'class' => 'yii\debug\Module',
         //'allowedIPs' => [$_SERVER['REMOTE_ADDR']]
-        'allowedIPs' => ['127.0.0.1']
+        'allowedIPs' => ['*']
     ];
 
     $config['bootstrap'][] = 'gii';

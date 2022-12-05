@@ -1,44 +1,18 @@
 <?php
+
+use common\models\Module;
 use yii\jui\DatePicker;
 use dosamigos\tinymce\TinyMce;
 use yii\widgets\ActiveForm;
 use yii\helpers\Html;
 use yii\helpers\Url;
-$mensaje = [ 'onclick'=>"return confirm('No se guardarán los cambios de esta pestaña, ¿desea salir?')"];
-$this->params['items'][] = ['label' => '1. Fundamentación','url' => Url::to(['cargar', 'id' => $model->id]), 'options'=>$mensaje];
-$this->params['items'][] = ['label' => '2. Objetivos según plan de estudio', 'url' => Url::to(['objetivo-plan', 'id' => $model->id]), 'options'=> $mensaje];
-$this->params['items'][] = ['label' => '2.1 Objetivos del programa', 'url' => Url::to(['objetivo-programa', 'id' => $model->id]), 'options'=> $mensaje];
-$this->params['items'][] = ['label' => '3. Contenidos según plan de estudio', 'url' => Url::to(['contenido-plan', 'id' => $model->id]), 'options'=> $mensaje];
-$this->params['items'][] = ['label' => '4. Contenidos analíticos', 'url' => Url::to(['contenido-analitico', 'id' => $model->id]), 'options'=> $mensaje];
-$this->params['items'][] = ['label' => '5. Bibliografía'];
-$this->params['items'][] = ['label' => '6. Propuesta Metodológica', 'url' => Url::to(['propuesta-metodologica', 'id' => $model->id]), 'options'=> $mensaje];
-$this->params['items'][] = ['label' => '7. Evaluación y cond. de acreditación', 'url' => Url::to(['eval-acred', 'id' => $model->id]), 'options'=> $mensaje];
-$this->params['items'][] = ['label' => '8. Parciales, recuperatorios y promociones', 'url' => Url::to(['parcial-rec-promo', 'id' => $model->id]), 'options'=> $mensaje];
-$this->params['items'][] = ['label' => '9. Distribución horaria', 'url' => Url::to(['dist-horaria', 'id' => $model->id]), 'options'=> $mensaje];
-$this->params['items'][] = ['label' => '10. Cronograma tentativo', 'url' => Url::to(['crono-tentativo', 'id' => $model->id]), 'options'=> $mensaje];
-$this->params['items'][] = ['label' => '11. Actividad extracurricular', 'url' => Url::to(['actividad-extracurricular', 'id' => $model->id]), 'options'=> $mensaje];
-$this->params['items'][] = ['label' => 'Firma','url' => Url::to(['firma', 'id' => $model->id]), 'options'=> $mensaje];
-
-$this->params['breadcrumbs'][] = ['label' => '...'];
-$this->params['breadcrumbs'][] = ['label' => "Contenido según el plan de estudio", 'url' => ['contenido-plan', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = ['label' => "Contenido analítico", 'url' => ['contenido-analitico', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Bibliografía';
-$porcentaje = $model->calcularPorcentajeCarga();
 ?>
-<div class="row">
-  <div class="col-md-2 text-right">
-    <label>Programa completado: </label>
-  </div>
-  <div class="col-md-10 ">
-    <div class="progress">
-      <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?= $porcentaje ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?= $porcentaje ?>%">
-         <?= $porcentaje ?>%
-      </div>
-    </div>
-  </div>
-</div>
+<?= $this->render('_menu_steps', [
+  'model' => $model,
+  'currentView' => Module::BIBLIOGRAPHY_TYPE
+]) ?>
 
-<h3>5. Bibliografía</h3>
+<h3>Bibliografía</h3>
   <?php $form = ActiveForm::begin([
     'enableAjaxValidation'      => false,
     'enableClientValidation'    => false,
@@ -46,8 +20,8 @@ $porcentaje = $model->calcularPorcentajeCarga();
     'validateOnSubmit'          => false,
     'validateOnBlur'            => false,
   ]); ?>
-  <?= $form->field($model, 'biblio_basica')->widget(TinyMce::className(), [
-      'options' => ['rows' => 12],
+  <?= $form->field($model, 'modules[value]')->widget(TinyMce::className(), [
+      'options' => ['rows' => 12, 'value' => $model->biblio_basica],
       'language' => 'es',
       'value' => 'pepe',
       'clientOptions' => [

@@ -22,8 +22,7 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
 <div class="programa-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-    <p id="">
+    <p>
         <?= Html::a('Añadir Programa', ['anadir'],['id'=> 'agregar','class' => 'btn btn-success']) ?>
     </p>
     <?= GridView::widget([
@@ -187,7 +186,7 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
                   {
                     return Html::a(
                       '<span style="padding:5px; font-size:20px; color:orange" class="glyphicon glyphicon-pencil "></span>',
-                      ['cargar','id' => $model->id]
+                      ['dist-horaria','id' => $model->id]
                     );
                   }
                 },
@@ -252,8 +251,16 @@ $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
                         ]
                       );
                     }
-
                 },
+                'time-distribution' => function($url, $model) {
+                    return Html::a(
+                      '<span style="padding:5px; font-size:20px; color:	#807979" class="glyphicon glyphicon-dashboard"></span>',
+                      ['time-distribution/view', 'id' => $model->id],
+                      [
+                          'title' => Yii::t('yii', 'Ver distribución horaria'),
+                      ]
+                    );
+                }
               ]
             ],
         ],

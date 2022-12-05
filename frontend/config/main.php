@@ -39,64 +39,11 @@ return [
 		    'sessionTable' => 'user_session',
         ],
         'log' => [
-            'traceLevel' => YII_DEBUG ? 0 : 0,
+            'traceLevel' => YII_DEBUG ? 3 : 0,
             'targets' => [
                 [
                     'class' => 'yii\log\FileTarget',
-                    'categories' => ['estado-programa'],
-                    'logFile' => '@app/runtime/logs/estado-programa/registro.log',
-                    'levels' => ['info'],
-                    'prefix' => function ($message) {
-                        $user = Yii::$app->has('user', true) ? Yii::$app->get('user') : null;
-                        $userID = $user ? $user->getId(false) : '-';
-                        return "[$userID] ";
-                    },
-                    'maxFileSize' => 1024 * 2,
-                    'maxLogFiles' => 8,
-                    'logVars' => ['_SESSION'],
-                ],
-                [
-                    'class' => 'yii\log\FileTarget',
-                    'categories' => ['estado-programa'],
-                    'logFile' => '@app/runtime/logs/estado-programa/error.log',
                     'levels' => ['error', 'warning'],
-                    'prefix' => function ($message) {
-                        $user = Yii::$app->has('user', true) ? Yii::$app->get('user') : null;
-                        $userID = $user ? $user->getId(false) : '-';
-                        return "[$userID] ";
-                    },
-                    'maxFileSize' => 1024 * 2,
-                    'maxLogFiles' => 8,
-                    'logVars' => ['_SESSION','_GET','_POST'],
-                ],
-                // LOGS Mi-Programa
-                [
-                    'class' => 'yii\log\FileTarget',
-                    'categories' => ['miprograma'],
-                    'logFile' => '@app/runtime/logs/miprograma/registro.log',
-                    'levels' => ['info'],
-                    'prefix' => function ($message) {
-                        $user = Yii::$app->has('user', true) ? Yii::$app->get('user') : null;
-                        $userID = $user ? $user->getId(false) : '-';
-                        return "[$userID] ";
-                    },
-                    'maxFileSize' => 1024 * 2,
-                    'maxLogFiles' => 8,
-                    'logVars' => ['_SESSION'],
-                ],
-                [
-                    'class' => 'yii\log\FileTarget',
-                    'categories' => ['miprograma'],
-                    'logFile' => '@app/runtime/logs/miprograma/error.log',
-                    'levels' => ['error', 'warning'],
-                    'prefix' => function ($message) {
-                        $user = Yii::$app->has('user', true) ? Yii::$app->get('user') : null;
-                        $userID = $user ? $user->getId(false) : '-';
-                        return "[$userID] ";
-                    },
-                    'maxFileSize' => 1024 * 2,
-                    'maxLogFiles' => 8,
-                    'logVars' => ['_SESSION','_GET','_POST'],
                 ],
             ],
         ],
