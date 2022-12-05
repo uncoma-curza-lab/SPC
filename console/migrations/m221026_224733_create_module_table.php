@@ -14,7 +14,7 @@ class m221026_224733_create_module_table extends Migration
     {
         $this->createTable('{{%modules}}', [
             'id' => $this->primaryKey(),
-            'value' => $this->string(),
+            'value' => $this->text(),
             'program_id' => $this->integer(),
             'type' => $this->string()->notNull(),
         ]);
