@@ -609,7 +609,7 @@ class Programa extends \yii\db\ActiveRecord
                 break;
             default:
                 throw new \Exception('Error, step not implemented');
-
+                break;
         }
     }
 
@@ -657,9 +657,25 @@ class Programa extends \yii\db\ActiveRecord
                  */
             default:
                 throw new \Exception('Error, Modulo no encontrado');
+                break;
         }
 
         return $this->save();
+    }
+
+    public function setDefaultValues($moduleType) : void
+    {
+        switch ($moduleType) {
+            case Module::BIBLIOGRAPHY_TYPE:
+                if ($this->biblio_basica == null) {
+                    $this->biblio_basica = "<p><strong>Bibliograf&iacute;a b&aacute;sica</strong></p> <p>&nbsp;</p><p><strong>Bibliograf&iacute;a de consulta</strong></p>";
+                }
+                break;
+            
+            default:
+                throw new \Exception('Error, Modulo no encontrado');
+                break;
+        }
     }
 
 }
