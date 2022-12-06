@@ -53,6 +53,10 @@ if ($isModule){
     <?php if ($isModule): ?>
 
     <div id="time-distribution-schema">
+        <div class="alert alert-info" role="alert">
+          Distribución de las horas de cursada semanales
+        </div>
+
     <? foreach($lessonTypes as $lesson): ?>
         <div class="distribution-specification">
             <?=
