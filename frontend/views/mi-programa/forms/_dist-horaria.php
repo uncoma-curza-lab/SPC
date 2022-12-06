@@ -53,6 +53,10 @@ if ($isModule){
     <?php if ($isModule): ?>
 
     <div id="time-distribution-schema">
+        <div class="alert alert-info" role="alert">
+          Distribución de las horas de cursada semanales
+        </div>
+
     <? foreach($lessonTypes as $lesson): ?>
         <div class="distribution-specification">
             <?=
@@ -90,9 +94,9 @@ if ($isModule){
         </div>
     <? endforeach; ?>
         
-    <p> Total de horas usadas <span id="used-hours"></span></p>
-    <p> Total de horas disponibles <span id="available-hours"></span></p>
-    <small id="course-total-hours"> Horas totales de la asignatura seleccionada <?= $courseTotalHours ?></small>
+    <p> Total de horas usadas <span id="used-hours"></span> (semanales)</p>
+    <p> Total de horas disponibles <span id="available-hours"></span> (semanales)</p>
+    <small id="course-total-hours"> Horas totales de la asignatura seleccionada <?= $courseTotalHours ?> (cuatrimestrales)</small>
     </div>
     
     <h3> Observaciones adicionales </h3>
