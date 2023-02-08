@@ -62,6 +62,22 @@
 
 <h4> 9. DISTRIBUCIÓN HORARIA </h4>
 <div style="margin-left:20px;">
+<?php 
+  if($timesDistributions):
+    foreach ($timesDistributions as $timeDistribution) :
+?>
+  <div style="display:flex;flex-direction:row;justify-content:space-between;">
+    <div>
+      <?=  HtmlPurifier::process($timeDistribution->lessonType->description) ?>
+    </div>
+    <div>
+      <?=  HtmlPurifier::process($timeDistribution->percentage_quantity) . '%'?>
+    </div>
+  </div>
+<?php 
+    endforeach;
+  endif; 
+?>
   <?= HtmlPurifier::process($model->distr_horaria) ?>
 </div>
 

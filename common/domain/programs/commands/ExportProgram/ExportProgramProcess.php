@@ -2,6 +2,7 @@
 
 namespace common\domain\programs\commands\ExportProgram;
 
+use common\models\Module;
 use common\models\PermisosHelpers;
 use common\models\Programa as Program;
 use common\models\Status;
@@ -13,10 +14,19 @@ class ExportProgramProcess implements CommandInterface
 {
 
     protected Program $program;
+    protected ?Array $timesDistributions;
 
     public function __construct(Program $program)
     {
         $this->program = $program;
+        $timesDistributions = null;
+
+        if($this->program->year >= 2023){
+            $module = Module::find()->oneByTimeDistributionTypeAndProgram($this->program->id);
+            $timesDistributions = $module->timeDistributions;
+        }
+        $this->timesDistributions = $timesDistributions;
+
     }
 
     public function handle() : ExportProgramResult
@@ -41,9 +51,13 @@ class ExportProgramProcess implements CommandInterface
             $footer =  '<span style="font-size:12px; !important"> Página {PAGENO} de {nb}</span>';
             $mpdf->SetHTMLFooter($footer);
 
+
             $mpdf->WriteHTML(\Yii::$app->view->renderFile(
                 '@frontend/views/programa/paginas.php',
-                [ 'model' => $this->program ]
+                [ 
+                    'model' => $this->program,
+                    'timesDistributions' => $this->timesDistributions
+                ]
             ));
 
             return new ExportProgramResult(
