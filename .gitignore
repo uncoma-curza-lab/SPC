@@ -6,6 +6,8 @@
 # phpstorm project files
 .idea
 
+frontend/controllers/TestController.php
+
 # netbeans project files
 nbproject
 

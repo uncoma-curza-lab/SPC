@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use common\models\querys\ModuleQuery;
 use Yii;
 
 /**
@@ -98,7 +99,7 @@ class Module extends \yii\db\ActiveRecord
      */
     public static function find()
     {
-        return new ModulesQuery(get_called_class());
+        return new ModuleQuery(get_called_class());
     }
 
     public function isSpecialModule()
