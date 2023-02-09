@@ -17,7 +17,7 @@ use common\models\search\AsignaturaSearch;
 use common\models\Programa;
 use common\models\Status;
 use common\models\Departamento;
-
+use common\models\Module;
 use common\models\PermisosHelpers;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -135,12 +135,18 @@ class ProgramaController extends Controller
 
     public function actionVer($id) {
       $model = $this->findModel($id);
+      $timesDistributions = null;
+       if($model->year >= 2023){
+           $module = Module::find()->oneByTimeDistributionTypeAndProgram($model->id);
+           $timesDistributions = $module->timeDistributions;
+       }
+
       if(Yii::$app->request->post('submit') == 'observacion' &&
           $model->load(Yii::$app->request->post()) && $model->save()) {
           return $this->redirect(['observacion/create', 'id'=>$model->id]);
       }
 
-      return $this->render('info',['model' => $model]);
+      return $this->render('info',['model' => $model, 'timesDistributions' => $timesDistributions]);
 
     }
 

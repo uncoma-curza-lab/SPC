@@ -25,7 +25,7 @@ $estado_programa = Status::findOne(['=','id',$model->status_id]);
 $items = [
     [
       'label' => 'Programa',
-      'content' => $this->render('pdf',['model' => $model]),
+      'content' => $this->render('pdf',['model' => $model, 'timesDistributions' => $timesDistributions]),
       'active'=>true,
     ],
     [

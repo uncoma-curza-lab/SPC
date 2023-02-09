@@ -127,6 +127,41 @@
     <div class="container">
       <h4> 9. DISTRIBUCIÓN HORARIA </h4>
       <div style="margin-left:20px;">
+<?php 
+  if($timesDistributions):
+?>
+  <table>
+    <tr>
+      <th>Modalidad</th>
+      <th class="text-center">Minutos *</th>
+      <th class="text-center">Porcentaje</th>
+    </tr>
+<?php 
+    foreach ($timesDistributions as $timeDistribution) :
+      $desimalHours = round(($asignatura->carga_horaria_sem * $timeDistribution->percentage_quantity) / 100, 2);
+      $minutes = $desimalHours * 60;
+?>
+    <tr>
+      <td>
+        <?=  HtmlPurifier::process($timeDistribution->lessonType->description) ?>
+      </td>
+      <td class="text-center">
+        <?=  HtmlPurifier::process($minutes) ?> 
+      </td>
+      <td class="text-center">
+        <?=  HtmlPurifier::process($timeDistribution->percentage_quantity) . '%' ?>
+      </td>
+    </tr>
+<?php 
+    endforeach;
+?>
+  </table>
+<p>* Minutos de dictado semanal</p>
+<h5>Observaciones</h5>
+<?php 
+  endif; 
+?>
+
         <?= HtmlPurifier::process($model->distr_horaria) ?>
       </div>
     </div>
@@ -151,3 +186,17 @@
     </div>
 
 </div>
+<style>
+table {
+  width: 80%;
+  border: 1px solid;
+}
+
+th , td, tr {
+  padding: 0.7em;
+}
+
+.text-center {
+  text-align: center;
+}
+
