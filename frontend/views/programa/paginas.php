@@ -1,9 +1,6 @@
 <?php
-  use \yii\helpers\Html;
   use \yii\helpers\HtmlPurifier;
-  use common\models\Departamento;
   $asignatura = $model->getAsignatura()->one();
-
 ?>
 
 <h4> 1. FUNDAMENTACIÓN </h4>
@@ -66,14 +63,24 @@
   if($timesDistributions):
 ?>
   <table>
+    <tr>
+      <th>Modalidad</th>
+      <th>Minutos *</th>
+      <th>Porcentaje</th>
+    </tr>
 <?php 
     foreach ($timesDistributions as $timeDistribution) :
+      $desimalHours = round(($asignatura->carga_horaria_sem * $timeDistribution->percentage_quantity) / 100, 2);
+      $minutes = $desimalHours * 60;
 ?>
     <tr>
       <td>
         <?=  HtmlPurifier::process($timeDistribution->lessonType->description) ?>
       </td>
-      <td class="text-right">
+      <td class="text-center">
+        <?=  HtmlPurifier::process($minutes) ?> 
+      </td>
+      <td class="text-center">
         <?=  HtmlPurifier::process($timeDistribution->percentage_quantity) . '%' ?>
       </td>
     </tr>
@@ -81,6 +88,7 @@
     endforeach;
 ?>
   </table>
+<p>* Minutos de dictado semanal</p>
 <h5>Observaciones</h5>
 <?php 
   endif; 
@@ -116,7 +124,11 @@ table {
   border: 1px solid;
 }
 
-.text-right {
-  text-align: right;
+th , td, tr {
+  padding: 0.7em;
+}
+
+.text-center {
+  text-align: center;
 }
 </style>
