@@ -14,11 +14,13 @@ class ExportProgramProcess implements CommandInterface
 {
 
     protected Program $program;
+    protected bool $savePdf;
     protected ?Array $timesDistributions;
 
-    public function __construct(Program $program)
+    public function __construct(Program $program, bool $savePdf = false)
     {
         $this->program = $program;
+        $this->savePdf = $savePdf;
         $timesDistributions = null;
 
         if($this->program->year >= 2023){
@@ -59,6 +61,10 @@ class ExportProgramProcess implements CommandInterface
                     'timesDistributions' => $this->timesDistributions
                 ]
             ));
+
+            if ($this->savePdf) {
+                $mpdf->Output(\Yii::getAlias("@api") . '/web/public/programas/' . $this->program->id . ".pdf", 'f');
+            }
 
             return new ExportProgramResult(
                 true,
