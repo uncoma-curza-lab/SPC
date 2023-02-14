@@ -21,13 +21,7 @@ class ExportProgramProcess implements CommandInterface
     {
         $this->program = $program;
         $this->savePdf = $savePdf;
-        $timesDistributions = null;
-
-        if($this->program->year >= 2023){
-            $module = Module::find()->oneByTimeDistributionTypeAndProgram($this->program->id);
-            $timesDistributions = $module->timeDistributions;
-        }
-        $this->timesDistributions = $timesDistributions;
+        $this->timesDistributions = $program->getTimesDistributions();
 
     }
 

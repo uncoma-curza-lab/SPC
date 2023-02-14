@@ -134,11 +134,7 @@ class ProgramaController extends Controller
 
     public function actionVer($id) {
       $model = $this->findModel($id);
-      $timesDistributions = null;
-       if($model->year >= 2023){
-           $module = Module::find()->oneByTimeDistributionTypeAndProgram($model->id);
-           $timesDistributions = $module->timeDistributions;
-       }
+      $timesDistributions = $model->getTimesDistributions();
 
       if(Yii::$app->request->post('submit') == 'observacion' &&
           $model->load(Yii::$app->request->post()) && $model->save()) {
