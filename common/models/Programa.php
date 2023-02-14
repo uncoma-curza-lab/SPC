@@ -750,4 +750,15 @@ class Programa extends \yii\db\ActiveRecord implements Linkable
     ];
   }
 
+    public function getTimesDistributions()
+    {
+        $timesDistributions = null;
+
+        if($this->year >= 2023){
+            $module = Module::find()->oneByTimeDistributionTypeAndProgram($this->id);
+            $timesDistributions = $module->timeDistributions;
+        }
+        
+        return $timesDistributions;
+    }
 }
