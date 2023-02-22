@@ -7,8 +7,11 @@ use frontend\models\Perfil;
 use yii\db\Expression;
 use yii\behaviors\BlameableBehavior;
 use yii\db\ActiveRecord;
+use yii\helpers\Url;
+use yii\web\Link;
+use yii\web\Linkable;
 
-class Programa extends \yii\db\ActiveRecord
+class Programa extends \yii\db\ActiveRecord implements Linkable
 {
     const EVENT_NEW_PROGM = 'nuevo-programa';
 
@@ -736,4 +739,26 @@ class Programa extends \yii\db\ActiveRecord
         }
     }
 
+  public function getLinks()
+  {
+    return [
+      Link::REL_SELF => Url::to(['biblioteca/' . $this->id], true),
+      'export' => Url::to(['biblioteca/export/' . $this->id], true),
+      //'edit' => Url::to(['user/view', 'id' => $this->id], true),
+      //'programas' => Url::to(['programas/plan', 'id' => $this->id], true),
+      //'index' => Url::to(['dpto'], true),
+    ];
+  }
+
+    public function getTimesDistributions()
+    {
+        $timesDistributions = null;
+
+        if($this->year >= 2023){
+            $module = Module::find()->oneByTimeDistributionTypeAndProgram($this->id);
+            $timesDistributions = $module->timeDistributions;
+        }
+        
+        return $timesDistributions;
+    }
 }

@@ -13,8 +13,11 @@
       font-family: 'Roboto', sans-serif;
       font-size: 16px;
     }
-    h1,h2,h3,h4 {
+    h1,h2,h3,h4,h5 {
       font-weight: bold;
+    }
+    h5{
+      font-size: 1.3em;
     }
     .titulo{
       text-align: center;
@@ -22,6 +25,17 @@
     .firma{
       margin-top: 20vh;
     }
+    table {
+      width: 80%;
+      border: 1px solid;
+    }
+    th , td, tr {
+      padding: 0.7em;
+    }
+    .text-center {
+      text-align: center;
+    }
+
   </style>
 
 <div class="contenedor">
@@ -127,6 +141,41 @@
     <div class="container">
       <h4> 9. DISTRIBUCIÓN HORARIA </h4>
       <div style="margin-left:20px;">
+<?php 
+  if($timesDistributions):
+?>
+  <table>
+    <tr>
+      <th>Modalidad</th>
+      <th class="text-center">Minutos *</th>
+      <th class="text-center">Porcentaje</th>
+    </tr>
+<?php 
+    foreach ($timesDistributions as $timeDistribution) :
+      $desimalHours = round(($asignatura->carga_horaria_sem * $timeDistribution->percentage_quantity) / 100, 2);
+      $minutes = $desimalHours * 60;
+?>
+    <tr>
+      <td>
+        <?=  HtmlPurifier::process($timeDistribution->lessonType->description) ?>
+      </td>
+      <td class="text-center">
+        <?=  HtmlPurifier::process($minutes) ?> 
+      </td>
+      <td class="text-center">
+        <?=  HtmlPurifier::process($timeDistribution->percentage_quantity) . '%' ?>
+      </td>
+    </tr>
+<?php 
+    endforeach;
+?>
+  </table>
+<p>* Minutos de dictado semanal</p>
+<h5>Observaciones</h5>
+<?php 
+  endif; 
+?>
+
         <?= HtmlPurifier::process($model->distr_horaria) ?>
       </div>
     </div>
@@ -151,3 +200,4 @@
     </div>
 
 </div>
+

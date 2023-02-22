@@ -17,12 +17,11 @@ use common\models\search\AsignaturaSearch;
 use common\models\Programa;
 use common\models\Status;
 use common\models\Departamento;
-
+use common\models\Module;
 use common\models\PermisosHelpers;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use Mpdf;
 use yii\web\ForbiddenHttpException;
 
 /**
@@ -135,12 +134,14 @@ class ProgramaController extends Controller
 
     public function actionVer($id) {
       $model = $this->findModel($id);
+      $timesDistributions = $model->getTimesDistributions();
+
       if(Yii::$app->request->post('submit') == 'observacion' &&
           $model->load(Yii::$app->request->post()) && $model->save()) {
           return $this->redirect(['observacion/create', 'id'=>$model->id]);
       }
 
-      return $this->render('info',['model' => $model]);
+      return $this->render('info',['model' => $model, 'timesDistributions' => $timesDistributions]);
 
     }
 
@@ -501,16 +502,6 @@ class ProgramaController extends Controller
             }
             return $this->redirect(['index']);
         }
-        //$mpdf = new Mpdf\Mpdf(['utf-8','A4','tempDir' => __DIR__ . '/tmp']);
-        //$stylesheet = file_get_contents('css/estilo-pdf.css');
-        //$mpdf->WriteHTML($stylesheet,\Mpdf\HTMLParserMode::HEADER_CSS);
-        //$mpdf->WriteHTML($this->renderPartial('portada',['model'=>$model]));
-        //$mpdf->addPage();
-        //$footer =  '<span style="font-size:12px; !important"> Página {PAGENO} de {nb}</span>';
-        //$mpdf->SetHTMLFooter($footer);
-
-        //$mpdf->WriteHTML($this->renderPartial('paginas',['model'=>$model]));
-        //$mpdf->Output();
     }
 
     /**

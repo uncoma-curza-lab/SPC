@@ -2,16 +2,13 @@
 
 namespace api\modules\v1\controllers;
 
-use Yii;
-use api\modules\v1\models\Programa;
-use api\modules\v1\models\search\PlanSearch;
+use common\models\Programa;
+use common\domain\programs\commands\ExportProgram\ExportProgramProcess;
 use yii\rest\ActiveController;
 use yii\web\NotFoundHttpException;
 use yii\data\ActiveDataProvider;
 use common\models\Status;
-use Mpdf;
 use yii\helpers\Url;
-use yii\web\Link;
 
 /**
  * PlanController implements the CRUD actions for Plan model.
@@ -105,21 +102,14 @@ class BibliotecaController extends ActiveController
         $model = $this->findModel($id);
         $response = [];
         if (!file_exists('public/programas/' . $id . '.pdf')) {
-            $mpdf = new Mpdf\Mpdf(['utf-8', 'A4', 'tempDir' => __DIR__ . '/tmp']);
-            $stylesheet = file_get_contents('../../frontend/web/css/estilo-pdf.css');
-            //$header = 'Document header';
-            //$html   = 'Your document content goes here';
-
-            //$mpdf = new Mpdf('utf-8', 'A4', 0, '', 12, 12, 25, 15, 12, 12);
-            //$mpdf->SetHTMLHeader($header);
-            $mpdf->WriteHTML($stylesheet, \Mpdf\HTMLParserMode::HEADER_CSS);
-            $mpdf->WriteHTML($this->renderPartial('portada', ['model' => $model]));
-            $mpdf->addPage();
-            $footer =  '<span style="font-size:12px; !important"> Página {PAGENO} de {nb}</span>';
-            $mpdf->SetHTMLFooter($footer);
-
-            $mpdf->WriteHTML($this->renderPartial('paginas', ['model' => $model]));
-            $mpdf->Output('public/programas/' . $model->id . ".pdf", 'f');
+            $command = new ExportProgramProcess($model, true);
+    
+            $result = $command->handle();
+            if ($result->getResult()) {
+                $resultData = $result->getData();
+                $exportMpdf = $resultData['mpdf'];
+                $exportMpdf->Output();
+            }
         }
         $response = [
             'file' => Url::to(['/public/programas/' . $id . '.pdf'], true),
@@ -131,28 +121,17 @@ class BibliotecaController extends ActiveController
     public function actionDownloadPdf($id)
     {
         $model = $this->findModel($id);
-        $response = [];
+
         if (!file_exists('public/programas/' . $id . '.pdf')) {
-            $mpdf = new Mpdf\Mpdf(['utf-8', 'A4', 'tempDir' => __DIR__ . '/tmp']);
-            $stylesheet = file_get_contents('../../frontend/web/css/estilo-pdf.css');
-            //$header = 'Document header';
-            //$html   = 'Your document content goes here';
-
-            //$mpdf = new Mpdf('utf-8', 'A4', 0, '', 12, 12, 25, 15, 12, 12);
-            //$mpdf->SetHTMLHeader($header);
-            $mpdf->WriteHTML($stylesheet, \Mpdf\HTMLParserMode::HEADER_CSS);
-            $mpdf->WriteHTML($this->renderPartial('portada', ['model' => $model]));
-            $mpdf->addPage();
-            $footer =  '<span style="font-size:12px; !important"> Página {PAGENO} de {nb}</span>';
-            $mpdf->SetHTMLFooter($footer);
-
-            $mpdf->WriteHTML($this->renderPartial('paginas', ['model' => $model]));
-            $mpdf->Output('public/programas/' . $model->id . ".pdf", 'f');
+            $command = new ExportProgramProcess($model, true);
+    
+            $result = $command->handle();
+            if ($result->getResult()) {
+                $resultData = $result->getData();
+                $exportMpdf = $resultData['mpdf'];
+                $exportMpdf->Output();
+            }
         }
-        //$response = [
-            //'file' => Url::to(['/public/programas/' . $id . '.pdf'], true),
-            //'status' => true
-        //];
         return \Yii::$app->response->sendFile('public/programas/' . $model->id . ".pdf");
     }
 
