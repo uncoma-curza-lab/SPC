@@ -12,7 +12,7 @@ use yii\helpers\Console;
 class SubmissionDeadlineController extends Controller
 {
     const DATES = [
-        '03/01',
+        '03/03',
         '08/04'
     ];
 
