@@ -21,12 +21,19 @@ class SubmissionDeadlineController extends Controller
             getenv('DEADLINE_LAST_FOUR_MONTH'),
         ];
 
-        if (!in_array($plusWeek, $limitDates)) {
+        $inOneWeek = in_array($plusWeek, $limitDates);
+
+        if (!$inOneWeek && !in_array($now, $limitDates)) {
             $this->stdout("Nothing for notify\n", Console::FG_GREEN);
             return;
         }
 
-        $this->processEmail($plusWeek);
+        $deadline = $now;
+        if ($inOneWeek) {
+            $deadline = $plusWeek;
+        }
+
+        $this->processEmail($deadline);
 
     }
 
@@ -38,8 +45,8 @@ class SubmissionDeadlineController extends Controller
 
         foreach ($emails as $group) {
             $message = $mailer->compose()
-                ->setFrom($fromEmail)
-                ->setTo($fromEmail)
+                ->setFrom("qweqwe@qweqweqwe.cc")
+                ->setTo("qweqweqew@qweqweeqw")
                 ->setBcc($group)
                 ->setSubject('Recordatorio - Plazo de entrega programas de cátedra')
                 ->setHtmlBody(Yii::$app->view->render('@console/views/deadline_notify.php', ['deadline' => $date]));
