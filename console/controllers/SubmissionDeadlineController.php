@@ -11,26 +11,26 @@ use yii\helpers\Console;
 
 class SubmissionDeadlineController extends Controller
 {
-    const DATES = [
-        '03/03',
-        '08/04'
-    ];
-
-
     public function actionNotify()
     {
         $now = date('m/d');
+        $plusWeek = date("m/d", strtotime("+1 week", strtotime($now)));
 
-        if (!in_array($now, self::DATES)) {
+        $limitDates = [
+            getenv('DEADLINE_FIRST_FOUR_MONTH'),
+            getenv('DEADLINE_LAST_FOUR_MONTH'),
+        ];
+
+        if (!in_array($plusWeek, $limitDates)) {
             $this->stdout("Nothing for notify\n", Console::FG_GREEN);
             return;
         }
 
-        $this->processEmail();
+        $this->processEmail($plusWeek);
 
     }
 
-    private function processEmail()
+    private function processEmail($date)
     {
         $emails = $this->getGroupEmails();
         $mailer = Yii::$app->mailer;
@@ -42,7 +42,7 @@ class SubmissionDeadlineController extends Controller
                 ->setTo($fromEmail)
                 ->setBcc($group)
                 ->setSubject('Recordatorio - Plazo de entrega programas de cátedra')
-                ->setHtmlBody(Yii::$app->view->render('@console/views/deadline_notify.php'));
+                ->setHtmlBody(Yii::$app->view->render('@console/views/deadline_notify.php', ['deadline' => $date]));
 
             if ($message->send()) {
                 $this->stdout("Mail sended to " . implode(',', $group) . "\n", Console::FG_GREEN);
@@ -54,14 +54,27 @@ class SubmissionDeadlineController extends Controller
 
     private function getGroupEmails()
     {
-        $teacherRole = Rol::find()->where(['=', 'rol_nombre', 'Profesor'])->one();
+        $teacherRole = array_map(function($role) {
+            return $role->id;
+        }, Rol::find()->select('id')->where([
+            'in',
+            'rol_nombre',
+            ['Profesor', 'Admin']
+        ])->all());
+
         if (!$teacherRole) {
             throw new Exception('Role not exists');
         }
 
-        $users = User::find()->where(['=', 'rol_id', $teacherRole->id])
+        $users = User::find()->where(['in', 'rol_id', $teacherRole])
                              ->with(['perfil'])
                              ->all();
+
+        $emails = [];
+
+        if (!$users) {
+            return $emails;
+        }
 
         foreach (array_chunk($users, 15) as $group) {
             $emails[] = array_column($group, 'email');
