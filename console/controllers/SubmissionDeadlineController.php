@@ -2,6 +2,7 @@
 
 namespace console\controllers;
 
+use common\models\Estado;
 use common\models\Rol;
 use common\models\User;
 use Exception;
@@ -78,7 +79,14 @@ class SubmissionDeadlineController extends Controller
             throw new Exception('Role not exists');
         }
 
+        $status = Estado::find()->where(['=', 'estado_nombre', 'Activo'])->one();
+        if (!$status) {
+            throw new Exception('Status not exists');
+        }
+
         $users = User::find()->where(['in', 'rol_id', $teacherRole])
+                             ->andWhere(['=', 'estado_id', $status->id])
+                             ->andWhere(['NOT LIKE', 'email', ["prueba@email.com", "test@"]])
                              ->with(['perfil'])
                              ->all();
 
