@@ -46,8 +46,8 @@ class SubmissionDeadlineController extends Controller
         foreach ($emails as $group) {
             try {
                 $message = $mailer->compose()
-                    ->setFrom($fromEmail)
-                    ->setTo($fromEmail)
+                    ->setFrom("qweqwe@qweqwe")
+                    ->setTo("qweqwe@qweqwe")
                     ->setBcc($group)
                     ->setSubject('Recordatorio - Plazo de entrega programas de cátedra')
                     ->setHtmlBody(Yii::$app->view->render('@console/views/deadline_notify.php', ['deadline' => $date]));
@@ -59,6 +59,7 @@ class SubmissionDeadlineController extends Controller
                 }
             } catch (\Throwable $e) {
                 $this->stdout("Error group to send: " . implode(',', $group) . "\n", Console::FG_RED);
+                $this->saveFailedGroup($group);
             }
         }
     }
@@ -92,5 +93,13 @@ class SubmissionDeadlineController extends Controller
         }
 
         return $emails;
+    }
+
+    private function saveFailedGroup($group)
+    {
+        $fileName = 'console/runtime/failed_emails_' . date('y-m-d');
+        $file = fopen($fileName, 'a');
+        fwrite($file, implode(',', $group) . "\n");
+        fclose($file);
     }
 }
