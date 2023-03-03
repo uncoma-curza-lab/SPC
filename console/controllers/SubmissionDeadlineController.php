@@ -2,6 +2,7 @@
 
 namespace console\controllers;
 
+use common\models\Estado;
 use common\models\Rol;
 use common\models\User;
 use Exception;
@@ -44,17 +45,22 @@ class SubmissionDeadlineController extends Controller
         $fromEmail = getenv("SMTP_USER");
 
         foreach ($emails as $group) {
-            $message = $mailer->compose()
-                ->setFrom($fromEmail)
-                ->setTo($fromEmail)
-                ->setBcc($group)
-                ->setSubject('Recordatorio - Plazo de entrega programas de cátedra')
-                ->setHtmlBody(Yii::$app->view->render('@console/views/deadline_notify.php', ['deadline' => $date]));
+            try {
+                $message = $mailer->compose()
+                    ->setFrom($fromEmail)
+                    ->setTo($fromEmail)
+                    ->setBcc($group)
+                    ->setSubject('Recordatorio - Plazo de entrega programas de cátedra')
+                    ->setHtmlBody(Yii::$app->view->render('@console/views/deadline_notify.php', ['deadline' => $date]));
 
-            if ($message->send()) {
-                $this->stdout("Mail sended to " . implode(',', $group) . "\n", Console::FG_GREEN);
-            } else {
+                if ($message->send()) {
+                    $this->stdout("Mail sended to " . implode(',', $group) . "\n", Console::FG_GREEN);
+                } else {
+                    $this->stdout("Error group to send: " . implode(',', $group) . "\n", Console::FG_RED);
+                }
+            } catch (\Throwable $e) {
                 $this->stdout("Error group to send: " . implode(',', $group) . "\n", Console::FG_RED);
+                $this->saveFailedGroup($group);
             }
         }
     }
@@ -66,14 +72,21 @@ class SubmissionDeadlineController extends Controller
         }, Rol::find()->select('id')->where([
             'in',
             'rol_nombre',
-            ['Profesor', 'Admin']
+            ['Profesor', 'SuperUsuario', 'Departamento']
         ])->all());
 
         if (!$teacherRole) {
             throw new Exception('Role not exists');
         }
 
+        $status = Estado::find()->where(['=', 'estado_nombre', 'Activo'])->one();
+        if (!$status) {
+            throw new Exception('Status not exists');
+        }
+
         $users = User::find()->where(['in', 'rol_id', $teacherRole])
+                             ->andWhere(['=', 'estado_id', $status->id])
+                             ->andWhere(['NOT LIKE', 'email', ["prueba@email.com", "test@"]])
                              ->with(['perfil'])
                              ->all();
 
@@ -88,5 +101,13 @@ class SubmissionDeadlineController extends Controller
         }
 
         return $emails;
+    }
+
+    private function saveFailedGroup($group)
+    {
+        $fileName = 'console/runtime/failed_emails_' . date('y-m-d');
+        $file = fopen($fileName, 'a');
+        fwrite($file, implode(',', $group) . "\n");
+        fclose($file);
     }
 }
