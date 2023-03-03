@@ -72,7 +72,7 @@ class SubmissionDeadlineController extends Controller
         }, Rol::find()->select('id')->where([
             'in',
             'rol_nombre',
-            ['Profesor', 'Admin']
+            ['Profesor', 'SuperUsuario', 'Departamento']
         ])->all());
 
         if (!$teacherRole) {
