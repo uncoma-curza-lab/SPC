@@ -44,16 +44,20 @@ class SubmissionDeadlineController extends Controller
         $fromEmail = getenv("SMTP_USER");
 
         foreach ($emails as $group) {
-            $message = $mailer->compose()
-                ->setFrom($fromEmail)
-                ->setTo($fromEmail)
-                ->setBcc($group)
-                ->setSubject('Recordatorio - Plazo de entrega programas de cátedra')
-                ->setHtmlBody(Yii::$app->view->render('@console/views/deadline_notify.php', ['deadline' => $date]));
+            try {
+                $message = $mailer->compose()
+                    ->setFrom($fromEmail)
+                    ->setTo($fromEmail)
+                    ->setBcc($group)
+                    ->setSubject('Recordatorio - Plazo de entrega programas de cátedra')
+                    ->setHtmlBody(Yii::$app->view->render('@console/views/deadline_notify.php', ['deadline' => $date]));
 
-            if ($message->send()) {
-                $this->stdout("Mail sended to " . implode(',', $group) . "\n", Console::FG_GREEN);
-            } else {
+                if ($message->send()) {
+                    $this->stdout("Mail sended to " . implode(',', $group) . "\n", Console::FG_GREEN);
+                } else {
+                    $this->stdout("Error group to send: " . implode(',', $group) . "\n", Console::FG_RED);
+                }
+            } catch (\Throwable $e) {
                 $this->stdout("Error group to send: " . implode(',', $group) . "\n", Console::FG_RED);
             }
         }
