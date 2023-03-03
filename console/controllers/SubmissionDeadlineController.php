@@ -45,8 +45,8 @@ class SubmissionDeadlineController extends Controller
 
         foreach ($emails as $group) {
             $message = $mailer->compose()
-                ->setFrom("qweqwe@qweqweqwe.cc")
-                ->setTo("qweqweqew@qweqweeqw")
+                ->setFrom($fromEmail)
+                ->setTo($fromEmail)
                 ->setBcc($group)
                 ->setSubject('Recordatorio - Plazo de entrega programas de cátedra')
                 ->setHtmlBody(Yii::$app->view->render('@console/views/deadline_notify.php', ['deadline' => $date]));
