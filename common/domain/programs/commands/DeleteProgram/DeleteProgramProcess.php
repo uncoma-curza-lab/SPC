@@ -29,18 +29,18 @@ class DeleteProgramProcess implements CommandInterface
                 return new DeleteProgramResult(false, 'No tiene permisos para realizar esta operación', []);
             }
 
-            $command = new DeleteAllNotificationsByProgramProcess($this->program);
-            $result = $command->handle();
+            //$command = new DeleteAllNotificationsByProgramProcess($this->program);
+            //$result = $command->handle();
 
-            if (!$result->getResult()) {
-                throw new Exception('No se pudieron eliminar las notificaciones');
-            }
+            //if (!$result->getResult()) {
+            //    throw new Exception('No se pudieron eliminar las notificaciones');
+            //}
 
-            $command = new DeleteAllObservationsByProgramProcess($this->program);
-            $result = $command->handle();
-            if (!$result->getResult()) {
-                throw new Exception('No se pudieron eliminar las observaciones');
-            }
+            //$command = new DeleteAllObservationsByProgramProcess($this->program);
+            //$result = $command->handle();
+            //if (!$result->getResult()) {
+            //    throw new Exception('No se pudieron eliminar las observaciones');
+            //}
 
             if ($this->program->delete()) {
                 $transaccion->commit();
