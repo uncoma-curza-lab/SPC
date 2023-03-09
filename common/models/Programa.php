@@ -51,6 +51,12 @@ class Programa extends \yii\db\ActiveRecord implements Linkable
         'save'
     ];
 
+    public static function find()
+    {
+        return parent::find()->where(['is', 'deleted_at', null]);
+        //return Yii::createObject(ActiveQuery::className(), [get_called_class()]);
+    }
+
     public function sendMain($event){
       echo 'mail sent';
     }
@@ -137,6 +143,7 @@ class Programa extends \yii\db\ActiveRecord implements Linkable
             'firma' => 'Firma',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
+            'deleted_at' => 'Eliminado',
             'created_by' => 'Created By',
             'updated_by' => 'Updated By',
         ];
@@ -760,5 +767,11 @@ class Programa extends \yii\db\ActiveRecord implements Linkable
         }
         
         return $timesDistributions;
+    }
+
+    public function delete()
+    {
+        $this->deleted_at = date('Y-m-d H:i:s');
+        return $this->save(false);
     }
 }
