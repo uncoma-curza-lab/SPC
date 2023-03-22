@@ -84,6 +84,7 @@ class Programa extends \yii\db\ActiveRecord implements Linkable
             [['asignatura_id'], 'exist', 'skipOnError' => true, 'targetClass' => Asignatura::class, 'targetAttribute' => ['asignatura_id' => 'id']],
             [['departamento_id'], 'exist', 'skipOnError' => true, 'targetClass' => Departamento::class, 'targetAttribute' => ['departamento_id' => 'id']],
             [['status_id'], 'exist', 'skipOnError' => true, 'targetClass' => Status::class, 'targetAttribute' => ['status_id' => 'id']],
+            [['current_plan_id'], 'exist', 'skipOnError' => true, 'targetClass' => Plan::class, 'targetAttribute' => ['current_plan_id' => 'id']],
         ];
     }
 
@@ -135,6 +136,7 @@ class Programa extends \yii\db\ActiveRecord implements Linkable
             'crono_tentativo' => 'Crono Tentativo',
             'actv_extracur' => 'Actv Extracur',
             'firma' => 'Firma',
+            'current_plan_id' => 'Plan',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
             'created_by' => 'Created By',
@@ -148,6 +150,7 @@ class Programa extends \yii\db\ActiveRecord implements Linkable
       $scenarios['crear'] = [
       //  'curso',
         'asignatura_id',
+        'current_plan_id',
       //  'cuatrimestre',
         'equipo_catedra',
         'year',
@@ -183,6 +186,11 @@ class Programa extends \yii\db\ActiveRecord implements Linkable
       $scenarios['firma'] = ['firma'];
       return array_merge(parent::scenarios(), $scenarios);
       //return $scenarios;
+    }
+
+    public function getPlan()
+    {
+        return $this->hasOne(Plan::class, ['current_plan_id', 'id']);
     }
 
     /**
@@ -265,6 +273,7 @@ class Programa extends \yii\db\ActiveRecord implements Linkable
     {
         return $this->hasOne(Departamento::class, ['id' => 'departamento_id']);
     }
+
     public function getDepartamentoasignatura()
     {
       return $this->hasOne(Departamento::class, ['id' => 'departamento_id'])
@@ -306,6 +315,7 @@ class Programa extends \yii\db\ActiveRecord implements Linkable
     {
         return $this->hasOne(Perfil::class, ['user_id' => 'created_by']);
     }
+
     /**
      * Obtiene al creador del programa
      * @return Integer
@@ -313,6 +323,7 @@ class Programa extends \yii\db\ActiveRecord implements Linkable
     public function getCreatedBy(){
       return $this->created_by;
     }
+
     /**
      * Obtiene la nomenclatura de la asignatura perteneciente al programa
      * @return String
@@ -329,46 +340,60 @@ class Programa extends \yii\db\ActiveRecord implements Linkable
     {
       return $this->getAsignatura()->one()->getCurso();
     }
+
     public function getOrdenanza(){
       return $this->getAsignatura()->one()->getPlan()->one()->getOrdenanza();
     }
+
     public function getFundamentacion(){
       return $this->fundament;
     }
+
     public function getObjetivoPlan(){
       return $this->objetivo_plan;
     }
+
     public function getContenidoPlan(){
       return $this->contenido_plan;
     }
+
     public function getContenidoAnalitico(){
       return $this->contenido_analitico;
     }
+
     public function countContenidoAnalitico(){
       $unidades = $this->getUnidades()->count();
       return $unidades;
     }
+
     public function getPropuestaMetodologica(){
       return $this->propuesta_met;
     }
+
     public function getEyCAcreditacion(){
       return $this->evycond_acreditacion;
     }
+
     public function getParcRecyPromo(){
       return $this->parcial_rec_promo;
     }
+
     public function getDistHoraria(){
       return $this->distr_horaria;
     }
+
     public function getCronoTent(){
       return $this->crono_tentativo;
     }
+
     public function getActividadExtrac(){
       return $this->actv_extracur;
     }
+
     public function getYear(){
       return $this->year;
     }
+
     public function getEquipoCatedra(){
       return $this->equipo_catedra;
     }
