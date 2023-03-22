@@ -43,6 +43,7 @@ class Asignatura extends \yii\db\ActiveRecord
             [['nomenclatura'], 'string', 'max' => 255],
             [['departamento_id'], 'exist', 'skipOnError' => true, 'targetClass' => Departamento::className(), 'targetAttribute' => ['departamento_id' => 'id']],
             [['plan_id'], 'exist', 'skipOnError' => true, 'targetClass' => Plan::className(), 'targetAttribute' => ['plan_id' => 'id']],
+            [['parent_id'], 'exist', 'skipOnError' => true, 'targetClass' => Asignatura::className(), 'targetAttribute' => ['parent_id' => 'id']],
         ];
     }
     public function scenarios(){
@@ -55,11 +56,13 @@ class Asignatura extends \yii\db\ActiveRecord
             'plan_id',
             'cuatrimestre',
             'orden',
-            'departamento_id'
+            'departamento_id',
+            'parent_id',
         ];
         return $scenarios;
 
     }
+
     /**
      * {@inheritdoc}
      */
@@ -76,8 +79,10 @@ class Asignatura extends \yii\db\ActiveRecord
             'carga_horaria_cuatr' => 'Carga Horaria Cuatr',
             'departamento_id' => 'Departamento',
             'requisitos' => 'Requisitos',
+            'parent_id' => 'Asignatura que modifica',
         ];
     }
+
     /**
     * @return \yii\db\ActiveQuery
     */
@@ -94,6 +99,11 @@ class Asignatura extends \yii\db\ActiveRecord
         return $this->hasOne(Plan::className(), ['id' => 'plan_id']);
     }
 
+    public function getParent()
+    {
+        return $this->hasOne(Asignatura::class, ['id' => 'parent_id']);
+    }
+
     public function getOrden(){
         return $this->orden;
     }
@@ -105,10 +115,12 @@ class Asignatura extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Programa::className(), ['asignatura_id' => 'id']);
     }
+
     public function getNomenclatura()
     {
       return $this->nomenclatura;
     }
+
     public function getCurso()
     {
         switch ($this->curso) {
@@ -137,6 +149,7 @@ class Asignatura extends \yii\db\ActiveRecord
                 return "N/N" ;
         }
     }
+
     public function getCuatrimestre(){
         switch ($this->cuatrimestre) {
             case 0:

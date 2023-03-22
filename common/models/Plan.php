@@ -40,7 +40,9 @@ class Plan extends \yii\db\ActiveRecord
             //puede ser vacio el archivo skipOnEmpty
             [['planArchivo'], 'file', 'skipOnEmpty' => true, 'extensions' => 'pdf'],
             // puede no tener carrera_id  o fallar la validación
-            [['carrera_id'], 'exist', 'skipOnError' => true, 'targetClass' => Carrera::className(), 'targetAttribute' => ['carrera_id' => 'id']],
+            [['carrera_id'], 'exist', 'skipOnError' => true, 'targetClass' => Carrera::class, 'targetAttribute' => ['carrera_id' => 'id']],
+            [['parent_id'], 'exist', 'skipOnError' => true, 'targetClass' => Plan::class, 'targetAttribute' => ['parent_id' => 'id']],
+            [['origin_plan_id'], 'exist', 'skipOnError' => true, 'targetClass' => Plan::class, 'targetAttribute' => ['origin_plan_id' => 'id']],
         ];
     }
 
@@ -54,7 +56,9 @@ class Plan extends \yii\db\ActiveRecord
             'planordenanza' => 'Planordenanza',
             'carrera_id' => 'Carrera ID',
             'activo' => 'activo',
-            'archivo' => 'Path Archivo'
+            'archivo' => 'Path Archivo',
+            'parent_id' => 'Plan o modificatoria superior',
+            'origin_plan_id' => 'Plan origen',
         ];
     }
 
