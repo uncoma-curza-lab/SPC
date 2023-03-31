@@ -1,11 +1,11 @@
 <?php
 
-namespace common\domain\Plans\CreateNewPlan;
+namespace common\domain\Plans\CreateOrUpdatePlan;
 
 use common\models\Plan;
 use common\shared\commands\CommandInterface;
 
-class CreateNewPlanCommand implements CommandInterface
+class CreateOrUpdatePlanCommand implements CommandInterface
 {
     private Plan $plan;
 
@@ -14,7 +14,7 @@ class CreateNewPlanCommand implements CommandInterface
         $this->plan = $plan;
     }
 
-    public function handle() : CreateNewPlanResult
+    public function handle() : CreateOrUpdatePlanResult
     {
         try {
             if ($this->isAmendPlan()) {
@@ -23,11 +23,11 @@ class CreateNewPlanCommand implements CommandInterface
 
             $result = $this->plan->save();
 
-            return new CreateNewPlanResult($result, 'Save plan', [
+            return new CreateOrUpdatePlanResult($result, 'Save plan', [
                 'plan' => $this->plan,
             ]);
         } catch (\Throwable $e) {
-            return new CreateNewPlanResult(false, 'Error save plan', [
+            return new CreateOrUpdatePlanResult(false, 'Error save plan', [
                 'exception' => $e,
                 'message' => $e->getMessage(),
                 'plan' => $this->plan,

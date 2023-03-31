@@ -6,6 +6,8 @@ use kartik\select2\Select2;
 use yii\helpers\ArrayHelper;
 use common\models\Carrera;
 
+$planId = $model->id ?? null;
+
 ?>
 
 <div class="plan-form">
@@ -35,6 +37,7 @@ use common\models\Carrera;
                 'dataType' => 'json',
                 'data' => new \yii\web\JsExpression('function(params) {
                     return {
+                        ' . ($planId ? "plan_id: $planId ," : "") . '
                         carrera_id: $("#plan-carrera_id").val(),
                         q: params.term,
                     };
@@ -42,6 +45,7 @@ use common\models\Carrera;
                 'cache' => true,
             ],
         ],
+        'initValueText' => $model->parent_id ? $model->parent->planordenanza : "",
     ])->label('Plan que modifica'); ?>
 
     <?= $form->field($model, 'activo')->checkbox(); ?>
