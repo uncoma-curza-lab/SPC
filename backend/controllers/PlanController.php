@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use common\domain\Plans\CreateNewPlan\CreateNewPlanCommand;
 use Yii;
 use common\models\Plan;
 use common\models\search\PlanSearch;
@@ -98,8 +99,14 @@ class PlanController extends Controller
     {
         $model = new Plan();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            $createPlanCommand = new CreateNewPlanCommand(
+                $model
+            );
+            $result = $createPlanCommand->handle();
+            if ($result->getResult()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
         }
 
         return $this->render('create', [
@@ -229,5 +236,32 @@ class PlanController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
+    public function actionGetPlansByCarreraId($carrera_id, $q = null)
+    {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        $data = [];
+
+        $query = Plan::find()->where(['carrera_id' => $carrera_id]);
+
+        if (!empty($q)) {
+            $query->andWhere(['like', 'planordenanza', $q]);
+        }
+
+        $models = $query->all();
+
+        if (!empty($models)) {
+            $data = array_map(function($plan) {
+                return [
+                    'id' => $plan->id,
+                    'text' => $plan->planordenanza,
+                ];
+            }, $models);
+        }
+
+        return ['results' => $data];
+    }
+
 
 }

@@ -42,7 +42,7 @@ class Plan extends \yii\db\ActiveRecord
             // puede no tener carrera_id  o fallar la validación
             [['carrera_id'], 'exist', 'skipOnError' => true, 'targetClass' => Carrera::class, 'targetAttribute' => ['carrera_id' => 'id']],
             [['parent_id'], 'exist', 'skipOnError' => true, 'targetClass' => Plan::class, 'targetAttribute' => ['parent_id' => 'id']],
-            [['origin_plan_id'], 'exist', 'skipOnError' => true, 'targetClass' => Plan::class, 'targetAttribute' => ['origin_plan_id' => 'id']],
+            [['root_plan_id'], 'exist', 'skipOnError' => true, 'targetClass' => Plan::class, 'targetAttribute' => ['root_plan_id' => 'id']],
         ];
     }
 
@@ -58,7 +58,7 @@ class Plan extends \yii\db\ActiveRecord
             'activo' => 'activo',
             'archivo' => 'Path Archivo',
             'parent_id' => 'Plan o modificatoria superior',
-            'origin_plan_id' => 'Plan origen',
+            'root_plan_id' => 'Plan origen',
         ];
     }
 
@@ -116,10 +116,24 @@ class Plan extends \yii\db\ActiveRecord
     public function getOrdenanza(){
       return $this->planordenanza;
     }
+
     public function getArchivo(){
         return $this->archivo;
     }
+
     public function setArchivo($filePath){
         $this->archivo = $filePath;
+    }
+
+    public static function getRootPlan($planId)
+    {
+        $plan = Plan::findOne($planId);
+        $parentId = $plan->parent_id;
+
+        if (!$parentId) {
+            return $plan;
+        }
+
+        return Plan::getRootPlan($parentId);
     }
 }
