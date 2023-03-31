@@ -105,6 +105,11 @@ class Asignatura extends \yii\db\ActiveRecord
         return $this->hasOne(Asignatura::class, ['id' => 'parent_id']);
     }
 
+    public function getChildrens()
+    {
+        return $this->hasMany(Asignatura::class, ['parent_id' => 'id']);
+    }
+
     public function getOrden(){
         return $this->orden;
     }
@@ -176,5 +181,10 @@ class Asignatura extends \yii\db\ActiveRecord
     public function getRequisitos(){
         return $this->requisitos;
     }
-    
+
+    public function hasChildren()
+    {
+        return $this->getChildrens()->exists();
+    }
+
 }

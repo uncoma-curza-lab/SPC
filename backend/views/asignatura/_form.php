@@ -41,8 +41,6 @@ use dosamigos\tinymce\TinyMce;
             'data' => ArrayHelper::map(Plan::find()->all(),'id',function($model){
                 return $model->ordenanza."(".$model->id.")";
             }),
-            //'data' =>ArrayHelper::map(((new StatusSearch())->search(['model' => 'backend\models\Status'])),'id','descripcion'),
-            //'data' => (new StatusSearch())->search(['model' => 'backend\models\Status'])->id,
             'language' => 'es',
             'options' => ['placeholder' => 'Seleccione un plan...'],
             'pluginOptions' => [
@@ -51,6 +49,32 @@ use dosamigos\tinymce\TinyMce;
         ]) ?>
         <?= $form->field($model, 'orden')->input('number') ?>
     </div>
+
+    <div class="col-md-12">
+    <?= $form->field($model, 'parent_id')->widget(Select2::classname(), [
+        'language' => 'es',
+        'options' => ['placeholder' => 'Seleccione la asignatura que modifica'],
+        'pluginOptions' => [
+            'allowClear' => true,
+            'depends' => ['asignatura-plan_id'],
+            'placeholder' => 'Seleccione un plan...',
+            'ajax' => [
+                'url' => \yii\helpers\Url::to(['asignatura/get-courses-by-plan-id']),
+                'dataType' => 'json',
+                'data' => new \yii\web\JsExpression('function(params) {
+                    return {
+                        ' . ($model->id ? "course_id: $model->id," : "") . '
+                        plan_id: $("#asignatura-plan_id").val(),
+                        q: params.term,
+                    };
+                }'),
+                'cache' => true,
+            ],
+        ],
+        'initValueText' => $model->parent_id ? $model->parent->nomenclatura : "",
+    ])->label('Asignatua que modifica'); ?>
+    </div>
+
     <div class="col-md-12">
         <div class="form-group ">
                 <?= $form->field($model, 'requisitos')->widget(TinyMce::className(), [

@@ -146,4 +146,21 @@ class Plan extends \yii\db\ActiveRecord
 
         return Plan::getRootPlan($parentId);
     }
+
+    public function getCoursesTree()
+    {
+        $courses = $this->asignaturas;
+
+        if ($this->parent_id !== null) {
+            $recursiveParentCourses = $this->parent->getCoursesTree();
+
+            foreach ($recursiveParentCourses as $parentCourses) {
+                if (!$parentCourses->hasChildren()) {
+                    $courses [] = $parentCourses;
+                }
+            }
+        }
+
+        return $courses;
+    }
 }
