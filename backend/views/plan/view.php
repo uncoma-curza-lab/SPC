@@ -32,6 +32,12 @@ $this->params['breadcrumbs'][] = $this->title;
             'planordenanza',
             'archivo',
             'carrera_id',
+            [
+                'attribute' => 'parent_id',
+                'value' => function($model) {
+                    return $model->parent->planordenanza;
+                }
+            ]
         ],
     ]) ?>
 

@@ -113,6 +113,16 @@ class Plan extends \yii\db\ActiveRecord
         return $this->hasOne(Carrera::className(), ['id' => 'carrera_id']);
     }
 
+    public function getParent()
+    {
+        return $this->hasOne(Plan::className(), ['id' => 'parent_id']);
+    }
+
+    public function getRoot()
+    {
+        return $this->hasOne(Plan::className(), ['id' => 'root_plan_id']);
+    }
+
     public function getOrdenanza(){
       return $this->planordenanza;
     }
