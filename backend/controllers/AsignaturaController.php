@@ -142,7 +142,7 @@ class AsignaturaController extends Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    public function actionGetCoursesByPlanId($course_id= null, $plan_id, $q = null)
+    public function actionGetCoursesByPlanId($course_id = null, $plan_id, $q = null)
     {
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 
@@ -152,9 +152,14 @@ class AsignaturaController extends Controller
 
         $courses = $plan->getCoursesTree();
 
-        if (!empty($models)) {
-            $data = array_filter(array_map(function($course) use($course_id) {
-                if ($course->id == $course_id) {
+        if (!empty($courses)) {
+            $data = array_filter(array_map(function($course) use($course_id, $plan_id) {
+                if (
+                    ($course_id && $course->id == $course_id)
+                    ||
+                    ($plan_id && $course->plan_id == $plan_id)
+
+                ) {
                     return null;
                 }
                 return [
@@ -164,6 +169,6 @@ class AsignaturaController extends Controller
             }, $courses));
         }
 
-        return ['results' => $data];
+        return ['results' => array_values($data)];
     }
 }
