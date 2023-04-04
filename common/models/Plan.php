@@ -124,6 +124,11 @@ class Plan extends \yii\db\ActiveRecord
         return $this->hasOne(Plan::className(), ['id' => 'root_plan_id']);
     }
 
+    public function getChild()
+    {
+        return $this->hasOne(Plan::className(), ['parent_id' => 'id']);
+    }
+
     public function getOrdenanza(){
       return $this->planordenanza;
     }

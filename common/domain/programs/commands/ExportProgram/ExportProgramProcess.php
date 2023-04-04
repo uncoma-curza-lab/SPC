@@ -28,6 +28,8 @@ class ExportProgramProcess implements CommandInterface
     public function handle() : ExportProgramResult
     {
         try {
+            var_dump($this->program->getCompleteOrdinance());
+            die;
             if (!$this->checkPermission()) {
                 throw new \Exception('No tiene permisos');
             }

@@ -198,7 +198,12 @@ class Programa extends \yii\db\ActiveRecord implements Linkable
 
     public function getPlan()
     {
-        return $this->hasOne(Plan::class, ['current_plan_id', 'id']);
+        if ($this->current_plan_id) {
+            return $this->hasOne(Plan::class, ['id' => 'current_plan_id']);
+        }
+
+        return $this->hasOne(Plan::class, ['id'=> 'plan_id'])
+                    ->viaTable('asignatura', ['id' => 'asignatura_id']);
     }
 
     /**
@@ -349,8 +354,32 @@ class Programa extends \yii\db\ActiveRecord implements Linkable
       return $this->getAsignatura()->one()->getCurso();
     }
 
-    public function getOrdenanza(){
-      return $this->getAsignatura()->one()->getPlan()->one()->getOrdenanza();
+    /**
+     * @deprecated
+     */
+    public function getOrdenanza()
+    {
+      return $this->getPlan()->one()->root->getOrdenanza();
+    }
+
+    public function getCompleteOrdinance()
+    {
+        if (!$this->plan->root) {
+            return 'Plan ' . $this->plan->getOrdenanza();
+        }
+
+        $currentPlan = $this->plan->root;
+        $ordinance = 'Plan: ' . $currentPlan->getOrdenanza();
+        $amendingPlan = '';
+        while($currentPlan->child && $currentPlan->child->id != $this->plan->id) {
+            $amendingPlan .= " " . $currentPlan->child->getOrdenanza() . " - ";
+            $currentPlan = $currentPlan->child;
+        }
+        if ($amendingPlan) {
+            $amendingPlan = ' - Modificatorias:' . rtrim($amendingPlan, '- ');
+            $ordinance .= $amendingPlan;
+        }
+        return $ordinance;
     }
 
     public function getFundamentacion(){
