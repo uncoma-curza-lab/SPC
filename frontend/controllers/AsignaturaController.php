@@ -132,7 +132,7 @@ class AsignaturaController extends Controller
 
         $data = [];
 
-        $plan = Plan::findOne($plan_id)->carrera->planVigente;
+        $plan = Plan::findOne($plan_id);
 
         $courses = $plan->getCoursesTree();
 

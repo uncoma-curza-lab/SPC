@@ -4,6 +4,7 @@ namespace common\domain\Plans\CreateOrUpdatePlan;
 
 use common\models\Plan;
 use common\shared\commands\CommandInterface;
+use Exception;
 
 class CreateOrUpdatePlanCommand implements CommandInterface
 {
@@ -18,6 +19,9 @@ class CreateOrUpdatePlanCommand implements CommandInterface
     {
         try {
             if ($this->isAmendPlan()) {
+                if ($this->plan->parent->hasChild()) {
+                    throw new Exception('Parent has child');
+                }
                 $this->plan->root_plan_id = Plan::getRootPlan($this->plan->parent_id);
             }
 
