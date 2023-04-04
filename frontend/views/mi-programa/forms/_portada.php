@@ -29,7 +29,7 @@ use yii\helpers\ArrayHelper;
 
 <?= $form->field($model, 'asignatura_id')->widget(Select2::classname(), [
     'language' => 'es',
-    'options' => ['placeholder' => 'Seleccione la asignatura que modifica'],
+    'options' => ['placeholder' => 'Seleccione la asignatura'],
     'pluginOptions' => [
         'allowClear' => true,
         'depends' => ['plan_id'],
