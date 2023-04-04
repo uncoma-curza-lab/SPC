@@ -146,7 +146,11 @@ class Programa extends \yii\db\ActiveRecord implements Linkable
 
     public function load($data, $formName = null)
     {
-        if ($this->scenario == 'crear') {
+        if (
+            $this->scenario == 'crear' &&
+            $data &&
+            array_key_exists('Programa', $data)
+        ) {
             $data['Programa']['current_plan_id'] = Asignatura::determineCurrentPlan($data['Programa']['asignatura_id']);
         }
         return parent::load($data, $formName);
@@ -368,17 +372,22 @@ class Programa extends \yii\db\ActiveRecord implements Linkable
             return 'Plan ' . $this->plan->getOrdenanza();
         }
 
-        $currentPlan = $this->plan->root;
-        $ordinance = 'Plan: ' . $currentPlan->getOrdenanza();
+        $rootPlan = $this->plan->root;
+        $ordinance = 'Plan: ' . $rootPlan->getOrdenanza();
+
         $amendingPlan = '';
+        $currentPlan = $rootPlan;
+
         while($currentPlan->child && $currentPlan->child->id != $this->plan->id) {
             $amendingPlan .= " " . $currentPlan->child->getOrdenanza() . " - ";
             $currentPlan = $currentPlan->child;
         }
+
         if ($amendingPlan) {
             $amendingPlan = ' - Modificatorias:' . rtrim($amendingPlan, '- ');
             $ordinance .= $amendingPlan;
         }
+
         return $ordinance;
     }
 
