@@ -19,6 +19,7 @@ use Yii;
  * @property Departamento $departamento
  * @property Plan $plan
  * @property Programa[] $programas
+ * @deprecated DONT USE THIS -> use common\models
  */
 class Asignatura extends \yii\db\ActiveRecord
 {

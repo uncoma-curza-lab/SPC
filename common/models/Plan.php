@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use common\models\querys\PlanQuery;
 use Yii;
 
 /**
@@ -162,5 +163,10 @@ class Plan extends \yii\db\ActiveRecord
         }
 
         return $courses;
+    }
+
+    public static function find()
+    {
+        return new PlanQuery(get_called_class());
     }
 }

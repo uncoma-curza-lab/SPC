@@ -171,9 +171,11 @@ class Asignatura extends \yii\db\ActiveRecord
                 return "N/N" ;
         }
     }
+
     public function getCargaHorariaSem(){
         return $this->carga_horaria_sem;
     }
+
     public function getCargaHorariaCuatr(){
         return $this->carga_horaria_cuatr;
     }
