@@ -160,9 +160,9 @@ class Plan extends \yii\db\ActiveRecord
 
     public function getCoursesTreeFromRoot(int $targetPlanId = null)
     {
-        $root = $this->root_plan_id ? $this->root : $this->id;
+        $root = $this->root_plan_id ? $this->root : $this;
         if ($targetPlanId == $root->id) {
-            return $this->asignaturas;
+            return $root->asignaturas;
         }
 
         $courses = [];
