@@ -461,9 +461,13 @@ class Programa extends \yii\db\ActiveRecord implements Linkable
       if($estadoActual){
         $estadoSiguiente = $estadoActual->nextStatus();
 
-        if ($estadoActual->is(Status::BORRADOR_ID) && $this->departamento_id) {
+        if (
+            $estadoSiguiente &&
+            $estadoActual->is(Status::BORRADOR_ID) &&
+            $this->departamento_id
+        ) {
             // super patch
-            $estadoSiguiente = $estadoActual->nextStatus();
+            $estadoSiguiente = $estadoSiguiente->nextStatus();
         }
 
         if ($estadoSiguiente) {
