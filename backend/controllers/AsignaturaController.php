@@ -150,7 +150,7 @@ class AsignaturaController extends Controller
 
         $plan = Plan::findOne($plan_id);
 
-        $courses = $plan->getCoursesTree();
+        $courses = $plan->getCoursesTreeFromRoot($plan_id);
 
         if (!empty($courses)) {
             $data = array_filter(array_map(function($course) use($course_id, $plan_id) {

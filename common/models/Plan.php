@@ -158,19 +158,20 @@ class Plan extends \yii\db\ActiveRecord
         return Plan::getRootPlan($parentId);
     }
 
-    public function getCoursesTree(int $targetPlanId = null)
+    public function getCoursesTreeFromRoot(int $targetPlanId = null)
     {
-        if ($targetPlanId == $this->id) {
+        $root = $this->root_plan_id ? $this->root : $this->id;
+        if ($targetPlanId == $root->id) {
             return $this->asignaturas;
         }
 
         $courses = [];
-        foreach ($this->asignaturas as $course) {
+        foreach ($root->asignaturas as $course) {
             $courses[$course->id] = $course;
         }
 
 
-        $child = $this->child;
+        $child = $root->child;
         while($child) {
 
             foreach($child->asignaturas as $courseChild) {
@@ -189,23 +190,6 @@ class Plan extends \yii\db\ActiveRecord
 
         return array_values(array_filter($courses));
 
-    }
-
-    public function getCoursesInverseTree()
-    {
-        $courses = $this->asignaturas;
-
-        if ($this->parent_id !== null) {
-            $recursiveParentCourses = $this->parent->getCoursesTree();
-
-            foreach ($recursiveParentCourses as $parentCourses) {
-                if (!$parentCourses->hasChildren()) {
-                    $courses [] = $parentCourses;
-                }
-            }
-        }
-
-        return $courses;
     }
 
     public static function find()
