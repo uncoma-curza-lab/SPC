@@ -576,7 +576,6 @@ class MiProgramaController extends Controller
         return $this->render('anadir', [
             'model' => $result->getProgram(),
             'plans' => ArrayHelper::map($plans, 'id', 'planordenanza'),
-            //'courses' => $courses,
         ]);
     }
 

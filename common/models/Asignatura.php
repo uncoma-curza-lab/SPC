@@ -189,4 +189,16 @@ class Asignatura extends \yii\db\ActiveRecord
         return $this->getChildrens()->exists();
     }
 
+    public static function determineCurrentPlan($courseId)
+    {
+        $course = self::findOne($courseId);
+        $plan = $course->plan;
+
+
+        if ($plan && $plan->carrera && $plan->carrera->plan_vigente_id) {
+            return $plan->carrera->plan_vigente_id;
+        }
+
+        return $plan->id;
+    }
 }

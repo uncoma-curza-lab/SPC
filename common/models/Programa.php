@@ -73,7 +73,7 @@ class Programa extends \yii\db\ActiveRecord implements Linkable
     public function rules()
     {
         return [
-            [['departamento_id', 'status_id', 'asignatura_id', 'year', 'created_by', 'updated_by'], 'integer'],
+            [['departamento_id', 'status_id', 'asignatura_id', 'year', 'created_by', 'updated_by', 'current_plan_id'], 'integer'],
             [['asignatura_id','year'], 'required', 'on' => 'crear', 'message'=>"Debe completar este campo"],
             [['asignatura_id','year'], 'required', 'on' => 'copy', 'message'=>"Debe completar este campo"],
             //[['fundament'], 'required', 'on' => 'fundamentacion', 'message'=>"Debe completar este campo"],
@@ -142,6 +142,14 @@ class Programa extends \yii\db\ActiveRecord implements Linkable
             'created_by' => 'Created By',
             'updated_by' => 'Updated By',
         ];
+    }
+
+    public function load($data, $formName = null)
+    {
+        if ($this->scenario == 'crear') {
+            $data['Programa']['current_plan_id'] = Asignatura::determineCurrentPlan($data['Programa']['asignatura_id']);
+        }
+        return parent::load($data, $formName);
     }
 
     public function scenarios(){

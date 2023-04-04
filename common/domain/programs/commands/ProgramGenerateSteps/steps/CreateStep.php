@@ -16,7 +16,6 @@ class CreateStep extends StepInterface
             throw new ForbiddenHttpException('No tiene permisos para actualizar este elemento');
         }
         $model = Programa::initNewProgram();
-        //obtener el id del director
         if ($model->load(Yii::$app->request->post())) {
             if($model->save()) {
                 return  new ProgramStepResult(true, 'El programa se creó correctamente', [], $model);
