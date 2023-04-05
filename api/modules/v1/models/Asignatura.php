@@ -3,40 +3,13 @@
 namespace api\modules\v1\models;
 use yii\web\Linkable;
 use yii\web\Link;
-use Yii;
-use api\modules\v1\models\Departamento;
+use common\models\Asignatura as ModelsAsignatura;
 use common\models\Status;
-use common\models\Correlativa;
 use yii\helpers\Url;
 
-/**
- * @deprecated DANGER
- */
-class Asignatura extends \yii\db\ActiveRecord implements Linkable
+class Asignatura extends ModelsAsignatura implements Linkable
 {
     private $version = "v1";
-    /**
-     * {@inheritdoc}
-     */
-    public static function tableName()
-    {
-        return 'asignatura';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function rules()
-    {
-        return [
-            [['nomenclatura', 'curso', 'cuatrimestre'], 'required'],
-            [['orden','curso', 'cuatrimestre', 'carga_horaria_sem', 'carga_horaria_cuatr', 'plan_id', 'departamento_id'], 'integer'],
-            [['nomenclatura'], 'string', 'max' => 255],
-            [['requisitos'],'string'],
-            [['departamento_id'], 'exist', 'skipOnError' => true, 'targetClass' => Departamento::className(), 'targetAttribute' => ['departamento_id' => 'id']],
-            [['plan_id'], 'exist', 'skipOnError' => true, 'targetClass' => Plan::className(), 'targetAttribute' => ['plan_id' => 'id']],
-        ];
-    }
 
     public function fields(){
         return [
@@ -67,41 +40,9 @@ class Asignatura extends \yii\db\ActiveRecord implements Linkable
 
                 return $array;
             }
-            /*'plan' => function(){
-                return $this->plan_id ? 
-                    Url::base(true)."/".$this->version."/plan/".$this->plan_id
-                    :
-                    null;
-            }*/
-            
         ];
     }
-/*    public function fields(){
-        $fields = parent::fields();
-        unset($fields['departamento_id']);
-        return $fields;
-    }*/
-    
-    //public function extraFields() {
-    //    return ['nomenclatura'];
-    //}
-    /**
-     * {@inheritdoc}
-     */
-    public function attributeLabels()
-    {
-        return [
-            'id' => 'ID',
-            'nomenclatura' => 'Nomenclatura',
-            'plan_id' => 'Plan ID',
-            'curso' => 'Curso',
-            'cuatrimestre' => 'Cuatrimestre',
-            'carga_horaria_sem' => 'Carga Horaria Sem',
-            'carga_horaria_cuatr' => 'Carga Horaria Cuatr',
-            'departamento_id' => 'Departamento ID',
-            'requisitos' => 'Requisitos',
-        ];
-    }
+
     public function getLinks()
     {
         $withExports = false;
@@ -131,43 +72,5 @@ class Asignatura extends \yii\db\ActiveRecord implements Linkable
             $responseLinks['exports'] = $exports;
         }
         return $responseLinks;
-    }
-    /**
-    * @return \yii\db\ActiveQuery
-    */
-    public function getDepartamento()
-    {
-       return $this->hasOne(Departamento::className(), ['id' => 'departamento_id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getPlan()
-    {
-        return $this->hasOne(Plan::className(), ['id' => 'plan_id']);
-    }
-    public function getOrden(){
-        return $this->orden;
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getProgramas()
-    {
-        return $this->hasMany(Programa::className(), ['asignatura_id' => 'id']);
-    }
-    public function getNomenclatura()
-    {
-      return $this->nomenclatura;
-    }
-    public function getCurso()
-    {
-      return $this->curso;
-    }
-    public function getCorrelativas()
-    {
-        return $this->hasMany(Correlativa::className(), ['asignatura_id' => 'id']);
     }
 }

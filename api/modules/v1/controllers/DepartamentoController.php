@@ -2,7 +2,7 @@
 
 namespace api\modules\v1\controllers;
 
-use common\models\Departamento;
+use api\modules\v1\models\Departamento;
 use yii\data\ActiveDataProvider;
 use yii\rest\ActiveController;
 /**

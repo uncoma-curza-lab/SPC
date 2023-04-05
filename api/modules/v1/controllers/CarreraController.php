@@ -2,7 +2,7 @@
 
 namespace api\modules\v1\controllers;
 
-use common\models\Carrera;
+use api\modules\v1\models\Carrera;
 use yii\rest\ActiveController;
 use yii\data\ActiveDataProvider;
 

@@ -4,7 +4,7 @@ namespace api\modules\v1\controllers;
 use yii\rest\ActiveController;
 use yii\data\ActiveDataProvider;
 use api\modules\v1\models\Asignatura;
-use common\models\Plan;
+use api\modules\v1\models\Plan;
 use yii\data\ArrayDataProvider;
 
 class AsignaturaController extends ActiveController

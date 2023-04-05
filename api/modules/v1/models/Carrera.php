@@ -1,43 +1,15 @@
 <?php
 
 namespace api\modules\v1\models;
+
+use common\models\Carrera as ModelsCarrera;
 use yii\web\Linkable;
 use yii\web\Link;
-use common\models\CarreraModalidad;
-use common\models\TituloIntermedio;
-use Yii;
 use yii\helpers\Url;
 
-/**
- * @deprecated
- */
-class Carrera extends \yii\db\ActiveRecord implements Linkable
+class Carrera extends ModelsCarrera implements Linkable
 {
     private $version = "v1";
-    /**
-     * {@inheritdoc}
-     */
-    public static function tableName()
-    {
-        return 'carrera';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function rules()
-    {
-        return [
-            [['nom'], 'required'],
-            [['duracion_total_hs','departamento_id'], 'integer'],
-            [['duracion_total_anos'],'number'],
-            [['perfil','alcance','fundamentacion'],'string'],
-            [['nom','titulo'], 'string', 'max' => 255],
-            [['departamento_id'], 'exist', 'skipOnError' => true, 'targetClass' => Departamento::className(), 'targetAttribute' => ['departamento_id' => 'id']],
-            [['plan_vigente_id'], 'exist', 'skipOnError' => true, 'targetClass' => Plan::className(), 'targetAttribute' => ['plan_vigente_id' => 'id']],
-
-        ];
-    }
 
     public function fields(){
         return [
@@ -125,37 +97,11 @@ class Carrera extends \yii\db\ActiveRecord implements Linkable
             'modalidad_id' => 'Modalidad'
         ];
     }
+
     public function getLinks(){
         return [
             Link::REL_SELF => Url::to(['carrera/'.$this->id], true),
-            //'edit' => Url::to(['user/view', 'id' => $this->id], true),
             'planes' => Url::to(['plan/carrera','id' => $this->id], true),
-            //'index' => Url::to(['dpto'], true),
         ];    
-    }
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getPlanes()
-    {
-        return $this->hasMany(Plan::className(), ['carrera_id' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getDepartamento()
-    {
-        return $this->hasOne(Departamento::className(), ['id' => 'departamento_id']);
-    }
-    
-    public function getCarreraModalidad(){
-        return $this->hasMany(CarreraModalidad::className(), ['carrera_id' => 'id']);
-    }
-    public function getPlanVigente(){
-        return $this->hasOne(Plan::className(),['id' => 'plan_vigente_id']);
-    }
-    public function getTituloIntermedio(){
-        return $this->hasOne(TituloIntermedio::className(),['titulo_intermedio_id' => 'id']);
     }
 }

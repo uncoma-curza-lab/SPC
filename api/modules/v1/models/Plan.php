@@ -1,6 +1,8 @@
 <?php
 
 namespace api\modules\v1\models;
+
+use common\models\Plan as ModelsPlan;
 use yii\web\Link;
 use yii\web\Linkable;
 use Yii;
@@ -16,32 +18,9 @@ use yii\helpers\Url;
  * @property Asignatura[] $asignaturas
  * @property Carrera $carrera
  */
-class Plan extends \yii\db\ActiveRecord implements Linkable
+class Plan extends ModelsPlan implements Linkable
 {
     private $version = "v1";
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function tableName()
-    {
-        return 'plan';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function rules()
-    {
-        return [
-            [['planordenanza'], 'required'],
-            [['carrera_id'], 'integer'],
-            [['activo'],'boolean'],
-            [['planordenanza'], 'string', 'max' => 255],
-            [['archivo'], 'file', 'skipOnEmpty' => false, 'extensions' => 'pdf'],
-            [['carrera_id'], 'exist', 'skipOnError' => true, 'targetClass' => Carrera::className(), 'targetAttribute' => ['carrera_id' => 'id']],
-        ];
-    }
 
     public function fields(){
         return [
@@ -56,6 +35,7 @@ class Plan extends \yii\db\ActiveRecord implements Linkable
             },
         ];
     }
+
     public function getLinks(){
         $asignaturas = Url::to(['asignatura/plan','id' => $this->id], true) . '&withExport=1';
         return [
@@ -63,35 +43,5 @@ class Plan extends \yii\db\ActiveRecord implements Linkable
             'asignaturas' => $asignaturas,
         ];    
     }
-    /**
-     * {@inheritdoc}
-     */
-    public function attributeLabels()
-    {
-        return [
-            'id' => 'id',
-            'planordenanza' => 'ordenanza',
-            'carrera_id' => 'carrera_id',
-            'archivo' => 'archivo',
-        ];
-    }
-    public function getOrdenanza(){
-        return $this->planordenanza;
-    }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getAsignaturas()
-    {
-        return $this->hasMany(Asignatura::className(), ['plan_id' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getCarrera()
-    {
-        return $this->hasOne(Carrera::className(), ['id' => 'carrera_id']);
-    }
 }

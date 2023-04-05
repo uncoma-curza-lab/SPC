@@ -3,11 +3,8 @@
 namespace common\models;
 
 use Yii;
-use yii\web\Link;
-use yii\web\Linkable;
-use yii\helpers\Url;
 
-class Departamento extends \yii\db\ActiveRecord implements Linkable
+class Departamento extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
@@ -29,28 +26,9 @@ class Departamento extends \yii\db\ActiveRecord implements Linkable
         ];
     }
 
-    public function fields()
-    {
-        return [
-            'id',
-            'nombre' => 'nom',
-            
-        ];
-    }
-
     public function extraFields()
     {
         return ['carreras' => function(){ return $this->getCarreras()->all();}];
-    }
-
-    public function getLinks()
-    {
-        return [
-            Link::REL_SELF => Url::to(['departamento/'.$this->id], true),
-            //'edit' => Url::to(['user/view', 'id' => $this->id], true),
-            'carreras' => Url::to(['carrera/departamento','id' => $this->id], true),
-            //'index' => Url::to(['dpto'], true),
-        ];    
     }
 
     /**
