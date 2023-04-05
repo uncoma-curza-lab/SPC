@@ -42,7 +42,7 @@ class Carrera extends ModelsCarrera implements Linkable
             'plan_vigente' => function($model){
                 $plan = null;
                 if ($model->plan_vigente_id){
-                    $plan = $model->getPlanVigente()->with('root')->one();
+                    $plan = Plan::find()->where([ 'id' => $model->plan_vigente_id ])->with('root')->one();
                     if ($plan->root) {
                         $plan = $plan->root;
                     }
@@ -54,7 +54,10 @@ class Carrera extends ModelsCarrera implements Linkable
                     null;
             },
             'planes' => function($model){
-                $planes = $model->getPlanes()->where(['=','plan.parent_id', null])->where(['activo' => true])->all();
+                $planes = Plan::find()->where(['carrera_id' => $model->id])
+                                      ->where(['=','plan.parent_id', null])
+                                      ->where(['activo' => true])
+                                      ->all();
                 return $planes;
             },
             'departamento' => function(){
@@ -81,12 +84,12 @@ class Carrera extends ModelsCarrera implements Linkable
             'id' => 'ID',
             'titulo' => 'Titulo',
             'alcance' => 'Alcance',
-            'duracion_total_anos' => 'Duraci—n en a–os',
-            'duracion_total_hs' => 'Duraci—n en horas',
+            'duracion_total_anos' => 'DuraciÃ³n aÃ±o',
+            'duracion_total_hs' => 'DuraciÃ³n horas',
             'perfil' => 'Perfil',
             'plan_vigente_id' => 'Plan vigente',
             'alcance' => 'Alcance',
-            'fundamentacion' => 'Fundamentaci—n',
+            'fundamentacion' => 'FundamentaciÃ³n',
             'nom' => 'Nombre',
             'departamento_id' => 'Departamento ID',
             'modalidad_id' => 'Modalidad'

@@ -21,11 +21,12 @@ class Plan extends ModelsPlan implements Linkable
 {
     private $version = "v1";
 
-    public function fields(){
+    public function fields()
+    {
         return [
             'id',
             'ordenanza' => 'planordenanza',
-            'activo' => function($model){
+            'activo' => function($model) {
                 return $model->activo ?
                     true : false;
             },
