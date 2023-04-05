@@ -4,6 +4,8 @@ namespace api\modules\v1\controllers;
 use yii\rest\ActiveController;
 use yii\data\ActiveDataProvider;
 use api\modules\v1\models\Asignatura;
+use common\models\Plan;
+use yii\data\ArrayDataProvider;
 use yii\filters\auth\HttpBasicAuth;
 use \yii\filters\ContentNegotiator;
 class AsignaturaController extends ActiveController
@@ -119,10 +121,24 @@ class AsignaturaController extends ActiveController
         return $model;
     }
     */
-    public function actionAsignaturas(){
+    public function actionAsignaturas()
+    {
+        $asignatura = Asignatura::find();
+
+        if (!$planId = $_GET['id']) {
+            $plan = Plan::findOne($planId);
+            if ($plan) {
+                $asignatura = $plan->getCoursesTreeFromRoot($planId);
+                return new ArrayDataProvider([
+                    'allModels' => $asignatura,
+                    'pagination' => false,
+                ]);
+            }
+        }
+
         $activeData = new ActiveDataProvider([
-            'query' => Asignatura::find()->andFilterWhere(['=','plan_id',$_GET['id']]),
-            'pagination' => false
+            'query' => Asignatura::find(),
+            'pagination' => true
         ]);
         return $activeData;
     }
