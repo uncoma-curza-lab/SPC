@@ -138,7 +138,7 @@ class AsignaturaController extends ActiveController
 
         $activeData = new ActiveDataProvider([
             'query' => Asignatura::find(),
-            'pagination' => true
+            'pagination' => false
         ]);
         return $activeData;
     }
