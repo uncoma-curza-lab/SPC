@@ -125,7 +125,7 @@ class AsignaturaController extends ActiveController
     {
         $asignatura = Asignatura::find();
 
-        if (!$planId = $_GET['id']) {
+        if ($planId = $_GET['id']) {
             $plan = Plan::findOne($planId);
             if ($plan) {
                 $asignatura = $plan->getCoursesTreeFromRoot($planId);
