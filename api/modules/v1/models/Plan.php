@@ -19,6 +19,7 @@ use yii\helpers\Url;
 class Plan extends \yii\db\ActiveRecord implements Linkable
 {
     private $version = "v1";
+
     /**
      * {@inheritdoc}
      */
@@ -53,21 +54,13 @@ class Plan extends \yii\db\ActiveRecord implements Linkable
             'archivo' => function($model){
                 return ($model->archivo ?\Yii::$app->urlManagerBackend->baseUrl.'/planFiles/'.$model->archivo  : '');
             },
-            /*'carrera' => function(){
-                return $this->carrera_id ? 
-                    Url::base(true)."/".$this->version."/carrera/".$this->carrera_id
-                    :
-                    null;
-            }*/
         ];
     }
     public function getLinks(){
         $asignaturas = Url::to(['asignatura/plan','id' => $this->id], true) . '&withExport=1';
         return [
             Link::REL_SELF => Url::to(['plan/'.$this->id], true),
-            //'edit' => Url::to(['user/view', 'id' => $this->id], true),
             'asignaturas' => $asignaturas,
-            //'index' => Url::to(['dpto'], true),
         ];    
     }
     /**

@@ -59,18 +59,20 @@ class PlanController extends ActiveController
         unset($actions['index']);
         return $actions;
     }
+
     public function actionIndex(){
         
         $activeData = new ActiveDataProvider([
             //'query' => Plan::find()->andFilterWhere(['=','id',$_GET['dpto']]),
-            'query' => Plan::find(),
+            'query' => Plan::find()->where(['is', 'parent_id', null]),
             'pagination' => false
         ]);
         return $activeData;
     }
+
     public function actionCarreras(){
         $activeData = new ActiveDataProvider([
-            'query' => Plan::find()->andFilterWhere(['=','carrera_id',$_GET['id']]),
+            'query' => Plan::find()->where(['is', 'parent_id', null])->andFilterWhere(['=','carrera_id',$_GET['id']]),
             'pagination' => false
         ]);
         return $activeData;
