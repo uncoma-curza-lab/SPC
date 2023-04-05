@@ -23,6 +23,7 @@ class CommandApproveProcess implements CommandInterface
       try { 
           if ($this->validateDraftFlow() || ($this->validateDepartmentFlow() && $this->validateAreas())) {
 
+              // draft -> department ---> set department.
               $this->program->subirEstado();
               $this->program->save();
 

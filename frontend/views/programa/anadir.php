@@ -5,6 +5,16 @@
   use yii\helpers\ArrayHelper;
   use common\models\Asignatura;
 
+  /***
+   *
+   *
+   *
+   * Deprecated View
+   *
+   *
+   *
+   */
+
 ?>
 <br>
 <div class="progress">

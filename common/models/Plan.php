@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use common\models\querys\PlanQuery;
 use Yii;
 
 /**
@@ -40,7 +41,9 @@ class Plan extends \yii\db\ActiveRecord
             //puede ser vacio el archivo skipOnEmpty
             [['planArchivo'], 'file', 'skipOnEmpty' => true, 'extensions' => 'pdf'],
             // puede no tener carrera_id  o fallar la validación
-            [['carrera_id'], 'exist', 'skipOnError' => true, 'targetClass' => Carrera::className(), 'targetAttribute' => ['carrera_id' => 'id']],
+            [['carrera_id'], 'exist', 'skipOnError' => true, 'targetClass' => Carrera::class, 'targetAttribute' => ['carrera_id' => 'id']],
+            [['parent_id'], 'exist', 'skipOnError' => true, 'targetClass' => Plan::class, 'targetAttribute' => ['parent_id' => 'id']],
+            [['root_plan_id'], 'exist', 'skipOnError' => true, 'targetClass' => Plan::class, 'targetAttribute' => ['root_plan_id' => 'id']],
         ];
     }
 
@@ -54,7 +57,9 @@ class Plan extends \yii\db\ActiveRecord
             'planordenanza' => 'Planordenanza',
             'carrera_id' => 'Carrera ID',
             'activo' => 'activo',
-            'archivo' => 'Path Archivo'
+            'archivo' => 'Path Archivo',
+            'parent_id' => 'Plan o modificatoria superior',
+            'root_plan_id' => 'Plan origen',
         ];
     }
 
@@ -109,13 +114,95 @@ class Plan extends \yii\db\ActiveRecord
         return $this->hasOne(Carrera::className(), ['id' => 'carrera_id']);
     }
 
+    public function getParent()
+    {
+        return $this->hasOne(Plan::className(), ['id' => 'parent_id']);
+    }
+
+    public function getRoot()
+    {
+        return $this->hasOne(Plan::className(), ['id' => 'root_plan_id']);
+    }
+
+    public function getChild()
+    {
+        return $this->hasOne(Plan::className(), ['parent_id' => 'id']);
+    }
+
+    public function hasChild()
+    {
+        return $this->getChild()->exists();
+    }
+
     public function getOrdenanza(){
       return $this->planordenanza;
     }
+
     public function getArchivo(){
         return $this->archivo;
     }
+
     public function setArchivo($filePath){
         $this->archivo = $filePath;
+    }
+
+    public function getLastAmendingPlan(int $limitPlanId = null)
+    {
+        if (!$this->child || $this->id == $limitPlanId) {
+            return $this;
+        }
+
+        return $this->child->getLastAmendingPlan($limitPlanId);
+    }
+
+    public static function getRootPlan($planId)
+    {
+        $plan = Plan::findOne($planId);
+        $parentId = $plan->parent_id;
+
+        if (!$parentId) {
+            return $plan;
+        }
+
+        return Plan::getRootPlan($parentId);
+    }
+
+    public function getCoursesTreeFromRoot(int $targetPlanId = null)
+    {
+        $root = $this->root_plan_id ? $this->root : $this;
+        if ($targetPlanId == $root->id) {
+            return $root->asignaturas;
+        }
+
+        $courses = [];
+        foreach ($root->asignaturas as $course) {
+            $courses[$course->id] = $course;
+        }
+
+
+        $child = $root->child;
+        while($child) {
+
+            foreach($child->asignaturas as $courseChild) {
+                if (in_array($courseChild->parent_id, array_keys($courses))) {
+                    unset($courses[$courseChild->parent_id]);
+                }
+                $courses[$courseChild->id] = $courseChild;
+            }
+
+            if ($targetPlanId == $child->id) {
+                break;
+            }
+
+            $child = $child->child;
+        }
+
+        return array_values(array_filter($courses));
+
+    }
+
+    public static function find()
+    {
+        return new PlanQuery(get_called_class());
     }
 }

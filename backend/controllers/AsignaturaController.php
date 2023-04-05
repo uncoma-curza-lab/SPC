@@ -5,10 +5,12 @@ namespace backend\controllers;
 use Yii;
 use common\models\Asignatura;
 use common\models\PermisosHelpers;
+use common\models\Plan;
 use common\models\search\AsignaturaSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\helpers\ArrayHelper;
 
 /**
  * AsignaturaController implements the CRUD actions for Asignatura model.
@@ -138,5 +140,35 @@ class AsignaturaController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    public function actionGetCoursesByPlanId($course_id = null, $plan_id, $q = null)
+    {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        $data = [];
+
+        $plan = Plan::findOne($plan_id);
+
+        $courses = $plan->getCoursesTreeFromRoot($plan_id);
+
+        if (!empty($courses)) {
+            $data = array_filter(array_map(function($course) use($course_id, $plan_id) {
+                if (
+                    ($course_id && $course->id == $course_id)
+                    ||
+                    ($plan_id && $course->plan_id == $plan_id)
+
+                ) {
+                    return null;
+                }
+                return [
+                    'id' => $course->id,
+                    'text' => $course->nomenclatura,
+                ];
+            }, $courses));
+        }
+
+        return ['results' => array_values($data)];
     }
 }

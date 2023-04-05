@@ -41,10 +41,12 @@ class Asignatura extends \yii\db\ActiveRecord
             [['orden','curso', 'cuatrimestre', 'carga_horaria_sem', 'carga_horaria_cuatr', 'plan_id', 'departamento_id'], 'integer'],
             [['requisitos'],'string'],
             [['nomenclatura'], 'string', 'max' => 255],
-            [['departamento_id'], 'exist', 'skipOnError' => true, 'targetClass' => Departamento::className(), 'targetAttribute' => ['departamento_id' => 'id']],
-            [['plan_id'], 'exist', 'skipOnError' => true, 'targetClass' => Plan::className(), 'targetAttribute' => ['plan_id' => 'id']],
+            [['departamento_id'], 'exist', 'skipOnError' => true, 'targetClass' => Departamento::class, 'targetAttribute' => ['departamento_id' => 'id']],
+            [['plan_id'], 'exist', 'skipOnError' => true, 'targetClass' => Plan::class, 'targetAttribute' => ['plan_id' => 'id']],
+            [['parent_id'], 'exist', 'skipOnError' => true, 'targetClass' => Asignatura::class, 'targetAttribute' => ['parent_id' => 'id']],
         ];
     }
+
     public function scenarios(){
         $scenarios = parent::scenarios();
         $scenarios['create'] = [
@@ -55,11 +57,13 @@ class Asignatura extends \yii\db\ActiveRecord
             'plan_id',
             'cuatrimestre',
             'orden',
-            'departamento_id'
+            'departamento_id',
+            'parent_id',
         ];
         return $scenarios;
 
     }
+
     /**
      * {@inheritdoc}
      */
@@ -76,8 +80,10 @@ class Asignatura extends \yii\db\ActiveRecord
             'carga_horaria_cuatr' => 'Carga Horaria Cuatr',
             'departamento_id' => 'Departamento',
             'requisitos' => 'Requisitos',
+            'parent_id' => 'Asignatura que modifica',
         ];
     }
+
     /**
     * @return \yii\db\ActiveQuery
     */
@@ -94,6 +100,16 @@ class Asignatura extends \yii\db\ActiveRecord
         return $this->hasOne(Plan::className(), ['id' => 'plan_id']);
     }
 
+    public function getParent()
+    {
+        return $this->hasOne(Asignatura::class, ['id' => 'parent_id']);
+    }
+
+    public function getChildrens()
+    {
+        return $this->hasMany(Asignatura::class, ['parent_id' => 'id']);
+    }
+
     public function getOrden(){
         return $this->orden;
     }
@@ -105,10 +121,12 @@ class Asignatura extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Programa::className(), ['asignatura_id' => 'id']);
     }
+
     public function getNomenclatura()
     {
       return $this->nomenclatura;
     }
+
     public function getCurso()
     {
         switch ($this->curso) {
@@ -137,6 +155,7 @@ class Asignatura extends \yii\db\ActiveRecord
                 return "N/N" ;
         }
     }
+
     public function getCuatrimestre(){
         switch ($this->cuatrimestre) {
             case 0:
@@ -152,9 +171,11 @@ class Asignatura extends \yii\db\ActiveRecord
                 return "N/N" ;
         }
     }
+
     public function getCargaHorariaSem(){
         return $this->carga_horaria_sem;
     }
+
     public function getCargaHorariaCuatr(){
         return $this->carga_horaria_cuatr;
     }
@@ -162,5 +183,23 @@ class Asignatura extends \yii\db\ActiveRecord
     public function getRequisitos(){
         return $this->requisitos;
     }
-    
+
+    public function hasChildren()
+    {
+        return $this->getChildrens()->exists();
+    }
+
+    public static function determineCurrentPlan($courseId)
+    {
+        $course = self::findOne($courseId);
+        $plan = $course->plan;
+        $currentPlanCareer = null;
+        if ($plan->carrera) {
+            $currentPlanCareer = $plan->carrera->plan_vigente_id;
+        }
+
+        $plan = $plan->getLastAmendingPlan($currentPlanCareer);
+
+        return $plan->id;
+    }
 }

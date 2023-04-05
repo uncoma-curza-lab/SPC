@@ -40,7 +40,7 @@
       <?= $model->printCurso(); ?>
     </p>
     <p><b>ORDENANZA: </b>
-      <?= Html::encode($model->getOrdenanza()); ?>
+      <?= Html::encode($model->getCompleteOrdinance()); ?>
     </p>
     <p><b>AÑO: </b><?= Html::encode($model->year) ?> </p>
     <p>

@@ -33,7 +33,7 @@ $designaciones = $model->getDesignaciones()->all();
     <p><b>CARRERA: </b><?= Html::encode($asignatura->getPlan()->one()->getCarrera()->one()->nom)?> </p>
     <p><b>CURSO: </b><?= Html::encode($model->printCurso()); ?></p>
     <p><b>ORDENANZA: </b>
-      <?= Html::encode($model->getOrdenanza()); ?>
+      <?= Html::encode($model->getCompleteOrdinance()); ?>
     </p>
     <p><b>AÑO: </b><?= Html::encode($model->year) ?> </p>
     <p>

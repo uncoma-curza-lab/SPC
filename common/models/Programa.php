@@ -79,7 +79,7 @@ class Programa extends \yii\db\ActiveRecord implements Linkable
     public function rules()
     {
         return [
-            [['departamento_id', 'status_id', 'asignatura_id', 'year', 'created_by', 'updated_by'], 'integer'],
+            [['departamento_id', 'status_id', 'asignatura_id', 'year', 'created_by', 'updated_by', 'current_plan_id'], 'integer'],
             [['asignatura_id','year'], 'required', 'on' => 'crear', 'message'=>"Debe completar este campo"],
             [['asignatura_id','year'], 'required', 'on' => 'copy', 'message'=>"Debe completar este campo"],
             //[['fundament'], 'required', 'on' => 'fundamentacion', 'message'=>"Debe completar este campo"],
@@ -90,6 +90,7 @@ class Programa extends \yii\db\ActiveRecord implements Linkable
             [['asignatura_id'], 'exist', 'skipOnError' => true, 'targetClass' => Asignatura::class, 'targetAttribute' => ['asignatura_id' => 'id']],
             [['departamento_id'], 'exist', 'skipOnError' => true, 'targetClass' => Departamento::class, 'targetAttribute' => ['departamento_id' => 'id']],
             [['status_id'], 'exist', 'skipOnError' => true, 'targetClass' => Status::class, 'targetAttribute' => ['status_id' => 'id']],
+            [['current_plan_id'], 'exist', 'skipOnError' => true, 'targetClass' => Plan::class, 'targetAttribute' => ['current_plan_id' => 'id']],
         ];
     }
 
@@ -141,6 +142,7 @@ class Programa extends \yii\db\ActiveRecord implements Linkable
             'crono_tentativo' => 'Crono Tentativo',
             'actv_extracur' => 'Actv Extracur',
             'firma' => 'Firma',
+            'current_plan_id' => 'Plan',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
             'deleted_at' => 'Eliminado',
@@ -149,12 +151,25 @@ class Programa extends \yii\db\ActiveRecord implements Linkable
         ];
     }
 
+    public function load($data, $formName = null)
+    {
+        if (
+            $this->scenario == 'crear' &&
+            $data &&
+            array_key_exists('Programa', $data)
+        ) {
+            $data['Programa']['current_plan_id'] = Asignatura::determineCurrentPlan($data['Programa']['asignatura_id']);
+        }
+        return parent::load($data, $formName);
+    }
+
     public function scenarios(){
       $scenarios = parent::scenarios();
       $scenarios['carrerap'] = ['status_id'];
       $scenarios['crear'] = [
       //  'curso',
         'asignatura_id',
+        'current_plan_id',
       //  'cuatrimestre',
         'equipo_catedra',
         'year',
@@ -190,6 +205,16 @@ class Programa extends \yii\db\ActiveRecord implements Linkable
       $scenarios['firma'] = ['firma'];
       return array_merge(parent::scenarios(), $scenarios);
       //return $scenarios;
+    }
+
+    public function getPlan()
+    {
+        if ($this->current_plan_id) {
+            return $this->hasOne(Plan::class, ['id' => 'current_plan_id']);
+        }
+
+        return $this->hasOne(Plan::class, ['id'=> 'plan_id'])
+                    ->viaTable('asignatura', ['id' => 'asignatura_id']);
     }
 
     /**
@@ -272,6 +297,7 @@ class Programa extends \yii\db\ActiveRecord implements Linkable
     {
         return $this->hasOne(Departamento::class, ['id' => 'departamento_id']);
     }
+
     public function getDepartamentoasignatura()
     {
       return $this->hasOne(Departamento::class, ['id' => 'departamento_id'])
@@ -313,6 +339,7 @@ class Programa extends \yii\db\ActiveRecord implements Linkable
     {
         return $this->hasOne(Perfil::class, ['user_id' => 'created_by']);
     }
+
     /**
      * Obtiene al creador del programa
      * @return Integer
@@ -320,6 +347,7 @@ class Programa extends \yii\db\ActiveRecord implements Linkable
     public function getCreatedBy(){
       return $this->created_by;
     }
+
     /**
      * Obtiene la nomenclatura de la asignatura perteneciente al programa
      * @return String
@@ -336,46 +364,93 @@ class Programa extends \yii\db\ActiveRecord implements Linkable
     {
       return $this->getAsignatura()->one()->getCurso();
     }
-    public function getOrdenanza(){
-      return $this->getAsignatura()->one()->getPlan()->one()->getOrdenanza();
+
+    /**
+     * @deprecated
+     */
+    public function getOrdenanza()
+    {
+      return $this->getPlan()->one()->root->getOrdenanza();
     }
+
+    public function getCompleteOrdinance()
+    {
+        if (!$this->plan->root) {
+            return 'Plan ' . $this->plan->getOrdenanza();
+        }
+
+        $rootPlan = $this->plan->root;
+        $ordinance = 'Plan: ' . $rootPlan->getOrdenanza();
+
+        $amendingPlan = '';
+        $currentPlan = $rootPlan;
+
+        while($currentPlan->child && $currentPlan->child->id != $this->plan->id) {
+            $amendingPlan .= " " . $currentPlan->child->getOrdenanza() . " - ";
+            $currentPlan = $currentPlan->child;
+        }
+
+        if ($currentPlan->child) {
+            $amendingPlan .= " " . $currentPlan->child->getOrdenanza();
+        }
+
+        if ($amendingPlan) {
+            $amendingPlan = ' - Modificatorias:' . rtrim($amendingPlan, '- ');
+            $ordinance .= $amendingPlan;
+        }
+
+        return $ordinance;
+    }
+
     public function getFundamentacion(){
       return $this->fundament;
     }
+
     public function getObjetivoPlan(){
       return $this->objetivo_plan;
     }
+
     public function getContenidoPlan(){
       return $this->contenido_plan;
     }
+
     public function getContenidoAnalitico(){
       return $this->contenido_analitico;
     }
+
     public function countContenidoAnalitico(){
       $unidades = $this->getUnidades()->count();
       return $unidades;
     }
+
     public function getPropuestaMetodologica(){
       return $this->propuesta_met;
     }
+
     public function getEyCAcreditacion(){
       return $this->evycond_acreditacion;
     }
+
     public function getParcRecyPromo(){
       return $this->parcial_rec_promo;
     }
+
     public function getDistHoraria(){
       return $this->distr_horaria;
     }
+
     public function getCronoTent(){
       return $this->crono_tentativo;
     }
+
     public function getActividadExtrac(){
       return $this->actv_extracur;
     }
+
     public function getYear(){
       return $this->year;
     }
+
     public function getEquipoCatedra(){
       return $this->equipo_catedra;
     }

@@ -7,6 +7,7 @@ use common\domain\programs\commands\ApproveProgram\CommandApproveProcess;
 use common\domain\programs\commands\GetCompleteProgram\GetCompleteProgramCommand;
 use common\domain\programs\commands\ProgramGenerateSteps\ProgramStepFactory;
 use common\domain\programs\commands\RejectProgram\CommandRejectProcess;
+use common\models\Asignatura;
 use Yii;
 use yii\data\ActiveDataProvider;
 /* Searchs */
@@ -19,6 +20,7 @@ use common\models\Departamento;
 use common\models\LessonType;
 use common\models\Module;
 use common\models\PermisosHelpers;
+use common\models\Plan;
 use common\models\TimeDistribution;
 use common\services\ModuleService;
 use Exception;
@@ -27,6 +29,8 @@ use yii\web\NotFoundHttpException;
 use yii\web\ForbiddenHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
+
+use function GuzzleHttp\Promise\all;
 
 /**
  * ProgramaController implements the CRUD actions for Programa model.
@@ -563,10 +567,16 @@ class MiProgramaController extends Controller
             Yii::$app->session->setFlash('danger','Hubo un problema al crear el programa');
         }
 
+
+        $plans = Plan::find()
+            ->onlyActive()
+            ->onlyRootPlans()
+            ->all();
+
         return $this->render('anadir', [
             'model' => $result->getProgram(),
+            'plans' => ArrayHelper::map($plans, 'id', 'planordenanza'),
         ]);
-
     }
 
    /**
