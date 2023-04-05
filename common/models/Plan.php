@@ -152,7 +152,7 @@ class Plan extends \yii\db\ActiveRecord
             return $this;
         }
 
-        $this->child->getLastAmendingPlan($limitPlanId);
+        return $this->child->getLastAmendingPlan($limitPlanId);
     }
 
     public static function getRootPlan($planId)
