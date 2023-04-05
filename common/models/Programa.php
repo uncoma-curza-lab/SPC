@@ -383,6 +383,10 @@ class Programa extends \yii\db\ActiveRecord implements Linkable
             $currentPlan = $currentPlan->child;
         }
 
+        if ($currentPlan->child) {
+            $amendingPlan .= " " . $currentPlan->child->getOrdenanza();
+        }
+
         if ($amendingPlan) {
             $amendingPlan = ' - Modificatorias:' . rtrim($amendingPlan, '- ');
             $ordinance .= $amendingPlan;

@@ -193,11 +193,12 @@ class Asignatura extends \yii\db\ActiveRecord
     {
         $course = self::findOne($courseId);
         $plan = $course->plan;
-
-
-        if ($plan && $plan->carrera && $plan->carrera->plan_vigente_id) {
-            return $plan->carrera->plan_vigente_id;
+        $currentPlanCareer = null;
+        if ($plan->carrera) {
+            $currentPlanCareer = $plan->carrera->plan_vigente_id;
         }
+
+        $plan = $plan->getLastAmendingPlan($currentPlanCareer);
 
         return $plan->id;
     }

@@ -146,6 +146,15 @@ class Plan extends \yii\db\ActiveRecord
         $this->archivo = $filePath;
     }
 
+    public function getLastAmendingPlan(int $limitPlanId = null)
+    {
+        if (!$this->child || $this->id == $limitPlanId) {
+            return $this;
+        }
+
+        $this->child->getLastAmendingPlan($limitPlanId);
+    }
+
     public static function getRootPlan($planId)
     {
         $plan = Plan::findOne($planId);
