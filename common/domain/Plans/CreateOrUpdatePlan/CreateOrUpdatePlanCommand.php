@@ -22,7 +22,11 @@ class CreateOrUpdatePlanCommand implements CommandInterface
                 if ($this->plan->parent->hasChild()) {
                     throw new Exception('Parent has child');
                 }
-                $this->plan->root_plan_id = Plan::getRootPlan($this->plan->parent_id);
+                $root = Plan::getRootPlan($this->plan->parent_id);
+                if (!$root) {
+                    throw new Exception('Fail to get root');
+                }
+                $this->plan->root_plan_id = $root->id;
             }
 
             $result = $this->plan->save();
