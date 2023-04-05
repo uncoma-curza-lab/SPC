@@ -3,6 +3,9 @@
 namespace common\models;
 
 use Yii;
+use yii\web\Linkable;
+use yii\web\Link;
+use yii\helpers\Url;
 
 /**
  * This is the model class for table "asignatura".
@@ -20,7 +23,7 @@ use Yii;
  * @property Plan $plan
  * @property Programa[] $programas
  */
-class Asignatura extends \yii\db\ActiveRecord
+class Asignatura extends \yii\db\ActiveRecord implements Linkable
 {
     /**
      * {@inheritdoc}
@@ -93,14 +96,34 @@ class Asignatura extends \yii\db\ActiveRecord
 
                 return $array;
             }
-            /*'plan' => function(){
-                return $this->plan_id ? 
-                    Url::base(true)."/".$this->version."/plan/".$this->plan_id
-                    :
-                    null;
-            }*/
-            
         ];
+    }
+
+    public function getLinks()
+    {
+        $withExports = false;
+        if (isset($_GET['withExport']) && ( $_GET['withExport'] === "1" || $_GET['withExport'] === 1 )) {
+            $bibliotecaStatus = Status::find()->where(['=', 'descripcion', 'Biblioteca'])->one();
+            if ($bibliotecaStatus) {
+                $bibliotecaId = $bibliotecaStatus->id;
+            }
+            $programas = $this->getProgramas()->andFilterWhere(['=', 'status_id', $bibliotecaId])->all();
+            $exports = [];
+            $request = \Yii::$app->request;
+            
+            foreach($programas as $programa) {
+                $exports[$programa->year] = Url::to(['biblioteca/download/' .  $programa->id], true);
+            }
+            $withExports = true;
+        }
+
+        $responseLinks = [
+            Link::REL_SELF => Url::to(['asignatura/' . $this->id], true),
+        ];    
+        if ($withExports) {
+            $responseLinks['exports'] = $exports;
+        }
+        return $responseLinks;
     }
 
     /**
