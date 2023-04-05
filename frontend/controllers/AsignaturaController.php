@@ -4,6 +4,7 @@ namespace frontend\controllers;
 
 use Yii;
 use common\models\Asignatura;
+use common\models\Plan;
 use common\models\search\AsignaturaSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -123,5 +124,27 @@ class AsignaturaController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    public function actionGetCoursesByPlanId($plan_id, $q = null)
+    {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        $data = [];
+
+        $plan = Plan::findOne($plan_id);
+
+        $courses = $plan->getCoursesTreeFromRoot();
+
+        if (!empty($courses)) {
+            $data = array_filter(array_map(function($course) {
+                return [
+                    'id' => $course->id,
+                    'text' => $course->nomenclatura,
+                ];
+            }, $courses));
+        }
+
+        return ['results' => array_values($data)];
     }
 }

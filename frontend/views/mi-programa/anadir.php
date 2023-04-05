@@ -43,6 +43,7 @@
   <?= $this->render('forms/_portada', [
         'form' => $form,
         'model' => $model,
+        'plans' => $plans,
   ]) ?>
 
   <div class="form-group text-right">

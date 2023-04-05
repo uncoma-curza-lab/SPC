@@ -23,11 +23,13 @@ class CommandApproveProcess implements CommandInterface
       try { 
           $draftFlow = $this->validateDraftFlow();
 
+
           if ($draftFlow) {
               $this->program->departamento_id = $this->program->asignatura->departamento_id;
           }
 
           if ($draftFlow || ($this->validateDepartmentFlow() && $this->validateAreas())) {
+
               $this->program->subirEstado();
               $this->program->save();
 
