@@ -64,6 +64,45 @@ class Asignatura extends \yii\db\ActiveRecord
 
     }
 
+    public function fields(){
+        return [
+            'id',
+            'nombre' => 'nomenclatura',
+            'ano_dictado' => 'curso',
+            'orden' => 'orden',
+            'cuatrimestre' => 'cuatrimestre',
+            'carga_sem' => 'carga_horaria_sem',
+            'plan' => 'plan_id',
+            'carga_total' => 'carga_horaria_cuatr',
+            'requisitos' => 'requisitos',
+            'correlativas' => function($model){
+                $correlativas = $model->getCorrelativas()->select('correlativa_id')->all();
+                $array = [];
+                foreach($correlativas as $correlativa){
+                    if ($correlativa->getCorrelativa()->one()){
+                        $asig = Asignatura::findOne($correlativa);
+                        
+                        array_push($array,[
+                            'orden' => $asig->getOrden(),
+                            'nomenclatura' => $asig->getNomenclatura(),
+                            'id' => $correlativa->correlativa_id
+                        ]);
+                    }
+
+                }
+
+                return $array;
+            }
+            /*'plan' => function(){
+                return $this->plan_id ? 
+                    Url::base(true)."/".$this->version."/plan/".$this->plan_id
+                    :
+                    null;
+            }*/
+            
+        ];
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -90,6 +129,11 @@ class Asignatura extends \yii\db\ActiveRecord
     public function getDepartamento()
     {
        return $this->hasOne(Departamento::className(), ['id' => 'departamento_id']);
+    }
+
+    public function getCorrelativas()
+    {
+        return $this->hasMany(Correlativa::className(), ['asignatura_id' => 'id']);
     }
 
     /**

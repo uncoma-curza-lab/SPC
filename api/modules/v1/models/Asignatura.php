@@ -10,20 +10,7 @@ use common\models\Correlativa;
 use yii\helpers\Url;
 
 /**
- * This is the model class for table "asignatura".
- *
- * @property int $id
- * @property string $nomenclatura
- * @property int $curso
- * @property int $cuatrimestre
- * @property int $carga_horaria_sem
- * @property int $carga_horaria_cuatr
- * @property int $plan_id
- * @property int $departamento_id
- *
- * @property Departamento $departamento
- * @property Plan $plan
- * @property Programa[] $programas
+ * @deprecated DANGER
  */
 class Asignatura extends \yii\db\ActiveRecord implements Linkable
 {
