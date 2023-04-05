@@ -55,7 +55,7 @@ class Carrera extends ModelsCarrera implements Linkable
             },
             'planes' => function($model){
                 $planes = Plan::find()->where(['carrera_id' => $model->id])
-                                      ->andWhere(['=','parent_id', null])
+                                      ->andWhere(['is','parent_id', null])
                                       ->andWhere(['activo' => true])
                                       ->all();
                 return $planes;
