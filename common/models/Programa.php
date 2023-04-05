@@ -535,6 +535,16 @@ class Programa extends \yii\db\ActiveRecord implements Linkable
       $estadoActual = Status::findOne($this->status_id);
       if($estadoActual){
         $estadoSiguiente = $estadoActual->nextStatus();
+
+        if (
+            $estadoSiguiente &&
+            $estadoActual->is(Status::BORRADOR_ID) &&
+            $this->departamento_id
+        ) {
+            // super patch
+            $estadoSiguiente = $estadoSiguiente->nextStatus();
+        }
+
         if ($estadoSiguiente) {
             $this->status_id = $estadoSiguiente->id;
             return true;

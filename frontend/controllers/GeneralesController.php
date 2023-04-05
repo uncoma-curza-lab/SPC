@@ -129,42 +129,46 @@ class GeneralesController extends Controller
      */
     public function actionPedir($id)
     {
-      $model = $this->findModel($id);
-      $model->scenario = 'pedir';
-      $estadoActual = $model->getstatus()->one();
-      if(!$estadoActual){
-        Yii::error("Hubo problemas con el estado del programa ID:".$id,'estado-programa');
+        $model = $this->findModel($id);
+        $model->scenario = 'pedir';
+        $estadoActual = $model->getstatus()->one();
 
-        Yii::$app->session->setFlash('danger','Programa sin estado');
-        return $this->redirect(['index']);
-      }
-
-      if(!isset($model->departamento_id) && $estadoActual->descripcion == "En espera"){
-        $perfil = \Yii::$app->user->identity->perfil;
-        // si es director tiene una designación con ese cargo
-        $cargoDirector = Cargo::find()->where(['=','nomenclatura','Director'])->one();
-        $designacion = Designacion::find()->where(['=','perfil_id',$perfil->id])->andWhere(['=','cargo_id',$cargoDirector->id])->one();
-        if($designacion){
-          $model->departamento_id = $designacion->departamento_id;
-          $estadoSiguiente = Status::find()->where(['>','value',$estadoActual->value])->orderBy('value')->one();
-          $model->status_id = $estadoSiguiente->id;
-        } else {
-          Yii::$app->session->setFlash('danger','No tiene un cargo directivo');
-          return $this->redirect(['index']);
+        if (!$estadoActual) {
+            Yii::error("Hubo problemas con el estado del programa ID:".$id,'estado-programa');
+            Yii::$app->session->setFlash('danger','Programa sin estado');
+            return $this->redirect(['index']);
         }
-        if ($model->save()){
-          Yii::info("Pidió el programa:".$id." con dpto: ".$model->departamento_id,'estado-programa');
 
-          return $this->redirect(['programa/evaluacion']);
+        if(!isset($model->departamento_id) && $estadoActual->descripcion == "En espera"){
+            $perfil = \Yii::$app->user->identity->perfil;
+            // si es director tiene una designación con ese cargo
+            $cargoDirector = Cargo::find()->where(['=','nomenclatura','Director'])->one();
+            $designacion = Designacion::find()->where(['=','perfil_id',$perfil->id])->andWhere(['=','cargo_id',$cargoDirector->id])->one();
+
+            if(!$designacion){
+                Yii::$app->session->setFlash('danger','No tiene un cargo directivo');
+                return $this->redirect(['index']);
+            }
+
+            $model->departamento_id = $designacion->departamento_id;
+            if (!$model->subirEstado()) {
+                Yii::$app->session->setFlash('danger','Hubo un problema al cambiar el estado del programa');
+                return $this->redirect(['index']);
+            }
+
+            if (!$model->save()) {
+                Yii::$app->session->setFlash('danger','Hubo un problema al guardar el programa');
+                return $this->redirect(['index']);
+            }
+
+            Yii::info("Pidió el programa:".$id." con dpto: ".$model->departamento_id,'estado-programa');
+            return $this->redirect(['programa/evaluacion']);
         } else {
+            Yii::error("El programa".$id." tenía departamento o no está en estado Profesor",'estado-programa');
 
+            Yii::$app->session->setFlash('danger','Hubo un problema al pedir el programa');
+            return $this->redirect(['index']);
         }
-      } else {
-        Yii::error("El programa".$id." tenía departamento o no está en estado Profesor",'estado-programa');
-
-        Yii::$app->session->setFlash('danger','Hubo un problema al pedir el programa');
-        return $this->redirect(['index']);
-      }
     }
 
 
