@@ -11,7 +11,8 @@ class Carrera extends ModelsCarrera implements Linkable
 {
     private $version = "v1";
 
-    public function fields(){
+    public function fields()
+    {
         return [
             'id',
             'nombre' => 'nom',
@@ -57,10 +58,6 @@ class Carrera extends ModelsCarrera implements Linkable
                 return $planes;
             },
             'departamento' => function(){
-                /*return $this->departamento_id ? 
-                    Url::base(true)."/".$this->version."/dpto/".$this->departamento_id
-                    :
-                    null;*/
                 return $this->departamento_id ? 
                     [
                         'nombre' => $this->getDepartamento()->one()->getNombre(),
@@ -77,28 +74,27 @@ class Carrera extends ModelsCarrera implements Linkable
     public function departamento($id){
         return ["nombre" => $id];
     }
-    /**
-     * {@inheritdoc}
-     */
+
     public function attributeLabels()
     {
         return [
             'id' => 'ID',
             'titulo' => 'Titulo',
             'alcance' => 'Alcance',
-            'duracion_total_anos' => 'DuraciÃ³n en aÃ±os',
-            'duracion_total_hs' => 'DuraciÃ³n en horas',
+            'duracion_total_anos' => 'Duraci—n en a–os',
+            'duracion_total_hs' => 'Duraci—n en horas',
             'perfil' => 'Perfil',
             'plan_vigente_id' => 'Plan vigente',
             'alcance' => 'Alcance',
-            'fundamentacion' => 'FundamentaciÃ³n',
+            'fundamentacion' => 'Fundamentaci—n',
             'nom' => 'Nombre',
             'departamento_id' => 'Departamento ID',
             'modalidad_id' => 'Modalidad'
         ];
     }
 
-    public function getLinks(){
+    public function getLinks()
+    {
         return [
             Link::REL_SELF => Url::to(['carrera/'.$this->id], true),
             'planes' => Url::to(['plan/carrera','id' => $this->id], true),

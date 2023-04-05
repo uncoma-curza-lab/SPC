@@ -41,9 +41,6 @@ class CarreraController extends ActiveController
         $behaviors['verbs'] = [
             'class' => \yii\filters\VerbFilter::className(),
             'actions' => [
-                //'create' => ['POST'],
-                //'update' => ['PUT','PATCH','POST'],
-                //'delete' => ['GET'],
                 'dptos' => ['GET'],
                 'index' => ['GET']
             ]
@@ -51,7 +48,8 @@ class CarreraController extends ActiveController
         return $behaviors;
     }
 
-    public function actionIndex(){
+    public function actionIndex()
+    {
         $activeData = new ActiveDataProvider([
             'query' => Carrera::find(),
             'pagination' => false
@@ -59,7 +57,8 @@ class CarreraController extends ActiveController
         return $activeData;
     }
 
-    public function actionDptos(){
+    public function actionDptos()
+    {
         $activeData = new ActiveDataProvider([
             'query' => Carrera::find()->andFilterWhere(['=','departamento_id',$_GET['id']]),
             'pagination' => false

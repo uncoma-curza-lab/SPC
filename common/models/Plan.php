@@ -3,9 +3,7 @@
 namespace common\models;
 
 use common\models\querys\PlanQuery;
-use yii\web\Link;
 use Yii;
-use yii\helpers\Url;
 
 /**
  * This is the model class for table "plan".
@@ -86,6 +84,7 @@ class Plan extends \yii\db\ActiveRecord
             return false;
         }
     }
+
     private function parseName($string) {
         $string = htmlentities($string);
         $string = str_replace(" ", "",$string);
@@ -136,11 +135,13 @@ class Plan extends \yii\db\ActiveRecord
         return $this->getChild()->exists();
     }
 
-    public function getOrdenanza(){
-      return $this->planordenanza;
+    public function getOrdenanza()
+    {
+        return $this->planordenanza;
     }
 
-    public function getArchivo(){
+    public function getArchivo()
+    {
         return $this->archivo;
     }
 

@@ -17,7 +17,6 @@ class PlanController extends ActiveController
     public function behaviors()
     {
         $behaviors = parent::behaviors();
-        //Formato
         $behaviors['contentNegotiator'] = [
             'class' => \yii\filters\ContentNegotiator::className(),
             'formats' => [
@@ -29,7 +28,6 @@ class PlanController extends ActiveController
             'class' => \yii\filters\Cors::className(),
             'cors' => [
                 'Origin' => ['*'],
-                // Permitir solo get
                 'Access-Control-Request-Method' => ['GET'],
                 'Access-Control-Request-Headers' => ['*'],
                 'Access-Control-Allow-Origin' => ['*'],
@@ -38,13 +36,9 @@ class PlanController extends ActiveController
                 'Access-Control-Expose-Headers' => [],
             ],
         ];
-        //verbo y accion
         $behaviors['verbs'] = [
             'class' => \yii\filters\VerbFilter::className(),
             'actions' => [
-                //'create' => ['POST'],
-                //'update' => ['PUT','PATCH','POST'],
-                //'delete' => ['GET'],
                 'index' => ['GET'],
                 'carreras' => ['GET']
             ]
@@ -57,7 +51,8 @@ class PlanController extends ActiveController
         return $actions;
     }
 
-    public function actionIndex(){
+    public function actionIndex()
+    {
         
         $activeData = new ActiveDataProvider([
             'query' => Plan::find()->where(['is', 'parent_id', null]),
@@ -66,7 +61,8 @@ class PlanController extends ActiveController
         return $activeData;
     }
 
-    public function actionCarreras(){
+    public function actionCarreras()
+    {
         $activeData = new ActiveDataProvider([
             'query' => Plan::find()->where(['is', 'parent_id', null])->andFilterWhere(['=','carrera_id',$_GET['id']]),
             'pagination' => false

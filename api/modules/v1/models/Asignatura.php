@@ -73,4 +73,19 @@ class Asignatura extends ModelsAsignatura implements Linkable
         }
         return $responseLinks;
     }
+
+    public function attributeLabels()
+    {
+        return [
+            'id' => 'ID',
+            'nomenclatura' => 'Nomenclatura',
+            'plan_id' => 'Plan ID',
+            'curso' => 'Curso',
+            'cuatrimestre' => 'Cuatrimestre',
+            'carga_horaria_sem' => 'Carga Horaria Sem',
+            'carga_horaria_cuatr' => 'Carga Horaria Cuatr',
+            'departamento_id' => 'Departamento ID',
+            'requisitos' => 'Requisitos',
+        ];
+    }
 }

@@ -65,7 +65,7 @@ class AsignaturaController extends ActiveController
         if ($planId = $_GET['id']) {
             $plan = Plan::findOne($planId);
             if ($plan) {
-                $asignatura = $plan->getCoursesTreeFromRoot($planId);
+                $asignatura = $plan->getCoursesTreeFromRoot();
                 return new ArrayDataProvider([
                     'allModels' => $asignatura,
                     'pagination' => false,

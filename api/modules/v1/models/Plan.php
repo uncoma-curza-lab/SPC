@@ -5,7 +5,6 @@ namespace api\modules\v1\models;
 use common\models\Plan as ModelsPlan;
 use yii\web\Link;
 use yii\web\Linkable;
-use Yii;
 use yii\helpers\Url;
 
 /**
@@ -42,6 +41,20 @@ class Plan extends ModelsPlan implements Linkable
             Link::REL_SELF => Url::to(['plan/'.$this->id], true),
             'asignaturas' => $asignaturas,
         ];    
+    }
+    
+    public function getOrdenanza(){
+        return $this->planordenanza;
+    }
+
+    public function attributeLabels()
+    {
+        return [
+            'id' => 'id',
+            'planordenanza' => 'ordenanza',
+            'carrera_id' => 'carrera_id',
+            'archivo' => 'archivo',
+        ];
     }
 
 }

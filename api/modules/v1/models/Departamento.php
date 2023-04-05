@@ -28,4 +28,13 @@ class Departamento extends ModelsDepartamento implements Linkable
         ];    
     }
 
+    public function attributeLabels()
+    {
+        return [
+            'id' => 'ID',
+            'nom' => 'Nom',
+            'slug' => 'Slug',
+            'director' => 'Director',
+        ];
+    }
 }
