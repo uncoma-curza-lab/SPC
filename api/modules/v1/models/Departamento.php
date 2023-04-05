@@ -9,16 +9,7 @@ use common\models\User;
 use yii\db\ActiveRecord;
 
 /**
- * This is the model class for table "departamento".
- *
- * @property int $id
- * @property string $nom
- * @property string $slug
- * @property int $director
- * @property Asignatura[] $asignaturas
- * @property Carrera[] $carreras
- * @property User $director0
- * @property Programa[] $programas
+ * @deprecated
  */
 class Departamento extends \yii\db\ActiveRecord implements Linkable
 {

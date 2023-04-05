@@ -3,21 +3,11 @@
 namespace common\models;
 
 use Yii;
-use frontend\models\Perfil;
+use yii\web\Link;
+use yii\web\Linkable;
+use yii\helpers\Url;
 
-/**
- * This is the model class for table "departamento".
- *
- * @property int $id
- * @property string $nom
- * @property string $slug
- * @property int $director
- * @property Asignatura[] $asignaturas
- * @property Carrera[] $carreras
- * @property User $director0
- * @property Programa[] $programas
- */
-class Departamento extends \yii\db\ActiveRecord
+class Departamento extends \yii\db\ActiveRecord implements Linkable
 {
     /**
      * {@inheritdoc}
@@ -37,6 +27,30 @@ class Departamento extends \yii\db\ActiveRecord
             [['director'], 'integer'],
             [['nom', 'slug'], 'string', 'max' => 255],
         ];
+    }
+
+    public function fields()
+    {
+        return [
+            'id',
+            'nombre' => 'nom',
+            
+        ];
+    }
+
+    public function extraFields()
+    {
+        return ['carreras' => function(){ return $this->getCarreras()->all();}];
+    }
+
+    public function getLinks()
+    {
+        return [
+            Link::REL_SELF => Url::to(['departamento/'.$this->id], true),
+            //'edit' => Url::to(['user/view', 'id' => $this->id], true),
+            'carreras' => Url::to(['carrera/departamento','id' => $this->id], true),
+            //'index' => Url::to(['dpto'], true),
+        ];    
     }
 
     /**
@@ -89,5 +103,10 @@ class Departamento extends \yii\db\ActiveRecord
     
     public function getNomenclatura(){
         return $this->nom;
+    }
+
+    public function getNombre()
+    {
+        return $this->getNomenclatura();
     }
 }

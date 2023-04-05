@@ -2,14 +2,9 @@
 
 namespace api\modules\v1\controllers;
 
-use Yii;
-use api\modules\v1\models\Carrera;
-use api\modules\v1\models\CarreraSearch;
+use common\models\Carrera;
 use yii\rest\ActiveController;
-use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 use yii\data\ActiveDataProvider;
-use \yii\filters\ContentNegotiator;
 
 /**
  * CarreraController implements the CRUD actions for Carrera model.
@@ -55,6 +50,7 @@ class CarreraController extends ActiveController
         ];
         return $behaviors;
     }
+
     public function actionIndex(){
         $activeData = new ActiveDataProvider([
             'query' => Carrera::find(),
@@ -62,6 +58,7 @@ class CarreraController extends ActiveController
         ]);
         return $activeData;
     }
+
     public function actionDptos(){
         $activeData = new ActiveDataProvider([
             'query' => Carrera::find()->andFilterWhere(['=','departamento_id',$_GET['id']]),

@@ -3,6 +3,9 @@
 namespace common\models;
 
 use Yii;
+use yii\helpers\Url;
+use yii\web\Linkable;
+use yii\web\Link;
 
 /**
  * This is the model class for table "carrera".
@@ -14,11 +17,11 @@ use Yii;
  *
  * @property Departamento $departamento
  */
-class Carrera extends \yii\db\ActiveRecord
+class Carrera extends \yii\db\ActiveRecord implements Linkable
 {
-    /**
-     * {@inheritdoc}
-     */
+
+    private $version = "v1";
+
     public static function tableName()
     {
         return 'carrera';
@@ -63,6 +66,78 @@ class Carrera extends \yii\db\ActiveRecord
         ];
     }
 
+    public function fields(){
+        return [
+            'id',
+            'nombre' => 'nom',
+            'titulo' => 'titulo',
+            'alcance' => 'alcance',
+            'duracion_total_anos' => 'duracion_total_anos',
+            'duracion_total_hs' => 'duracion_total_hs',
+            'perfil' => 'perfil',
+            'modalidades' => function ($model) {
+                $modalidades = $model->getCarreraModalidad()->with(['modalidad'])->all();
+                $array = [];
+                foreach($modalidades as $modalidad){
+                    $maux = $modalidad->getModalidad()->one();
+                    if ($maux){
+                        array_push($array,[
+                            'nombre' => $maux->getNombre(),
+                            'descripcion' => $maux->getDescripcion(),
+                        ]);
+                    }
+                }
+
+                return $array ? 
+                    $array
+                    :
+                    null;
+            },
+            'plan_vigente' => function($model){
+                $plan = null;
+                if ($model->plan_vigente_id){
+                    $plan = $model->getPlanVigente()->with('root')->one();
+                    if ($plan->root) {
+                        $plan = $plan->root;
+                    }
+                }
+                
+                return $plan ? 
+                    $plan
+                    :
+                    null;
+            },
+            'planes' => function($model){
+                $planes = $model->getPlanes()->where(['=','plan.parent_id', null])->where(['activo' => true])->all();
+                return $planes;
+            },
+            'departamento' => function(){
+                /*return $this->departamento_id ? 
+                    Url::base(true)."/".$this->version."/dpto/".$this->departamento_id
+                    :
+                    null;*/
+                return $this->departamento_id ? 
+                    [
+                        'nombre' => $this->getDepartamento()->one()->getNombre(),
+                        'href' => Url::base(true)."/".$this->version."/departamento/".$this->departamento_id
+                    ]: null;
+            },
+            'es_titulo_intermedio' => function($model){
+                $modelo = $model->getTituloIntermedio()->one();
+                return $modelo ? true : false;
+            }
+        ];
+    }
+
+    public function getLinks(){
+        return [
+            Link::REL_SELF => Url::to(['carrera/'.$this->id], true),
+            //'edit' => Url::to(['user/view', 'id' => $this->id], true),
+            'planes' => Url::to(['plan/carrera','id' => $this->id], true),
+            //'index' => Url::to(['dpto'], true),
+        ];    
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -79,9 +154,6 @@ class Carrera extends \yii\db\ActiveRecord
         ->viaTable('{{%carreramodalidad}}',['carrera_id'=>'id']);
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
     public function getDepartamento()
     {
         return $this->hasOne(Departamento::className(), ['id' => 'departamento_id']);
@@ -96,11 +168,19 @@ class Carrera extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Plan::className(), ['id' => 'plan_vigente_id']);
     }
-    public function getNomenclatura(){
+
+    public function getNomenclatura()
+    {
         return $this->nom;
     }
-    public function getNivelID(){
+
+    public function getNivelID()
+    {
         return $this->nivel_id;
     }
 
+    public function getTituloIntermedio()
+    {
+        return $this->hasOne(TituloIntermedio::className(),['titulo_intermedio_id' => 'id']);
+    }
 }

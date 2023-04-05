@@ -3,7 +3,10 @@
 namespace common\models;
 
 use common\models\querys\PlanQuery;
+use yii\web\Link;
+use yii\web\Linkable;
 use Yii;
+use yii\helpers\Url;
 
 /**
  * This is the model class for table "plan".
@@ -15,7 +18,7 @@ use Yii;
  * @property Asignatura[] $asignaturas
  * @property Carrera $carrera
  */
-class Plan extends \yii\db\ActiveRecord
+class Plan extends \yii\db\ActiveRecord implements Linkable
 {
     public $planArchivo;
 
@@ -45,6 +48,30 @@ class Plan extends \yii\db\ActiveRecord
             [['parent_id'], 'exist', 'skipOnError' => true, 'targetClass' => Plan::class, 'targetAttribute' => ['parent_id' => 'id']],
             [['root_plan_id'], 'exist', 'skipOnError' => true, 'targetClass' => Plan::class, 'targetAttribute' => ['root_plan_id' => 'id']],
         ];
+    }
+
+    public function fields()
+    {
+        return [
+            'id',
+            'ordenanza' => 'planordenanza',
+            'activo' => function($model){
+                return $model->activo ?
+                    true : false;
+            },
+            'archivo' => function($model){
+                return ($model->archivo ?\Yii::$app->urlManagerBackend->baseUrl.'/planFiles/'.$model->archivo  : '');
+            },
+        ];
+    }
+
+    public function getLinks()
+    {
+        $asignaturas = Url::to(['asignatura/plan','id' => $this->id], true) . '&withExport=1';
+        return [
+            Link::REL_SELF => Url::to(['plan/'.$this->id], true),
+            'asignaturas' => $asignaturas,
+        ];    
     }
 
     /**

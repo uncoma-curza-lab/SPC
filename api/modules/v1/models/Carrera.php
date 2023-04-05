@@ -7,15 +7,9 @@ use common\models\CarreraModalidad;
 use common\models\TituloIntermedio;
 use Yii;
 use yii\helpers\Url;
+
 /**
- * This is the model class for table "carrera".
- *
- * @property int $id
- * @property string $nom
- * @property int $codigo
- * @property int $departamento_id
- *
- * @property Departamento $departamento
+ * @deprecated
  */
 class Carrera extends \yii\db\ActiveRecord implements Linkable
 {
@@ -75,17 +69,19 @@ class Carrera extends \yii\db\ActiveRecord implements Linkable
             'plan_vigente' => function($model){
                 $plan = null;
                 if ($model->plan_vigente_id){
-                    $plan = $model->getPlanVigente()->one();
+                    $plan = $model->getPlanVigente()->with('root')->one();
+                    if ($plan->root) {
+                        $plan = $plan->root;
+                    }
                 }
                 
                 return $plan ? 
-                    //Url::to(['plan/'.$model->plan_vigente_id], true)
                     $plan
-                :
+                    :
                     null;
             },
             'planes' => function($model){
-                $planes = $model->getPlanes()->where(['activo' => true])->all();
+                $planes = $model->getPlanes()->where(['=','plan.parent_id', null])->where(['activo' => true])->all();
                 return $planes;
             },
             'departamento' => function(){

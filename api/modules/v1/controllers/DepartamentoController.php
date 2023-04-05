@@ -2,15 +2,9 @@
 
 namespace api\modules\v1\controllers;
 
-use Yii;
+use common\models\Departamento;
 use yii\data\ActiveDataProvider;
-use api\modules\v1\models\Departamento;
-use api\modules\v1\models\search\DepartamentoSearch;
-use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 use yii\rest\ActiveController;
-use yii\filters\auth\HttpBasicAuth;
-use \yii\filters\ContentNegotiator;
 /**
  * DepartamentoController implements the CRUD actions for Departamento model.
  */
@@ -86,19 +80,20 @@ class DepartamentoController extends ActiveController
         
         return $actions;
     }
-    public function actionIndex(){
+
+    public function actionIndex()
+    {
         $query = Departamento::find();
-        //if ($_GET['carrera']){
-        //    query = $query->andFilterWhere('')
-        //}
         $activeData = new ActiveDataProvider([
             'query' => $query,
             'pagination' => false
         ]);
         return $activeData;
     }
-    public function actionCarrera(){
-        $query = Departamento::find()->all()->getCarreras()->all();
+
+    public function actionCarrera()
+    {
+        $query = Departamento::find()->getCarreras()->all();
         $activeData = new ActiveDataProvider([
             'query' => $query,
             'pagination' => false
