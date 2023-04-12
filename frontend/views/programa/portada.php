@@ -3,7 +3,7 @@
   use \yii\helpers\HtmlPurifier;
   use common\models\Departamento;
   $asignatura = $model->getAsignatura()->one();
-$designaciones = $model->getDesignaciones()->all();
+  $designaciones = $model->getDesignaciones()->all();
 ?>
 <head>
   <meta charset="utf-8">

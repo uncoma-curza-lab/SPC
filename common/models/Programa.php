@@ -370,7 +370,12 @@ class Programa extends \yii\db\ActiveRecord implements Linkable
      */
     public function getOrdenanza()
     {
-      return $this->getPlan()->one()->root->getOrdenanza();
+        $plan = $this->getPlan()->one();
+        if ($plan->root) {
+            return $plan->root->getOrdenanza();
+        }
+
+        return $plan->getOrdenanza();
     }
 
     public function getCompleteOrdinance()
