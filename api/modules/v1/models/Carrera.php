@@ -44,7 +44,9 @@ class Carrera extends ModelsCarrera implements Linkable
                 if ($model->plan_vigente_id){
                     $plan = Plan::find()->where([ 'id' => $model->plan_vigente_id ])->with('root')->one();
                     if ($plan->root) {
-                        $plan = $plan->root;
+                        // don't use Plan from common models
+                        $rootPlanId= $plan->root_plan_id;
+                        $plan = Plan::findOne($rootPlanId);
                     }
                 }
                 
