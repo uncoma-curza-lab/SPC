@@ -1,6 +1,8 @@
 <?php
 
 namespace api\modules\v1\models;
+
+use common\domain\programs\commands\GetAllByCourse\GetAllByCourseProcess;
 use yii\web\Linkable;
 use yii\web\Link;
 use common\models\Asignatura as ModelsAsignatura;
@@ -51,14 +53,18 @@ class Asignatura extends ModelsAsignatura implements Linkable
             if ($bibliotecaStatus) {
                 $bibliotecaId = $bibliotecaStatus->id;
             }
-            $programas = $this->getProgramas()->andFilterWhere(['=', 'status_id', $bibliotecaId])->all();
+            $process = new GetAllByCourseProcess($this);
+            $result = $process->handle();
+            $programas = $result->getPrograms();
+
             $exports = [];
             $request = \Yii::$app->request;
             
-            foreach($programas as $programa) {
-                $exports[$programa->year] = Url::to(['biblioteca/download/' .  $programa->id], true);
+            if ($programas) {
+                foreach($programas as $programa) {
+                    $exports[$programa->year] = Url::to(['biblioteca/download/' .  $programa->id], true);
+                }
             }
-            //if (strpos($request->pathInfo,'plan') !== false) {
             $withExports = true;
         }
 

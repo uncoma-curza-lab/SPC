@@ -99,6 +99,9 @@ class Asignatura extends \yii\db\ActiveRecord implements Linkable
         ];
     }
 
+    /**
+     * @deprecated use into api
+     */
     public function getLinks()
     {
         $withExports = false;
