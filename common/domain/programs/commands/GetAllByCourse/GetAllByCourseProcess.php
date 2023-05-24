@@ -3,13 +3,7 @@
 namespace common\domain\programs\commands\GetAllByCourse;
 
 use common\models\Asignatura as Course;
-use common\models\Module;
-use common\models\PermisosHelpers;
-use common\models\Programa as Program;
-use common\models\Status;
 use common\shared\commands\CommandInterface;
-use Mpdf\HTMLParserMode;
-use Mpdf\Mpdf;
 
 class GetAllByCourseProcess implements CommandInterface
 {
@@ -38,6 +32,10 @@ class GetAllByCourseProcess implements CommandInterface
 
     protected function getParentPrograms($parent)
     {
+        if ($parent == null) {
+            return [];
+        }
+
         $programs = $parent->getProgramas()->all();
         $parent = $parent->getParent()->with('programas')->one();
         if ($parent) {
@@ -49,6 +47,10 @@ class GetAllByCourseProcess implements CommandInterface
 
     protected function getChildPrograms(array $childs)
     {
+        if (count($childs) == 0) {
+            return [];
+        }
+
         $programs = [];
         foreach ($childs as $child) {
             $programs = array_merge($child->getProgramas()->all(), $programs);
