@@ -37,9 +37,9 @@ class Plan extends ModelsPlan implements Linkable
     }
 
     public function getLinks(){
-        $asignaturas = Url::to(['asignatura/plan','id' => $this->id], true) . '&withExport=1';
+        $asignaturas = Url::to(['asignatura/plan','id' => $this->id], 'https') . '&withExport=1';
         return [
-            Link::REL_SELF => Url::to(['plan/'.$this->id], true),
+            Link::REL_SELF => Url::to(['plan/'.$this->id], 'https'),
             'asignaturas' => $asignaturas,
         ];    
     }
