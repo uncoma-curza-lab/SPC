@@ -70,9 +70,6 @@ class Asignatura extends ModelsAsignatura implements Linkable
 
         $responseLinks = [
             Link::REL_SELF => Url::to(['asignatura/' . $this->id], 'https'),
-            //'edit' => Url::to(['user/view', 'id' => $this->id], true),
-            //'planes' => Url::to(['planes/carrera','id' => $this->id], true),
-            //'index' => Url::to(['dpto'], true),
         ];    
         if ($withExports) {
             $responseLinks['exports'] = $exports;
