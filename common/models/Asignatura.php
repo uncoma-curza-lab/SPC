@@ -115,13 +115,13 @@ class Asignatura extends \yii\db\ActiveRecord implements Linkable
             $request = \Yii::$app->request;
             
             foreach($programas as $programa) {
-                $exports[$programa->year] = Url::to(['biblioteca/download/' .  $programa->id], true);
+                $exports[$programa->year] = Url::to(['biblioteca/download/' .  $programa->id], 'https');
             }
             $withExports = true;
         }
 
         $responseLinks = [
-            Link::REL_SELF => Url::to(['asignatura/' . $this->id], true),
+            Link::REL_SELF => Url::to(['asignatura/' . $this->id], 'https'),
         ];    
         if ($withExports) {
             $responseLinks['exports'] = $exports;
