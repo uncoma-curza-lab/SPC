@@ -839,11 +839,8 @@ class Programa extends \yii\db\ActiveRecord implements Linkable
   public function getLinks()
   {
     return [
-      Link::REL_SELF => Url::to(['biblioteca/' . $this->id], true),
-      'export' => Url::to(['biblioteca/export/' . $this->id], true),
-      //'edit' => Url::to(['user/view', 'id' => $this->id], true),
-      //'programas' => Url::to(['programas/plan', 'id' => $this->id], true),
-      //'index' => Url::to(['dpto'], true),
+      Link::REL_SELF => Url::to(['biblioteca/' . $this->id], 'https'),
+      'export' => Url::to(['biblioteca/export/' . $this->id], 'https'),
     ];
   }
 

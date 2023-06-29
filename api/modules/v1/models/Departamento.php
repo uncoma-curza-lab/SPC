@@ -23,8 +23,8 @@ class Departamento extends ModelsDepartamento implements Linkable
     }
     public function getLinks(){
         return [
-            Link::REL_SELF => Url::to(['departamento/'.$this->id], true),
-            'carreras' => Url::to(['carrera/departamento','id' => $this->id], true),
+            Link::REL_SELF => Url::to(['departamento/'.$this->id], 'https'),
+            'carreras' => Url::to(['carrera/departamento','id' => $this->id], 'https'),
         ];    
     }
 

@@ -62,17 +62,14 @@ class Asignatura extends ModelsAsignatura implements Linkable
             
             if ($programas) {
                 foreach($programas as $programa) {
-                    $exports[$programa->year] = Url::to(['biblioteca/download/' .  $programa->id], true);
+                    $exports[$programa->year] = Url::to(['biblioteca/download/' .  $programa->id], 'https');
                 }
             }
             $withExports = true;
         }
 
         $responseLinks = [
-            Link::REL_SELF => Url::to(['asignatura/' . $this->id], true),
-            //'edit' => Url::to(['user/view', 'id' => $this->id], true),
-            //'planes' => Url::to(['planes/carrera','id' => $this->id], true),
-            //'index' => Url::to(['dpto'], true),
+            Link::REL_SELF => Url::to(['asignatura/' . $this->id], 'https'),
         ];    
         if ($withExports) {
             $responseLinks['exports'] = $exports;

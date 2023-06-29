@@ -101,8 +101,8 @@ class Carrera extends ModelsCarrera implements Linkable
     public function getLinks()
     {
         return [
-            Link::REL_SELF => Url::to(['carrera/'.$this->id], true),
-            'planes' => Url::to(['plan/carrera','id' => $this->id], true),
+            Link::REL_SELF => Url::to(['carrera/'.$this->id], 'https'),
+            'planes' => Url::to(['plan/carrera','id' => $this->id], 'https'),
         ];    
     }
 }
