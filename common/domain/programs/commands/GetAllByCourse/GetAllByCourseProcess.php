@@ -18,8 +18,8 @@ class GetAllByCourseProcess implements CommandInterface
     {
         try {
             $programs = $this->course->getProgramas()->all();
-            $childs = $this->getChildPrograms($this->course->getChildrens()->with('programas')->all());
-            $parents = $this->getParentPrograms($this->course->getParent()->with('programas')->one());
+            $childs = $this->getChildPrograms($this->course->getChildrens()->with('programa')->all());
+            $parents = $this->getParentPrograms($this->course->getParent()->with('programa')->one());
 
             return new GetAllByCourseResult(true, 'Success', ['programs' => array_merge($programs, $childs, $parents)]);
 
@@ -37,7 +37,7 @@ class GetAllByCourseProcess implements CommandInterface
         }
 
         $programs = $parent->getProgramas()->all();
-        $parent = $parent->getParent()->with('programas')->one();
+        $parent = $parent->getParent()->with('programa')->one();
         if ($parent) {
             $programs = array_merge($this->getParentPrograms($parent), $programs);
         }
