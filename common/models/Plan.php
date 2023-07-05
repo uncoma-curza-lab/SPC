@@ -2,7 +2,6 @@
 
 namespace common\models;
 
-use api\modules\v1\models\Asignatura;
 use common\models\querys\PlanQuery;
 use Yii;
 
@@ -16,7 +15,7 @@ use Yii;
  * @property Asignatura[] $asignaturas
  * @property Carrera $carrera
  */
-class Plan extends \yii\db\ActiveRecord
+class Plan extends BaseExtendedModel 
 {
     public $planArchivo;
 
@@ -207,6 +206,7 @@ class Plan extends \yii\db\ActiveRecord
 
     public static function find()
     {
-        return new PlanQuery(get_called_class());
+        $class = get_class(Yii::$container->get(static::class));
+        return new PlanQuery($class);
     }
 }

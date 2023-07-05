@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use yii\db\ActiveQuery;
 use yii\web\Linkable;
 use yii\web\Link;
 use yii\helpers\Url;
@@ -271,5 +272,11 @@ class Asignatura extends \yii\db\ActiveRecord implements Linkable
         $plan = $plan->getLastAmendingPlan($currentPlanCareer);
 
         return $plan->id;
+    }
+
+    public static function find()
+    {
+        $class = get_class(Yii::$container->get(static::class));
+        return Yii::createObject(ActiveQuery::className(), [$class]);
     }
 }

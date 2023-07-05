@@ -11,7 +11,7 @@ use yii\helpers\Url;
 use yii\web\Link;
 use yii\web\Linkable;
 
-class Programa extends \yii\db\ActiveRecord implements Linkable
+class Programa extends BaseExtendedModel implements Linkable
 {
     const EVENT_NEW_PROGM = 'nuevo-programa';
 
