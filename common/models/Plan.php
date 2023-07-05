@@ -15,7 +15,7 @@ use Yii;
  * @property Asignatura[] $asignaturas
  * @property Carrera $carrera
  */
-class Plan extends BaseExtendedModel 
+class Plan extends BaseModel 
 {
     public $planArchivo;
 

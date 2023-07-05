@@ -6,7 +6,7 @@ use Yii;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
-abstract class BaseExtendedModel extends ActiveRecord
+abstract class BaseModel extends ActiveRecord
 {
     public static function find()
     {

@@ -4,7 +4,7 @@ namespace common\models;
 
 use Yii;
 
-class Departamento extends BaseExtendedModel 
+class Departamento extends BaseModel 
 {
     /**
      * {@inheritdoc}

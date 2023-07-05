@@ -14,7 +14,7 @@ use Yii;
  *
  * @property Departamento $departamento
  */
-class Carrera extends BaseExtendedModel 
+class Carrera extends BaseModel 
 {
 
     private $version = "v1";

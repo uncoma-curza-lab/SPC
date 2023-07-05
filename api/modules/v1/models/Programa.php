@@ -6,6 +6,8 @@ use common\models\Designacion;
 use common\models\Notification;
 use common\models\Objetivo;
 use common\models\Observacion;
+use common\models\Programa as ModelsPrograma;
+use common\models\Status;
 use Yii;
 use frontend\models\Perfil;
 //behaviors library
@@ -49,7 +51,7 @@ use yii\web\Linkable;
  * @property Status $status
  * @property Unidad[] $unidads
  */
-class Programa extends \yii\db\ActiveRecord implements Linkable
+class Programa extends ModelsPrograma implements Linkable
 {
   const EVENT_NEW_PROGM = 'nuevo-programa';
 
