@@ -14,7 +14,7 @@ use Yii;
  *
  * @property Departamento $departamento
  */
-class Carrera extends \yii\db\ActiveRecord
+class Carrera extends BaseModel 
 {
 
     private $version = "v1";

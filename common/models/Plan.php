@@ -15,7 +15,7 @@ use Yii;
  * @property Asignatura[] $asignaturas
  * @property Carrera $carrera
  */
-class Plan extends \yii\db\ActiveRecord
+class Plan extends BaseModel 
 {
     public $planArchivo;
 
@@ -104,7 +104,7 @@ class Plan extends \yii\db\ActiveRecord
      */
     public function getAsignaturas()
     {
-        return $this->hasMany(Asignatura::className(), ['plan_id' => 'id']);
+        return $this->hasMany(Asignatura::class, ['plan_id' => 'id']);
     }
 
     /**
@@ -112,22 +112,22 @@ class Plan extends \yii\db\ActiveRecord
      */
     public function getCarrera()
     {
-        return $this->hasOne(Carrera::className(), ['id' => 'carrera_id']);
+        return $this->hasOne(Carrera::class, ['id' => 'carrera_id']);
     }
 
     public function getParent()
     {
-        return $this->hasOne(Plan::className(), ['id' => 'parent_id']);
+        return $this->hasOne(Plan::class, ['id' => 'parent_id']);
     }
 
     public function getRoot()
     {
-        return $this->hasOne(Plan::className(), ['id' => 'root_plan_id']);
+        return $this->hasOne(Plan::class, ['id' => 'root_plan_id']);
     }
 
     public function getChild()
     {
-        return $this->hasOne(Plan::className(), ['parent_id' => 'id']);
+        return $this->hasOne(Plan::class, ['parent_id' => 'id']);
     }
 
     public function hasChild()
@@ -206,6 +206,7 @@ class Plan extends \yii\db\ActiveRecord
 
     public static function find()
     {
-        return new PlanQuery(get_called_class());
+        $class = get_class(Yii::$container->get(static::class));
+        return new PlanQuery($class);
     }
 }

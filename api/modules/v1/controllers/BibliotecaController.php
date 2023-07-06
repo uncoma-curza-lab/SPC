@@ -2,7 +2,7 @@
 
 namespace api\modules\v1\controllers;
 
-use common\models\Programa;
+use api\modules\v1\models\Programa;
 use common\domain\programs\commands\ExportProgram\ExportProgramProcess;
 use yii\rest\ActiveController;
 use yii\web\NotFoundHttpException;
