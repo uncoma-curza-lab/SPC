@@ -11,7 +11,7 @@ use yii\helpers\Url;
 use yii\web\Link;
 use yii\web\Linkable;
 
-class Programa extends BaseModel implements Linkable
+class Programa extends BaseModel
 {
     const EVENT_NEW_PROGM = 'nuevo-programa';
 
@@ -834,14 +834,6 @@ class Programa extends BaseModel implements Linkable
             default:
                 break;
         }
-    }
-
-    public function getLinks()
-    {
-      return [
-        Link::REL_SELF => Url::to(['biblioteca/' . $this->id], 'https'),
-        'export' => Url::to(['biblioteca/export/' . $this->id], 'https'),
-      ];
     }
 
     public function getTimesDistributions()
