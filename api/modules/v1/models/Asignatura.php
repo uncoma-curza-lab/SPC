@@ -58,11 +58,12 @@ class Asignatura extends ModelsAsignatura implements Linkable
             $programas = $result->getPrograms();
 
             $exports = [];
-            $request = \Yii::$app->request;
             
             if ($programas) {
                 foreach($programas as $programa) {
-                    $exports[$programa->year] = Url::to(['biblioteca/download/' .  $programa->id], 'https');
+                    if($programa->status_id == $bibliotecaId){
+                        $exports[$programa->year] = Url::to(['biblioteca/download/' .  $programa->id], 'https');
+                    }
                 }
             }
             $withExports = true;
