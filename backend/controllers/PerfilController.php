@@ -91,6 +91,7 @@ class PerfilController extends Controller
     public function actionCreate()
     {
         $model = new Perfil();
+        $model->imagen = '';
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
