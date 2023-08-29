@@ -48,15 +48,6 @@ $photo = Html::img($photoInfo['url'],['alt'=>$photoInfo['alt']]);
 
     <?= $form->field($model, 'apellido')->textInput(['maxlength' => 45]) ?>
 
-  <!--  <? // $form->field($model, 'localidad')->textInput(['maxlength' => 255])->widget(TypeaheadBasic::classname(), ['data'=>$localidadesData])
-    ?> -->
-
-    <!--<? //$form->field($model, 'telefono')->textInput(['maxlength' => 255]) ?>-->
-
-  <!--  <? //$form->field($model, 'cargo')->textInput(['maxlength' => 255])
-            ->widget(TypeaheadBasic::classname(), ['data'=>$cargosData])
-    ?> -->
-
     <?php echo $form->field($model,'fecha_nacimiento')->
                     widget(DatePicker::className(),[
                       'dateFormat' => 'yyyy-MM-dd',
