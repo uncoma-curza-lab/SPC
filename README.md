@@ -7,11 +7,22 @@
     <br>
 </p>
 
-
-
-Una vez  configurada la base de datos realizar:
--------------------
-
+## Consideraciones al momento de instalar
+1. Se debe crear la carpeta `tmp` en el directorio `common/`
+```shell
+mkdir common/tmp
 ```
-
+2. Crear la carpeta `programas` en api/web/public
+```shell
+mkdir -p api/web/public/programas
 ```
+3. Es importante que las carpetas tengan como owner y group `www-data` o el usuario que posea permisos para su servidor web.
+4. El `.env.example` es un ejemplo de las variables requeridas para el correcto funcionamiento del sistema
+5. Puede consultar los registros (logs) de cada módulo en la carpeta `runtime/logs`. Por ejemplo, si hay una falla en el frontend puede consultar en `frontend/runtime/logs`.
+
+## API
+Puede consultar la api mediante la URL `{url}/api/v1/{resource}`. Los principales endpoints son:
+- /departamento
+- /asignatura
+- /carrera
+- /plan
