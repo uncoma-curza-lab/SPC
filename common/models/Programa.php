@@ -154,7 +154,7 @@ class Programa extends BaseModel
     public function load($data, $formName = null)
     {
         if (
-            $this->scenario == 'crear' &&
+            ($this->scenario == 'crear' || $this->scenario == 'copy') &&
             $data &&
             array_key_exists('Programa', $data)
         ) {
