@@ -26,4 +26,3 @@ Puede consultar la api mediante la URL `{url}/api/v1/{resource}`. Los principale
 - /asignatura
 - /carrera
 - /plan
-
