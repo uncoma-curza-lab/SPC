@@ -60,6 +60,7 @@ COPY ./apache2 /etc/apache2
 
 RUN a2enmod rewrite
 
+RUN echo "memory_limit = 350M" > /usr/local/etc/php/conf.d/memory_limit.ini
 
 #USER apache
 
