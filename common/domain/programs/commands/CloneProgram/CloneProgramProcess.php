@@ -37,6 +37,7 @@ class CloneProgramProcess implements CommandInterface
             // TODO Borrar firma y equipo de catedra
             $modelNew->setAsignatura('null');
             $dataResponse['new_program'] = $modelNew;
+
             if (Yii::$app->request->post() && $modelNew->load(Yii::$app->request->post()) && $modelNew->save()) {
                 $message = 'El programa se clonó con éxito';
                 $statusResponse = true;
