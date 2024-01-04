@@ -158,7 +158,9 @@ class Programa extends BaseModel
             $data &&
             array_key_exists('Programa', $data)
         ) {
-            $data['Programa']['current_plan_id'] = Asignatura::determineCurrentPlan($data['Programa']['asignatura_id']);
+            $currentPlanId = Asignatura::determineCurrentPlan($data['Programa']['asignatura_id']);
+            $data['Programa']['current_plan_id'] = $currentPlanId;
+            $this->current_plan_id = $currentPlanId;
         }
         return parent::load($data, $formName);
     }
@@ -469,7 +471,7 @@ class Programa extends BaseModel
     public function calcularPorcentajeCarga(){
       // valor x inciso
       $valorPunto = 100/14;
-    
+
       $porcentaje = 0;
       if(strlen($this->getFundamentacion()) > 10){
         $porcentaje = $porcentaje+$valorPunto;
@@ -534,7 +536,7 @@ class Programa extends BaseModel
     /**
      * Cambia el estado del programa al siguiente según el peso (valor) que tenga el estado actual
      * Si pudo cambiar el estado devuelve true, en caso contrario, false.
-     * @return Boolean 
+     * @return Boolean
      */
     public function subirEstado():bool{
       $estadoActual = Status::findOne($this->status_id);
@@ -618,7 +620,7 @@ class Programa extends BaseModel
               $string= "Sexto año";
               break;
       }
-  
+
       return $string.$this->curso;
     }
     public function getFirma(){
@@ -673,7 +675,7 @@ class Programa extends BaseModel
                 break;
             case Module::PROFESSORSHIP_TEAM_TYPE:
                 $this->scenario = 'equipo_catedra';
-                break; 
+                break;
             case Module::FUNDAMENTALS_TYPE:
                 $this->scenario = 'fundamentacion';
                 break;
@@ -766,7 +768,7 @@ class Programa extends BaseModel
 
 
                 //TODO: Agregar todos los modulos necesarios para guardar la data;
-                /*            
+                /*
                     'equipo_catedra' => 'Equipo de catedra',
                  */
             default:
@@ -829,7 +831,7 @@ class Programa extends BaseModel
                       </div>';
                   $this->setFirma($html);
                 }
-                break;            
+                break;
 
             default:
                 break;
@@ -844,7 +846,7 @@ class Programa extends BaseModel
             $module = Module::find()->oneByTimeDistributionTypeAndProgram($this->id);
             $timesDistributions = $module->timeDistributions;
         }
-        
+
         return $timesDistributions;
     }
 
