@@ -17,11 +17,9 @@ use common\models\search\AsignaturaSearch;
 use common\models\Programa;
 use common\models\Status;
 use common\models\Departamento;
-use common\models\LessonType;
 use common\models\Module;
 use common\models\PermisosHelpers;
 use common\models\Plan;
-use common\models\TimeDistribution;
 use common\services\ModuleService;
 use Exception;
 use yii\web\Controller;
@@ -30,7 +28,6 @@ use yii\web\ForbiddenHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 
-use function GuzzleHttp\Promise\all;
 
 /**
  * ProgramaController implements the CRUD actions for Programa model.
@@ -87,7 +84,7 @@ class MiProgramaController extends Controller
     }
     public function actionError()
 
-    {        
+    {
 
         if (Yii::$app->errorHandler->error['code'] == 403)
 
@@ -144,7 +141,7 @@ class MiProgramaController extends Controller
       return $this->render('@frontend/views/programa/info',['model' => $model]);
 
     }
-    
+
 
     /**
      * Displays a single Designacion model.
@@ -293,7 +290,7 @@ class MiProgramaController extends Controller
         }
     }
     /**
-     * Step: 2 
+     * Step: 2
      * Edición del Punto 1 del programa -  Fundamentación
      * @param Integer $id del programa
      * @throws ForbiddenHttpException si no tiene permisos de modificar el programa
@@ -637,7 +634,7 @@ class MiProgramaController extends Controller
         // deprecated
         //$estado = $model->getStatus()->one()->getDescripcion();
         //$userId = \Yii::$app->user->identity->id;
-        
+
 
         //$transaccion = Yii::$app->db->beginTransaction();
         //try {
@@ -679,7 +676,7 @@ class MiProgramaController extends Controller
         //          }
         //        }
         //      }
-        //      
+        //
         //      if ($flag && $model->delete()){
         //        $transaccion->commit();
         //        Yii::$app->session->setFlash('success','El programa eliminó correctamente.');
@@ -725,7 +722,7 @@ class MiProgramaController extends Controller
         $userId = \Yii::$app->user->identity->id;
 
         //if (PermisosHelpers::requerirRol('Profesor') &&
-        //  ($estado->descripcion == "Profesor") && ($model->created_by == $userId)) {
+        //  ($estado->descripcion == "Profesor") && ($model->created_by == $userId))
         /*if (PermisosHelpers::requerirRol('Profesor') &&
           ($estado->descripcion == "Profesor")) {
             return true;
