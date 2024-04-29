@@ -10,6 +10,6 @@ before_script:
   
 deploys:
   script:
-  - ssh -A $SERVER_PROD_USER@$SERVER_PROD_IP -p $SERVER_PROD_PORT "cd $PROJECT_DIRECTORY &&  git checkout master && git pull origin $BRANCH && exit"
+  - ssh -A $SERVER_PROD_USER@$SERVER_PROD_IP -p $SERVER_PROD_PORT "cd $PROJECT_DIRECTORY &&  git checkout master && git pull origin $BRANCH && ./bin/yii.sh migrate --interactive=0  && exit"
   only:
     - master
