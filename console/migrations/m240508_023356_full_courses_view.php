@@ -16,7 +16,7 @@ class m240508_023356_full_courses_view extends Migration
 
             CREATE PROCEDURE refresh_full_courses_materialized_view()
             BEGIN
-                TRUNCATE TABLE full_courses_view;
+                DROP TABLE full_courses_view;
                 CREATE TABLE full_courses_view AS
                 SELECT
                     c.id,
@@ -54,7 +54,7 @@ class m240508_023356_full_courses_view extends Migration
     public function safeDown()
     {
         $this->execute("
-            TRUNCATE TABLE full_courses_view;
+            DROP TABLE full_courses_view;
             DROP PROCEDURE IF EXISTS refresh_full_courses_materialized_view;
          ");
     }

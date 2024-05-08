@@ -15,10 +15,13 @@ class m240508_024905_course_syllabus_view extends Migration
         $this->execute("
             CREATE PROCEDURE refresh_syllabus_materialized_view()
             BEGIN
-                TRUNCATE TABLE syllabus_view;
+                DROP TABLE syllabus_view;
                 CREATE TABLE syllabus_view AS
                 SELECT
-                    p.*
+                    p.id AS syllabus_id
+                    ,p.YEAR
+                    ,p.created_at
+                    ,p.updated_at
                     ,s.value AS status_value
                     ,s.descripcion AS status_description
                     ,department_auditor_assigned.nom AS department_auditor_assigned_name
@@ -53,8 +56,7 @@ class m240508_024905_course_syllabus_view extends Migration
     public function safeDown()
     {
         $this->execute("
-            TRUNCATE TABLE syllabus_view;
-            DROP PROCEDURE IF EXISTS refresh_syllabus_materialized_view;
+            DROP TABLE syllabus_view;
             DROP PROCEDURE IF EXISTS refresh_syllabus_materialized_view;
          ");
     }
