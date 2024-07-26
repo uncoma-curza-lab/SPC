@@ -53,12 +53,23 @@ class ProgramaController extends Controller
                      [
                           'actions' => [
                             'create','update','delete','anadir', 'ver',
-                            'aprobar', 'rechazar', 'evaluacion', 'copy'
+                            'aprobar', 'rechazar', 'copy'
                           ],
                           'allow' => true,
                           'roles' => ['@'],
                           'matchCallback' => function($rule,$action) {
                             return PermisosHelpers::requerirMinimoRol('Profesor')
+                              && PermisosHelpers::requerirEstado('Activo');
+                          }
+                     ],
+                     [
+                          'actions' => [
+                            'evaluacion'
+                          ],
+                          'allow' => true,
+                          'roles' => ['@'],
+                          'matchCallback' => function($rule,$action) {
+                            return PermisosHelpers::requerirMinimoRol('Aux_departamento')
                               && PermisosHelpers::requerirEstado('Activo');
                           }
                      ],
@@ -229,7 +240,7 @@ class ProgramaController extends Controller
     //      if($programa->subirEstado() && $programa->save()){
     //        Yii::info("Subió el estado del programa:".$id." Estaba en estado: ".$estadoActual->descripcion,'estado-programa');
     //        Yii::$app->session->setFlash('success','Se aprobó el programa exitosamente');
-    //        
+    //
     //        Yii::$app->GenerateNotification->creador(self::APROBAR_PROGRAMA,$id);
     //        Yii::$app->GenerateNotification->suscriptores(self::APROBAR_PROGRAMA,$id);
 
@@ -381,7 +392,7 @@ class ProgramaController extends Controller
         return $this->redirect(['index']);
        // $estado = $model->getStatus()->one()->getDescripcion();
        // $userId = \Yii::$app->user->identity->id;
-       // 
+       //
 
        // $transaccion = Yii::$app->db->beginTransaction();
        // try {
@@ -423,7 +434,7 @@ class ProgramaController extends Controller
        //           }
        //         }
        //       }
-       //       
+       //
        //       if ($flag && $model->delete()){
        //         $transaccion->commit();
        //         Yii::$app->session->setFlash('success','El programa eliminó correctamente.');
@@ -556,7 +567,7 @@ class ProgramaController extends Controller
         //      Yii::$app->session->setFlash('success','Se ha generado una copia correctamente');
         //      // LOG de éxito
         //      $this->mensajeGuardadoExito($modelNew);
-        //      
+        //
         //      return $this->redirect(['index']);
         //    } else {
         //      // mensaje a usuario
@@ -565,7 +576,7 @@ class ProgramaController extends Controller
         //      $this->mensajeGuardadoFalla($modelNew);
         //    }
         //  }
-        //  
+        //
         //  return $this->render('forms/_copy', [
         //      'model' => $modelNew,
         //      'oldModel' => $model
