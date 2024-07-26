@@ -34,7 +34,30 @@ class ObservacionController extends Controller
                 'rules' => [
                     [
                          'actions' => [
-                            'index', 'view', 'create', 'update','delete',
+                            'view',
+                         ],
+                         'allow' => true,
+                         'roles' => ['@'],
+                         'matchCallback' => function() {
+                            if (!PermisosHelpers::requerirEstado('Activo')) {
+                                return false;
+                            }
+                            if (PermisosHelpers::requerirMinimoRol('Adm_academica')) {
+                                return true;
+                            }
+
+                            $observationId = Yii::$app->request->get('id');
+                            if (!$observationId) {
+                                return false;
+                            }
+                            $observation = Observacion::findOne($observationId);
+                            $syllabus = $observation->programa;
+                            return $syllabus && (PermisosHelpers::requerirAuxDepartamento($syllabus) || PermisosHelpers::requerirSerDueno($syllabus->id));
+                         }
+                    ],
+                    [
+                         'actions' => [
+                            'create'
                          ],
                          'allow' => true,
                          'roles' => ['@'],
@@ -64,21 +87,6 @@ class ObservacionController extends Controller
                 ],
             ],
         ];
-    }
-
-    /**
-     * Lists all Observacion models.
-     * @return mixed
-     */
-    public function actionIndex()
-    {
-        $searchModel = new ObservacionSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
     }
 
     /**
@@ -122,40 +130,6 @@ class ObservacionController extends Controller
         return $this->render('create', [
             'model' => $model,
         ]);
-    }
-
-    /**
-     * Updates an existing Observacion model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionUpdate($id)
-    {
-        $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        }
-
-        return $this->render('update', [
-            'model' => $model,
-        ]);
-    }
-
-    /**
-     * Deletes an existing Observacion model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
     }
 
     /**

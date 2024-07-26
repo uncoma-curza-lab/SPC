@@ -84,7 +84,7 @@ if( !Yii::$app->user->isGuest){
             [
               'label' => 'En evaluación',
               'url' => ['/programa/evaluacion'],
-              'visible' => PermisosHelpers::requerirMinimoRol("Aux _departamento")
+              'visible' => PermisosHelpers::requerirMinimoRol("Aux_departamento")
             ]
 
           ]
