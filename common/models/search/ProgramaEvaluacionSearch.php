@@ -13,7 +13,7 @@ use common\models\User;
 use common\models\Cargo;
 use common\models\Designacion;
 use common\models\Status;
-
+use yii\web\ForbiddenHttpException;
 
 /**
  * ProgramaSearch represents the model behind the search form of `common\models\Programa`.
@@ -40,9 +40,9 @@ class ProgramaEvaluacionSearch extends Programa
             [['id', 'departamento_id', 'status_id', 'asignatura_id', 'year', 'created_by', 'updated_by'], 'integer'],
             [[ //'asignatura',
 
-            'departamento','fundament', 'objetivo_plan', 
-            'contenido_plan', 'propuesta_met', 'evycond_acreditacion', 
-            'parcial_rec_promo', 'distr_horaria', 'crono_tentativo', 
+            'departamento','fundament', 'objetivo_plan',
+            'contenido_plan', 'propuesta_met', 'evycond_acreditacion',
+            'parcial_rec_promo', 'distr_horaria', 'crono_tentativo',
             'actv_extracur', 'created_at', 'updated_at','perfil'], 'safe'],
         ];
     }
@@ -77,6 +77,10 @@ class ProgramaEvaluacionSearch extends Programa
           }
         }
 
+        if (!$depto) {
+            throw new ForbiddenHttpException("No tiene acceso para listar los programas en evaluación.");
+        }
+
 
         $query = Programa::find();
         $query->where(['not',['departamento_id' => null]]);
@@ -103,7 +107,7 @@ class ProgramaEvaluacionSearch extends Programa
         //$query->joinWith(['asignatura']);
         $query->joinWith(['departamento']);
         $query->joinWith(['perfil']);
-        
+
         $this->load($params);
 
         if (!$this->validate()) {
@@ -145,7 +149,7 @@ class ProgramaEvaluacionSearch extends Programa
             ->andFilterWhere(['like', 'concat({{%perfil}}.nombre,{{%perfil}}.apellido)', $this->perfil])
 
             ->andFilterWhere(['like', 'actv_extracur', $this->actv_extracur]);
-            
+
 
         return $dataProvider;
     }
