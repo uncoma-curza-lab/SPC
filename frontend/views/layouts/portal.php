@@ -66,6 +66,7 @@ AppAsset::register($this);
               'url' => ['/programa/evaluacion'],
               'visible' => PermisosHelpers::requerirRol("Departamento") ||
                            PermisosHelpers::requerirRol("Sec_academica") ||
+                           PermisosHelpers::requerirRol("Aux_departamento") ||
                            PermisosHelpers::requerirRol("Adm_academica") ||
                            PermisosHelpers::requerirRol("SuperUsuario")
             ]
