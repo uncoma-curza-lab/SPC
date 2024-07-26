@@ -4,15 +4,13 @@ namespace frontend\controllers;
 
 use Yii;
 use common\models\Observacion;
-use common\events\NotificationEvent;
 use common\models\Programa;
 use common\models\search\ObservacionSearch;
-use common\models\EventType;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use common\models\PermisosHelpers;
-
+use Exception;
 
 /**
  * ObservacionController implements the CRUD actions for Observacion model.
@@ -109,8 +107,12 @@ class ObservacionController extends Controller
         if ($model->load(Yii::$app->request->post())) {
           if($model->save()) {
             Yii::$app->session->setFlash('success','Observación agregada exitosamente');
-            //generar notificacion
-            Yii::$app->GenerateNotification->creador(self::CREAR_OBSERVACION,$id);
+            try {
+                // generar notificación
+                Yii::$app->GenerateNotification->creador(self::CREAR_OBSERVACION, $id);
+            } catch (Exception $e) {
+                Yii::error("Error al enviar observación: " . $e->getMessage());
+            }
             return $this->redirect(['programa/ver', 'id' => $model->programa_id]);
           } else {
             Yii::$app->session->setFlash('danger','Observación no agregada');
