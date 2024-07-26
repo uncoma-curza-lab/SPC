@@ -4,15 +4,13 @@ namespace frontend\controllers;
 
 use Yii;
 use common\models\Observacion;
-use common\events\NotificationEvent;
 use common\models\Programa;
 use common\models\search\ObservacionSearch;
-use common\models\EventType;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use common\models\PermisosHelpers;
-
+use Exception;
 
 /**
  * ObservacionController implements the CRUD actions for Observacion model.
@@ -20,7 +18,7 @@ use common\models\PermisosHelpers;
 class ObservacionController extends Controller
 {
     const CREAR_OBSERVACION = "crear-observacion";
-    
+
     public function init() {
         parent::init();
     }
@@ -36,13 +34,47 @@ class ObservacionController extends Controller
                 'rules' => [
                     [
                          'actions' => [
-                            'index', 'view', 'create', 'update','delete',
+                            'view',
                          ],
                          'allow' => true,
                          'roles' => ['@'],
-                         'matchCallback' => function($rule,$action) {
-                           return PermisosHelpers::requerirMinimoRol('Profesor')
-                             && PermisosHelpers::requerirEstado('Activo');
+                         'matchCallback' => function() {
+                            if (!PermisosHelpers::requerirEstado('Activo')) {
+                                return false;
+                            }
+                            if (PermisosHelpers::requerirMinimoRol('Adm_academica')) {
+                                return true;
+                            }
+
+                            $observationId = Yii::$app->request->get('id');
+                            if (!$observationId) {
+                                return false;
+                            }
+                            $observation = Observacion::findOne($observationId);
+                            $syllabus = $observation->programa;
+                            return $syllabus && (PermisosHelpers::requerirAuxDepartamento($syllabus) || PermisosHelpers::requerirSerDueno($syllabus->id));
+                         }
+                    ],
+                    [
+                         'actions' => [
+                            'create'
+                         ],
+                         'allow' => true,
+                         'roles' => ['@'],
+                         'matchCallback' => function() {
+                            if (!PermisosHelpers::requerirEstado('Activo')) {
+                                return false;
+                            }
+                            if (PermisosHelpers::requerirMinimoRol('Adm_academica')) {
+                                return true;
+                            }
+
+                            $syllabusId = Yii::$app->request->get('id');
+                            if (!$syllabusId) {
+                                return false;
+                            }
+                            $syllabus = Programa::findOne($syllabusId);
+                            return $syllabus && (PermisosHelpers::requerirAuxDepartamento($syllabus) || PermisosHelpers::requerirSerDueno($syllabusId));
                          }
                     ],
 
@@ -55,21 +87,6 @@ class ObservacionController extends Controller
                 ],
             ],
         ];
-    }
-
-    /**
-     * Lists all Observacion models.
-     * @return mixed
-     */
-    public function actionIndex()
-    {
-        $searchModel = new ObservacionSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
     }
 
     /**
@@ -98,8 +115,12 @@ class ObservacionController extends Controller
         if ($model->load(Yii::$app->request->post())) {
           if($model->save()) {
             Yii::$app->session->setFlash('success','Observación agregada exitosamente');
-            //generar notificacion
-            Yii::$app->GenerateNotification->creador(self::CREAR_OBSERVACION,$id);
+            try {
+                // generar notificación
+                Yii::$app->GenerateNotification->creador(self::CREAR_OBSERVACION, $id);
+            } catch (Exception $e) {
+                Yii::error("Error al enviar observación: " . $e->getMessage());
+            }
             return $this->redirect(['programa/ver', 'id' => $model->programa_id]);
           } else {
             Yii::$app->session->setFlash('danger','Observación no agregada');
@@ -109,40 +130,6 @@ class ObservacionController extends Controller
         return $this->render('create', [
             'model' => $model,
         ]);
-    }
-
-    /**
-     * Updates an existing Observacion model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionUpdate($id)
-    {
-        $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        }
-
-        return $this->render('update', [
-            'model' => $model,
-        ]);
-    }
-
-    /**
-     * Deletes an existing Observacion model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
     }
 
     /**
@@ -161,5 +148,5 @@ class ObservacionController extends Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    
+
 }

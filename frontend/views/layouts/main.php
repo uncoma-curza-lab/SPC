@@ -53,7 +53,7 @@ if( !Yii::$app->user->isGuest){
         [
           'label' => 'Inicio', 'url' => ['/site/index'],
         ],
-     
+
       //  ['label' => 'About', 'url' => ['/site/about']],
       //  ['label' => 'Contact', 'url' => ['/site/contact']],
     ];
@@ -68,7 +68,7 @@ if( !Yii::$app->user->isGuest){
           'url' => ['/user-notifications/index'],
         ];
         $menuItems[] = [
-          
+
           'label' => "Programas",
           'options'=> ['id'=>'programaLink'],
 
@@ -84,15 +84,12 @@ if( !Yii::$app->user->isGuest){
             [
               'label' => 'En evaluación',
               'url' => ['/programa/evaluacion'],
-              'visible' => PermisosHelpers::requerirRol("Departamento") ||
-                           PermisosHelpers::requerirRol("Sec_academica") ||
-                           PermisosHelpers::requerirRol("Adm_academica") ||
-                           PermisosHelpers::requerirRol("SuperUsuario")
+              'visible' => PermisosHelpers::requerirMinimoRol("Aux_departamento")
             ]
 
           ]
         ];
-       
+
         $menuItems[] = [
           'label' => '¡Hola '. $nombre .'!',
           'items' =>[

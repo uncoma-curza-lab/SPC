@@ -8,8 +8,6 @@ use backend\models\Asignatura;
 use common\models\Programa;
 use common\models\search\ProgramaSearch;
 use backend\models\AsignaturaSearch;
-use backend\models\Designacion;
-use backend\models\DesignacionSearch;
 use backend\models\SetStatusByYearForm;
 use common\models\PermisosHelpers;
 use common\models\Departamento;
@@ -34,10 +32,6 @@ class ProgramaController extends Controller
                  'only' => [
                    'index', 'view', 'create', 'update','delete',
                    'update-departamento', 'set-status-by-year'
-              /*     'fundamentacion', 'objetivo-plan', 'contenido-analitico',
-                   'contenido-plan', 'eval-acred', 'propuesta-metodologica',
-                   'parcial-rec-promo', 'dist-horaria', 'crono-tentativo',
-                   'actividad-extracurricular'*/
                  ],
                  'rules' => [
                      [
@@ -608,13 +602,13 @@ class ProgramaController extends Controller
       }
       /*if ($estado->load(Yii::$app->request->post())) {
         $superUserRol = Rol::find()->where(['rol_nombre' => "SuperUsuario"])->one();
-        $allUsers = User::find()->where(['<>','rol_id' ,$superUserRol->id])->all(); 
+        $allUsers = User::find()->where(['<>','rol_id' ,$superUserRol->id])->all();
         foreach ($allUsers as $user) {
             $user->estado_id = $estado->estado;
             $user->save(false);
         }
       } */
-    
+
       return $this->render('set_status_by_year',['model' => $model ]);
 
     }

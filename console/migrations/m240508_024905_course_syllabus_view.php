@@ -44,7 +44,7 @@ class m240508_024905_course_syllabus_view extends Migration
                 JOIN modules m ON
                     m.program_id = p.id
                 WHERE
-                p.deleted_at IS NULL
+                p.deleted_at IS NULL;
             END
         ");
 
