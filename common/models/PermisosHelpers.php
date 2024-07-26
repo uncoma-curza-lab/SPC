@@ -45,6 +45,33 @@ class PermisosHelpers
       }
       return false;
     }
+
+    public static function requerirAuxDepartamento(Programa $programa)
+    {
+        if (!PermisosHelpers::requerirRol("Departamento") && !PermisosHelpers::requerirRol("Aux_departamento")) {
+            return false;
+        }
+
+        //si el programa tiene el departamento
+        $departamento = $programa->getDepartamento()->one();
+
+        $cargo = Cargo::find()->where(['=','nomenclatura','Director'])->orWhere(['=','nomenclatura','Aux_departamento'])->one();
+        $perfil = \Yii::$app->user->identity->perfil;
+
+        if (!$perfil) {
+            return false;
+        }
+
+        // Perfil tiene una designación de director
+        // y corresponde al departamento del programa
+        $designacion = Designacion::find()
+              ->where(['=','cargo_id',$cargo->id])
+              ->andWhere(['=','perfil_id',$perfil->id])
+              ->one();
+
+        return $designacion && $departamento && $designacion->departamento_id == $departamento->id;
+    }
+
     /**
     * Verifica si el usuario logueado es director del departamento que
     * obtiene el programa
@@ -65,7 +92,7 @@ class PermisosHelpers
           return false;
       }
 
-      // Perfil tiene una designación de director 
+      // Perfil tiene una designación de director
       // y corresponde al departamento del programa
       $designacion = Designacion::find()->where(['=','cargo_id',$cargo->id])
           ->andWhere(['=','perfil_id',$perfil->id])->one();
@@ -169,5 +196,5 @@ class PermisosHelpers
 
         return in_array($programa->status->id, $greaterStatuses);
     }
-  
+
 }

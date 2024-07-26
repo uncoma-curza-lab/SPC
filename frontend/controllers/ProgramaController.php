@@ -68,7 +68,7 @@ class ProgramaController extends Controller
                           ],
                           'allow' => true,
                           'roles' => ['@'],
-                          'matchCallback' => function($rule,$action) {
+                          'matchCallback' => function() {
                             return PermisosHelpers::requerirMinimoRol('Aux_departamento')
                               && PermisosHelpers::requerirEstado('Activo');
                           }

@@ -16,6 +16,10 @@ class m240725_033901_add_role_auxiliar_department extends Migration
             'rol_nombre' => 'Aux_departamento',
             'rol_valor' => 50
         ]);
+
+        $this->insert('{{%cargo}}', [
+            'nomenclatura' => 'Auxiliar departamento',
+        ]);
     }
 
     /**
@@ -24,5 +28,6 @@ class m240725_033901_add_role_auxiliar_department extends Migration
     public function safeDown()
     {
         $this->delete('{{%rol}}', ['rol_nombre' => 'Aux_departamento']);
+        $this->delete('{{%cargo}}', ['nomenclatura' => 'Auxiliar departamento']);
     }
 }

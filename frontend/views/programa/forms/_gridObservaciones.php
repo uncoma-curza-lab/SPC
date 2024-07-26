@@ -20,7 +20,7 @@ $estado_programa = Status::findOne(['=','id',$model->status_id]);
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-      <?php if((PermisosHelpers::requerirDirector($model->id) && $estado_programa->descripcion == "Departamento")
+      <?php if(((PermisosHelpers::requerirDirector($model->id) || PermisosHelpers::requerirAuxDepartamento($model)) && $estado_programa->descripcion == "Departamento")
                 || ($estado_programa->descripcion == "Administración Académica"
                 && PermisosHelpers::requerirRol('Adm_academica'))
                 || ($estado_programa->descripcion == "Secretaría Académica"

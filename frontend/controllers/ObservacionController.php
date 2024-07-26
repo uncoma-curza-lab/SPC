@@ -20,7 +20,7 @@ use common\models\PermisosHelpers;
 class ObservacionController extends Controller
 {
     const CREAR_OBSERVACION = "crear-observacion";
-    
+
     public function init() {
         parent::init();
     }
@@ -40,9 +40,20 @@ class ObservacionController extends Controller
                          ],
                          'allow' => true,
                          'roles' => ['@'],
-                         'matchCallback' => function($rule,$action) {
-                           return PermisosHelpers::requerirMinimoRol('Profesor')
-                             && PermisosHelpers::requerirEstado('Activo');
+                         'matchCallback' => function() {
+                            if (!PermisosHelpers::requerirEstado('Activo')) {
+                                return false;
+                            }
+                            if (PermisosHelpers::requerirMinimoRol('Adm_academica')) {
+                                return true;
+                            }
+
+                            $syllabusId = Yii::$app->request->get('id');
+                            if (!$syllabusId) {
+                                return false;
+                            }
+                            $syllabus = Programa::findOne($syllabusId);
+                            return $syllabus && (PermisosHelpers::requerirAuxDepartamento($syllabus) || PermisosHelpers::requerirSerDueno($syllabusId));
                          }
                     ],
 
@@ -161,5 +172,5 @@ class ObservacionController extends Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    
+
 }
