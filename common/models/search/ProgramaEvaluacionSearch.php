@@ -74,7 +74,7 @@ class ProgramaEvaluacionSearch extends Programa
                 ->joinWith('cargo')
                 ->where(['=','perfil_id',$perfil->id])
                 ->andWhere([
-                    '=','cargo.nomenclatura' => $cargos
+                    'cargo.nomenclatura' => $cargos
                 ])->one();
 
           if ($designacion) {
