@@ -67,6 +67,7 @@ class ProgramaEvaluacionSearch extends Programa
     {
         $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
         $perfil = \Yii::$app->user->identity->perfil;
+        $depto = null;
         if ($perfil) {
             $cargos = ['Director', 'Auxiliar departamento'];
             $designacion = Designacion::find()
@@ -76,20 +77,19 @@ class ProgramaEvaluacionSearch extends Programa
                     '=','cargo.nomenclatura' => $cargos
                 ])->one();
 
-          $depto = null;
-          if($designacion) {
+          if ($designacion) {
             $depto = $designacion->departamento_id;
           }
         }
 
-        if (!$depto) {
+        if (!$depto && !$esAdmin) {
             throw new ForbiddenHttpException("No tiene acceso para listar los programas en evaluación.");
         }
 
 
         $query = Programa::find();
         $query->where(['not',['departamento_id' => null]]);
-        if(PermisosHelpers::requerirRol("Departamento"))
+        if(PermisosHelpers::requerirRol("Departamento") || PermisosHelpers::requerirRol('Aux_departamento'))
           $query->where(['=','departamento_id',$depto]);
         else if (PermisosHelpers::requerirRol("Adm_academica") ){
           $statusAdm_academica = Status::find()->where(['=','descripcion','Administración Académica'])->one();
