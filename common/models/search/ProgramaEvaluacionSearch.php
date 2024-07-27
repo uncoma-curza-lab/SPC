@@ -67,24 +67,30 @@ class ProgramaEvaluacionSearch extends Programa
     {
         $esAdmin = PermisosHelpers::requerirMinimoRol('Admin');
         $perfil = \Yii::$app->user->identity->perfil;
-        // si es director tiene una designación con ese cargo
-        $cargoDirector = Cargo::find()->where(['=','nomenclatura','Director'])->one();
-        if ($perfil){
-          $designacion = Designacion::find()->where(['=','perfil_id',$perfil->id])->andWhere(['=','cargo_id',$cargoDirector->id])->one();
-          $depto = null;
-          if($designacion) {
+        $depto = null;
+        if ($perfil) {
+            $cargos = ['Director', 'Auxiliar departamento'];
+            $designacion = Designacion::find()
+                ->joinWith('cargo')
+                ->where(['=','perfil_id',$perfil->id])
+                ->andWhere([
+                    'cargo.nomenclatura' => $cargos
+                ])->one();
+
+          if ($designacion) {
             $depto = $designacion->departamento_id;
           }
         }
 
-        if (!$depto) {
+        $isDeptoRole = PermisosHelpers::requerirRol("Departamento") || PermisosHelpers::requerirRol('Aux_departamento');
+
+        if ($isDeptoRole && !$depto) {
             throw new ForbiddenHttpException("No tiene acceso para listar los programas en evaluación.");
         }
 
-
         $query = Programa::find();
         $query->where(['not',['departamento_id' => null]]);
-        if(PermisosHelpers::requerirRol("Departamento"))
+        if($isDeptoRole)
           $query->where(['=','departamento_id',$depto]);
         else if (PermisosHelpers::requerirRol("Adm_academica") ){
           $statusAdm_academica = Status::find()->where(['=','descripcion','Administración Académica'])->one();
@@ -93,7 +99,6 @@ class ProgramaEvaluacionSearch extends Programa
           $statusSec_academica = Status::find()->where(['=','descripcion','Secretaría Académica'])->one();
           $query->where(['=','status_id',$statusSec_academica->id]);
         }
-        // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -104,24 +109,15 @@ class ProgramaEvaluacionSearch extends Programa
                 ]
             ]
         ]);
-        //$query->joinWith(['asignatura']);
         $query->joinWith(['departamento']);
         $query->joinWith(['perfil']);
 
         $this->load($params);
 
         if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
             return $dataProvider;
         }
 
-        //$query->joinWith('user');
-        /*$query->andFilterWhere(
-            ['LIKE','user.username',$this->getAttribute('user.username')]
-        );*/
-
-        // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
             'departamento_id' => $this->departamento_id,
@@ -136,7 +132,6 @@ class ProgramaEvaluacionSearch extends Programa
         $query->joinWith(['status']);
 
         $query->andFilterWhere(['like', 'fundament', $this->fundament])
-        //->andFilterWhere(['like', 'asignatura', $this->asignatura])
         ->andFilterWhere(['like', '{{%asignatura}}.nomenclatura', $this->asignatura])
         ->andFilterWhere(['like', '{{%departamento}}.nom', $this->departamento])
             ->andFilterWhere(['like', 'objetivo_plan', $this->objetivo_plan])
