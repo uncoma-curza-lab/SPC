@@ -82,14 +82,15 @@ class ProgramaEvaluacionSearch extends Programa
           }
         }
 
-        if (!$depto && !$esAdmin) {
+        $isDeptoRole = PermisosHelpers::requerirRol("Departamento") || PermisosHelpers::requerirRol('Aux_departamento');
+
+        if ($isDeptoRole && !$depto) {
             throw new ForbiddenHttpException("No tiene acceso para listar los programas en evaluación.");
         }
 
-
         $query = Programa::find();
         $query->where(['not',['departamento_id' => null]]);
-        if(PermisosHelpers::requerirRol("Departamento") || PermisosHelpers::requerirRol('Aux_departamento'))
+        if($isDeptoRole)
           $query->where(['=','departamento_id',$depto]);
         else if (PermisosHelpers::requerirRol("Adm_academica") ){
           $statusAdm_academica = Status::find()->where(['=','descripcion','Administración Académica'])->one();
@@ -98,7 +99,6 @@ class ProgramaEvaluacionSearch extends Programa
           $statusSec_academica = Status::find()->where(['=','descripcion','Secretaría Académica'])->one();
           $query->where(['=','status_id',$statusSec_academica->id]);
         }
-        // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -109,24 +109,15 @@ class ProgramaEvaluacionSearch extends Programa
                 ]
             ]
         ]);
-        //$query->joinWith(['asignatura']);
         $query->joinWith(['departamento']);
         $query->joinWith(['perfil']);
 
         $this->load($params);
 
         if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
             return $dataProvider;
         }
 
-        //$query->joinWith('user');
-        /*$query->andFilterWhere(
-            ['LIKE','user.username',$this->getAttribute('user.username')]
-        );*/
-
-        // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
             'departamento_id' => $this->departamento_id,
@@ -141,7 +132,6 @@ class ProgramaEvaluacionSearch extends Programa
         $query->joinWith(['status']);
 
         $query->andFilterWhere(['like', 'fundament', $this->fundament])
-        //->andFilterWhere(['like', 'asignatura', $this->asignatura])
         ->andFilterWhere(['like', '{{%asignatura}}.nomenclatura', $this->asignatura])
         ->andFilterWhere(['like', '{{%departamento}}.nom', $this->departamento])
             ->andFilterWhere(['like', 'objetivo_plan', $this->objetivo_plan])
