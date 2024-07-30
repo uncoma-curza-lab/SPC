@@ -52,24 +52,26 @@ class PermisosHelpers
             return false;
         }
 
-        //si el programa tiene el departamento
-        $departamento = $programa->getDepartamento()->one();
-
-        $cargo = Cargo::find()->where(['=','nomenclatura','Director'])->orWhere(['=','nomenclatura','Aux_departamento'])->one();
         $perfil = \Yii::$app->user->identity->perfil;
+        $departmentId = $programa->departamento_id;
 
-        if (!$perfil) {
+        if (!$perfil || !$departmentId) {
             return false;
         }
 
-        // Perfil tiene una designación de director
+        // Perfil tiene una designación de director o aux departamento
         // y corresponde al departamento del programa
+        $cargos = ['Director', 'Auxiliar departamento'];
         $designacion = Designacion::find()
-              ->where(['=','cargo_id',$cargo->id])
-              ->andWhere(['=','perfil_id',$perfil->id])
-              ->one();
+            ->joinWith('cargo')
+            ->andWhere([
+              'cargo.nomenclatura' => $cargos
+            ])
+            ->andWhere(['=', 'departamento_id', $departmentId])
+            ->andWhere(['=','perfil_id',$perfil->id])
+            ->exists();
 
-        return $designacion && $departamento && $designacion->departamento_id == $departamento->id;
+        return $designacion;
     }
 
     /**
