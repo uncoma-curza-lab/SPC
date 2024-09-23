@@ -3,6 +3,11 @@
 namespace common\models;
 
 use Yii;
+use yii\helpers\Url;
+
+const VALID_RELATED_FILES_TYPES = [
+    'brochure'
+];
 
 /**
  * This is the model class for table "carrera".
@@ -14,7 +19,7 @@ use Yii;
  *
  * @property Departamento $departamento
  */
-class Carrera extends BaseModel 
+class Carrera extends BaseModel
 {
 
     private $version = "v1";
@@ -35,6 +40,7 @@ class Carrera extends BaseModel
             [['duracion_total_anos'],'number'],
             [['perfil','alcance','fundamentacion'],'string'],
             [['nom','titulo'], 'string', 'max' => 255],
+            [['related_files'], 'safe'],
             [['departamento_id'], 'exist', 'skipOnError' => true, 'targetClass' => Departamento::className(), 'targetAttribute' => ['departamento_id' => 'id']],
             [['nivel_id'], 'exist', 'skipOnError' => true, 'targetClass' => Nivel::className(), 'targetAttribute' => ['nivel_id' => 'id']],
             [['plan_vigente_id'], 'exist', 'skipOnError' => true, 'targetClass' => Plan::className(), 'targetAttribute' => ['plan_vigente_id' => 'id']],
@@ -107,5 +113,20 @@ class Carrera extends BaseModel
     public function getTituloIntermedio()
     {
         return $this->hasOne(TituloIntermedio::className(),['titulo_intermedio_id' => 'id']);
+    }
+
+    public function getUrlToRelatedFiles() {
+        $relatedFiles = json_decode($this->related_files, true);
+        $urls = [];
+
+        if($relatedFiles){
+            foreach ($relatedFiles as $key => $filePath) {
+                if (file_exists($filePath)) {
+                    $urls[$key] = Url::to('/uploads/carrera/' . basename($filePath), true);
+                }
+            }
+        }
+
+        return $urls;
     }
 }

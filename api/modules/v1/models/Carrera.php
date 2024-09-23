@@ -21,6 +21,9 @@ class Carrera extends ModelsCarrera implements Linkable
             'duracion_total_anos' => 'duracion_total_anos',
             'duracion_total_hs' => 'duracion_total_hs',
             'perfil' => 'perfil',
+            'related_files'=> function($model) {
+                return $model->getUrlToRelatedFiles();
+            },
             'modalidades' => function ($model) {
                 $modalidades = $model->getCarreraModalidad()->with(['modalidad'])->all();
                 $array = [];
@@ -34,7 +37,7 @@ class Carrera extends ModelsCarrera implements Linkable
                     }
                 }
 
-                return $array ? 
+                return $array ?
                     $array
                     :
                     null;
@@ -49,8 +52,8 @@ class Carrera extends ModelsCarrera implements Linkable
                         $plan = Plan::findOne($rootPlanId);
                     }
                 }
-                
-                return $plan ? 
+
+                return $plan ?
                     $plan
                     :
                     null;
@@ -63,7 +66,7 @@ class Carrera extends ModelsCarrera implements Linkable
                 return $planes;
             },
             'departamento' => function(){
-                return $this->departamento_id ? 
+                return $this->departamento_id ?
                     [
                         'nombre' => $this->getDepartamento()->one()->getNombre(),
                         'href' => Url::base(true)."/".$this->version."/departamento/".$this->departamento_id
@@ -103,6 +106,6 @@ class Carrera extends ModelsCarrera implements Linkable
         return [
             Link::REL_SELF => Url::to(['carrera/'.$this->id], 'https'),
             'planes' => Url::to(['plan/carrera','id' => $this->id], 'https'),
-        ];    
+        ];
     }
 }
