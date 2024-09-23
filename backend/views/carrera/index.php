@@ -27,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'nom',
-            [ 
+            [
                 'attribute' => 'departamento_id',
                 'value' => function ($model){
                     $depto = $model->getDepartamento()->one();
@@ -43,7 +43,23 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
 
-            ['class' => 'yii\grid\ActionColumn'],
+[
+            'class' => 'yii\grid\ActionColumn',
+            'template' => '{view} {update} {delete} {upload}',
+            'buttons' => [
+                'upload' => function ($url, $model, $key) {
+                    return \yii\helpers\Html::a(
+                        '<span class="glyphicon glyphicon-upload"></span>',
+                        \yii\helpers\Url::to(['carrera-files/upload', 'id' => $model->id]),
+                        [
+                            'title' => 'Subir archivo',
+                            'aria-label' => 'Subir archivo',
+                            'data-pjax' => '0'
+                        ]
+                    );
+                }
+            ],
+        ],
         ],
     ]); ?>
     <?php Pjax::end(); ?>

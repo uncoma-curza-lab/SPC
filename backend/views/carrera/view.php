@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 use yii\data\ActiveDataProvider;
+use yii\helpers\Url;
 
 $carreraModalidades = new ActiveDataProvider([
     'query' => $model->getModalidades(),
@@ -39,14 +40,14 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'nom',
             'codigo',
-            [ 
+            [
                 'attribute' => 'departamento_id',
                 'value' => function ($model){
                     $depto = $model->getDepartamento()->one();
                     return $depto ? $depto->getNomenclatura() : "Sin departamento";
                 }
             ],
-            [ 
+            [
                 'attribute' => 'nivel_id',
                 'value' => function ($model){
                     $depto = $model->getNivel()->one();
@@ -58,6 +59,28 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function($model){
                     $plan = $model->getPlanVigente()->one();
                     return $plan ? $plan->getOrdenanza() : "N/N/";
+                }
+            ],
+           [
+                'attribute' => 'related_files',
+                'label' => 'Brochure',
+                'format' => 'html',
+                'value' => function($model) {
+                    $urls = $model->getUrlToRelatedFiles();
+                    if (isset($urls['brochure'])) {
+                        $url = $urls["brochure"];
+                        $extension = pathinfo($url, PATHINFO_EXTENSION);
+
+                        if (in_array(strtolower($extension), ['jpg', 'jpeg', 'png', 'gif'])) {
+                            return Html::img($url, [
+                                'alt' => 'folleto',
+                                'style' => 'width:200px;'
+                            ]);
+                        } else {
+                            return Html::a('Descargar archivo', $url, ['target' => '_blank']);
+                        }
+                    }
+                    return "No hay archivo disponible";
                 }
             ],
         ],
