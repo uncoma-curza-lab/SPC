@@ -122,7 +122,7 @@ class Carrera extends BaseModel
         if($relatedFiles){
             foreach ($relatedFiles as $key => $filePath) {
                 if (file_exists($filePath)) {
-                    $urls[$key] = Url::to('/uploads/carrera/' . basename($filePath), true);
+                    $urls[$key] = Url::to('/uploads/carrera/' . basename($filePath), 'https');
                 }
             }
         }
